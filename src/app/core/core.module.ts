@@ -15,7 +15,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { HomeModule } from '../home/home.module';
 import { BookStoreService } from '../book/book-store.service';
 
-
+import { CovalentLayoutModule, CovalentStepsModule /*, any other modules */ } from '@covalent/core';
 
 
 @NgModule({
@@ -25,7 +25,8 @@ import { BookStoreService } from '../book/book-store.service';
     CoreRoutingModule,
     HttpModule,
     HttpClientModule,
-
+    CovalentLayoutModule,
+    CovalentStepsModule,
    ],
 
   declarations: [

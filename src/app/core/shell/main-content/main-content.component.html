@@ -24,6 +24,7 @@
 </mat-menu>
 
 
+
 <mat-sidenav-container>
 
     <!-- sidenav content -->
@@ -54,18 +55,18 @@
             <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
                 <mat-icon matListIcon>school</mat-icon>
                 <h3 matLine>Asignaturas</h3>
-                <mat-icon >arrow_drop_down</mat-icon>
+                <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
             </mat-list-item>
 
-            <div >
+            <div [@tdCollapse]="triggerAsignaturas">
 
                 <mat-list-item (click)="triggerMat = !triggerMat">
                     <mat-icon matListIcon></mat-icon>
                     <h3 matLine>Matemáticas</h3>
-                    <mat-icon>arrow_drop_down</mat-icon>
+                    <mat-icon [@tdRotate]="!triggerMat">arrow_drop_down</mat-icon>
                 </mat-list-item>
 
-                <div >
+                <div [@tdCollapse]="triggerMat">
 
                     <mat-list-item routerLink="/social" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
@@ -90,10 +91,10 @@
                 <mat-list-item (click)="triggerHist = !triggerHist">
                     <mat-icon matListIcon></mat-icon>
                     <h3 matLine>Historia</h3>
-                    <mat-icon >arrow_drop_down</mat-icon>
+                    <mat-icon [@tdRotate]="!triggerHist">arrow_drop_down</mat-icon>
                 </mat-list-item>
 
-                <div >
+                <div [@tdCollapse]="triggerHist">
 
                     <mat-list-item routerLink="/social" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
@@ -128,10 +129,10 @@
             <mat-list-item (click)="triggerPruebas = !triggerPruebas">
                 <mat-icon matListIcon>description</mat-icon>
                 <h3 matLine>Pruebas</h3>
-                <mat-icon >arrow_drop_down</mat-icon>
+                <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
             </mat-list-item>
 
-            <div >
+            <div [@tdCollapse]="triggerPruebas">
                 <mat-list-item routerLink="/login" routerLinkActive="active">
                     <mat-icon matListIcon></mat-icon>
                     <h3 matLine>Tomar Prueba</h3>
