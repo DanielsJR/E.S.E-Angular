@@ -1,0 +1,15 @@
+<button *ngIf="type === 'detail'" mat-icon-button (click)="openDialogDetail(); $event.stopPropagation()">
+    <mat-icon>visibility</mat-icon>
+</button>
+
+<button *ngIf="type === 'edit'" mat-mini-fab color="accent" (click)="openDialogEdit(); $event.stopPropagation()">
+    <mat-icon>edit</mat-icon>
+</button>
+
+<button *ngIf="type === 'delete'" mat-mini-fab color="warn" (click)="openDialogDelete(); $event.stopPropagation()">
+    <mat-icon>delete</mat-icon>
+</button>
+
+<button *ngIf="type === 'create'" mat-fab (click)="openDialogCreate()">
+    <mat-icon>add circle</mat-icon>
+</button>

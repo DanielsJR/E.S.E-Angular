@@ -1,0 +1,56 @@
+<div class="app-content">
+
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <mat-toolbar color="primary">
+      <span class="spacer"></span>
+      <h1>Login</h1>
+    </mat-toolbar>
+
+    <div class="login-content">
+      <br>
+      <mat-form-field>
+        <input matInput type="text" #phone formControlName="mobile">
+        <mat-placeholder>
+          <i class="material-icons app-input-icon">phone</i>Movile
+        </mat-placeholder>
+        <mat-hint align="end">{{phone.value.length}} / 9</mat-hint>
+        <mat-error *ngIf="mobile.hasError('required')">Mobile is required.</mat-error>
+        <mat-error *ngIf="mobile.hasError('minlength')">Mobile must be 9 digits long.</mat-error>
+        <mat-error *ngIf="mobile.hasError('maxlength')">Mobile must be 9 digits long.</mat-error>
+      </mat-form-field>
+
+      <br>
+      <br>
+
+      <mat-form-field>
+        <input matInput type="password" formControlName="password">
+        <mat-placeholder>
+          <i class="material-icons app-input-icon">lock_open</i>Password
+        </mat-placeholder>
+        <mat-error *ngIf="password.hasError('required')">Password is required.</mat-error>
+      </mat-form-field>
+
+      <br>
+      <br>
+      
+      <mat-slide-toggle color="primary">
+          <small>Remember me!</small>
+      </mat-slide-toggle>
+
+    </div>
+    <div class="login-actions ">
+
+      <br>
+      <br>
+
+      <button mat-raised-button color="accent" type="submit" id="login-submit-button" [disabled]="!loginForm.valid">
+        Sing In
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*MATERIAL DESIGN*/
+@import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+/*MATERIAL dialog*/
+  .bar-icon{
+  margin-bottom: 0px !important;
+  padding: 20px 120px;
+  }
+
+  .spacer {
+  flex: 1 1 auto;
+  }
+
+  .myDialog .mat-dialog-container { 
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .myDialog .mat-dialog-content { 
+    margin: 0;
+  }
+  
+  .myDialog .mat-dialog-actions { 
+    margin-bottom: 0px !important;
+    padding: 20px 30px;
+  }
+  /*MATERIAL dialog*/
+
+
+
+
+ /*MATERIAL sidenav Content*/
+ html, body, material-app, mat-sidenav-container {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+ /*MATERIAL sidenav*/
+
+
+
+

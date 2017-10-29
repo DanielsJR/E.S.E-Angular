@@ -1,0 +1,37 @@
+
+
+.spacer {
+  flex: 1 1 auto;
+ }
+
+ h1 {
+  font-size: 27px;
+  font-family: 'Roboto', sans-serif;
+ }
+
+form {
+  width: 250px;
+  height: 400px;
+  margin: 4em auto;
+  padding: 0;
+  overflow: hidden;
+  background: #fafafa;
+  box-shadow: rgba(0,0,0,0.14902) 10px 10px 20px 0px,rgba(0,0,0,0.09804) 10px 10px 20px 0px;
+
+}
+
+form .login-content { 
+  padding: 20px 0px 0px 20px;
+}
+
+form .login-actions { 
+  padding: 8px 80px;
+}
+
+.app-input-icon {
+  font-size: 16px;
+}
+
+
+
+
