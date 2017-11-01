@@ -13,8 +13,8 @@ export class LoginService {
 
     constructor(private httpService: HTTPService) { }
 
-    login(mobile: number, password: string): Observable<Session> {
-        const headers = new Headers({'Authorization': 'Basic ' + btoa(mobile + ':' + password)});
+    login(userName: string, password: string): Observable<Session> {
+        const headers = new Headers({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) });
         return this.httpService.post(this.endpoint, null, headers);
     }
 }

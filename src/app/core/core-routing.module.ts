@@ -1,13 +1,15 @@
 import { PageNotFoundComponent } from '../error-pages/page-not-found.component';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
 
-    { path: 'books', loadChildren: './../book/book.module#BookModule' },
     { path: 'about', loadChildren: './../about/about.module#AboutModule' },
     { path: 'social', loadChildren: './../social/social.module#SocialModule' },
-    { path: 'login', loadChildren: './../login/login.module#LoginModule' },
+    { path: 'admin', loadChildren: './../admin/admin.module#AdminModule' },
+    { path: 'teacher', loadChildren: './../teacher/teacher.module#TeacherModule' },
+    { path: 'student', loadChildren: './../student/student.module#StudentModule' },
+    // { path: 'login', loadChildren: './../login/login.module#LoginModule' },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: PageNotFoundComponent } // wildcard route the last
 
@@ -15,8 +17,14 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes)
-       // , { enableTracing: true }) // <-- debugging purposes only)
+        RouterModule.forRoot(
+            routes,
+            {
+               // enableTracing: true,
+                preloadingStrategy: PreloadAllModules
+            }
+        )
+
     ],
 
     exports: [

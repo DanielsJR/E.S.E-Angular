@@ -1,8 +1,9 @@
 <div class="app-content">
-
+ <br><br>
+  <h3 style="text-align: center">Inicia Sesion En ESE</h3>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
+   
     <mat-toolbar color="primary">
       <span class="spacer"></span>
       <h1>Login</h1>
@@ -11,14 +12,11 @@
     <div class="login-content">
       <br>
       <mat-form-field>
-        <input matInput type="text" #phone formControlName="mobile">
+        <input matInput type="text" formControlName="userName">
         <mat-placeholder>
-          <i class="material-icons app-input-icon">phone</i>Movile
+          <i class="material-icons app-input-icon">face</i>Nombre de Usuario
         </mat-placeholder>
-        <mat-hint align="end">{{phone.value.length}} / 9</mat-hint>
-        <mat-error *ngIf="mobile.hasError('required')">Mobile is required.</mat-error>
-        <mat-error *ngIf="mobile.hasError('minlength')">Mobile must be 9 digits long.</mat-error>
-        <mat-error *ngIf="mobile.hasError('maxlength')">Mobile must be 9 digits long.</mat-error>
+        <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
       </mat-form-field>
 
       <br>
@@ -27,16 +25,16 @@
       <mat-form-field>
         <input matInput type="password" formControlName="password">
         <mat-placeholder>
-          <i class="material-icons app-input-icon">lock_open</i>Password
+          <i class="material-icons app-input-icon">lock_open</i>Contraseña
         </mat-placeholder>
-        <mat-error *ngIf="password.hasError('required')">Password is required.</mat-error>
+        <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
       </mat-form-field>
 
       <br>
       <br>
-      
+
       <mat-slide-toggle color="primary">
-          <small>Remember me!</small>
+        <small>Remember me!</small>
       </mat-slide-toggle>
 
     </div>

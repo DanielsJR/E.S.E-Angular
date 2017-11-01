@@ -1,11 +1,10 @@
 import { SharedModule } from '../shared/shared.module';
+import { RouterModule, Routes } from '@angular/router';
+import { StudentComponent } from './student.component';
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './login.component';
-import { Routes, RouterModule } from '@angular/router';
-
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent }
+  { path: '', component: StudentComponent }
 ];
 
 @NgModule({
@@ -15,8 +14,7 @@ const routes: Routes = [
   ],
 
   declarations: [
-    LoginComponent
+    StudentComponent
   ]
 })
-
-export class LoginModule { }
+export class StudentModule { }

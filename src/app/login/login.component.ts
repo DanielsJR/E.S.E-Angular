@@ -25,11 +25,12 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.user = this.loginForm.value;
-    this.loginService.login(this.user.mobile, this.user.password)
+    this.user.username = this.userName.value;
+    this.user.password = this.password.value;
+    this.loginService.login(this.user.username, this.user.password)
       .subscribe(session => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE, session);
-        this.router.navigate(['/books']);
+        this.router.navigate(['/teacher']);
       }
       );
   }
@@ -40,14 +41,14 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      mobile: [this.user.mobile, [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+      userName: [this.user.username, Validators.required],
       password: [this.user.password, Validators.required]
     });
   }
 
 
   // getters
-  get mobile() { return this.loginForm.get('mobile'); }
+  get userName() { return this.loginForm.get('userName'); }
   get password() { return this.loginForm.get('password'); }
 
 }

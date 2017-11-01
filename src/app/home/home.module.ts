@@ -6,13 +6,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }
-
 ];
 
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(routes)
   ],
 
   declarations: [

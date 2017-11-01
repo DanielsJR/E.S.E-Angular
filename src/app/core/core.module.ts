@@ -1,5 +1,5 @@
-import { AlumnoComponent } from '../alumno/alumno.component';
-import { DocenteComponent } from '../docente/docente.component';
+import { LoginComponent } from '../login/login.component';
+import { LoginModule } from '../login/login.module';
 import { BookService2 } from '../book/book2.service';
 import { PageNotFoundComponent } from '../error-pages/page-not-found.component';
 import { NgModule, SkipSelf, Optional } from '@angular/core';
@@ -15,27 +15,24 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { HomeModule } from '../home/home.module';
 import { BookStoreService } from '../book/book-store.service';
 
-import { CovalentLayoutModule, CovalentStepsModule /*, any other modules */ } from '@covalent/core';
 
 
 @NgModule({
   imports: [
     SharedModule,
     HomeModule,
+    LoginModule,
     CoreRoutingModule,
     HttpModule,
     HttpClientModule,
-    CovalentLayoutModule,
-    CovalentStepsModule,
    ],
 
   declarations: [
     ShellComponent,
     MainContentComponent,
-    PageNotFoundComponent,
-    DocenteComponent,
-    AlumnoComponent
+    PageNotFoundComponent
   ],
+
   providers: [
     HTTPService,
     LocalStorageService,
@@ -50,7 +47,6 @@ import { CovalentLayoutModule, CovalentStepsModule /*, any other modules */ } fr
 })
 
 export class CoreModule {
-
       // Prevent reimport of the CoreModule
       constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
         if (parentModule) {

@@ -15,7 +15,9 @@ import { ShellComponent } from './core/shell/shell.component';
 
   bootstrap: [
     ShellComponent
-  ]
+  ],
+
+  declarations: []
 })
 
 export class AppModule { }
