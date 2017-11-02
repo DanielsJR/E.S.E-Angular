@@ -10,7 +10,6 @@ import { LocalStorageService } from '../services/local-storage.service';
   selector: 'nx-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [LoginService]
 })
 export class LoginComponent implements OnInit {
 
@@ -30,6 +29,7 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.user.username, this.user.password)
       .subscribe(session => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE, session);
+        this.loginService.isLoggedIn = true;
         this.router.navigate(['/teacher']);
       }
       );

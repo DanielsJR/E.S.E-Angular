@@ -1,3 +1,5 @@
+import { LoginService } from './login.service';
+import { AuthGuard } from '../guards/auth-guard.service';
 import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './login.component';
@@ -16,7 +18,13 @@ const routes: Routes = [
 
   declarations: [
     LoginComponent
+  ],
+
+  providers: [
+    AuthGuard,
+    LoginService
   ]
+
 })
 
 export class LoginModule { }

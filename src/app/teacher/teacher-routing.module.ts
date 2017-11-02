@@ -1,3 +1,4 @@
+import { AuthGuard } from '../guards/auth-guard.service';
 import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
 import { SubjectDetailComponent } from './subject-list/subject-detail/subject-detail.component';
 import { SubjectListComponent } from './subject-list/subject-list.component';
@@ -11,18 +12,23 @@ const teacherRoutes: Routes = [
     {
         path: '',
         component: TeacherComponent,
+        canActivate: [AuthGuard],
         children: [
             {
-                path: 'subject:id',
-                component: SubjectListComponent,
+                path: 'subject',
                 children: [
                     {
-                        path: 'class:id',
+                        path: ':id',
                         component: SubjectDetailComponent,
                         children: [
                             {
-                                path: 'student:id',
-                                component: SubjectDetailComponent,
+                                path: 'class',
+                                children: [
+                                    {
+                                        path: ':id',
+                                        component: SubjectDetailComponent,
+                                    }
+                                ],
                             }
                         ],
                     }

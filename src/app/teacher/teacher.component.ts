@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TdRotateAnimation, TdCollapseAnimation  } from '@covalent/core';
 
 @Component({
-  selector: 'nx-teacher',
+
   templateUrl: './teacher.component.html',
   styleUrls: ['./teacher.component.css'],
   animations: [

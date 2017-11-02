@@ -1,3 +1,5 @@
+
+
 <mat-sidenav-container>
   
       <!-- sidenav content -->
@@ -33,19 +35,19 @@
   
               <div [@tdCollapse]="triggerAsignaturas">
   
-                  <mat-list-item routerLink="/teacher/subjects" routerLinkActive="active">
+                  <mat-list-item [routerLink]="['/teacher/subject',1]" routerLinkActive="active">
                       <mat-icon matListIcon></mat-icon>
                       <h3 matLine>Matemáticas</h3>
                   </mat-list-item>
   
   
-                  <mat-list-item routerLink="/teacher/subjects" routerLinkActive="active">
+                  <mat-list-item routerLink="/teacher/subject/2" routerLinkActive="active">
                       <mat-icon matListIcon></mat-icon>
                       <h3 matLine>Historia</h3>
                   </mat-list-item>
   
   
-                  <mat-list-item routerLink="/teacher/subjects" routerLinkActive="active">
+                  <mat-list-item routerLink="/teacher/subject/3" routerLinkActive="active">
                       <mat-icon matListIcon></mat-icon>
                       <h3 matLine>Lenguaje</h3>
                   </mat-list-item>
