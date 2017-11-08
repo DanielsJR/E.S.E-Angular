@@ -7,6 +7,7 @@ const routes: Routes = [
     { path: 'about', loadChildren: './../about/about.module#AboutModule' },
     { path: 'social', loadChildren: './../social/social.module#SocialModule' },
     { path: 'admin', loadChildren: './../admin/admin.module#AdminModule' },
+    { path: 'manager', loadChildren: './../manager/manager.module#ManagerModule' },
     { path: 'teacher', loadChildren: './../teacher/teacher.module#TeacherModule' },
     { path: 'student', loadChildren: './../student/student.module#StudentModule' },
     // { path: 'login', loadChildren: './../login/login.module#LoginModule' },

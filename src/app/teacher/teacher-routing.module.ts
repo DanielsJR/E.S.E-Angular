@@ -1,8 +1,7 @@
-import { AuthGuard } from '../guards/auth-guard.service';
+import { TeacherAuthGuard } from '../guards/teacher-auth-guard.service';
 import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
 import { SubjectDetailComponent } from './subject-list/subject-detail/subject-detail.component';
 import { SubjectListComponent } from './subject-list/subject-list.component';
-import { PageNotFoundComponent } from '../error-pages/page-not-found.component';
 import { TeacherComponent } from './teacher.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -12,7 +11,7 @@ const teacherRoutes: Routes = [
     {
         path: '',
         component: TeacherComponent,
-        canActivate: [AuthGuard],
+        canActivate: [TeacherAuthGuard],
         children: [
             {
                 path: 'subject',

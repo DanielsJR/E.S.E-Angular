@@ -1,27 +1,4 @@
-<mat-toolbar class="fixed-header" color="primary">
-        
-            <span>
-                <button type="button" mat-icon-button (click)="sidenav.toggle()">
-                    <mat-icon>menu</mat-icon>
-                </button>
-            </span>
-        
-            <span>
-                <a class="nav-link home" routerLink=''>
-                    <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
-                </a>
-            </span>
-            <span class="spacer"></span>
-            <button mat-icon-button [mat-menu-trigger-for]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        
-        </mat-toolbar>
-        
-        <mat-menu x-position="before" #menu="matMenu">
-            <button mat-menu-item>Chat</button>
-            <button mat-menu-item>Logout</button>
-        </mat-menu>
+
 
 
     <router-outlet></router-outlet>

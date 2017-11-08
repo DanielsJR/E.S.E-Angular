@@ -16,9 +16,9 @@ export class LoginComponent implements OnInit {
   user: User;
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private loginService: LoginService,
-    private localStorageService: LocalStorageService,
-    private router: Router
+  constructor(
+    private formBuilder: FormBuilder, private loginService: LoginService,
+    private localStorageService: LocalStorageService, private router: Router
   ) {
     this.user = new User();
   }
@@ -26,11 +26,15 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.user.username = this.userName.value;
     this.user.password = this.password.value;
-    this.loginService.login(this.user.username, this.user.password)
+    this.loginService
+      .login(this.user.username, this.user.password)
       .subscribe(session => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE, session);
-        this.loginService.isLoggedIn = true;
-        this.router.navigate(['/teacher']);
+        console.log(JSON.stringify(session));
+        const sessionString: string = this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE);
+        const parsedSession: any = JSON.parse(sessionString);
+        const route = parsedSession.rol.toString().toLowerCase();
+        this.router.navigate(['/' + route]);
       }
       );
   }

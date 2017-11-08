@@ -1,20 +1,21 @@
+import { StudentRoutingModule } from './student.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentComponent } from './student.component';
 import { NgModule } from '@angular/core';
+import { StudentHomeComponent } from './student-home/student-home.component';
 
-const routes: Routes = [
-  { path: '', component: StudentComponent }
-];
+
 
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild(routes)
+    StudentRoutingModule
   ],
 
   declarations: [
-    StudentComponent
+    StudentComponent,
+    StudentHomeComponent
   ]
 })
 export class StudentModule { }

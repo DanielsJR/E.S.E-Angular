@@ -1,25 +1,4 @@
 
-/*mat-toolbar */
-.nav-link.home img {
-    position:relative;
-    margin-top:-21px;
-    margin-right:20px;
-    top:6px;
-    height:40px;
-   }
 
-   .spacer {
-    flex: 1 1 auto;
-   }
-
-
-  .fixed-header {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    width: 100%  !important;
-  }
-  /*mat-toolbar */
 
 

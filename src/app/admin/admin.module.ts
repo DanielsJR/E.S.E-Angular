@@ -1,19 +1,20 @@
-import { RouterModule, Routes } from '@angular/router';
+import { AdminCreateUserComponent } from './admin-create-user/admin-create-user.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AdminRoutingModule } from './admin.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { AdminComponent } from './admin.component';
 import { NgModule } from '@angular/core';
 
-const routes: Routes = [
-  { path: '', component: AdminComponent }
-];
 
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild(routes),
+    AdminRoutingModule
   ],
   declarations: [
-    AdminComponent
+    AdminComponent,
+    AdminHomeComponent,
+    AdminCreateUserComponent
   ]
 })
 export class AdminModule { }

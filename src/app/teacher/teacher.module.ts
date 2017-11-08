@@ -19,6 +19,9 @@ import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
     SubjectListComponent,
     SubjectDetailComponent,
     TeacherHomeComponent
+  ],
+  providers: [
+
   ]
 })
 export class TeacherModule { }
