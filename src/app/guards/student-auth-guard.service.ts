@@ -20,7 +20,8 @@ export class StudentAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
         console.log('AuthGuard#canActivate called');
-        return this.checkLogin(url);
+       // return this.checkLogin(url);
+        return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

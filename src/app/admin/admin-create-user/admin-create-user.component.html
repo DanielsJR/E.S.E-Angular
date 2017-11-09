@@ -1,14 +1,20 @@
-<mat-card>
 
+<mat-card>
 
   <form [formGroup]="crateManagerForm" (ngSubmit)="onSubmit()">
     
-     <mat-toolbar color="primary">
+     <mat-toolbar color="accent" class="c-m-bar">
+
+     
       <button type="button" mat-raised-button color="default"><span style=color:black>E</span></button>
       <button type="button" mat-raised-button color="primary"><span>S</span></button>
       <button type="button" mat-raised-button color="accent"><span>E</span></button>
-      <span class="spacer"></span>
-      <h1>Crear Manager</h1>
+      
+      
+      <mat-toolbar-row>
+        <span class="spacer-l"></span>
+        <h1>Crear Manager</h1>
+      </mat-toolbar-row>
      </mat-toolbar>
  
      <div class="login-content">
@@ -42,7 +48,8 @@
          </mat-placeholder>
          <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
        </mat-form-field>
- 
+
+
        <br>
        <br>
 
@@ -76,3 +83,4 @@
    </form>
 
 </mat-card>
+

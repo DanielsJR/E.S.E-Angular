@@ -65,15 +65,22 @@
   height: 100%;
 }
 
-
+.bar2 {
+  position: fixed !important;
+  left: 0;
+  width: 100%  !important;
+  top:64px;
+}
 .my-content {
-overflow: auto;
-position: absolute;
-bottom:0;
-left:0;
-right:0;
-top:64px;
-padding: 0 40px 0 40px;
+ overflow: auto;
+ position: absolute;
+ bottom:0;
+ left:0;
+ right:0;
+ top:64px;
+ padding: 0 40px 0 40px;
+ margin: auto;
+ max-width: 80%;
  
 }
  /*MATERIAL sidenav*/

@@ -3,35 +3,34 @@ body {
     font-family: 'Roboto', sans-serif;
   }
   
-  mat-card {
-    max-width: 80%;
-    margin: 2em auto;
-    }
-  
 
 .spacer {
+    flex: .5 1 auto;
+   }
+
+   .spacer-l {
     flex: 1 1 auto;
    }
   
+  
    h1 {
     font-size: 27px;
+    
     }
   
-  form {
-    min-width: 250px;
-    min-height: 600px;
-    max-width: 550px;
-    max-height: 600px;
+   mat-card, form {
+    width: 350px;
+    height: 650px;
     margin: 0 auto;
     padding: 0;
     overflow: hidden;
     background: #fafafa;
-    box-shadow: rgba(0,0,0,0.14902) 10px 10px 20px 0px,rgba(0,0,0,0.09804) 10px 10px 20px 0px;
-  
+     
   }
+
   
   form .login-content { 
-    padding: 20px 0px 0px 20px;
+    padding:35px;
   }
   
   form .login-actions { 
@@ -43,17 +42,23 @@ body {
   }
 
 
-  span{
+  span {
     font-family: 'Fascinate', sans-serif;
     font-size: 15px;
     
   }
 
   mat-form-field{
-      width: 50%;
+    width: 80%; 
   }
 
   .btn-submit{
     width: 50%;  
   }
+
+
+  .c-m-bar {
+
+}
+
 
