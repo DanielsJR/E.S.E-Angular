@@ -1,14 +1,10 @@
-<mat-sidenav-container [class]="activeTheme">  
+<mat-sidenav-container [class]="activeTheme">
 
     <mat-toolbar class="fixed-header" color="primary">
-
         <span>
-
-
             <button type="button" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
-
         </span>
 
         <span>
@@ -16,11 +12,9 @@
                 <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
             </a>
         </span>
+
         <span class="spacer"></span>
-
-
-
-        <button mat-icon-button [mat-menu-trigger-for]="themeMenu" matTooltip="Select a theme!" tabindex="-1">
+        <button mat-icon-button [mat-menu-trigger-for]="themeMenu" matTooltip="Selecciona un Tema!" tabindex="-1">
             <mat-icon>format_color_fill</mat-icon>
         </button>
 
@@ -28,20 +22,13 @@
             <mat-icon>more_vert</mat-icon>
         </button>
 
-     
     </mat-toolbar>
-
-
 
     <mat-menu x-position="before" #menu="matMenu">
         <button mat-menu-item>Chat</button>
         <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
 
-
-  
-    
-    <!-- TODO: replace use of `mat-menu` here with a custom overlay -->
     <mat-menu class="docs-theme-picker-menu" #themeMenu="matMenu" x-position="before">
         <mat-grid-list cols="2">
             <mat-grid-tile *ngFor="let theme of themes">
@@ -56,18 +43,15 @@
     </mat-menu>
 
 
-
-
-
     <mat-sidenav-container>
 
         <!-- sidenav content -->
         <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
 
-            <mat-toolbar color="default">
+            <mat-toolbar>
                 <mat-list>
                     <mat-list-item>
-                        <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="imagen del profesor">
+                        <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
                         <h3 matLine> Daniel's </h3>
                         <p matLine>
                             <span>Administrador</span>
@@ -76,7 +60,6 @@
                 </mat-list>
                 <mat-toolbar-row></mat-toolbar-row>
             </mat-toolbar>
-
 
             <mat-nav-list>
 
@@ -145,18 +128,14 @@
 
             </mat-nav-list>
 
-
         </mat-sidenav>
 
 
         <!-- primary content -->
         <div class="my-content">
-            <mat-toolbar color="primary" class="bar2">
-
-            </mat-toolbar>
+            <mat-toolbar color="primary" class="bar2"></mat-toolbar>
             <router-outlet></router-outlet>
         </div>
-
 
     </mat-sidenav-container>
 

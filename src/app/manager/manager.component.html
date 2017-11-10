@@ -1,3 +1,4 @@
+
 <mat-toolbar class="fixed-header" color="primary">
   
       <span>
@@ -12,6 +13,7 @@
           </a>
       </span>
       <span class="spacer"></span>
+
       <button mat-icon-button [mat-menu-trigger-for]="menu">
           <mat-icon>more_vert</mat-icon>
       </button>
@@ -20,10 +22,12 @@
   
   </mat-toolbar>
 
+
   <mat-menu x-position="before" #menu="matMenu">
       <button mat-menu-item>Chat</button>
       <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
+
 
 <mat-sidenav-container>
 
@@ -42,7 +46,6 @@
             </mat-list>
             <mat-toolbar-row></mat-toolbar-row>
         </mat-toolbar>
-
 
         <mat-nav-list>
 
@@ -110,7 +113,6 @@
             </mat-list-item>
 
         </mat-nav-list>
-
 
     </mat-sidenav>
 

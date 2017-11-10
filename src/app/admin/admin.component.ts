@@ -6,13 +6,13 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 @Component({
   selector: 'nx-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css', '../shared/theme-picker.scss'],
+  styleUrls: ['./admin.component.css'],
   animations: [
     TdRotateAnimation(),
     TdCollapseAnimation(),
   ],
 
-  encapsulation: ViewEncapsulation.None,
+  // encapsulation: ViewEncapsulation.None,
 
 
 })
