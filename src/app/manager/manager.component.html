@@ -1,3 +1,4 @@
+<mat-sidenav-container [class]="theme.activeTheme">
 
 <mat-toolbar class="fixed-header" color="primary">
   
@@ -13,6 +14,8 @@
           </a>
       </span>
       <span class="spacer"></span>
+
+      <nx-theme-picker #theme></nx-theme-picker>
 
       <button mat-icon-button [mat-menu-trigger-for]="menu">
           <mat-icon>more_vert</mat-icon>
@@ -122,5 +125,7 @@
         <router-outlet></router-outlet>
     </div>
 
+
+</mat-sidenav-container>
 
 </mat-sidenav-container>
