@@ -6,12 +6,13 @@
      <mat-toolbar color="accent" class="c-m-bar">
 
      
-      <button type="button" mat-raised-button color="default"><span style=color:black>E</span></button>
+      <button type="button" mat-raised-button color="default"><span>E</span></button>
       <button type="button" mat-raised-button color="primary"><span>S</span></button>
       <button type="button" mat-raised-button color="accent"><span>E</span></button>
       
       
       <mat-toolbar-row>
+          
         <span class="spacer-l"></span>
         <h1>Crear Manager</h1>
       </mat-toolbar-row>
@@ -68,7 +69,6 @@
        <mat-slide-toggle color="primary" checked="true">
          <small>Active</small>
        </mat-slide-toggle>
-
        <br>
        <br>
        <br>
@@ -77,7 +77,7 @@
        <button mat-raised-button class="btn-submit" color="accent" type="submit" id="login-submit-button" [disabled]="!crateManagerForm.valid">
          Create
        </button>
- 
+       
      </div>
  
    </form>

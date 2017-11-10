@@ -1,4 +1,4 @@
-import { LoginComponent } from '../login/login.component';
+
 import { LoginModule } from '../login/login.module';
 import { BookService2 } from '../book/book2.service';
 import { PageNotFoundComponent } from '../error-pages/page-not-found.component';
@@ -16,7 +16,6 @@ import { HomeModule } from '../home/home.module';
 import { BookStoreService } from '../book/book-store.service';
 
 
-
 @NgModule({
   imports: [
     SharedModule,
@@ -24,8 +23,8 @@ import { BookStoreService } from '../book/book-store.service';
     LoginModule,
     CoreRoutingModule,
     HttpModule,
-    HttpClientModule,
-   ],
+    HttpClientModule
+  ],
 
   declarations: [
     ShellComponent,
@@ -38,7 +37,8 @@ import { BookStoreService } from '../book/book-store.service';
     LocalStorageService,
     BookService,
     BookService2,
-    BookStoreService
+    BookStoreService,
+
   ],
 
   exports: [
@@ -47,11 +47,11 @@ import { BookStoreService } from '../book/book-store.service';
 })
 
 export class CoreModule {
-      // Prevent reimport of the CoreModule
-      constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
-        if (parentModule) {
-            throw new Error(
-                'CoreModule is already loaded. Import it in the AppModule only');
-        }
+  // Prevent reimport of the CoreModule
+  constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
+    if (parentModule) {
+      throw new Error(
+        'CoreModule is already loaded. Import it in the AppModule only');
     }
- }
+  }
+}

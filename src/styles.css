@@ -2,16 +2,15 @@
 
 /*MATERIAL DESIGN*/
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
 @import '~https://fonts.googleapis.com/css?family=Fascinate';
 @import '~https://fonts.googleapis.com/css?family=Roboto';
 
+
 /*mat-toolbar */
-.nav-link.home img {
+.nav-link, .home img {
   position:relative;
   margin-top:-21px;
-  margin-right:20px;
+  margin-left:20px;
   top:6px;
   height:40px;
  }
