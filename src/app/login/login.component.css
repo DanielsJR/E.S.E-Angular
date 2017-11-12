@@ -9,16 +9,6 @@
   font-family: 'Roboto', sans-serif;
  }
 
-form {
-  width: 250px;
-  height: 400px;
-  margin: 0 auto;
-  padding: 0;
-  overflow: hidden;
-  background: #fafafa;
-  box-shadow: rgba(0,0,0,0.14902) 10px 10px 20px 0px,rgba(0,0,0,0.09804) 10px 10px 20px 0px;
-
-}
 
 form .login-content { 
   padding: 20px 0px 0px 20px;
@@ -31,6 +21,161 @@ form .login-actions {
 .app-input-icon {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+@media all and (min-width:601px) {
+  .uc81Ff {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative
+  }
+  .uc81Ff:before,
+  .uc81Ff:after {
+      -webkit-box-flex: 1;
+      box-flex: 1;
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+      content: '';
+      display: block;
+      height: 24px
+  }
+  .uc81Ff:before {
+      min-height: 30px
+  }
+  .uc81Ff:after {
+      min-height: 24px
+  }
+  .uc81Ff.wKBl8c:after {
+      min-height: 64.8px
+  }
+}
+
+.LJtPoc {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  background: #fff;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  max-width: 100%;
+  position: relative;
+  z-index: 2
+}
+.wKBl8c .LJtPoc {
+  min-height: 100vh
+}
+
+@media all and (min-width:601px) {
+  .wKBl8c .LJtPoc {
+      min-height: 0
+  }
+  .LJtPoc,
+  .form{
+      -webkit-transition: .2s;
+      transition: .2s
+  }
+  .LJtPoc {
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+      background: #fff;
+      -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+      display: block;
+      margin: 0 auto;
+      min-height: 0;
+      width: 450px;
+      height: 400px;
+  }
+
+}
+
+
+.form{
+  -webkit-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 24px 24px 36px
+}
+
+@media all and (min-width:450px) {
+  .form {
+      padding: 48px 40px 36px
+  }
+}
+@media all and (min-width:601px) {
+  .form {
+      height: auto;
+      min-height: 500px;
+      overflow-y: auto
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+.VYMape {
+  background: #fff;
+  bottom: 0;
+  direction: ltr;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1
+}
+
+@media all and (min-width:601px) {
+  .VYMape {
+      background: #e0e0e0
+  }
+}
+
+.VYMape svg {
+  display: none;
+  height: 100%;
+  position: relative;
+  width: 100%
+}
+
+@media all and (min-width:601px) {
+  .VYMape svg {
+      display: block
+  }
+}
+  
+
+
+
 
 
 

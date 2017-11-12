@@ -4,11 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'nx-shell',
-  template: `
-
-   <nx-main-content></nx-main-content>
-
-  `,
+  template: `<nx-main-content></nx-main-content>`,
   styles: []
 })
 

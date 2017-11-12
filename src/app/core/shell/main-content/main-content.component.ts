@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 
-
 @Component({
   selector: 'nx-main-content',
-  templateUrl: './main-content.component.html',
-  styleUrls: ['./main-content.component.css']
+  template: `<router-outlet></router-outlet>`,
+  styles: []
 })
 
 export class MainContentComponent implements OnInit {
