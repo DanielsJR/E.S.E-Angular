@@ -1,11 +1,32 @@
-body {
+
+  mat-card {
+     text-align: center;
+     width:950px;
+     margin: auto;
+     padding: 0;
+     padding-bottom: 30px;
+     overflow: hidden;
+
+  }
+
+  .m-toolbar {
+    position: fixed !important;
+    top: 64px;
+    z-index: 2;
+    width:950px;
+         
+    }
+
+  .spacer-c {
+    flex: .5 1 auto;
+   }
+
+  
+   h1 {
+    font-size: 27px;
     font-family: 'Roboto', sans-serif;
   }
   
-  mat-card {
-     text-align: center;
-    
-  }
   
   button {
     font-family: 'Fascinate', sans-serif;

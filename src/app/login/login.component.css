@@ -10,24 +10,17 @@
  }
 
 
-form .login-content { 
-  padding: 20px 0px 0px 20px;
-}
 
-form .login-actions { 
-  padding: 8px 80px;
-}
 
 .app-input-icon {
   font-size: 16px;
 }
 
 
-
-
-
-
-
+span {
+  font-family: 'Fascinate', sans-serif;
+  font-size: 15px;
+}
 
 
 
@@ -101,7 +94,7 @@ form .login-actions {
       display: block;
       margin: 0 auto;
       min-height: 0;
-      width: 450px;
+      width: 250px;
       height: 400px;
   }
 
@@ -116,13 +109,27 @@ form .login-actions {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
-  padding: 24px 24px 36px
+  
+}
+
+form .login-content { 
+  padding: 20px;
+}
+
+form .login-actions { 
+  padding: 20px 80px;
 }
 
 @media all and (min-width:450px) {
-  .form {
-      padding: 48px 40px 36px
+
+  form .login-content { 
+    padding: 100px;
   }
+  
+  form .login-actions { 
+    padding: 100px 120px;
+  }
+  
 }
 @media all and (min-width:601px) {
   .form {
@@ -130,7 +137,17 @@ form .login-actions {
       min-height: 500px;
       overflow-y: auto
   }
+
+  form .login-content { 
+    padding: 20px;
+  }
+  
+  form .login-actions { 
+    padding: 20px 80px;
+  }
 }
+
+
 
 
 

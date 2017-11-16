@@ -14,14 +14,17 @@
         </span>
 
         <span class="spacer"></span>
-        
+
         <nx-theme-picker #theme></nx-theme-picker>
 
         <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
 
+       
+
     </mat-toolbar>
+
 
     <mat-menu x-position="before" #menu="matMenu">
         <button mat-menu-item>Chat</button>
@@ -32,8 +35,10 @@
 
 
     <mat-sidenav-container>
-
-        <!-- sidenav content -->
+        
+    <mat-toolbar class="toolbar2" color="primary"></mat-toolbar>
+          
+          <!-- sidenav content -->
         <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
 
             <mat-toolbar>
@@ -46,10 +51,17 @@
                         </p>
                     </mat-list-item>
                 </mat-list>
-                <mat-toolbar-row></mat-toolbar-row>
+    
             </mat-toolbar>
 
-            <mat-nav-list>
+            <mat-toolbar>
+                    
+                       
+           </mat-toolbar>
+
+            <mat-nav-list class="menu">
+
+          
 
                 <mat-list-item routerLink="/admin" routerLinkActive="active">
                     <mat-icon matListIcon>home</mat-icon>
@@ -121,7 +133,7 @@
 
         <!-- primary content -->
         <div class="my-content">
-            <mat-toolbar color="primary" class="bar2"></mat-toolbar>
+
             <router-outlet></router-outlet>
         </div>
 

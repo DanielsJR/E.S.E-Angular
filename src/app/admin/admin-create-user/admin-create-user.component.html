@@ -1,37 +1,39 @@
-
 <mat-card>
 
   <form [formGroup]="crateManagerForm" (ngSubmit)="onSubmit()">
-    
-     <mat-toolbar color="accent" class="c-m-bar">
 
-     
-      <button type="button" mat-raised-button color="default"><span>E</span></button>
-      <button type="button" mat-raised-button color="primary"><span>S</span></button>
-      <button type="button" mat-raised-button color="accent"><span>E</span></button>
-      
-      
-      <mat-toolbar-row>
-          
-        <span class="spacer-l"></span>
-        <h1>Crear Manager</h1>
-      </mat-toolbar-row>
-     </mat-toolbar>
- 
-     <div class="login-content">
-       <br>
-       <mat-form-field>
-         <input matInput type="text" formControlName="userName">
-         <mat-placeholder>
-           <i class="material-icons app-input-icon">face</i>Nombre de Usuario
-         </mat-placeholder>
-         <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
-       </mat-form-field>
- 
-       <br>
-       <br>
+    <mat-toolbar class="m-toolbar">
 
-       <mat-form-field>
+      <button type="button" mat-mini-fab color="default">
+        <span>E</span>
+      </button>
+      <button type="button" mat-mini-fab color="primary">
+        <span>S</span>
+      </button>
+      <button type="button" mat-mini-fab color="accent">
+        <span>E</span>
+      </button>
+
+
+    </mat-toolbar>
+
+    <mat-toolbar>
+      <span class="spacer-l"></span>
+      <h1>Crear Manager</h1>
+    </mat-toolbar>
+
+    <div class="content">
+
+      <mat-form-field>
+        <input matInput type="text" formControlName="userName">
+        <mat-placeholder>
+          <i class="material-icons app-input-icon">face</i>Nombre de Usuario
+        </mat-placeholder>
+        <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field>
         <input matInput type="text" formControlName="phone">
         <mat-placeholder>
           <i class="material-icons app-input-icon">phone</i>Telefono
@@ -39,22 +41,18 @@
         <mat-error *ngIf="userName.hasError('required')">El Telefono es requerido.</mat-error>
       </mat-form-field>
 
-      <br>
-      <br>
- 
-       <mat-form-field>
-         <input matInput type="password" formControlName="password">
-         <mat-placeholder>
-           <i class="material-icons app-input-icon">lock_open</i>Contraseña
-         </mat-placeholder>
-         <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
-       </mat-form-field>
 
 
-       <br>
-       <br>
+      <mat-form-field>
+        <input matInput type="password" formControlName="password">
+        <mat-placeholder>
+          <i class="material-icons app-input-icon">lock_open</i>Contraseña
+        </mat-placeholder>
+        <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
+      </mat-form-field>
 
-       <mat-form-field>
+
+      <mat-form-field>
         <input matInput type="password" formControlName="password">
         <mat-placeholder>
           <i class="material-icons app-input-icon">lock_open</i>Repita la Contraseña
@@ -62,25 +60,19 @@
         <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
       </mat-form-field>
 
-       <br>
-       <br>
-     
 
-       <mat-slide-toggle color="primary" checked="true">
-         <small>Active</small>
-       </mat-slide-toggle>
-       <br>
-       <br>
-       <br>
-       <br>
- 
-       <button mat-raised-button class="btn-submit" color="accent" type="submit" id="login-submit-button" [disabled]="!crateManagerForm.valid">
-         Create
-       </button>
-       
-     </div>
- 
-   </form>
+      <mat-slide-toggle color="primary" checked="true">
+        <small>Active</small>
+      </mat-slide-toggle>
+
+
+      <div class="actions">
+        <button mat-raised-button class="btn-submit" color="accent" type="submit" id="login-submit-button" [disabled]="!crateManagerForm.valid">
+          Create
+        </button>
+      </div>
+    </div>
+
+  </form>
 
 </mat-card>
-
