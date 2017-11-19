@@ -21,7 +21,7 @@
             <mat-icon>more_vert</mat-icon>
         </button>
 
-       
+
 
     </mat-toolbar>
 
@@ -35,10 +35,10 @@
 
 
     <mat-sidenav-container>
-        
-    <mat-toolbar class="toolbar2" color="primary"></mat-toolbar>
-          
-          <!-- sidenav content -->
+
+
+
+        <!-- sidenav content -->
         <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
 
             <mat-toolbar>
@@ -51,17 +51,17 @@
                         </p>
                     </mat-list-item>
                 </mat-list>
-    
+
             </mat-toolbar>
 
             <mat-toolbar>
-                    
-                       
-           </mat-toolbar>
+
+
+            </mat-toolbar>
 
             <mat-nav-list class="menu">
 
-          
+
 
                 <mat-list-item routerLink="/admin" routerLinkActive="active">
                     <mat-icon matListIcon>home</mat-icon>
@@ -130,9 +130,15 @@
 
         </mat-sidenav>
 
+        <mat-toolbar class="toolbar3">
+            <span class="spacer-c"></span>
+            <nx-logo-raised-button></nx-logo-raised-button>
+        </mat-toolbar>
 
         <!-- primary content -->
         <div class="my-content">
+
+
 
             <router-outlet></router-outlet>
         </div>

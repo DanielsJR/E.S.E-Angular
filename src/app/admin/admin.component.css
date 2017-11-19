@@ -27,3 +27,30 @@
     width: 100%  !important;
     z-index: 0;
   }
+
+  .toolbar3 {
+  position: relative;
+    top: 64px;
+    overflow: hidden;
+    
+    
+   
+    width: 100%  !important;
+    z-index: 20;
+  }
+
+  .spacer-l {
+    flex: 1 1 auto;
+  
+   }
+
+   .spacer-c {
+    flex: .5 1 auto;
+   }
+
+   mat-toolbar.toolbar3 span {
+    font-family: 'Black Ops One', cursive;
+    font-size: 1.8em;
+  }
+
+  

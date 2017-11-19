@@ -2,18 +2,12 @@
 mat-card, form {
     width: 350px;
     height: 530px;
-    margin: auto;
+    margin: 0 auto;
     padding: 0;
+    top: 25px;
   }
 
-  .m-toolbar {
-  position: fixed !important;
-  top: 64px;
-  z-index: 2;
-  width: 350px;
-       
-  }
-        
+   
 .content { 
     padding:0 40px;
     overflow: hidden;
@@ -37,10 +31,6 @@ mat-card, form {
     font-family: 'Roboto', sans-serif;
   }
   
-  span {
-    font-family: 'Fascinate', sans-serif;
-    font-size: 15px;
-  }
 
 .app-input-icon {
     font-size: 16px;
@@ -55,7 +45,7 @@ mat-card, form {
     position: relative;
     top: 30px;
     display: block;
-    left: 30px;
+    left: 50px;
   }
 
 

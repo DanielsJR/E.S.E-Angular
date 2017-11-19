@@ -2,25 +2,14 @@
 
   <form [formGroup]="crateManagerForm" (ngSubmit)="onSubmit()">
 
-    <mat-toolbar class="m-toolbar">
-
-      <button type="button" mat-mini-fab color="default">
-        <span>E</span>
-      </button>
-      <button type="button" mat-mini-fab color="primary">
-        <span>S</span>
-      </button>
-      <button type="button" mat-mini-fab color="accent">
-        <span>E</span>
-      </button>
-
-
-    </mat-toolbar>
 
     <mat-toolbar>
+      <nx-logo-icon-button></nx-logo-icon-button>
       <span class="spacer-l"></span>
       <h1>Crear Manager</h1>
     </mat-toolbar>
+
+
 
     <div class="content">
 

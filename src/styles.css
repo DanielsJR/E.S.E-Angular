@@ -2,8 +2,12 @@
 
 /*MATERIAL DESIGN*/
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
-@import '~https://fonts.googleapis.com/css?family=Fascinate';
+
 @import '~https://fonts.googleapis.com/css?family=Roboto';
+
+@import '~https://fonts.googleapis.com/css?family=Black+Ops+One';
+
+
 
 
 
@@ -79,7 +83,7 @@
  left:0;
  right:0;
  top:128px;
- padding: 0 80px;
+ padding: 0;
  margin: 0;
 
  
