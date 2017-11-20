@@ -1,19 +1,58 @@
 
-body {
-  margin: 0;
-  font-family: Roboto, sans-serif;
+#btn1 {
+  position: fixed;
+  width: 100%;
+  height: 30%;
+  bottom: 70%;
+  z-index: 1;
 }
 
-mat-card {
-  max-width: 80%;
-  margin: 2em auto;
+#btn2 {
+  top: 30%;
+  position: fixed;
+  width: 100%;
+  height: 70%;
+  z-index: 1;
+}
+
+#btn3 {
+  top: 30%;
+  position: fixed;
+  width: 100%;
+  height: 1%;
+  z-index: 1;
+}
+
+#btn4{
+  position: absolute;
+  width: 900px;
   text-align: center;
+  z-index: 3;
+  top: 140px;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
 }
 
-
-.done {
+.login  {
   position: fixed;
   bottom: 20px;
   right: 20px;
+
+  z-index: 3;
+}
+
+.theme-picker {
+  position: fixed;
+  top: 20px;
+  right: 20px;
   color: white;
+  z-index: 3;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+  padding: 25px 0;
 }

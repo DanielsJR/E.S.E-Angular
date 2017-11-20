@@ -2,7 +2,6 @@
   mat-card {
      text-align: center;
      width:700px;
-  
      margin: 0 auto;
      padding: 30px 0; 
      overflow: hidden;
@@ -10,32 +9,22 @@
 
   }
 
-  .m-toolbar {
-    position: fixed !important;
-    top: 64px;
-    z-index: 2;
-    width:700px;
-         
-    }
 
-  .spacer-c {
-    flex: .5 1 auto;
-   }
-
-  
    h1 {
     font-size: 27px;
     font-family: 'Roboto', sans-serif;
   }
   
-  
-  span {
-    font-family: 'Fascinate', sans-serif;
-  }
-  
+
   .done {
     position: fixed;
     bottom: 20px;
     right: 20px;
     color: white;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0;
   }

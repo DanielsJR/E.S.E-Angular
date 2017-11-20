@@ -1,6 +1,6 @@
 <mat-sidenav-container [class]="theme.activeTheme">
-
-    <mat-toolbar class="fixed-header" color="primary">
+    <!-- toolbar -->
+    <mat-toolbar class="toolbar1" color="primary">
         <span>
             <button type="button" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -13,35 +13,26 @@
             </a>
         </span>
 
-        <span class="spacer"></span>
+        <span class="spacer-l"></span>
 
         <nx-theme-picker #theme></nx-theme-picker>
 
         <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
-
-
-
     </mat-toolbar>
-
-
     <mat-menu x-position="before" #menu="matMenu">
         <button mat-menu-item>Chat</button>
         <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
 
-
-
-
     <mat-sidenav-container>
-
-
 
         <!-- sidenav content -->
         <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
 
-            <mat-toolbar>
+            <!-- sidenav toobar -->
+            <mat-toolbar color="default" class="side-toolbar">
                 <mat-list>
                     <mat-list-item>
                         <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
@@ -51,23 +42,16 @@
                         </p>
                     </mat-list-item>
                 </mat-list>
-
+                <mat-toolbar-row></mat-toolbar-row>
             </mat-toolbar>
-
-            <mat-toolbar>
-
-
-            </mat-toolbar>
-
+            
+            <!-- sidenav menu -->
             <mat-nav-list class="menu">
-
-
 
                 <mat-list-item routerLink="/admin" routerLinkActive="active">
                     <mat-icon matListIcon>home</mat-icon>
                     <h3 matLine>Home</h3>
                 </mat-list-item>
-
 
                 <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
                     <mat-icon matListIcon>school</mat-icon>
@@ -128,18 +112,16 @@
 
             </mat-nav-list>
 
-        </mat-sidenav>
+        </mat-sidenav> 
 
-        <mat-toolbar class="toolbar3">
+        <!-- toolbar2 -->
+        <mat-toolbar class="toolbar2">
             <span class="spacer-c"></span>
             <nx-logo-raised-button></nx-logo-raised-button>
         </mat-toolbar>
 
         <!-- primary content -->
         <div class="my-content">
-
-
-
             <router-outlet></router-outlet>
         </div>
 

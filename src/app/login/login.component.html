@@ -1,49 +1,65 @@
+<mat-sidenav-container [class]="theme.activeTheme">
 <div class=" uc81Ff wKBl8c">
 
   <div class="LJtPoc">
 
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <span class="theme-picker">
+      <nx-theme-picker #theme></nx-theme-picker>
+    </span>
 
-      <mat-toolbar color="primary">
-        <nx-logo-mini-fab></nx-logo-mini-fab>
-        <span class="spacer"></span>
-        <h1>Login</h1>
-      </mat-toolbar>
+    <mat-card>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-      <div class="login-content">
-        <br>
-        <mat-form-field>
-          <input matInput type="text" formControlName="userName">
-          <mat-placeholder>
-            <i class="material-icons app-input-icon">face</i>Nombre de Usuario
-          </mat-placeholder>
-          <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
-        </mat-form-field>
-        <br>
-        <br>
-        <mat-form-field>
-          <input matInput type="password" formControlName="password">
-          <mat-placeholder>
-            <i class="material-icons app-input-icon">lock_open</i>Contraseña
-          </mat-placeholder>
-          <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
-        </mat-form-field>
-        <br>
-        <br>
-        <mat-slide-toggle color="primary">
-          <small>Remember me!</small>
-        </mat-slide-toggle>
-      </div>
+        <mat-toolbar color="primary">
+          <nx-logo-mini-fab></nx-logo-mini-fab>
+          <span class="spacer"></span>
+          <h1>Login</h1>
+        </mat-toolbar>
+
+        <div class="login-content">
+
+          <br>
+
+          <mat-form-field>
+            <input matInput type="text" formControlName="userName">
+            <mat-placeholder>
+              <i class="material-icons app-input-icon">face</i>Nombre de Usuario
+            </mat-placeholder>
+            <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
+          </mat-form-field>
+
+          <br>
+          <br>
+
+          <mat-form-field>
+            <input matInput type="password" formControlName="password">
+            <mat-placeholder>
+              <i class="material-icons app-input-icon">lock_open</i>Contraseña
+            </mat-placeholder>
+            <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
+          </mat-form-field>
+
+          <br>
+          <br>
+
+          <mat-slide-toggle color="primary">
+            <small>Remember me!</small>
+          </mat-slide-toggle>
+
+        </div>
+
+        <div class="login-actions ">
+          <button mat-raised-button color="accent" type="submit" id="login-submit-button" [disabled]="!loginForm.valid">
+            Sing In
+          </button>
+        </div>
+
+      </form>
+
+    </mat-card>
 
 
-      <div class="login-actions ">
-        <button mat-raised-button color="accent" type="submit" id="login-submit-button" [disabled]="!loginForm.valid">
-          Sing In
-        </button>
-      </div>
-
-    </form>
 
   </div>
 
@@ -69,3 +85,5 @@
 
 
 </div>
+
+</mat-sidenav-container>

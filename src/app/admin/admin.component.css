@@ -1,56 +1,7 @@
 
 
-  .mySidenav {
-    top:64px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    width: 260px;
-    
-  }
-
-  .menu {
-    overflow: auto;
-    position: absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    top:128px;
-
-    margin: auto;
-  }
 
 
 
-  .toolbar2 {
-    position: fixed !important;
-    top: 64px;
-    left: 0;
-    width: 100%  !important;
-    z-index: 0;
-  }
-
-  .toolbar3 {
-  position: relative;
-    top: 64px;
-    overflow: hidden;
-    
-    
-   
-    width: 100%  !important;
-    z-index: 20;
-  }
-
-  .spacer-l {
-    flex: 1 1 auto;
-  
-   }
-
-   .spacer-c {
-    flex: .5 1 auto;
-   }
-
-   mat-toolbar.toolbar3 span {
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.8em;
-  }
 
   

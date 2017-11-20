@@ -1,127 +1,130 @@
 <mat-sidenav-container [class]="theme.activeTheme">
-<mat-toolbar class="fixed-header" color="primary">
-  
-      <span>
-          <button type="button" mat-icon-button (click)="sidenav.toggle()">
-              <mat-icon>menu</mat-icon>
-          </button>
-      </span>
-  
-      <span>
-          <a class="nav-link home" routerLink=''>
-              <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
-          </a>
-      </span>
-      <span class="spacer"></span>
-      <nx-theme-picker #theme></nx-theme-picker>
-
-      <button mat-icon-button [mat-menu-trigger-for]="menu">
-          <mat-icon>more_vert</mat-icon>
-      </button>
-  
-  </mat-toolbar>
-  
-  <mat-menu x-position="before" #menu="matMenu">
-      <button mat-menu-item>Chat</button>
-      <button mat-menu-item (click)="logout()">Logout</button>
-  </mat-menu>
-  
-  <mat-sidenav-container>
-  
-      <!-- sidenav content -->
-      <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
-  
-          <mat-toolbar color="default">
-              <mat-list>
-                  <mat-list-item>
-                      <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="imagen del profesor">
-                      <h3 matLine> Lukas Lobos </h3>
-                      <p matLine style="color: rgba(0, 0, 0, 0.54);">
-                          <span>Estudiante</span>
-                      </p>
-                  </mat-list-item>
-              </mat-list>
-              <mat-toolbar-row></mat-toolbar-row>
-          </mat-toolbar>
-  
-  
-          <mat-nav-list>
-  
-              <mat-list-item routerLink="/teacher" routerLinkActive="active">
-                  <mat-icon matListIcon>home</mat-icon>
-                  <h3 matLine>Home</h3>
-              </mat-list-item>
-  
-  
-              <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
-                  <mat-icon matListIcon>school</mat-icon>
-                  <h3 matLine>Asignaturas</h3>
-                  <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
-              </mat-list-item>
-  
-              <div [@tdCollapse]="triggerAsignaturas">
-  
-                  <mat-list-item [routerLink]="['/teacher/subject',1]" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Matemáticas</h3>
-                  </mat-list-item>
-  
-  
-                  <mat-list-item routerLink="/teacher/subject/2" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Historia</h3>
-                  </mat-list-item>
-  
-  
-                  <mat-list-item routerLink="/teacher/subject/3" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Lenguaje</h3>
-                  </mat-list-item>
-  
-              </div>
-  
-  
-              <mat-list-item (click)="triggerPruebas = !triggerPruebas">
-                  <mat-icon matListIcon>description</mat-icon>
-                  <h3 matLine>Pruebas</h3>
-                  <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
-              </mat-list-item>
-  
-              <div [@tdCollapse]="triggerPruebas">
-                  <mat-list-item routerLink="/login" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Tomar Prueba</h3>
-                  </mat-list-item>
-  
-                  <mat-list-item routerLink="/login" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Crear Prueba</h3>
-                  </mat-list-item>
-  
-                  <mat-list-item routerLink="/login" routerLinkActive="active">
-                      <mat-icon matListIcon></mat-icon>
-                      <h3 matLine>Historial Pruebas</h3>
-                  </mat-list-item>
-              </div>
-  
-  
-              <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
-                  <mat-icon matListIcon>cancel</mat-icon>
-                  <h3 matLine>404</h3>
-              </mat-list-item>
-  
-          </mat-nav-list>
-  
-  
-      </mat-sidenav>
-  
-  
-      <!-- primary content -->
-      <div class="my-content">
-          <router-outlet></router-outlet>
-      </div>
-  
-  
-  </mat-sidenav-container>
-
-</mat-sidenav-container>
+        <!-- toolbar -->
+        <mat-toolbar class="toolbar1" color="primary">
+            <span>
+                <button type="button" mat-icon-button (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+            </span>
+    
+            <span>
+                <a class="nav-link home" routerLink=''>
+                    <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
+                </a>
+            </span>
+    
+            <span class="spacer-l"></span>
+    
+            <nx-theme-picker #theme></nx-theme-picker>
+    
+            <button mat-icon-button [mat-menu-trigger-for]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </mat-toolbar>
+        <mat-menu x-position="before" #menu="matMenu">
+            <button mat-menu-item>Chat</button>
+            <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+    
+        <mat-sidenav-container>
+    
+            <!-- sidenav content -->
+            <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
+    
+                <!-- sidenav toobar -->
+                <mat-toolbar color="default" class="side-toolbar">
+                    <mat-list>
+                        <mat-list-item>
+                            <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
+                            <h3 matLine>Lukas Lobos</h3>
+                            <p matLine>
+                                <span>Alumno</span>
+                            </p>
+                        </mat-list-item>
+                    </mat-list>
+                    <mat-toolbar-row></mat-toolbar-row>
+                </mat-toolbar>
+                
+                <!-- sidenav menu -->
+                <mat-nav-list class="menu">
+    
+                    <mat-list-item routerLink="/admin" routerLinkActive="active">
+                        <mat-icon matListIcon>home</mat-icon>
+                        <h3 matLine>Home</h3>
+                    </mat-list-item>
+    
+                    <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
+                        <mat-icon matListIcon>school</mat-icon>
+                        <h3 matLine>Usuarios</h3>
+                        <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
+                    </mat-list-item>
+    
+                    <div [@tdCollapse]="triggerAsignaturas">
+    
+                        <mat-list-item routerLink="./users/create-user" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Crear Manager</h3>
+                        </mat-list-item>
+    
+    
+                        <mat-list-item routerLink="/social" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Editar Manager</h3>
+                        </mat-list-item>
+    
+    
+                        <mat-list-item routerLink="/social" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Borrar Manager</h3>
+                        </mat-list-item>
+    
+                    </div>
+    
+    
+                    <mat-list-item (click)="triggerPruebas = !triggerPruebas">
+                        <mat-icon matListIcon>description</mat-icon>
+                        <h3 matLine>Pruebas</h3>
+                        <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
+                    </mat-list-item>
+    
+                    <div [@tdCollapse]="triggerPruebas">
+                        <mat-list-item routerLink="/login" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Tomar Prueba</h3>
+                        </mat-list-item>
+    
+                        <mat-list-item routerLink="/login" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Crear Prueba</h3>
+                        </mat-list-item>
+    
+                        <mat-list-item routerLink="/login" routerLinkActive="active">
+                            <mat-icon matListIcon></mat-icon>
+                            <h3 matLine>Historial Pruebas</h3>
+                        </mat-list-item>
+                    </div>
+    
+    
+                    <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
+                        <mat-icon matListIcon>cancel</mat-icon>
+                        <h3 matLine>404</h3>
+                    </mat-list-item>
+    
+                </mat-nav-list>
+    
+            </mat-sidenav> 
+    
+            <!-- toolbar2 -->
+            <mat-toolbar class="toolbar2">
+                <span class="spacer-c"></span>
+                <nx-logo-raised-button></nx-logo-raised-button>
+            </mat-toolbar>
+    
+            <!-- primary content -->
+            <div class="my-content">
+                <router-outlet></router-outlet>
+            </div>
+    
+        </mat-sidenav-container>
+    
+    </mat-sidenav-container>

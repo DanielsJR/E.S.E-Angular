@@ -7,9 +7,11 @@
 
 @import '~https://fonts.googleapis.com/css?family=Black+Ops+One';
 
-
-
-
+html, body, mat-sidenav-container {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
 
 
 /*mat-toolbar */
@@ -21,19 +23,74 @@
   height:40px;
  }
 
- .spacer {
-  flex: 1 1 auto;
- }
-
-
-.fixed-header {
+.toolbar1 {
   position: fixed !important;
   top: 0;
   left: 0;
   z-index: 10;
   width: 100%  !important;
 }
+
+.toolbar2 {
+  position: relative;
+  top: 64px;
+  overflow: hidden;
+  width: 100%  !important;
+  z-index: 20;
+ }
+
+ .spacer-l {
+  flex: 1 1 auto;
+
+ }
+
+ .spacer-c {
+  flex: .5 1 auto;
+ }
 /*mat-toolbar */
+
+
+
+/*mat-sidenav*/
+ .mySidenav {
+  top:64px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  width: 260px;
+  
+}
+
+ .side-toolbar {
+  position: fixed !important;
+  top: 64px;
+  left: 0;
+  width: 100%  !important;
+  z-index: 0;
+}
+
+.menu {
+  overflow: auto;
+  position: absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  top:192px;
+  margin: auto;
+}
+
+
+.my-content {
+ overflow: auto;
+ position: absolute;
+ bottom:0;
+ left:0;
+ right:0;
+ top:128px;
+ padding: 0;
+ margin: 0;
+}
+/*mat-sidenav*/
+
+
 
 /*MATERIAL dialog*/
   .bar-icon{
@@ -41,9 +98,6 @@
   padding: 20px 120px;
   }
 
-  .spacer {
-  flex: 1 1 auto;
-  }
 
   .myDialog .mat-dialog-container { 
     padding: 0;
@@ -61,35 +115,34 @@
   /*MATERIAL dialog*/
 
 
- /*MATERIAL sidenav Content*/
- html, body, mat-sidenav-container {
-  margin: 0;
-  width: 100%;
-  height: 100%;
+
+ /*scrollbar */
+
+ ::-webkit-scrollbar {
+  width: 11px;
 }
 
-.bar2 {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%  !important;
-  top:64px;
-}
-
-.my-content {
- overflow: auto;
- position: absolute;
- bottom:0;
- left:0;
- right:0;
- top:128px;
- padding: 0;
- margin: 0;
-
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
  
 }
- /*MATERIAL sidenav*/
+
+::-webkit-scrollbar-thumb {
+  
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  
+}
+
+::-webkit-scrollbar-thumb:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7); 
+}
+
+::-webkit-scrollbar-thumb:active {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9); 
+}
+
+/*scrollbar */
 
 
 
-
+ 
