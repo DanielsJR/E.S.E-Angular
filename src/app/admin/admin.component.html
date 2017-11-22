@@ -2,7 +2,6 @@
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
-
         <span>
             <button type="button" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -10,12 +9,13 @@
         </span>
 
         <span>
-            <a class="nav-link home" routerLink='./'>
+            <a class="home" routerLink='./'>
                 <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
             </a>
         </span>
 
         <span class="spacer-l"></span>
+        <nx-full-screen></nx-full-screen>
         <nx-theme-picker #theme></nx-theme-picker>
 
         <button mat-icon-button [mat-menu-trigger-for]="menu">
@@ -122,7 +122,7 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" nxScroller (scrollEvent)="scrolled=$event">
+        <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="theme.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
             <router-outlet></router-outlet>
         </div>
 

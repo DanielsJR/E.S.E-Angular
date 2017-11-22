@@ -1,3 +1,4 @@
+import { FullScreenModule } from './full-screen/full-screen.module';
 import { LogoModule } from './logo.module';
 import { ThemePickerModule } from './theme-picker/theme-picker.module';
 import { MaterialModule } from './material.module';
@@ -21,6 +22,7 @@ import { ScrollerDirective } from './directives/scroll.directive';
     FormsModule,
     ReactiveFormsModule,
     ThemePickerModule,
+    FullScreenModule,
     LogoModule,
     MaterialModule,
     ScrollerDirective,

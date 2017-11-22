@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Theme } from '../../models/theme';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'nx-theme-picker',
@@ -45,18 +47,41 @@ export class ThemePickerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  private theme(): Theme {
+    if (localStorage.length !== 0) {
+      const stringTheme = localStorage.getItem('theme');
+      const parsedTheme: any = JSON.parse(stringTheme);
+      return new Theme(parsedTheme.name, parsedTheme.isDark);
+    } else {
+      return null;
+    }
   }
 
   get activeTheme(): string {
-    return localStorage.getItem('theme');
+     if (this.theme() != null) {
+      return this.theme().name;
+    } else {
+      return 'indigo-pink';
+    }
+  }
+  get isDark(): boolean {
+    if (this.theme() != null) {
+      return this.theme().isDark;
+    } else {
+      return false;
+    }
   }
 
-  installTheme(theme: string): void {
-    localStorage.setItem('theme', theme);
+  installTheme(theme: Theme): void {
+    localStorage.setItem('theme', JSON.stringify(theme));
   }
 
   removeTheme(theme: string): void {
     localStorage.removeItem('theme');
   }
+
 
 }

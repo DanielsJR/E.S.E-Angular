@@ -12,16 +12,13 @@ html, body, mat-sidenav-container {
   margin: 0;
   width: 100%;
   height: 100%;
-}
-
-#container2 {
-  
+  overflow:hidden;
 }
 
 /*mat-toolbar */
 .toolbar1 {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 0;
   width: 100% !important;
   z-index: 2;
@@ -32,34 +29,36 @@ html, body, mat-sidenav-container {
   left: 0;
   width: 100%  !important;
   z-index: 1;
+  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
  }
- .nav-link, .home img {
+ .home img {
   position:relative;
   margin-top:-21px;
-  margin-left:20px;
+  margin-left:45px;
   top:6px;
   height:40px;
- }
- .spacer-l {
-  flex: 1 1 auto;
-
  }
  .spacer-c {
   flex: .5 1 auto;
  }
+ .spacer-l {
+  flex: 1 1 auto;
+ }
+
 /*mat-toolbar */
 
 
 /*mat-sidenav*/
  .sidenav {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
   width: 260px;
 }
  .side-toolbar {
   position: fixed !important;
   top: 64px;
   left: 0;
-  width: 100%  !important;
+  width: 260px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
 }
 .menu {
   overflow: auto;
@@ -71,7 +70,7 @@ html, body, mat-sidenav-container {
   margin: auto;
 }
 .content {
-  overflow: auto;
+ overflow: auto;
  position: absolute;
  bottom:0;
  left:0;
@@ -79,6 +78,8 @@ html, body, mat-sidenav-container {
  top:128px;
  padding: 0;
  margin: 0;
+
+
 }
 /*mat-sidenav*/
 

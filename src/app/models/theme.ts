@@ -1,4 +1,5 @@
 export class Theme {
-    id: number;
-    name: string;
+
+    constructor(public name: string,  public isDark: boolean, public color?: string) { }
 }
+

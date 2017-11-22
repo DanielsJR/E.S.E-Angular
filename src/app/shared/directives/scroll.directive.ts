@@ -23,6 +23,7 @@ export class ScrollerDirective {
 
     @HostListener('click') clicking() {
         console.log('clicking...');
+        // this.el.nativeElement.webkitRequestFullscreen();
     }
 
     constructor(private el: ElementRef) { }
