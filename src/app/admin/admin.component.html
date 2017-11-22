@@ -1,6 +1,8 @@
-<mat-sidenav-container [class]="theme.activeTheme">
+<mat-sidenav-container id="container" #container [class]="theme.activeTheme">
+
     <!-- toolbar -->
-    <mat-toolbar class="toolbar1" color="primary">
+    <mat-toolbar color="primary" class="toolbar1">
+
         <span>
             <button type="button" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -8,28 +10,28 @@
         </span>
 
         <span>
-            <a class="nav-link home" routerLink=''>
+            <a class="nav-link home" routerLink='./'>
                 <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
             </a>
         </span>
 
         <span class="spacer-l"></span>
-
         <nx-theme-picker #theme></nx-theme-picker>
 
         <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
+
     </mat-toolbar>
     <mat-menu x-position="before" #menu="matMenu">
         <button mat-menu-item>Chat</button>
         <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
 
-    <mat-sidenav-container>
+    <mat-sidenav-container id="container2">
 
         <!-- sidenav content -->
-        <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
+        <mat-sidenav mode="side" opened="true" #sidenav class="sidenav">
 
             <!-- sidenav toobar -->
             <mat-toolbar color="default" class="side-toolbar">
@@ -42,9 +44,8 @@
                         </p>
                     </mat-list-item>
                 </mat-list>
-                <mat-toolbar-row></mat-toolbar-row>
             </mat-toolbar>
-            
+
             <!-- sidenav menu -->
             <mat-nav-list class="menu">
 
@@ -112,7 +113,7 @@
 
             </mat-nav-list>
 
-        </mat-sidenav> 
+        </mat-sidenav>
 
         <!-- toolbar2 -->
         <mat-toolbar class="toolbar2">
@@ -121,7 +122,7 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="my-content">
+        <div class="content" nxScroller (scrollEvent)="scrolled=$event">
             <router-outlet></router-outlet>
         </div>
 

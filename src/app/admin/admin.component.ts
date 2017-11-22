@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 
+
 @Component({
   selector: 'nx-admin',
   templateUrl: './admin.component.html',
@@ -12,7 +13,6 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
     TdCollapseAnimation(),
   ],
 
-
 })
 export class AdminComponent implements OnInit {
 
@@ -20,7 +20,10 @@ export class AdminComponent implements OnInit {
   triggerMat = true;
   triggerHist = true;
   triggerPruebas = true;
-  
+
+  scrolled = false;
+
+
   constructor(private router: Router, private loginService: LoginService) { }
 
   ngOnInit() {
@@ -32,8 +35,6 @@ export class AdminComponent implements OnInit {
     localStorage.removeItem('theme');
     this.router.navigate(['/']);
   }
-
-
 
 
 }

@@ -4,8 +4,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { ScrollerDirective } from './directives/scroll.directive';
 
 
 @NgModule({
@@ -14,6 +13,7 @@ import { CommonModule } from '@angular/common';
   ],
 
   declarations: [
+    ScrollerDirective
 
   ],
   exports: [
@@ -23,6 +23,7 @@ import { CommonModule } from '@angular/common';
     ThemePickerModule,
     LogoModule,
     MaterialModule,
+    ScrollerDirective,
 
   ]
 })
