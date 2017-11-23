@@ -1,9 +1,17 @@
-<button type="button" mat-raised-button color="default" [@tdJello]="jelloState" (click)="jelloState = !jelloState">
+<button type="button" mat-raised-button color="default" 
+[@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState"
+[@tdJello]="jelloState">
   <span>e</span>
 </button>
-<button type="button" mat-raised-button color="primary" [@tdBounce]="bounceState" (click)="bounceState = !bounceState">
+
+<button type="button" mat-raised-button color="primary" 
+[@tdBounce]="bounceState" (click)="bounceState = !bounceState"
+[@tdJello]="jelloState">
   <span>S</span>
 </button>
-<button type="button" mat-raised-button color="accent" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+
+<button type="button" mat-raised-button color="accent" 
+[@tdPulse]="pulseState" (click)="pulseState = !pulseState" 
+[@tdJello]="jelloState">
   <span>e</span>
 </button>

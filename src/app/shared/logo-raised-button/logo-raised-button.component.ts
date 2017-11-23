@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   TdBounceAnimation,
   TdFlashAnimation,
@@ -17,15 +17,17 @@ import {
     TdHeadshakeAnimation(), // using implicit anchor name 'tdHeadshake' in template
     TdJelloAnimation(), // using implicit anchor name 'tdJello' in template
     TdPulseAnimation(), // using implicit anchor name 'tdPulse' in template
+
   ],
 })
 export class LogoRaisedButtonComponent implements OnInit {
 
-  bounceState = false;
-  flashState = false;
-  headshakeState = false;
-  jelloState = false;
-  pulseState = false;
+  @Input() bounceState = false;
+  @Input() flashState = false;
+  @Input() headshakeState = false;
+  @Input() jelloState = false;
+  @Input() pulseState = false;
+
 
 
   constructor() { }

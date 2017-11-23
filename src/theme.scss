@@ -1,11 +1,15 @@
 @import '~@angular/material/theming';
 
+
 //custom-themes
-@import './assets/custom-themes/deeppurple-amber.scss';
-@import './assets/custom-themes/pink-bluegrey.scss';
-@import './assets/custom-themes/purple-green.scss';
-@import './assets/custom-themes/blue-grey.scss';
+@import './assets/custom-themes/pink-purple.scss';
+@import './assets/custom-themes/indigo-pink.scss';
 @import './assets/custom-themes/orange-blue.scss';
+@import './assets/custom-themes/deeppurple-amber.scss';
+@import './assets/custom-themes/blue-grey.scss';
+@import './assets/custom-themes/pink-bluegrey.scss';
+
+
 
 // Plus imports for other components in your app.
 
@@ -15,16 +19,13 @@
 @include mat-core();
 
 
-// Define the light theme.
+// Define the default theme.
 $primary: mat-palette($mat-indigo);
 $accent:  mat-palette($mat-pink, A200, A100, A400);
 
 $theme: mat-light-theme($primary, $accent);
 @include angular-material-theme($theme);
 
-.indigo-pink {
- @include angular-material-theme($theme);
-}
 
 
 
