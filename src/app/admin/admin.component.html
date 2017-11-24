@@ -1,4 +1,4 @@
-<mat-sidenav-container id="container" #container [class]="theme.activeTheme">
+<mat-sidenav-container id="container" #container [class]="themePicker.activeTheme">
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
@@ -16,7 +16,7 @@
 
         <span class="spacer-l"></span>
         <nx-full-screen></nx-full-screen>
-        <nx-theme-picker #theme></nx-theme-picker>
+        <nx-theme-picker></nx-theme-picker>
 
         <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon>more_vert</mat-icon>
@@ -152,7 +152,7 @@
 
         <!-- primary content -->
         <div class="content" nxScroller (scrollEvent)="scrolled=$event"
-         [style.background-color]="theme.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
+         [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
             <router-outlet></router-outlet>
         </div>
 

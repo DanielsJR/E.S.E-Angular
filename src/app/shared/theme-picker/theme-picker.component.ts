@@ -3,7 +3,7 @@ import { Theme } from '../../models/theme';
 import { forEach } from '@angular/router/src/utils/collection';
 
 
-import {OverlayContainer} from '@angular/cdk/overlay';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'nx-theme-picker',
@@ -13,32 +13,31 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 })
 export class ThemePickerComponent implements OnInit {
 
-  themes = [
-
+  themesLight = [
     { name: 'pink-purple', color: '#E91E63', isDark: false },
-    { name: 'pink-purple-dark', color: '#E91E63', isDark: true },
-
     { name: 'indigo-pink', color: '#3F51B5', isDark: false },
-    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true },
-
     { name: 'orange-blue', color: '#F57C00', isDark: false },
-    { name: 'orange-blue-dark', color: '#F57C00', isDark: true },
-
     { name: 'deeppurple-amber', color: '#673AB7', isDark: false },
-    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true },
-
     { name: 'blue-grey', color: '#455A64', isDark: false },
-    { name: 'blue-grey-dark', color: '#455A64', isDark: true },
-
     { name: 'pink-bluegrey', color: '#E91E63', isDark: false },
-    { name: 'pink-bluegrey-dark', color: '#E91E63', isDark: true },
-
   ];
+
+  themesDark = [
+    { name: 'pink-purple-dark', color: '#E91E63', isDark: true },
+    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true },
+    { name: 'orange-blue-dark', color: '#F57C00', isDark: true },
+    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true },
+    { name: 'blue-grey-dark', color: '#455A64', isDark: true },
+    { name: 'pink-bluegrey-dark', color: '#E91E63', isDark: true },
+  ];
+
+  themeArray;
 
   constructor(public overlayContainer: OverlayContainer) { }
 
   ngOnInit() {
     this.overlayContainer.getContainerElement().classList.add(this.activeTheme);
+    this.selectTheme();
   }
 
   private theme(): Theme {
@@ -67,10 +66,35 @@ export class ThemePickerComponent implements OnInit {
     }
   }
 
+  selectTheme(): void {
+    if (this.isDark) {
+      this.themeArray = this.themesDark;
+    }else {
+      this.themeArray = this.themesLight;
+    }
+  }
+
   installTheme(theme: Theme): void {
     this.overlayContainer.getContainerElement().classList.remove(this.activeTheme);
     localStorage.setItem('theme', JSON.stringify(theme));
     this.overlayContainer.getContainerElement().classList.add(theme.name);
+    this.selectTheme();
+  }
+
+  installDarkTheme(): void {
+    const darkThemeName = this.activeTheme + '-dark';
+    const darkTheme = new Theme(darkThemeName, true);
+    this.installTheme(darkTheme);
+  }
+
+  installLightTheme(): void {
+    if (this.activeTheme !== 'indigo-pink') {
+      const lightThemeName = this.activeTheme.slice(0, -5);
+      const lightTheme = new Theme(lightThemeName, false);
+      this.installTheme(lightTheme);
+    } else {
+      this.installDarkTheme();
+    }
   }
 
   removeTheme(): void {

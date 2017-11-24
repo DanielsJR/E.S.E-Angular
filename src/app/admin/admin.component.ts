@@ -23,14 +23,14 @@ export class AdminComponent implements OnInit {
 
   scrolled = false;
 
+
   @ViewChild(ThemePickerComponent)
-  private themePicker: ThemePickerComponent;
+   themePicker: ThemePickerComponent;
+
 
   constructor(private router: Router, private loginService: LoginService) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   private logout(): void {
     this.loginService.logout();
