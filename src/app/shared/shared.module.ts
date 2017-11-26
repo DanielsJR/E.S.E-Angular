@@ -7,7 +7,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
 import { ShowScrollDirective } from './directives/show-scroll.directive';
-import { ThemeModule } from '../../assets/custom-themes/theme.module';
 
 
 @NgModule({
@@ -30,7 +29,6 @@ import { ThemeModule } from '../../assets/custom-themes/theme.module';
     MaterialModule,
     ScrollerDirective,
     ShowScrollDirective,
-   // ThemeModule,
 
   ]
 })

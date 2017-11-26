@@ -14,21 +14,45 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 export class ThemePickerComponent implements OnInit {
 
   themesLight = [
+    { name: 'red-indigo', color: '#F44336', isDark: false },
     { name: 'pink-purple', color: '#E91E63', isDark: false },
-    { name: 'indigo-pink', color: '#3F51B5', isDark: false },
-    { name: 'orange-blue', color: '#F57C00', isDark: false },
+    { name: 'purple-pink', color: '#9C27B0', isDark: false },
     { name: 'deeppurple-amber', color: '#673AB7', isDark: false },
-    { name: 'blue-grey', color: '#455A64', isDark: false },
-    { name: 'pink-bluegrey', color: '#E91E63', isDark: false },
+    { name: 'indigo-pink', color: '#3F51B5', isDark: false },
+    { name: 'blue-red', color: '#2196F3', isDark: false },
+    { name: 'lightblue-lime', color: '#03A9F4', isDark: false },
+    { name: 'cyan-blue-grey', color: '#00BCD4', isDark: false },
+    { name: 'teal-yellow', color: '#009688', isDark: false },
+    { name: 'green-amber', color: '#4CAF50', isDark: false },
+    { name: 'lightgreen-blue', color: '#8BC34A', isDark: false },
+    { name: 'lime-pink', color: '#CDDC39', isDark: false },
+    { name: 'yellow-deeppurple', color: '#FFEB3B', isDark: false },
+    { name: 'amber-indigo', color: '#FFC107', isDark: false },
+    { name: 'orange-lightblue', color: '#F57C00', isDark: false },
+    { name: 'deeporange-indigo', color: '#FF5722', isDark: false },
+
+    { name: 'bluegrey-amber', color: '#455A64', isDark: false },
   ];
 
   themesDark = [
-    { name: 'pink-purple-dark', color: '#E91E63', isDark: true },
-    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true },
-    { name: 'orange-blue-dark', color: '#F57C00', isDark: true },
-    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true },
-    { name: 'blue-grey-dark', color: '#455A64', isDark: true },
-    { name: 'pink-bluegrey-dark', color: '#E91E63', isDark: true },
+    { name: 'red-indigo-dark', color: '#F44336', isDark: true },
+    { name: 'pink-purple-dark', color: '#E91E63', isDark: true  },
+    { name: 'purple-pink-dark', color: '#9C27B0', isDark: true  },
+    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true  },
+    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true  },
+    { name: 'blue-red-dark', color: '#2196F3', isDark: true  },
+    { name: 'lightblue-lime-dark', color: '#03A9F4', isDark: true  },
+    { name: 'cyan-blue-grey-dark', color: '#00BCD4', isDark: true  },
+    { name: 'teal-yellow-dark', color: '#009688', isDark: true  },
+    { name: 'green-amber-dark', color: '#4CAF50', isDark: true  },
+    { name: 'lightgreen-blue-dark', color: '#8BC34A', isDark: true  },
+    { name: 'lime-pink-dark', color: '#CDDC39', isDark: true  },
+    { name: 'yellow-deeppurple-dark', color: '#FFEB3B', isDark: true  },
+    { name: 'amber-indigo-dark', color: '#FFC107', isDark: true  },
+    { name: 'orange-lightblue-dark', color: '#F57C00', isDark: true  },
+    { name: 'deeporange-indigo-dark', color: '#FF5722', isDark: true  },
+
+    { name: 'bluegrey-amber-dark', color: '#455A64', isDark: true },
   ];
 
   themeArray;

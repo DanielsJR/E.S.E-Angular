@@ -2,17 +2,17 @@
 @import './assets/custom-themes/highlightjs/material-dark';
 
 
-$primary: mat-palette($mat-indigo);
-$accent:  mat-palette($mat-pink, A200, A100, A400);
+$primary: mat-palette($mat-deep-orange, 800);
+$accent: mat-palette($mat-indigo, 600, 100, 800);
 
 // Define the light theme.
 $theme: mat-light-theme($primary, $accent);
-.indigo-pink {
+.deeporange-indigo {
  @include angular-material-theme($theme);
 }
 
 // Define the dark theme.
 $theme: mat-dark-theme($primary, $accent);
-.indigo-pink-dark {
+.deeporange-indigo-dark {
  @include angular-material-theme($theme);
 }
