@@ -4,5 +4,15 @@ text-align: center;
 width: 100%;
 min-height: 100%;
 height: auto !important;
+}
+
+.e404 img {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
 }

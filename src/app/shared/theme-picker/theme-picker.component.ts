@@ -30,7 +30,8 @@ export class ThemePickerComponent implements OnInit {
     { name: 'amber-indigo', color: '#FFC107', isDark: false },
     { name: 'orange-lightblue', color: '#F57C00', isDark: false },
     { name: 'deeporange-indigo', color: '#FF5722', isDark: false },
-
+    { name: 'brown-orange', color: '#795548', isDark: false },
+    { name: 'grey-indigo', color: '#9E9E9E', isDark: false },
     { name: 'bluegrey-amber', color: '#455A64', isDark: false },
   ];
 
@@ -51,7 +52,8 @@ export class ThemePickerComponent implements OnInit {
     { name: 'amber-indigo-dark', color: '#FFC107', isDark: true  },
     { name: 'orange-lightblue-dark', color: '#F57C00', isDark: true  },
     { name: 'deeporange-indigo-dark', color: '#FF5722', isDark: true  },
-
+    { name: 'brown-orange-dark', color: '#795548', isDark: true },
+    { name: 'grey-indigo-dark', color: '#9E9E9E', isDark: true},
     { name: 'bluegrey-amber-dark', color: '#455A64', isDark: true },
   ];
 

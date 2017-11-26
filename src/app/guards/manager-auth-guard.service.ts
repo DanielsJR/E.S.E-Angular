@@ -20,8 +20,7 @@ export class ManagerAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
         console.log('ManagerAuthGuard#canActivate called');
-       return this.checkLogin(url);
-       
+        return this.checkLogin(url);
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
