@@ -1,4 +1,4 @@
-<mat-sidenav-container id="container" [class]="theme.activeTheme">
+<mat-sidenav-container id="container" [class]="theme.themeName">
 
   <button id="head" mat-raised-button color="primary">
     <nx-theme-picker #theme></nx-theme-picker>
@@ -9,26 +9,24 @@
     </button>
   </button>
 
+  <button id="line1" mat-raised-button color="accent"></button>
+
   <mat-card id="center" [style.background-color]="theme.isDark ? 'rgb(46, 46, 46)': 'rgb(246, 246, 246)'">
   </mat-card>
 
+  <button id="line2" mat-raised-button color="accent"></button>
+
   <button id="footer" mat-raised-button color="primary">
 
-    <img id="l-s" alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
+    <img id="l-s" alt="logo" src="assets/images/logos/ese-logo.png">
 
     <h6>Powered by Daniel's &copy;2017-2018.</h6>
   </button>
-
-  <button id="line1" mat-raised-button color="accent"></button>
-
-  <button id="line2" mat-raised-button color="accent"></button>
 
   <mat-card id="content">
     <h2>Bienvenido a</h2>
     <nx-logo-raised-button></nx-logo-raised-button>
     <img width="180" src="assets/images/logos/ese-logo-big2.png">
   </mat-card>
-
-
 
 </mat-sidenav-container>

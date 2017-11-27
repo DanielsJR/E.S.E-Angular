@@ -63,7 +63,7 @@ html, body, mat-sidenav-container {
   box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
 }
 .menu {
-  overflow-y: auto;
+  overflow-y: hidden;
   position: absolute;
   bottom:0;
   left:0;
@@ -71,8 +71,12 @@ html, body, mat-sidenav-container {
   top:128px;
   margin: auto;
 }
+.menu:hover {
+  overflow-y: overlay;
+}
+
 .content {
- overflow: auto;
+ overflow: hidden;
  position: absolute;
  bottom:0;
  left:0;
@@ -80,9 +84,11 @@ html, body, mat-sidenav-container {
  top:128px;
  padding: 0;
  margin: 0;
-
-
 }
+.content:hover {
+  overflow: overlay;
+ }
+
 /*mat-sidenav*/
 
 

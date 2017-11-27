@@ -87,11 +87,11 @@ img {
   position: absolute;
   margin: 0;
   padding: 0;
-  width: 3%;
+  width: 50px;
   top: 50%;
-  left: 5%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  left: 2%;
+  -ms-transform: translate( -2%,-50%);
+  transform: translate(-2%,-50%);
   z-index: 4;
 }
 

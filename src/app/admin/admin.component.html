@@ -1,9 +1,9 @@
-<mat-sidenav-container id="container" #container [class]="themePicker.activeTheme">
+<mat-sidenav-container id="container" #container [class]="themePicker.themeName">
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
         <span>
-            <button type="button" mat-icon-button (click)="sidenav.toggle()">
+            <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
         </span>
@@ -18,23 +18,18 @@
         <nx-full-screen></nx-full-screen>
         <nx-theme-picker></nx-theme-picker>
 
-        <button mat-icon-button [mat-menu-trigger-for]="menu">
-            <mat-icon>more_vert</mat-icon>
+        <button type="button" mat-icon-button (click)="sidenavChat.toggle()" matTooltip="chat">
+            <mat-icon>chat</mat-icon>
         </button>
-
     </mat-toolbar>
-    <mat-menu x-position="before" #menu="matMenu">
-        <button mat-menu-item>Chat</button>
-        <button mat-menu-item (click)="logout()">Logout</button>
-    </mat-menu>
 
     <mat-sidenav-container id="container2">
 
-        <!-- sidenav content -->
-        <mat-sidenav mode="side" opened="true" #sidenav class="sidenav">
+        <!-- sidenav menu -->
+        <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav">
 
             <!-- sidenav toobar -->
-            <mat-toolbar color="default" class="side-toolbar">
+            <mat-toolbar class="side-toolbar">
                 <mat-list>
                     <mat-list-item>
                         <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
@@ -44,7 +39,41 @@
                         </p>
                     </mat-list-item>
                 </mat-list>
+                <span class="spacer-l"></span>
+                <button mat-icon-button [matMenuTriggerFor]="settings">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
             </mat-toolbar>
+
+            <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
+                <button mat-menu-item (click)="sidenavSettings.toggle()">
+                    <mat-icon> settings </mat-icon>
+                    <span> Preferencias </span>
+                </button>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon> power_settings_new </mat-icon>
+                    <span> Salir </span>
+                </button>
+            </mat-menu>
+
+
+            <!-- sidenav settings -->
+            <mat-sidenav mode="side" opened="false" #sidenavSettings class="sidenav">
+
+                <!-- sidenav toobar -->
+                <mat-toolbar color="accent" class="side-toolbar">
+                    <button mat-icon-button (click)="sidenavSettings.toggle()">
+                        <mat-icon> arrow_back </mat-icon>
+                    </button>
+                    <span class="spacer-c"></span>
+                    <h1>Preferencias</h1>
+                </mat-toolbar>
+
+                <!-- sidenav content -->
+                <mat-nav-list class="menu">
+                </mat-nav-list>
+
+            </mat-sidenav>
 
             <!-- sidenav menu -->
             <mat-nav-list class="menu">
@@ -144,6 +173,21 @@
 
         </mat-sidenav>
 
+
+        <!-- sidenav chat -->
+        <mat-sidenav mode="side" position="end" opened="false" #sidenavChat class="sidenav">
+
+            <!-- sidenav toobar -->
+            <mat-toolbar class="side-toolbar">
+            </mat-toolbar>
+
+            <!-- sidenav content -->
+            <mat-nav-list class="menu">
+            </mat-nav-list>
+
+        </mat-sidenav>
+
+
         <!-- toolbar2 -->
         <mat-toolbar class="toolbar2">
             <span class="spacer-c"></span>
@@ -151,8 +195,7 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" nxScroller (scrollEvent)="scrolled=$event"
-         [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
+        <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
             <router-outlet></router-outlet>
         </div>
 

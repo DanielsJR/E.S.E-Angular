@@ -37,50 +37,53 @@ export class ThemePickerComponent implements OnInit {
 
   themesDark = [
     { name: 'red-indigo-dark', color: '#F44336', isDark: true },
-    { name: 'pink-purple-dark', color: '#E91E63', isDark: true  },
-    { name: 'purple-pink-dark', color: '#9C27B0', isDark: true  },
-    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true  },
-    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true  },
-    { name: 'blue-red-dark', color: '#2196F3', isDark: true  },
-    { name: 'lightblue-lime-dark', color: '#03A9F4', isDark: true  },
-    { name: 'cyan-blue-grey-dark', color: '#00BCD4', isDark: true  },
-    { name: 'teal-yellow-dark', color: '#009688', isDark: true  },
-    { name: 'green-amber-dark', color: '#4CAF50', isDark: true  },
-    { name: 'lightgreen-blue-dark', color: '#8BC34A', isDark: true  },
-    { name: 'lime-pink-dark', color: '#CDDC39', isDark: true  },
-    { name: 'yellow-deeppurple-dark', color: '#FFEB3B', isDark: true  },
-    { name: 'amber-indigo-dark', color: '#FFC107', isDark: true  },
-    { name: 'orange-lightblue-dark', color: '#F57C00', isDark: true  },
-    { name: 'deeporange-indigo-dark', color: '#FF5722', isDark: true  },
+    { name: 'pink-purple-dark', color: '#E91E63', isDark: true },
+    { name: 'purple-pink-dark', color: '#9C27B0', isDark: true },
+    { name: 'deeppurple-amber-dark', color: '#673AB7', isDark: true },
+    { name: 'indigo-pink-dark', color: '#3F51B5', isDark: true },
+    { name: 'blue-red-dark', color: '#2196F3', isDark: true },
+    { name: 'lightblue-lime-dark', color: '#03A9F4', isDark: true },
+    { name: 'cyan-blue-grey-dark', color: '#00BCD4', isDark: true },
+    { name: 'teal-yellow-dark', color: '#009688', isDark: true },
+    { name: 'green-amber-dark', color: '#4CAF50', isDark: true },
+    { name: 'lightgreen-blue-dark', color: '#8BC34A', isDark: true },
+    { name: 'lime-pink-dark', color: '#CDDC39', isDark: true },
+    { name: 'yellow-deeppurple-dark', color: '#FFEB3B', isDark: true },
+    { name: 'amber-indigo-dark', color: '#FFC107', isDark: true },
+    { name: 'orange-lightblue-dark', color: '#F57C00', isDark: true },
+    { name: 'deeporange-indigo-dark', color: '#FF5722', isDark: true },
     { name: 'brown-orange-dark', color: '#795548', isDark: true },
-    { name: 'grey-indigo-dark', color: '#9E9E9E', isDark: true},
+    { name: 'grey-indigo-dark', color: '#9E9E9E', isDark: true },
     { name: 'bluegrey-amber-dark', color: '#455A64', isDark: true },
   ];
 
-  themeArray;
+  themeArray: Theme[];
+  private defaultTheme: Theme;
+  private saveTheme: Theme;
+  private installed: boolean;
 
   constructor(public overlayContainer: OverlayContainer) { }
 
   ngOnInit() {
-    this.overlayContainer.getContainerElement().classList.add(this.activeTheme);
+    this.defaultTheme = new Theme('indigo-pink', false);
+    this.installed = false;
+    this.overlayContainer.getContainerElement().classList.add(this.themeName);
     this.selectTheme();
   }
 
   private theme(): Theme {
-    if (localStorage.length !== 0) {
+    if (localStorage.getItem('theme') !== null) {
       const stringTheme = localStorage.getItem('theme');
       const parsedTheme: any = JSON.parse(stringTheme);
       return new Theme(parsedTheme.name, parsedTheme.isDark);
-    } else {
-      return null;
     }
   }
 
-  get activeTheme(): string {
+  get themeName(): string {
     if (this.theme() != null) {
       return this.theme().name;
     } else {
-      return 'indigo-pink';
+      return this.defaultTheme.name;
     }
   }
 
@@ -88,34 +91,51 @@ export class ThemePickerComponent implements OnInit {
     if (this.theme() != null) {
       return this.theme().isDark;
     } else {
-      return false;
+      return this.defaultTheme.isDark;
     }
   }
 
   selectTheme(): void {
     if (this.isDark) {
       this.themeArray = this.themesDark;
-    }else {
+    } else {
       this.themeArray = this.themesLight;
     }
   }
 
   installTheme(theme: Theme): void {
-    this.overlayContainer.getContainerElement().classList.remove(this.activeTheme);
+    this.overlayContainer.getContainerElement().classList.remove(this.themeName);
     localStorage.setItem('theme', JSON.stringify(theme));
     this.overlayContainer.getContainerElement().classList.add(theme.name);
     this.selectTheme();
+    this.installed = true;
+  }
+
+  mouseOverTheme(theme: Theme): void {
+    if (this.theme() != null) {
+      this.saveTheme = this.theme();
+    } else {
+      this.saveTheme = this.defaultTheme;
+    }
+    this.installTheme(theme);
+    this.installed = false;
+  }
+
+  mouseOutTheme(): void {
+    if (!this.installed) {
+      this.installTheme(this.saveTheme);
+    }
   }
 
   installDarkTheme(): void {
-    const darkThemeName = this.activeTheme + '-dark';
+    const darkThemeName = this.themeName + '-dark';
     const darkTheme = new Theme(darkThemeName, true);
     this.installTheme(darkTheme);
   }
 
   installLightTheme(): void {
-    if (this.activeTheme !== 'indigo-pink') {
-      const lightThemeName = this.activeTheme.slice(0, -5);
+    if (this.themeName !== this.defaultTheme.name) {
+      const lightThemeName = this.themeName.slice(0, -5);
       const lightTheme = new Theme(lightThemeName, false);
       this.installTheme(lightTheme);
     } else {
@@ -124,8 +144,9 @@ export class ThemePickerComponent implements OnInit {
   }
 
   removeTheme(): void {
-    this.overlayContainer.getContainerElement().classList.remove(this.activeTheme);
+    this.overlayContainer.getContainerElement().classList.remove(this.themeName);
     localStorage.removeItem('theme');
+    this.installed = false;
   }
 
 

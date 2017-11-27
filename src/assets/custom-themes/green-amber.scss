@@ -6,7 +6,7 @@ $primary: mat-palette($mat-green);
 $accent: mat-palette($mat-amber, A200, A100, A400);
 
 // Define a light theme.
-$theme: mat-light-theme($primary, $accent, $warn);
+$theme: mat-light-theme($primary, $accent);
 .green-amber {
   @include angular-material-theme($theme);
 }
