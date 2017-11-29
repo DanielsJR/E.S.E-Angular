@@ -107,21 +107,9 @@
                         <h3 matLine>Borrar Manager</h3>
                     </mat-list-item>
 
-                    <mat-list-item routerLink="./users/create-user" routerLinkActive="active">
+                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Crear Manager</h3>
-                    </mat-list-item>
-
-
-                    <mat-list-item routerLink="/social" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Editar Manager</h3>
-                    </mat-list-item>
-
-
-                    <mat-list-item routerLink="/social" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Borrar Manager</h3>
+                        <h3 matLine>Lista de Usuarios</h3>
                     </mat-list-item>
 
                 </div>
@@ -131,6 +119,7 @@
                     <h3 matLine>Pruebas</h3>
                     <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
                 </mat-list-item>
+
                 <div [@tdCollapse]="triggerPruebas">
                     <mat-list-item routerLink="/login" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>

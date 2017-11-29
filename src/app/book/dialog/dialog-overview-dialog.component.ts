@@ -29,7 +29,7 @@ export class DialogOverviewBookDialogComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<DialogOverviewBookDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private service: BookStoreService,
+        private bookStoreService: BookStoreService,
         private service2: BookService2,
         private formBuilder: FormBuilder
     ) {
@@ -86,21 +86,21 @@ export class DialogOverviewBookDialogComponent implements OnInit {
     create(): void {
         this.book = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.book));
-        this.service.create(this.book);
+        this.bookStoreService.create(this.book);
         this.dialogRef.close('created');
     }
 
     save(): void {
         this.book = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.book));
-        this.service.update(this.book);
+        this.bookStoreService.update(this.book);
         this.dialogRef.close('saved');
     }
 
     delete(): void {
         this.book = this.editForm.value;
         console.log('deleting... ' + JSON.stringify(this.data));
-        this.service.remove(this.book.id);
+        this.bookStoreService.remove(this.book.id);
         this.dialogRef.close('deleted');
     }
 

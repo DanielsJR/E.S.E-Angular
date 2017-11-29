@@ -1,0 +1,11 @@
+
+  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="userName">
+      <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.username}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="fila"></mat-row>
+  </mat-table>

@@ -1,144 +1,155 @@
 /* You can add global styles to this file, and also import other style files */
 
+
 /*MATERIAL DESIGN*/
+
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
-
 @import '~https://fonts.googleapis.com/css?family=Roboto';
-
 @import '~https://fonts.googleapis.com/css?family=Black+Ops+One';
-
-
-html, body, mat-sidenav-container {
-  margin: 0;
-  
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow:hidden;
+html,
+body,
+mat-sidenav-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
+
 /*mat-toolbar */
+
 .toolbar1 {
-  position: absolute;
-  top: 0px;
-  left: 0;
-  width: 100% !important;
-  z-index: 2;
- }
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100% !important;
+    z-index: 2;
+}
+
 .toolbar2 {
-  position: relative;
-  top: 64px;
-  left: 0;
-  width: 100%  !important;
-  z-index: 1;
-  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
- }
- .home img {
-  position:relative;
-  margin-top:-21px;
-  margin-left:45px;
-  top:6px;
-  height:40px;
- }
- .spacer-c {
-  flex: .5 1 auto;
- }
- .spacer-l {
-  flex: 1 1 auto;
- }
+    position: relative;
+    top: 64px;
+    left: 0;
+    width: 100% !important;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
+}
+
+.home img {
+    position: relative;
+    margin-top: -21px;
+    margin-left: 45px;
+    top: 6px;
+    height: 40px;
+}
+
+.spacer-c {
+    flex: .5 1 auto;
+}
+
+.spacer-l {
+    flex: 1 1 auto;
+}
+
 
 /*mat-toolbar */
 
 
 /*mat-sidenav*/
- .sidenav {
-  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
-  width: 260px;
+
+.sidenav {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
+    width: 260px;
 }
- .side-toolbar {
-  position: fixed !important;
-  top: 64px;
-  left: 0;
-  width: 260px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.19), 0 0 3px rgba(0,0,0,0.23);
+
+.side-toolbar {
+    position: fixed !important;
+    top: 64px;
+    left: 0;
+    width: 260px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
+
 .menu {
-  overflow-y: hidden;
-  position: absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  top:128px;
-  margin: auto;
+    overflow-y: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 128px;
+    margin: auto;
 }
+
 .menu:hover {
-  overflow-y: overlay;
+    overflow-y: overlay;
 }
 
 .content {
- overflow: hidden;
- position: absolute;
- bottom:0;
- left:0;
- right:0;
- top:128px;
- padding: 0;
- margin: 0;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 128px;
+    padding: 0;
+    margin: 0;
 }
+
 .content:hover {
-  overflow: overlay;
- }
+    overflow: overlay;
+}
+
 
 /*mat-sidenav*/
 
 
-
 /*MATERIAL dialog*/
-  .bar-icon{
-  margin-bottom: 0px !important;
-  padding: 20px 120px;
-  }
-  .myDialog .mat-dialog-container { 
+
+.bar-icon {
+    margin-bottom: 0px !important;
+    padding: 20px 120px;
+}
+
+.myDialog .mat-dialog-container {
     padding: 0;
     overflow: hidden;
-  }
-  .myDialog .mat-dialog-content { 
+}
+
+.myDialog .mat-dialog-content {
     margin: 0;
- }
- .myDialog .mat-dialog-actions { 
+}
+
+.myDialog .mat-dialog-actions {
     margin-bottom: 0px !important;
     padding: 20px 30px;
- }
-  /*MATERIAL dialog*/
-
-
-
- /*scrollbar */
- ::-webkit-scrollbar {
-  width: 11px;
 }
 
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
- 
-}
 
-::-webkit-scrollbar-thumb {
-  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-  
-}
+/*MATERIAL dialog*/
 
-::-webkit-scrollbar-thumb:hover {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7); 
-}
-
-::-webkit-scrollbar-thumb:active {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9); 
-}
 
 /*scrollbar */
 
+ ::-webkit-scrollbar {
+    width: 11px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+::-webkit-scrollbar-thumb:active {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+}
 
 
- 
+/*scrollbar */

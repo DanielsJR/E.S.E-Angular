@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="mat-elevation-z8">
 
   <form [formGroup]="crateManagerForm" (ngSubmit)="onSubmit()">
 
@@ -18,7 +18,6 @@
         <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
       </mat-form-field>
 
-
       <mat-form-field>
         <input matInput type="text" formControlName="phone">
         <mat-placeholder>
@@ -26,8 +25,6 @@
         </mat-placeholder>
         <mat-error *ngIf="userName.hasError('required')">El Telefono es requerido.</mat-error>
       </mat-form-field>
-
-
 
       <mat-form-field>
         <input matInput type="password" formControlName="password">
@@ -37,26 +34,14 @@
         <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
       </mat-form-field>
 
-
-      <mat-form-field>
-        <input matInput type="password" formControlName="password">
-        <mat-placeholder>
-          <i class="material-icons app-input-icon">lock_open</i>Repita la Contraseña
-        </mat-placeholder>
-        <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
-      </mat-form-field>
-
-
       <mat-slide-toggle color="primary" checked="true">
         <small>Active</small>
       </mat-slide-toggle>
 
+      <button mat-raised-button class="btn-submit" color="accent" type="submit" id="login-submit-button" [disabled]="!crateManagerForm.valid">
+        Create
+      </button>
 
-      <div class="actions">
-        <button mat-raised-button class="btn-submit" color="accent" type="submit" id="login-submit-button" [disabled]="!crateManagerForm.valid">
-          Create
-        </button>
-      </div>
     </div>
 
   </form>

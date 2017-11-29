@@ -1,3 +1,4 @@
+import { AdminGetUsersComponent } from './admin-get-users/admin-get-users.component';
 import { AdminCreateUserComponent } from './admin-create-user/admin-create-user.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminComponent } from './admin.component';
@@ -22,12 +23,12 @@ const adminRoutes: Routes = [
                     },
 
                     {
-                        path: 'take-test',
-                        component: AdminHomeComponent,
+                        path: 'list-users',
+                        component: AdminGetUsersComponent,
                     },
 
                     {
-                        path: 'historical',
+                        path: 'user',
                         component: AdminHomeComponent,
                     }
                 ],

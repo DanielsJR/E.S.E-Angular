@@ -1,130 +1,193 @@
-<mat-sidenav-container [class]="theme.activeTheme">
-        <!-- toolbar -->
-        <mat-toolbar class="toolbar1" color="primary">
-            <span>
-                <button type="button" mat-icon-button (click)="sidenav.toggle()">
-                    <mat-icon>menu</mat-icon>
+<mat-sidenav-container id="container" #container [class]="themePicker.themeName">
+        
+            <!-- toolbar -->
+            <mat-toolbar color="primary" class="toolbar1">
+                <span>
+                    <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                </span>
+        
+                <span>
+                    <a class="home" routerLink='./'>
+                        <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
+                    </a>
+                </span>
+        
+                <span class="spacer-l"></span>
+                <nx-full-screen></nx-full-screen>
+                <nx-theme-picker></nx-theme-picker>
+        
+                <button type="button" mat-icon-button (click)="sidenavChat.toggle()" matTooltip="chat">
+                    <mat-icon>chat</mat-icon>
                 </button>
-            </span>
-    
-            <span>
-                <a class="nav-link home" routerLink=''>
-                    <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
-                </a>
-            </span>
-    
-            <span class="spacer-l"></span>
-    
-            <nx-theme-picker #theme></nx-theme-picker>
-    
-            <button mat-icon-button [mat-menu-trigger-for]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </mat-toolbar>
-        <mat-menu x-position="before" #menu="matMenu">
-            <button mat-menu-item>Chat</button>
-            <button mat-menu-item (click)="logout()">Logout</button>
-        </mat-menu>
-    
-        <mat-sidenav-container>
-    
-            <!-- sidenav content -->
-            <mat-sidenav mode="side" opened="true" #sidenav class="mySidenav">
-    
-                <!-- sidenav toobar -->
-                <mat-toolbar color="default" class="side-toolbar">
-                    <mat-list>
-                        <mat-list-item>
-                            <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
-                            <h3 matLine> El Rayo </h3>
-                            <p matLine>
-                                <span>Manager</span>
-                            </p>
-                        </mat-list-item>
-                    </mat-list>
-                    <mat-toolbar-row></mat-toolbar-row>
-                </mat-toolbar>
-                
-                <!-- sidenav menu -->
-                <mat-nav-list class="menu">
-    
-                    <mat-list-item routerLink="/admin" routerLinkActive="active">
-                        <mat-icon matListIcon>home</mat-icon>
-                        <h3 matLine>Home</h3>
-                    </mat-list-item>
-    
-                    <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
-                        <mat-icon matListIcon>school</mat-icon>
-                        <h3 matLine>Usuarios</h3>
-                        <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
-                    </mat-list-item>
-    
-                    <div [@tdCollapse]="triggerAsignaturas">
-    
-                        <mat-list-item routerLink="./users/create-user" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Crear Manager</h3>
-                        </mat-list-item>
-    
-    
-                        <mat-list-item routerLink="/social" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Editar Manager</h3>
-                        </mat-list-item>
-    
-    
-                        <mat-list-item routerLink="/social" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Borrar Manager</h3>
-                        </mat-list-item>
-    
-                    </div>
-    
-    
-                    <mat-list-item (click)="triggerPruebas = !triggerPruebas">
-                        <mat-icon matListIcon>description</mat-icon>
-                        <h3 matLine>Pruebas</h3>
-                        <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
-                    </mat-list-item>
-    
-                    <div [@tdCollapse]="triggerPruebas">
-                        <mat-list-item routerLink="/login" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Tomar Prueba</h3>
-                        </mat-list-item>
-    
-                        <mat-list-item routerLink="/login" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Crear Prueba</h3>
-                        </mat-list-item>
-    
-                        <mat-list-item routerLink="/login" routerLinkActive="active">
-                            <mat-icon matListIcon></mat-icon>
-                            <h3 matLine>Historial Pruebas</h3>
-                        </mat-list-item>
-                    </div>
-    
-    
-                    <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
-                        <mat-icon matListIcon>cancel</mat-icon>
-                        <h3 matLine>404</h3>
-                    </mat-list-item>
-    
-                </mat-nav-list>
-    
-            </mat-sidenav> 
-    
-            <!-- toolbar2 -->
-            <mat-toolbar class="toolbar2">
-                <span class="spacer-c"></span>
-                <nx-logo-raised-button></nx-logo-raised-button>
             </mat-toolbar>
-    
-            <!-- primary content -->
-            <div class="my-content">
-                <router-outlet></router-outlet>
-            </div>
-    
+        
+            <mat-sidenav-container id="container2">
+        
+                <!-- sidenav menu -->
+                <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav">
+        
+                    <!-- sidenav toobar -->
+                    <mat-toolbar class="side-toolbar">
+                        <mat-list>
+                            <mat-list-item>
+                                <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
+                                <h3 matLine> El Rayo </h3>
+                                <p matLine>
+                                    <span>Manager</span>
+                                </p>
+                            </mat-list-item>
+                        </mat-list>
+                        <span class="spacer-l"></span>
+                        <button mat-icon-button [matMenuTriggerFor]="settings">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </mat-toolbar>
+        
+                    <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
+                        <button mat-menu-item (click)="sidenavSettings.toggle()">
+                            <mat-icon> settings </mat-icon>
+                            <span> Preferencias </span>
+                        </button>
+                        <button mat-menu-item (click)="logout()">
+                            <mat-icon> power_settings_new </mat-icon>
+                            <span> Salir </span>
+                        </button>
+                    </mat-menu>
+        
+        
+                    <!-- sidenav settings -->
+                    <mat-sidenav mode="side" opened="false" #sidenavSettings class="sidenav">
+        
+                        <!-- sidenav toobar -->
+                        <mat-toolbar color="accent" class="side-toolbar">
+                            <button mat-icon-button (click)="sidenavSettings.toggle()">
+                                <mat-icon> arrow_back </mat-icon>
+                            </button>
+                            <span class="spacer-c"></span>
+                            <h1>Preferencias</h1>
+                        </mat-toolbar>
+        
+                        <!-- sidenav content -->
+                        <mat-nav-list class="menu">
+                        </mat-nav-list>
+        
+                    </mat-sidenav>
+        
+                    <!-- sidenav menu -->
+                    <mat-nav-list class="menu">
+        
+                        <mat-list-item routerLink="/manager" routerLinkActive="active">
+                            <mat-icon matListIcon>home</mat-icon>
+                            <h3 matLine>Home</h3>
+                        </mat-list-item>
+        
+                        <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
+                            <mat-icon matListIcon>school</mat-icon>
+                            <h3 matLine>Usuarios</h3>
+                            <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
+                        </mat-list-item>
+                        <div [@tdCollapse]="triggerAsignaturas">
+        
+                            <mat-list-item routerLink="./users/create-user" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Crear Manager</h3>
+                            </mat-list-item>
+        
+        
+                            <mat-list-item routerLink="/social" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Editar Manager</h3>
+                            </mat-list-item>
+        
+        
+                            <mat-list-item routerLink="/social" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Borrar Manager</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Lista de Usuarios</h3>
+                            </mat-list-item>
+        
+                        </div>
+        
+                        <mat-list-item (click)="triggerPruebas = !triggerPruebas">
+                            <mat-icon matListIcon>description</mat-icon>
+                            <h3 matLine>Pruebas</h3>
+                            <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
+                        </mat-list-item>
+        
+                        <div [@tdCollapse]="triggerPruebas">
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Tomar Prueba</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Crear Prueba</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Historial Pruebas</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Tomar Prueba</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Crear Prueba</h3>
+                            </mat-list-item>
+        
+                            <mat-list-item routerLink="/login" routerLinkActive="active">
+                                <mat-icon matListIcon></mat-icon>
+                                <h3 matLine>Historial Pruebas</h3>
+                            </mat-list-item>
+        
+                        </div>
+        
+                        <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
+                            <mat-icon matListIcon>cancel</mat-icon>
+                            <h3 matLine>404</h3>
+                        </mat-list-item>
+        
+                    </mat-nav-list>
+        
+                </mat-sidenav>
+        
+        
+                <!-- sidenav chat -->
+                <mat-sidenav mode="side" position="end" opened="false" #sidenavChat class="sidenav">
+        
+                    <!-- sidenav toobar -->
+                    <mat-toolbar class="side-toolbar">
+                    </mat-toolbar>
+        
+                    <!-- sidenav content -->
+                    <mat-nav-list class="menu">
+                    </mat-nav-list>
+        
+                </mat-sidenav>
+        
+        
+                <!-- toolbar2 -->
+                <mat-toolbar class="toolbar2">
+                    <span class="spacer-c"></span>
+                    <nx-logo-raised-button [jelloState]=scrolled></nx-logo-raised-button>
+                </mat-toolbar>
+        
+                <!-- primary content -->
+                <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
+                    <router-outlet></router-outlet>
+                </div>
+        
+            </mat-sidenav-container>
+        
         </mat-sidenav-container>
-    
-    </mat-sidenav-container>

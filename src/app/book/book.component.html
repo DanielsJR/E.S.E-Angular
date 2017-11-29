@@ -26,7 +26,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" class="book-row" (click)="openDialog(row)">
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="row" (click)="openDialog(row)">
 
         </mat-row>
     </mat-table>
