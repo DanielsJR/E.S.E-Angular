@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { LocalStorageService } from './local-storage.service';
-import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_ATTRIBUTE } from '../app.config';
+import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 
@@ -45,7 +45,7 @@ export class HTTPService {
         const requestHeaders: Headers = headers || new Headers();
         requestHeaders.append('X-Requested-With', 'XMLHttpRequest');
         if (!requestHeaders.has('Authorization')) {
-            const sessionString: string = this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE);
+            const sessionString: string = this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_KEY);
             const parsedSession = JSON.parse(sessionString);
             if (parsedSession) {
                 const base64Token: string = btoa(`${parsedSession.token}:`);

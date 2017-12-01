@@ -3,7 +3,7 @@ import { LoginService } from './login.service';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LOCAL_STORAGE_TOKEN_ATTRIBUTE } from '../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 import { LocalStorageService } from '../services/local-storage.service';
 
 @Component({
@@ -29,12 +29,10 @@ export class LoginComponent implements OnInit {
     this.loginService
       .login(this.user.username, this.user.password)
       .subscribe(session => {
-        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE, session);
-        console.log(JSON.stringify(session));
-        const sessionString: string = this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE);
-        const parsedSession: any = JSON.parse(sessionString);
-        const route = parsedSession.rol.toString().toLowerCase();
-        this.router.navigate(['/' + route]);
+        console.log('setting local storage');
+        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, session);
+        const route = '/' + this.localStorageService.getRole().toLowerCase();
+        this.router.navigate([route]);
       }
       );
   }

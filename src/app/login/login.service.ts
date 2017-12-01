@@ -1,16 +1,16 @@
 import { LocalStorageService } from '../services/local-storage.service';
 import { Injectable } from '@angular/core';
-import { Headers } from '@angular/http';
 import { Session } from '../models/session';
-import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_ATTRIBUTE } from '../app.config';
+import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { HTTPService } from '../services/http.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Injectable()
 export class LoginService {
-    private endpoint = '/tokens';
+    private endpoint = API_SERVER + '/tokens';
 
     isAdmin = false;
     isManager = false;
@@ -20,35 +20,42 @@ export class LoginService {
     // store the URL so we can redirect after logging in
     redirectUrl: string;
 
-    constructor(private httpService: HTTPService, private localStorageService: LocalStorageService) { }
+    constructor(
+        private localStorageService: LocalStorageService,
+        private httpCli: HttpClient
+    ) { }
 
-    login(userName: string, password: string): Observable<Session> {
-        const headers = new Headers({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) });
-        return this.httpService.post(this.endpoint, null, headers);
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred!!!!!!', error); // for demo purposes only
+        return Promise.reject(error.message || error);
     }
 
-    checkPrivileges(): void {
-        if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_ATTRIBUTE)) {
-            const sessionString: string = this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE);
-            const parsedSession: any = JSON.parse(sessionString);
-            const session: Session = new Session(parsedSession.token, parsedSession.rol.toString());
-
-            console.log('session token: ' + session.token + ' session rol: ' + session.role);
-
-            if (session.hasPrivileges()) {
-                this.isAdmin = (session.role === 'ADMIN') ? true : false;
-                this.isManager = (session.role === 'MANAGER') ? true : false;
-                this.isTeacher = (session.role === 'TEACHER') ? true : false;
-                this.isStudent = (session.role === 'STUDENT') ? true : false;
-            }
-        }
+    login(userName: string, password: string): Observable<Session> {
+        console.log('Login called');
+        return this.httpCli
+            .post(this.endpoint, null, { headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) }) })
+            .catch(this.handleError);
     }
 
     logout(): void {
-        this.localStorageService.removeItem(LOCAL_STORAGE_TOKEN_ATTRIBUTE);
+        this.localStorageService.removeItem(LOCAL_STORAGE_TOKEN_KEY);
         this.isAdmin = false;
         this.isManager = false;
         this.isTeacher = false;
         this.isStudent = false;
+    }
+
+    checkPrivileges(): void {
+        if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+            console.log('checking privileges of: ' + this.localStorageService.getToken()
+                + ' rol: ' + this.localStorageService.getRole());
+            this.isAdmin = (this.localStorageService.getRole() === ROLE_ADMIN) ? true : false;
+            this.isManager = (this.localStorageService.getRole() === ROLE_MANAGER) ? true : false;
+            this.isTeacher = (this.localStorageService.getRole() === ROLE_TEACHER) ? true : false;
+            this.isStudent = (this.localStorageService.getRole() === ROLE_STUDENT) ? true : false;
+        } else {
+            console.log('unauthorized redirecting.....');
+        }
+
     }
 }

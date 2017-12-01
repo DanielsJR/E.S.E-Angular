@@ -13,6 +13,8 @@ import { HTTPService } from '../services/http.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { HomeModule } from '../home/home.module';
 import { BookStoreService } from '../book/book-store.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../shared/interceptors/auth-interceptor.interceptor';
 
 
 @NgModule({
@@ -37,7 +39,12 @@ import { BookStoreService } from '../book/book-store.service';
     BookService,
     BookService2,
     BookStoreService,
-   
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
+
   ],
 
   exports: [

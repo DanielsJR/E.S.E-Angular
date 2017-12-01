@@ -7,4 +7,5 @@ export class Session {
     hasPrivileges(): boolean {
         return this.role === ROLE_ADMIN || this.role === ROLE_MANAGER || this.role === ROLE_TEACHER || this.role === ROLE_STUDENT;
     }
+
 }

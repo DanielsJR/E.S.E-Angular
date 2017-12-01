@@ -3,7 +3,7 @@ export const ROLE_MANAGER = 'MANAGER';
 export const ROLE_TEACHER = 'TEACHER';
 export const ROLE_STUDENT = 'STUDENT';
 
-export const LOCAL_STORAGE_TOKEN_ATTRIBUTE = 'token';
+export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
 export const API_SERVER = 'http://192.168.1.30:8080/E.S.E.1.0.0/api/v0';
