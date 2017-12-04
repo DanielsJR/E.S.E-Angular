@@ -4,6 +4,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 
 
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { LocalStorageService } from '../services/local-storage.service';
 
 @Component({
   selector: 'nx-theme-picker',
@@ -62,7 +63,7 @@ export class ThemePickerComponent implements OnInit {
   private saveTheme: Theme;
   private installed: boolean;
 
-  constructor(public overlayContainer: OverlayContainer) { }
+  constructor(public overlayContainer: OverlayContainer, private localstorage: LocalStorageService) { }
 
   ngOnInit() {
     this.defaultTheme = new Theme('indigo-pink', false);
@@ -109,6 +110,7 @@ export class ThemePickerComponent implements OnInit {
     this.overlayContainer.getContainerElement().classList.add(theme.name);
     this.selectTheme();
     this.installed = true;
+    this.localstorage.getIsDarkTheme();
   }
 
   mouseOverTheme(theme: Theme): void {

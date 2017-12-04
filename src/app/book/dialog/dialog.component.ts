@@ -10,7 +10,6 @@ import { DialogOverviewBookDialogComponent } from './dialog-overview-dialog.comp
   // tslint:disable-next-line:component-selector
   selector: 'dialog-overview',
   templateUrl: './dialog-overview.html',
-  styleUrls: ['./dialog-overview.css'],
   // encapsulation: ViewEncapsulation.None
 })
 

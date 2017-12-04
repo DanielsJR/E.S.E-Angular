@@ -7,5 +7,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" class="fila"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"  [class.fila]="!isDark"
+     [class.fila-dark]="isDark" (click)="openDialogDetail(row)">
+    </mat-row>
   </mat-table>

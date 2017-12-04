@@ -82,7 +82,6 @@ export class DialogOverviewBookDialogComponent implements OnInit {
         this.dialogRef.close('delete');
     }
 
-
     create(): void {
         this.book = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.book));

@@ -16,7 +16,7 @@
 
         <span class="spacer-l"></span>
         <nx-full-screen></nx-full-screen>
-        <nx-theme-picker></nx-theme-picker>
+        <nx-theme-picker ></nx-theme-picker>
 
         <button type="button" mat-icon-button (click)="sidenavChat.toggle()" matTooltip="chat">
             <mat-icon>chat</mat-icon>
@@ -33,7 +33,7 @@
                 <mat-list>
                     <mat-list-item>
                         <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
-                        <h3 matLine> Daniel's </h3>
+                        <h3 matLine> {{user?.username}} </h3>
                         <p matLine>
                             <span>Administrador</span>
                         </p>
@@ -60,7 +60,7 @@
             <!-- sidenav settings -->
             <mat-sidenav mode="side" opened="false" #sidenavSettings class="sidenav">
 
-                <!-- sidenav toobar -->
+                <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="side-toolbar">
                     <button mat-icon-button (click)="sidenavSettings.toggle()">
                         <mat-icon> arrow_back </mat-icon>
@@ -71,6 +71,18 @@
 
                 <!-- sidenav content -->
                 <mat-nav-list class="menu">
+                    <mat-list-item>
+                        <h3 matLine>Nombre: {{user?.username}}</h3>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <h3 matLine>Telefono: {{user?.mobile}}</h3>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <h3 matLine>Dirección: {{user?.address}}</h3>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <h3 matLine>Mail: {{user?.email}}</h3>
+                    </mat-list-item>
                 </mat-nav-list>
 
             </mat-sidenav>
@@ -184,7 +196,8 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
+        <div class="content" nxScroller (scrollEvent)="scrolled=$event" 
+        [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
             <router-outlet></router-outlet>
         </div>
 

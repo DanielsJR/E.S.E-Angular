@@ -1,15 +1,12 @@
-import { AdminService } from '../admin.service';
-
 import { LoginService } from '../../login/login.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../shared/services/users.service';
 
 
 @Component({
-  selector: 'nx-admin-create-user',
   templateUrl: './admin-create-user.component.html',
   styleUrls: ['./admin-create-user.component.css']
 })
@@ -18,19 +15,16 @@ export class AdminCreateUserComponent implements OnInit {
   user: User;
   crateManagerForm: FormGroup;
 
-
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService,
-    private router: Router, private adminService: AdminService
+    private router: Router, private service: UserService
   ) {
     this.user = new User();
   }
 
   ngOnInit(): void {
     this.buildForm();
-
   }
-
 
   buildForm(): void {
     this.crateManagerForm = this.formBuilder.group({
@@ -51,18 +45,11 @@ export class AdminCreateUserComponent implements OnInit {
     this.user.mobile = this.phone.value;
     this.user.password = this.password.value;
     console.log('creating... ' + JSON.stringify(this.user));
-    this.adminService
-      .createUser(this.user)
+    this.service
+      .create(this.user)
       .subscribe();
 
-
-
-    // this.router.navigate(['/admin']);
   }
-
-
-
-
 
 
 }

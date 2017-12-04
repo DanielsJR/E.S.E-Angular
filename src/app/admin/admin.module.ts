@@ -5,24 +5,33 @@ import { AdminRoutingModule } from './admin.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { AdminComponent } from './admin.component';
 import { NgModule } from '@angular/core';
-import { AdminService } from './admin.service';
 import { AdminGetUsersComponent } from './admin-get-users/admin-get-users.component';
+
+import { UsersDialogRefComponent } from './admin-get-users/dialog/users-dialog-ref.component';
+import { DialogService } from './dialog.service';
+
 
 
 @NgModule({
   imports: [
     SharedModule,
-    AdminRoutingModule
+    AdminRoutingModule,
   ],
+
   declarations: [
     AdminComponent,
     AdminHomeComponent,
     AdminCreateUserComponent,
     AdminGetUsersComponent,
+    UsersDialogRefComponent,
   ],
 
   providers: [
-    AdminService,
-  ]
+    DialogService,
+  ],
+
+  entryComponents: [
+    UsersDialogRefComponent,
+  ],
 })
 export class AdminModule { }

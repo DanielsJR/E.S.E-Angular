@@ -5,6 +5,7 @@
   height: 30%;
    z-index: 0;
    cursor: auto;
+   pointer-events: none;
 }
 
 #center {
@@ -22,6 +23,7 @@
   height: 10%;
   z-index: 0;
   cursor: auto;
+  pointer-events: none;
 }
 
 #line1 {
@@ -60,7 +62,8 @@
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 3;
+  z-index: 2;
+  pointer-events: visible;
 }
 
 h4 {
@@ -74,7 +77,8 @@ nx-theme-picker {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 4;
+  z-index: 2;
+  pointer-events: visible;
 }
 
 img {

@@ -4,7 +4,8 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
-import { LocalStorageService } from '../services/local-storage.service';
+import { LocalStorageService } from '../shared/services/local-storage.service';
+
 
 @Component({
   selector: 'nx-login',
