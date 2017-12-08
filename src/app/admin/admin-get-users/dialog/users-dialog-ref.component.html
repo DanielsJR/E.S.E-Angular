@@ -60,6 +60,72 @@
 
 </div>
 
+<div *ngIf="data.type === 'create'">
+    <form [formGroup]="createForm" (ngSubmit)="create()">
+
+        <mat-toolbar color="primary">
+            <button button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <span class="spacer"></span>
+            <h1 mat-dialog-title>Agregar Usuario</h1>
+        </mat-toolbar>
+        <br>
+        <br>
+        <mat-dialog-content>
+
+            <mat-form-field>
+                <input matInput tabindex="1" formControlName="username">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Nombre
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="2" formControlName="mobile">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Telefono
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="3" formControlName="password">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Contraseña
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="4" >
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">person</i>RUT
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="5" >
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">description</i>Dirección
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="6">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">description</i>Email
+                </mat-placeholder>
+            </mat-form-field>
+
+        </mat-dialog-content>
+        <br>
+        <mat-dialog-actions>
+            <button type="submit" mat-raised-button color="accent" tabindex="7" [disabled]="!createForm.valid">Agregar</button>
+            <button type="button" mat-raised-button tabindex="8" (click)="cancel()">Cancelar</button>
+        </mat-dialog-actions>
+
+    </form>
+</div>
+
 <div *ngIf="data.type === 'edit'">
     <form [formGroup]="editForm" (ngSubmit)="save()">
 
@@ -75,7 +141,7 @@
         <mat-dialog-content>
 
             <mat-form-field>
-                <input matInput formControlName="id" >
+                <input matInput disabled>
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">title</i>Id
                 </mat-placeholder>
@@ -89,21 +155,35 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="dni">
+                <input matInput tabindex="2" formControlName="mobile">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Telefono
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="3" formControlName="password">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Contraseña
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="2" >
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">person</i>dni
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="address">
+                <input matInput tabindex="3" >
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">description</i>Dirección
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="4" formControlName="email">
+                <input matInput tabindex="4" >
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">description</i>Email
                 </mat-placeholder>
@@ -143,61 +223,3 @@
         <button mat-raised-button (click)="cancel()" tabindex="2">Cancelar</button>
     </mat-dialog-actions>
 </div>
-
-<div *ngIf="data.type === 'create'">
-        <form [formGroup]="createForm" (ngSubmit)="create()">
-    
-            <mat-toolbar color="primary">
-                <button button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()">
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
-                <span class="spacer"></span>
-                <h1 mat-dialog-title>Agregar Usuario</h1>
-            </mat-toolbar>
-            <br>
-            <br>
-            <mat-dialog-content>
-                <mat-form-field>
-                    <input matInput tabindex="1" formControlName="title">
-                    <mat-placeholder>
-                        <i class="material-icons app-input-icon">title</i>Id
-                    </mat-placeholder>
-                </mat-form-field>
-    
-                <mat-form-field>
-                    <input matInput tabindex="3" formControlName="username">
-                    <mat-placeholder>
-                        <i class="material-icons app-input-icon">view_column</i>Nombre
-                    </mat-placeholder>
-                </mat-form-field>
-    
-                <mat-form-field>
-                    <input matInput tabindex="4" formControlName="dni">
-                    <mat-placeholder>
-                        <i class="material-icons app-input-icon">person</i>RUT
-                    </mat-placeholder>
-                </mat-form-field>
-    
-                <mat-form-field>
-                    <input matInput tabindex="5" formControlName="address">
-                    <mat-placeholder>
-                        <i class="material-icons app-input-icon">description</i>Dirección
-                    </mat-placeholder>
-                </mat-form-field>
-
-                <mat-form-field>
-                        <input matInput tabindex="5" formControlName="email">
-                        <mat-placeholder>
-                            <i class="material-icons app-input-icon">description</i>Email
-                        </mat-placeholder>
-                    </mat-form-field>
-
-            </mat-dialog-content>
-            <br>
-            <mat-dialog-actions>
-                <button type="submit" mat-raised-button color="accent" tabindex="6" [disabled]="!createForm.valid">Agregar</button>
-                <button type="button" mat-raised-button tabindex="7" (click)="cancel()">Cancelar</button>
-            </mat-dialog-actions>
-    
-        </form>
-    </div>

@@ -22,8 +22,7 @@ export class BookStoreService {
             .subscribe(data => {
                 this.dataStore.books = data;
                 this.booksSource.next(Object.assign({}, this.dataStore).books);
-            },
-            err => console.log('Error retrieving Todos')
+            }, error => console.log('Error retrieving Todos')
             );
     }
 

@@ -1,9 +1,7 @@
 import { API_SERVER } from '../app.config';
 import { Observable } from 'rxjs/Observable';
 import { Book } from '../models/book';
-import { Headers, Http } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HTTPService } from '../services/http.service';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
@@ -17,9 +15,9 @@ export class BookService {
     private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     constructor(
-        private http: Http,
+
         private httpCli: HttpClient,
-        private httpToken: HTTPService
+
     ) { }
 
 
@@ -28,12 +26,6 @@ export class BookService {
         return Promise.reject(error.message || error);
     }
 
-    getBooksHttpToken(): Promise<Book[]> {
-        return this.httpToken
-            .get(this.apiUrl)
-            .toPromise()
-            .catch(this.handleError);
-    }
 
     getBooks(): Observable<Book[]> {
         return this.httpCli

@@ -24,3 +24,10 @@ mat-table {
 .fila-dark:active {
     background: #292929;
 }
+
+.add {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+}

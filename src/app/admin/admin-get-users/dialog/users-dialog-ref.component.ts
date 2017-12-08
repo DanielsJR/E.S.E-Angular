@@ -3,6 +3,7 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../models/user';
 import { UserService } from '../../../shared/services/users.service';
+import { UserStoreService } from '../../../shared/services/user-store.service';
 
 
 @Component({
@@ -22,43 +23,49 @@ export class UsersDialogRefComponent implements OnInit {
     createForm: FormGroup;
     editForm: FormGroup;
     obj: User;
+   // objs: User[] = [];
 
     constructor(
         public dialogRef: MatDialogRef<UsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private service: UserService, private formBuilder: FormBuilder
+        private userStoreservice: UserStoreService, private formBuilder: FormBuilder
     ) {
         this.obj = data.obj;
     }
 
     ngOnInit(): void {
         this.buildForm();
-        console.log('objDialogRef:' + JSON.stringify(this.obj));
+       // console.log('objDialogRef:' + JSON.stringify(this.obj));
     }
 
     buildForm() {
         this.createForm = this.formBuilder.group({
-            id: [this.obj.id, Validators.required],
+            mobile: [this.obj.mobile, Validators.required],
             username: [this.obj.username, Validators.required],
-            dni: [this.obj.dni],
-            address: [this.obj.address],
-            email: [this.obj.email]
+            password: [this.obj.password, Validators.required],
+            /* dni: [this.obj.dni],
+             address: [this.obj.address],
+             email: [this.obj.email] */
         });
         this.editForm = this.formBuilder.group({
-            id: [this.obj.id, Validators.required],
+            mobile: [this.obj.mobile, Validators.required],
             username: [this.obj.username, Validators.required],
+            password: [this.obj.password, Validators.required],
+
+           /*  id: [this.obj.id, Validators.required],
             dni: [this.obj.dni],
             address: [this.obj.address],
-            email: [this.obj.email]
+            email: [this.obj.email]*/
         });
     }
 
     // getters create
-    get cIsbn() { return this.createForm.get('id'); }
-    get cTitle() { return this.createForm.get('username'); }
-    get cAuthor() { return this.createForm.get('dni'); }
-    get cTheme() { return this.createForm.get('address'); }
-    get cEmail() { return this.createForm.get('email'); }
+    get cMobile() { return this.createForm.get('mobile'); }
+    get cUsername() { return this.createForm.get('username'); }
+    get cPassword() { return this.createForm.get('password'); }
+    /*  get cDni() { return this.createForm.get('dni'); }
+      get cAddress() { return this.createForm.get('address'); }
+      get cEmail() { return this.createForm.get('email'); }  */
 
     // getters edit
     get eIsbn() { return this.createForm.get('id'); }
@@ -84,21 +91,20 @@ export class UsersDialogRefComponent implements OnInit {
     create(): void {
         this.obj = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.obj));
-        this.service.create(this.obj);
+        this.userStoreservice.create(this.obj);
         this.dialogRef.close('created');
     }
 
     save(): void {
         this.obj = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.obj));
-        this.service.update(this.obj);
+        this.userStoreservice.update(this.obj);
         this.dialogRef.close('saved');
     }
 
     delete(): void {
-        this.obj = this.editForm.value;
-        console.log('deleting... ' + JSON.stringify(this.data));
-        this.service.delete(this.obj.id);
+        console.log('deleting... ' + JSON.stringify(this.obj));
+        this.userStoreservice.delete(this.obj.id);
         this.dialogRef.close('deleted');
     }
 

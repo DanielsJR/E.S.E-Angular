@@ -40,8 +40,7 @@ export class AdminComponent implements OnInit {
     this.service.getUserByToken(token).subscribe(data => {
       this.user = data;
     },
-      error => this.errorMessage = <any>error);
-    console.log(this.errorMessage);
+     error => console.log('error getting the token ' + error));
   }
 
 

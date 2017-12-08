@@ -1,13 +1,21 @@
+<mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="userName">
+    <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.username}}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="userName">
-      <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-      <mat-cell *matCellDef="let user"> {{user.username}}</mat-cell>
-    </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" [class.fila]="!isDark" [class.fila-dark]="isDark" (click)="openDialogDetail(row)">
+  </mat-row>
+</mat-table>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"  [class.fila]="!isDark"
-     [class.fila-dark]="isDark" (click)="openDialogDetail(row)">
-    </mat-row>
-  </mat-table>
+<span class="add">
+  <button mat-fab (click)="openDialogCreate()">
+    <mat-icon>add</mat-icon>
+  </button>
+</span>
+
+<div *ngFor="let u of users">
+  {{u.username}}
+</div>

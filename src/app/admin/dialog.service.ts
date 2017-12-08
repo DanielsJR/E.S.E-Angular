@@ -12,6 +12,7 @@ export class DialogService {
   constructor(public dialog: MatDialog) { }
 
   openDialogDetail(): void {
+    console.log('openenig dialog : detail');
     this.data.type = 'detail';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -22,13 +23,31 @@ export class DialogService {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog detail was closed');
-      console.log(`Dialog result: ${result}`);
+      console.log(`openenig dialog : ${result}`);
       if (result === 'edit') {
         this.openDialogEdit();
       } else if (result === 'delete') {
         this.openDialogDelete();
       }
     });
+  }
+
+  openDialogCreate(): void {
+    console.log('openenig dialog : create');
+    this.data.type = 'create';
+    this.data.obj = this.obj;
+    const dialogRef = this.dialog.open(this.inputDialogRef, {
+      width: '250px',
+      data: this.data,
+      disableClose: true,
+      panelClass: 'myDialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog create was closed');
+      console.log(`Dialog result: ${result}`);
+    });
+
   }
 
   openDialogEdit(): void {
@@ -45,23 +64,6 @@ export class DialogService {
       console.log(`Dialog result: ${result}`);
     });
   }
-
-  openDialogCreate(): void {
-    this.data.type = 'create';
-    const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '250px',
-      data: this.data,
-      disableClose: true,
-      panelClass: 'myDialog'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog create was closed');
-      console.log(`Dialog result: ${result}`);
-    });
-
-  }
-
 
   openDialogDelete(): void {
     this.data.type = 'delete';

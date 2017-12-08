@@ -1,7 +1,6 @@
 
 import { UserService } from '../shared/services/users.service';
 import { LoginModule } from '../login/login.module';
-import { BookService2 } from '../book/book2.service';
 import { PageNotFoundComponent } from '../error-pages/page-not-found.component';
 import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { CoreRoutingModule } from './core-routing.module';
@@ -10,14 +9,13 @@ import { SharedModule } from '../shared/shared.module';
 import { ShellComponent } from './shell/shell.component';
 import { MainContentComponent } from './shell/main-content/main-content.component';
 import { HttpClientModule } from '@angular/common/http';
-import { BookService } from '../book/book.service';
 import { HTTPService } from '../services/http.service';
 
 import { HomeModule } from '../home/home.module';
-import { BookStoreService } from '../book/book-store.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../shared/interceptors/auth-interceptor.interceptor';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { UserStoreService } from '../shared/services/user-store.service';
 
 
 
@@ -42,10 +40,7 @@ import { LocalStorageService } from '../shared/services/local-storage.service';
   providers: [
     HTTPService,
     LocalStorageService,
-    BookService,
-    BookService2,
-    BookStoreService,
-    
+    UserStoreService,
     UserService,
     {
       provide: HTTP_INTERCEPTORS,

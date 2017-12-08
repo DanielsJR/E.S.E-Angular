@@ -15,6 +15,7 @@ export const URI_TEACHERS = '/teachers';
 export const URI_STUDENTS = '/students';
 export const BY_TOKEN = '/by_token';
 export const BY_ID = '/by_id';
+export const BY_NAME = '/by_name';
 
 export const LOCAL_STORAGE_THEME_KEY = 'theme';
 
