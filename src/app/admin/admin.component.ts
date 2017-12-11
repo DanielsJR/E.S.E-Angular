@@ -20,7 +20,6 @@ import { LocalStorageService } from '../shared/services/local-storage.service';
 export class AdminComponent implements OnInit {
 
   user: User;
-  errorMessage: string;
 
   triggerAsignaturas = true;
   triggerMat = true;
@@ -42,8 +41,6 @@ export class AdminComponent implements OnInit {
     },
      error => console.log('error getting the token ' + error));
   }
-
-
 
   private logout(): void {
     this.loginService.logout();

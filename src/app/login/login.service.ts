@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Session } from '../models/session';
 import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
 import { HTTPService } from '../services/http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { catchError } from 'rxjs/operators';
+// import 'rxjs/add/operator/catch';
 
 
 @Injectable()
@@ -35,7 +36,7 @@ export class LoginService {
         console.log('Login called');
         return this.httpCli
             .post(this.endpoint, null, { headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) }) })
-            .catch(this.handleError);
+            .pipe(catchError(this.handleError));
     }
 
     logout(): void {

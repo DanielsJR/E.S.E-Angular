@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 
 @Component({
@@ -16,7 +16,5 @@ export class ShellComponent implements OnInit {
   }
 
   ngOnInit() { }
-
-
 
 }

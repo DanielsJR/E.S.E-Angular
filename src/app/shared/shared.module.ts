@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
-import { ShowScrollDirective } from './directives/show-scroll.directive';
+import { FullscreenDirective } from './directives/fullscreen.directive';
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import { ShowScrollDirective } from './directives/show-scroll.directive';
 
   declarations: [
     ScrollerDirective,
-    ShowScrollDirective,
+    FullscreenDirective,
 
   ],
   exports: [
@@ -28,7 +28,7 @@ import { ShowScrollDirective } from './directives/show-scroll.directive';
     LogoModule,
     MaterialModule,
     ScrollerDirective,
-    ShowScrollDirective,
+     FullscreenDirective,
 
   ]
 })

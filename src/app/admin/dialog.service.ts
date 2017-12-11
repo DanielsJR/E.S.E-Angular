@@ -12,7 +12,7 @@ export class DialogService {
   constructor(public dialog: MatDialog) { }
 
   openDialogDetail(): void {
-    console.log('openenig dialog : detail');
+  // console.log('openenig dialog : detail');
     this.data.type = 'detail';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -22,8 +22,8 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog detail was closed');
-      console.log(`openenig dialog : ${result}`);
+      // console.log('The dialog detail was closed');
+      // console.log(`openenig dialog : ${result}`);
       if (result === 'edit') {
         this.openDialogEdit();
       } else if (result === 'delete') {
@@ -33,7 +33,7 @@ export class DialogService {
   }
 
   openDialogCreate(): void {
-    console.log('openenig dialog : create');
+    // console.log('openenig dialog : create');
     this.data.type = 'create';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -44,8 +44,8 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog create was closed');
-      console.log(`Dialog result: ${result}`);
+      // console.log('The dialog create was closed');
+     //  console.log(`Dialog result: ${result}`);
     });
 
   }
@@ -60,8 +60,8 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog edit was closed');
-      console.log(`Dialog result: ${result}`);
+      // console.log('The dialog edit was closed');
+      // console.log(`Dialog result: ${result}`);
     });
   }
 
@@ -75,8 +75,8 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog delete was closed');
-      console.log(`Dialog result: ${result}`);
+      // console.log('The dialog delete was closed');
+      // console.log(`Dialog result: ${result}`);
     });
 
   }

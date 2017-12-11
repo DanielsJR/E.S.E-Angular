@@ -1,12 +1,13 @@
 import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { UserService } from '../../shared/services/users.service';
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../../models/user';
-import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';
 import { UsersDialogRefComponent } from './dialog/users-dialog-ref.component';
 import { DialogService } from '../dialog.service';
 import { UserStoreService } from '../../shared/services/user-store.service';
+
+
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   templateUrl: './admin-get-users.component.html',
@@ -21,22 +22,24 @@ export class AdminGetUsersComponent implements OnInit {
   dataSource: MDDataSource | null;
 
   // mat dialog
-  usersDialogRef: UsersDialogRefComponent;
   user: User;
   isDark = this.localstorage.getIsDarkTheme();
+  styleClasses: {};
 
-  @ViewChild(UsersDialogRefComponent) dialogRef: UsersDialogRefComponent;
 
-  constructor(private userStoreservice: UserStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
+  constructor(private userStoreService: UserStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
 
   ngOnInit() {
-    this.dataSource = new MDDataSource(this.userStoreservice);
+    console.log('OnInit called');
+    this.dataSource = new MDDataSource(this.userStoreService);
 
     this.localstorage.isThemeDark$.subscribe(
-      isDark => this.isDark = isDark
+      isDark => {
+        this.isDark = isDark;
+        this.setDarkClass();
+      }
     );
-
-    this.userStoreservice.users$.subscribe(data => this.users = data);
+    this.setDarkClass();
 
   }
 
@@ -54,31 +57,36 @@ export class AdminGetUsersComponent implements OnInit {
     this.dialogServ.openDialogCreate();
   }
 
+  setDarkClass() {
+    // [ngClass]="{'fila': !isDark, 'fila-dark': isDark}" other way in the template
+
+    // CSS classes: added/removed per current state of component properties
+    this.styleClasses = {
+      'fila': !this.isDark,
+      'fila-dark': this.isDark
+    };
+  }
+
 }
 
 
 
 
 //  Data source to provide what data should be rendered in the table.
-export class MDDataSource extends DataSource<any> implements OnInit {
+export class MDDataSource extends DataSource<any> {
 
-  constructor(private userStoreservice: UserStoreService) {
+  constructor(private userStoreService: UserStoreService) {
     super();
-
   }
 
-  ngOnInit(): void {
-    console.log('loading data called');
-    
-  }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<User[]> {
-    this.userStoreservice.loadInitialData();
-    return this.userStoreservice.users$;
+    //  this.userStoreservice.loadInitialData();
+    console.log('connect called');
+    return this.userStoreService.users$;
   }
 
   disconnect() { }
 
 }
-

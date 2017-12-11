@@ -13,6 +13,7 @@ export class UserStoreService {
 
     constructor(private userBackendService: UserService) {
         this.dataStore = { users: [] };
+        console.log('************loadInitialData************');
         this.loadInitialData();
     }
 

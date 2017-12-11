@@ -58,7 +58,7 @@ export class LocalStorageService {
 
     getIsDarkTheme(): boolean {
         if (this.isStored(LOCAL_STORAGE_THEME_KEY)) {
-            console.log('darkTheme: ' + this.themeParsed().isDark);
+          //  console.log('darkTheme: ' + this.themeParsed().isDark);
             this.isThemeDarkSource.next(this.themeParsed().isDark);
             return this.themeParsed().isDark;
         } else {

@@ -16,7 +16,7 @@
 
         <span class="spacer-l"></span>
         <nx-full-screen></nx-full-screen>
-        <nx-theme-picker ></nx-theme-picker>
+        <nx-theme-picker></nx-theme-picker>
 
         <button type="button" mat-icon-button (click)="sidenavChat.toggle()" matTooltip="chat">
             <mat-icon>chat</mat-icon>
@@ -32,7 +32,7 @@
             <mat-toolbar class="side-toolbar">
                 <mat-list>
                     <mat-list-item>
-                        <img matListAvatar src="https://angular.io/generated/images/bios/jelbourn.jpg" alt="admin">
+                        <img matListAvatar src="assets/images/users/admin.jpg" alt="admin">
                         <h3 matLine> {{user?.username}} </h3>
                         <p matLine>
                             <span>Administrador</span>
@@ -108,13 +108,13 @@
                     </mat-list-item>
 
 
-                    <mat-list-item routerLink="/social" routerLinkActive="active">
+                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
                         <h3 matLine>Editar Manager</h3>
                     </mat-list-item>
 
 
-                    <mat-list-item routerLink="/social" routerLinkActive="active">
+                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
                         <h3 matLine>Borrar Manager</h3>
                     </mat-list-item>
@@ -196,8 +196,7 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" nxScroller (scrollEvent)="scrolled=$event" 
-        [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)': 'rgb(226, 226, 226)'">
+        <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
             <router-outlet></router-outlet>
         </div>
 

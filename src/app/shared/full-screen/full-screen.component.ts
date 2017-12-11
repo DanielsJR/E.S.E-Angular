@@ -11,29 +11,29 @@ export class FullScreenComponent implements OnInit {
   isFullscreen = false;
   tooltipMessage = 'Pantalla Completa';
 
-  constructor(@Inject(DOCUMENT) private doc: any) { }
+  constructor( @Inject(DOCUMENT) private doc: any) { }
 
   ngOnInit() {
+
   }
 
   toggleFullScreen() {
-    // const doc = window.document;
-     const docEl = this.doc.documentElement;
- 
-     // tslint:disable-next-line:max-line-length
-     const requestFullScreen = docEl['requestFullscreen'] || docEl['mozRequestFullScreen'] || docEl['webkitRequestFullScreen'] || docEl['msRequestFullscreen'];
-     const cancelFullScreen = this.doc['exitFullscreen'] || this.doc['mozCancelFullScreen'] || this.doc['webkitExitFullscreen'] || this.doc['msExitFullscreen'];
- 
-     // tslint:disable-next-line:max-line-length
-     if (!this.doc['fullscreenElement'] && !this.doc['mozFullScreenElement'] && !this.doc['webkitFullscreenElement'] && !this.doc['msFullscreenElement']) {
-       requestFullScreen.call(docEl);
-       this.tooltipMessage = 'Salir Pantalla Completa';
-       this.isFullscreen = true;
-     } else {
-       cancelFullScreen.call(this.doc);
-       this.tooltipMessage = 'Pantalla Completa';
-       this.isFullscreen = false;
-     }
-   }
+    const docEl = this.doc.documentElement;
+
+    // tslint:disable-next-line:max-line-length
+    const requestFullScreen = docEl['requestFullscreen'] || docEl['mozRequestFullScreen'] || docEl['webkitRequestFullScreen'] || docEl['msRequestFullscreen'];
+    const cancelFullScreen = this.doc['exitFullscreen'] || this.doc['mozCancelFullScreen'] || this.doc['webkitExitFullscreen'] || this.doc['msExitFullscreen'];
+
+    // tslint:disable-next-line:max-line-length
+    if (!this.doc['fullscreenElement'] && !this.doc['mozFullScreenElement'] && !this.doc['webkitFullscreenElement'] && !this.doc['msFullscreenElement']) {
+      requestFullScreen.call(docEl);
+      this.tooltipMessage = 'Salir Pantalla Completa';
+      this.isFullscreen = true;
+    } else {
+      cancelFullScreen.call(this.doc);
+      this.tooltipMessage = 'Pantalla Completa';
+      this.isFullscreen = false;
+    }
+  }
 
 }
