@@ -5,6 +5,10 @@ import { AdminComponent } from './admin.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminAuthGuard } from '../guards/admin-auth-guard.service';
+import { AdminGetAdminsComponent } from './admin-get-admins/admin-get-admins.component';
+import { AdminGetMangersComponent } from './admin-get-mangers/admin-get-mangers.component';
+import { AdminGetTeachersComponent } from './admin-get-teachers/admin-get-teachers.component';
+import { AdminGetStudentsComponent } from './admin-get-students/admin-get-students.component';
 
 
 const adminRoutes: Routes = [
@@ -18,19 +22,27 @@ const adminRoutes: Routes = [
                 path: 'users',
                 children: [
                     {
-                        path: 'create-user',
-                        component: AdminCreateUserComponent,
-                    },
-
-                    {
                         path: 'list-users',
                         component: AdminGetUsersComponent,
                     },
-
                     {
-                        path: 'user',
-                        component: AdminHomeComponent,
-                    }
+                        path: 'list-admins',
+                        component: AdminGetAdminsComponent,
+                    },
+                    {
+                        path: 'list-managers',
+                        component: AdminGetMangersComponent,
+                    },
+                    {
+                        path: 'list-teachers',
+                        component: AdminGetTeachersComponent,
+                    },
+                    {
+                        path: 'list-students',
+                        component: AdminGetStudentsComponent,
+                    },
+
+
                 ],
             },
 

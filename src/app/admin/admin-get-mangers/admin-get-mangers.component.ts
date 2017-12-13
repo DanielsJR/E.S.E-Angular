@@ -1,19 +1,20 @@
 import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { User } from '../../models/user';
-import { UsersDialogRefComponent } from './dialog/users-dialog-ref.component';
+
 import { DialogService } from '../dialog.service';
 import { UserStoreService } from '../../shared/services/user-store.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl } from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { UsersDialogRefComponent } from '../admin-get-users/dialog/users-dialog-ref.component';
 
 @Component({
-  templateUrl: './admin-get-users.component.html',
-  styleUrls: ['./admin-get-users.component.css']
+  templateUrl: './admin-get-mangers.component.html',
+  styleUrls: ['./admin-get-mangers.component.css']
 })
 
-export class AdminGetUsersComponent implements OnInit, AfterViewInit {
+export class AdminGetMangersComponent implements OnInit, AfterViewInit {
 
   // mat table
   users: User[];
@@ -33,7 +34,7 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     console.log('OnInit called');
     this.dataSource = new MatTableDataSource();
-    this.userStoreService.users$.subscribe(data => this.dataSource.data = data);
+    this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
 
     this.localstorage.isThemeDark$.subscribe(
       isDark => {
@@ -96,5 +97,6 @@ export class MatPaginatorIntlSpa extends MatPaginatorIntl {
     return `${startIndex + 1} - ${endIndex} de ${length}`;
   }
 }
+
 
 

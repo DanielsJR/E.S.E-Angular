@@ -1,13 +1,13 @@
 <mat-sidenav-container id="container" [class]="theme.themeName">
 
-  <button id="head" mat-raised-button color="primary">
+  <div id="head" class="primaryColorBG">
     <nx-theme-picker #theme></nx-theme-picker>
 
     <h4>Inicia sessión</h4>
     <button id="login" mat-fab routerLink="/login" matTooltip="Ingresa!">
       <mat-icon>account_circle</mat-icon>
     </button>
-  </button>
+  </div>
 
   <button id="line1" mat-raised-button color="accent"></button>
 
@@ -16,12 +16,12 @@
 
   <button id="line2" mat-raised-button color="accent"></button>
 
-  <button id="footer" mat-raised-button color="primary">
+  <div id="footer" class="primaryColorBG">
 
     <img id="l-s" alt="logo" src="assets/images/logos/ese-logo.png">
 
     <h6>Powered by Daniel's &copy;2017-2018.</h6>
-  </button>
+  </div>
 
   <mat-card id="content" class="mat-elevation-z8">
     <h2>Bienvenido a</h2>

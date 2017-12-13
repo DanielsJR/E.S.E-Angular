@@ -21,10 +21,7 @@ export class AdminComponent implements OnInit {
 
   user: User;
 
-  triggerAsignaturas = true;
-  triggerMat = true;
-  triggerHist = true;
-  triggerPruebas = true;
+  triggerUsers = true;
 
   scrolled = false;
 

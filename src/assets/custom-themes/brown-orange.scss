@@ -1,6 +1,6 @@
 @import './assets/custom-themes/highlightjs/material-light';
 @import './assets/custom-themes/highlightjs/material-dark';
-
+@import './assets/custom-themes/theme-color-grabber';
 
 $primary: mat-palette($mat-brown);
 $accent: mat-palette($mat-orange, A200, A100, A400);
@@ -9,10 +9,12 @@ $accent: mat-palette($mat-orange, A200, A100, A400);
 $theme: mat-light-theme($primary, $accent);
 .brown-orange {
   @include angular-material-theme($theme);
+  @include theme-color-grabber($theme);
 }
 
 // Define a dark theme.
 $theme: mat-dark-theme($primary, $accent);
 .brown-orange-dark {
   @include angular-material-theme($theme);
+  @include theme-color-grabber($theme);
 }

@@ -11,10 +11,16 @@ export class UserStoreService {
     public readonly users$ = this.usersSource.asObservable();
     private dataStore: { users: User[] };
 
+    private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
+    public readonly managers$ = this.managersSource.asObservable();
+    private managersStore: { users: User[] };
+
     constructor(private userBackendService: UserService) {
         this.dataStore = { users: [] };
+        this.managersStore = { users: [] };
         console.log('************loadInitialData************');
         this.loadInitialData();
+        this.getUsersByRole('manager');
     }
 
     loadInitialData() {
@@ -24,6 +30,16 @@ export class UserStoreService {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
             }, error => console.log('Error retrieving users')
+            );
+    }
+
+    getUsersByRole(role: string) {
+        this.userBackendService
+            .getUsersByRole(role)
+            .subscribe(data => {
+                this.managersStore.users = data;
+                this.managersSource.next(Object.assign({}, this.managersStore).users);
+            }, error => console.log('Error retrieving managers')
             );
     }
 

@@ -95,75 +95,42 @@
                     <h3 matLine>Home</h3>
                 </mat-list-item>
 
-                <mat-list-item (click)="triggerAsignaturas = !triggerAsignaturas">
-                    <mat-icon matListIcon>school</mat-icon>
+                <mat-list-item (click)="triggerUsers = !triggerUsers">
+                    <mat-icon matListIcon>person</mat-icon>
                     <h3 matLine>Usuarios</h3>
-                    <mat-icon [@tdRotate]="!triggerAsignaturas">arrow_drop_down</mat-icon>
+                    <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
                 </mat-list-item>
-                <div [@tdCollapse]="triggerAsignaturas">
-
-                    <mat-list-item routerLink="./users/create-user" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Crear Manager</h3>
-                    </mat-list-item>
-
+                <div [@tdCollapse]="triggerUsers">
 
                     <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Editar Manager</h3>
+                        <h3 matLine>Todos los Usuarios</h3>
+                    </mat-list-item>
+
+                    <mat-list-item routerLink="./users/list-admins" routerLinkActive="active">
+                        <mat-icon matListIcon></mat-icon>
+                        <h3 matLine>Administradores</h3>
                     </mat-list-item>
 
 
-                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
+                    <mat-list-item routerLink="./users/list-managers" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Borrar Manager</h3>
+                        <h3 matLine>Managers</h3>
                     </mat-list-item>
 
-                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
+
+                    <mat-list-item routerLink="./users/list-teachers" routerLinkActive="active">
                         <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Lista de Usuarios</h3>
+                        <h3 matLine>Profesores</h3>
+                    </mat-list-item>
+
+                    <mat-list-item routerLink="./users/list-students" routerLinkActive="active">
+                        <mat-icon matListIcon></mat-icon>
+                        <h3 matLine>Alumnos</h3>
                     </mat-list-item>
 
                 </div>
 
-                <mat-list-item (click)="triggerPruebas = !triggerPruebas">
-                    <mat-icon matListIcon>description</mat-icon>
-                    <h3 matLine>Pruebas</h3>
-                    <mat-icon [@tdRotate]="!triggerPruebas">arrow_drop_down</mat-icon>
-                </mat-list-item>
-
-                <div [@tdCollapse]="triggerPruebas">
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Tomar Prueba</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Crear Prueba</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Historial Pruebas</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Tomar Prueba</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Crear Prueba</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="/login" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Historial Pruebas</h3>
-                    </mat-list-item>
-
-                </div>
 
                 <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
                     <mat-icon matListIcon>cancel</mat-icon>

@@ -49,6 +49,15 @@ export class UserService {
             .pipe(catchError(this.handleError));
     }
 
+    getUsersByRole(role: string): Observable<User[]> {
+        const url = `${this.usersURL}/${role}s-list`;
+        console.log('resource called: ' + url);
+        return this.httpCli
+            .get<User[]>(url)
+            .pipe(catchError(this.handleError));
+    }
+
+
     create(user: User): Observable<User> {
         console.log('resource called: ' + this.usersURL + URI_MANAGERS);
         return this.httpCli
