@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   TdBounceAnimation,
   TdFlashAnimation,
@@ -17,57 +17,24 @@ import {
     TdHeadshakeAnimation(), // using implicit anchor name 'tdHeadshake' in template
     TdJelloAnimation(), // using implicit anchor name 'tdJello' in template
     TdPulseAnimation(), // using implicit anchor name 'tdPulse' in template
+
   ],
 })
 
 
 export class LogoComponent implements OnInit {
 
-  bounceState = false;
-  flashState = false;
-  headshakeState = false;
-  jelloState = false;
-  pulseState = false;
-
-  anim;
-
-  anims = [
-
-    {
-      name: 'tdBounce',
-      active: false,
-    },
-    {
-      name: 'tdFlash',
-      active: false,
-    },
-    {
-      name: 'tdHeadshake',
-      active: false,
-    },
-    {
-      name: 'tdJello',
-      active: false,
-    },
-    {
-      name: 'tdPulse',
-      active: false,
-    },
-  ];
-
-
+  @Input() bounceState = false;
+  @Input() flashState = false;
+  @Input() headshakeState = false;
+  @Input() jelloState = false;
+  @Input() pulseState = false;
+  @Input() type = 'mat-raised-button';
 
   constructor() { }
 
   ngOnInit() {
-    this.animate();
-  }
-
-  animate(): void {
-    this.anim = this.anims[Math.floor(Math.random() * this.anims.length)];
-    this.anim.active = true;
-    console.log(this.anim.name + ' ' + this.anim.active);
-
+ 
   }
 
 

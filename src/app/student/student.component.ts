@@ -1,7 +1,11 @@
 import { LoginService } from '../login/login.service';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
+import { User } from '../models/user';
+import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
+import { UserService } from '../shared/services/users.service';
+import { LocalStorageService } from '../shared/services/local-storage.service';
 
 @Component({
   selector: 'nx-student',
@@ -15,19 +19,28 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 })
 export class StudentComponent implements OnInit {
 
-  triggerAsignaturas = true;
-  triggerMat = true;
-  triggerHist = true;
-  triggerPruebas = true;
+  triggerUsers = true;
+  scrolled = false;
+  user: User;
+  role = this.localStorage.getRole();
 
-  constructor(private router: Router, private loginService: LoginService) { }
+  @ViewChild(ThemePickerComponent)
+  themePicker: ThemePickerComponent;
+
+  constructor(private router: Router, private loginService: LoginService,
+    private service: UserService, private localStorage: LocalStorageService) { }
 
   ngOnInit() {
-
+    const token = this.localStorage.getToken();
+    this.service.getUserByToken(token).subscribe(data => {
+      this.user = data;
+    },
+      error => console.log('error getting the token ' + error));
   }
 
   private logout(): void {
     this.loginService.logout();
+    this.themePicker.removeTheme();
     this.router.navigate(['/']);
   }
 }

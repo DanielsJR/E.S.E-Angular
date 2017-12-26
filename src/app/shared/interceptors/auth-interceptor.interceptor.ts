@@ -29,30 +29,35 @@ export class AuthInterceptor implements HttpInterceptor {
                     if (event instanceof HttpResponse) {
                         // do stuff with response if you want
                     }
-                }, (err: any) => {
+                }
                     // token expired
-                    if (err instanceof HttpErrorResponse) {
-                        if (err.status === 401) {
-                            this.router.navigate(['/login']);
+                    , (err: any) => {
+
+                        if (err instanceof HttpErrorResponse) {
+                            if (err.status === 401) {
+                                this.router.navigate(['/login']);
+                            }
                         }
-                    }
-                });
+                    });
             }
-            // no local storage
+
             return next.handle(req).do((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     // do stuff with response if you want
                 }
-            }, (err: any) => {
-                if (err instanceof HttpErrorResponse) {
-                    if (err.status === 401) {
-                        // redirect to the login route
-                        this.router.navigate(['/login']);
+            }
+                // no local storage
+                , (err: any) => {
+                    if (err instanceof HttpErrorResponse) {
+                        if (err.status === 401) {
+                            // redirect to the login route
+                            this.router.navigate(['/login']);
+                        }
                     }
-                }
-            });
+                });
         }
         // has authorization (login)
         return next.handle(req);
     }
+
 }

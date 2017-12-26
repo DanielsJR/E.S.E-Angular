@@ -24,6 +24,7 @@ export class AdminComponent implements OnInit {
   triggerUsers = true;
 
   scrolled = false;
+  role = this.localStorage.getRole();
 
   @ViewChild(ThemePickerComponent)
   themePicker: ThemePickerComponent;

@@ -6,6 +6,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 import { LocalStorageService } from '../shared/services/local-storage.service';
 
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { error } from 'util';
+
 
 @Component({
   selector: 'nx-login',
@@ -16,6 +20,8 @@ export class LoginComponent implements OnInit {
 
   user: User;
   loginForm: FormGroup;
+  unauthMessage = 'Usuario o Contraseña Incorrecta';
+  error = false;
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService,
@@ -34,8 +40,20 @@ export class LoginComponent implements OnInit {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, session);
         const route = '/' + this.localStorageService.getRole().toLowerCase();
         this.router.navigate([route]);
+      }, err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            console.error(err.message);
+            this.userName.setValue('');
+            this.password.setValue('');
+            this.loginForm.reset();
+            this.error = true;
+          }
+        }
       }
+
       );
+
   }
 
   ngOnInit(): void {

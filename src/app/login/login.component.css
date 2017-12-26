@@ -1,206 +1,103 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr minmax(200px, 300px) 1fr;
+    grid-template-rows: 1fr minmax(300px, 400px) 1fr;
+    height: 100%;
+}
 
+mat-card,
+.form {
+    grid-area: 2/2/2/3;
+    z-index: 2;
+}
+
+mat-card {
+    padding: 0;
+}
+
+form .login-content {
+    position: absolute;
+    padding: 0 45px;
+    top:100px;
+    bottom: 0;
+    line-height: 4.5em;
+    overflow: hidden;
+}
+
+.unauthMessage {
+    position: relative;
+    top:20px;
+    color: red;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+}
+
+.login-actions {
+    position: relative;
+    display: block;
+    margin: auto;
+    top: 25px;
+    width: 60%;
+}
 
 .spacer {
-  flex: 1 1 auto;
- }
+    flex: 1 1 auto;
+}
 
- h1 {
-  font-size: 27px;
-  font-family: 'Roboto', sans-serif;
- }
+mat-form-field {
+    width: 100%
+}
 
+h1 {
+    font-size: 27px;
+    font-family: 'Roboto', sans-serif;
+}
 
 .app-input-icon {
-  font-size: 16px;
+    font-size: 16px;
 }
-
 
 span {
-  font-family: 'Fascinate', sans-serif;
-  font-size: 15px;
-}
-
-
-@media all and (min-width:601px) {
-  .uc81Ff {
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-flex-direction: column;
-      flex-direction: column;
-      min-height: 100vh;
-      position: relative
-  }
-  .uc81Ff:before,
-  .uc81Ff:after {
-      -webkit-box-flex: 1;
-      box-flex: 1;
-      -webkit-flex-grow: 1;
-      flex-grow: 1;
-      content: '';
-      display: block;
-      height: 24px
-  }
-  .uc81Ff:before {
-      min-height: 30px
-  }
-  .uc81Ff:after {
-      min-height: 24px
-  }
-  .uc81Ff.wKBl8c:after {
-      min-height: 64.8px
-  }
-}
-
-.LJtPoc {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  background: #fff;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  max-width: 100%;
-  position: relative;
-  z-index: 2
-}
-.wKBl8c .LJtPoc {
-  min-height: 100vh
-}
-
-@media all and (min-width:601px) {
-  .wKBl8c .LJtPoc {
-      min-height: 0
-  }
-  .LJtPoc,
-  mat-card,
-  .form{
-      -webkit-transition: .2s;
-      transition: .2s
-  }
-  mat-card, .LJtPoc {
-      -webkit-flex-shrink: 0;
-      flex-shrink: 0;
-
-      
-      display: block;
-      margin: 0 auto;
-      min-height: 0;
-      width: 250px;
-      height: 400px;
-  }
-
-}
-mat-card{
-  padding: 0;
-}
-
-mat-card, .form {
-  -webkit-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  overflow: hidden;
- 
- 
-}
-
-form .login-content { 
-  padding: 20px;
-}
-
-form .login-actions { 
-  padding: 20px 80px;
-}
-
-@media all and (min-width:450px) {
-
-  form .login-content { 
-    padding: 100px;
-  }
-  
-  form .login-actions { 
-    padding: 100px 120px;
-  }
-  
-}
-@media all and (min-width:601px) {
-   .form {
-      height: auto;
-      min-height: 500px;
-      overflow-y: auto
-  }
-
-  form .login-content { 
-    padding: 20px;
-  }
-  
-  form .login-actions { 
-    padding: 20px 80px;
-  }
+    font-family: 'Fascinate', sans-serif;
+    font-size: 15px;
 }
 
 .theme-picker {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 3;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 3;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 .VYMape {
-  background: #fff;
-  bottom: 0;
-  direction: ltr;
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1
+    background: #fff;
+    bottom: 0;
+    direction: ltr;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1
 }
 
 @media all and (min-width:601px) {
-  .VYMape {
-      background: #e0e0e0
-  }
+    .VYMape {
+        background: #e0e0e0
+    }
 }
 
 .VYMape svg {
-  display: none;
-  height: 100%;
-  position: relative;
-  width: 100%
+    display: none;
+    height: 100%;
+    position: relative;
+    width: 100%
 }
 
 @media all and (min-width:601px) {
-  .VYMape svg {
-      display: block
-  }
+    .VYMape svg {
+        display: block
+    }
 }
-  
-
-
-
-
-
-
-

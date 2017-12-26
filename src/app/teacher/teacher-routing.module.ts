@@ -51,6 +51,11 @@ const teacherRoutes: Routes = [
                     },
 
                     {
+                        path: 'edit-test',
+                        component: SubjectDetailComponent,
+                    },
+
+                    {
                         path: 'historical',
                         component: SubjectDetailComponent,
                     }

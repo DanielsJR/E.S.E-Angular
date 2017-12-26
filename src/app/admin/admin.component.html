@@ -35,7 +35,7 @@
                         <img matListAvatar src="assets/images/users/admin.jpg" alt="admin">
                         <h3 matLine> {{user?.username}} </h3>
                         <p matLine>
-                            <span>Administrador</span>
+                            <span>{{role}}</span>
                         </p>
                     </mat-list-item>
                 </mat-list>
@@ -159,7 +159,7 @@
         <!-- toolbar2 -->
         <mat-toolbar class="toolbar2">
             <span class="spacer-c"></span>
-            <nx-logo-raised-button [jelloState]=scrolled></nx-logo-raised-button>
+            <nx-logo [jelloState]=scrolled></nx-logo>
         </mat-toolbar>
 
         <!-- primary content -->
