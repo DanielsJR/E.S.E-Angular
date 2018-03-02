@@ -3,7 +3,7 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../models/user';
 import { UserService } from '../../../shared/services/users.service';
-import { UserStoreService } from '../../../shared/services/user-store.service';
+import { UserStoreService } from '../user-store.service';
 
 
 @Component({
@@ -11,10 +11,7 @@ import { UserStoreService } from '../../../shared/services/user-store.service';
     selector: 'nx-users-dialog-ref',
     templateUrl: './users-dialog-ref.component.html',
     styles: [`
-    .app-input-icon {
-        font-size: 16px;
-      },
-
+    .app-input-icon { font-size: 16px; },
     `]
 })
 
@@ -31,48 +28,50 @@ export class UsersDialogRefComponent implements OnInit {
         private userStoreservice: UserStoreService, private formBuilder: FormBuilder
     ) {
         this.obj = data.obj;
-    }
+      }
 
     ngOnInit(): void {
         this.buildForm();
-       // console.log('objDialogRef:' + JSON.stringify(this.obj));
+        console.log('objDialogRef:' + JSON.stringify(this.obj.id));
     }
 
     buildForm() {
         this.createForm = this.formBuilder.group({
-            mobile: [this.obj.mobile, Validators.required],
-            username: [this.obj.username, Validators.required],
+            userName: [this.obj.userName, Validators.required],
+            firstName: [this.obj.firstName],
+            lastName: [this.obj.lastName],
+            dni: [this.obj.dni],
+            age:[this.obj.age],
+            gender:[this.obj.gender],
             password: [this.obj.password, Validators.required],
-            /* dni: [this.obj.dni],
-             address: [this.obj.address],
-             email: [this.obj.email] */
+            mobile: [this.obj.mobile],
+            email: [this.obj.email],
+            address: [this.obj.address],
+            active:[this.obj.active],
+           // roles:[this.obj.roles]
         });
         this.editForm = this.formBuilder.group({
-            mobile: [this.obj.mobile, Validators.required],
-            username: [this.obj.username, Validators.required],
-            password: [this.obj.password, Validators.required],
-
-           /*  id: [this.obj.id, Validators.required],
+            id: [this.obj.id],
+            userName: [this.obj.userName, Validators.required],
+            firstName: [this.obj.firstName],
+            lastName: [this.obj.lastName],
             dni: [this.obj.dni],
+            age:[this.obj.age],
+            gender:[this.obj.gender],
+            password: [this.obj.password, Validators.required],
+            mobile: [this.obj.mobile],
+            email: [this.obj.email],
             address: [this.obj.address],
-            email: [this.obj.email]*/
+            active:[this.obj.active],
+           // roles:[this.obj.roles]
+            
         });
     }
 
     // getters create
-    get cMobile() { return this.createForm.get('mobile'); }
-    get cUsername() { return this.createForm.get('username'); }
-    get cPassword() { return this.createForm.get('password'); }
-    /*  get cDni() { return this.createForm.get('dni'); }
-      get cAddress() { return this.createForm.get('address'); }
-      get cEmail() { return this.createForm.get('email'); }  */
-
+  //  get cUserName() { return this.createForm.get('userName'); }
     // getters edit
-    get eIsbn() { return this.createForm.get('id'); }
-    get eTitle() { return this.createForm.get('username'); }
-    get eAuthor() { return this.createForm.get('dni'); }
-    get eTheme() { return this.createForm.get('address'); }
-    get eEmail() { return this.createForm.get('email'); }
+  //  get eUserName() { return this.createForm.get('userName'); }
 
 
     cancel(): void {

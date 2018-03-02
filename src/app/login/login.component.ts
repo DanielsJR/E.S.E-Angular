@@ -31,14 +31,19 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.user.username = this.userName.value;
+    this.user.userName = this.userName.value;
     this.user.password = this.password.value;
     this.loginService
-      .login(this.user.username, this.user.password)
+      .login(this.user.userName, this.user.password)
       .subscribe(session => {
         console.log('setting local storage');
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, session);
-        const route = '/' + this.localStorageService.getRole().toLowerCase();
+        let role = this.localStorageService.getRole();
+        if (role === 'ADMIN') { role = 'admin' }
+        if (role === 'ADMINISTRADOR') { role = 'manager' }
+        if (role === 'PROFESOR') { role = 'teacher' }
+        if (role === 'ESTUDIANTE') { role = 'student' }
+        const route = '/' + role;
         this.router.navigate([route]);
       }, err => {
         if (err instanceof HttpErrorResponse) {
@@ -62,7 +67,7 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      userName: [this.user.username, Validators.required],
+      userName: [this.user.userName, Validators.required],
       password: [this.user.password, Validators.required]
     });
   }

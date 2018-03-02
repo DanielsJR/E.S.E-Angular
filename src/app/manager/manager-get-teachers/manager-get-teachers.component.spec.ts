@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LogoMiniFabComponent } from './logo-mini-fab.component';
+import { ManagerGetTeachersComponent } from './manager-get-teachers.component';
 
-describe('LogoMiniFabComponent', () => {
-  let component: LogoMiniFabComponent;
-  let fixture: ComponentFixture<LogoMiniFabComponent>;
+describe('ManagerGetTeachersComponent', () => {
+  let component: ManagerGetTeachersComponent;
+  let fixture: ComponentFixture<ManagerGetTeachersComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogoMiniFabComponent ]
+      declarations: [ ManagerGetTeachersComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LogoMiniFabComponent);
+    fixture = TestBed.createComponent(ManagerGetTeachersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

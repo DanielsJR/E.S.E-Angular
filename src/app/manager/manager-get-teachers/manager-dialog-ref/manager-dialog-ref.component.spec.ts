@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminGetMangersComponent } from './admin-get-mangers.component';
+import { ManagerDialogRefComponent } from './manager-dialog-ref.component';
 
-describe('AdminGetMangersComponent', () => {
-  let component: AdminGetMangersComponent;
-  let fixture: ComponentFixture<AdminGetMangersComponent>;
+describe('ManagerDialogRefComponent', () => {
+  let component: ManagerDialogRefComponent;
+  let fixture: ComponentFixture<ManagerDialogRefComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminGetMangersComponent ]
+      declarations: [ ManagerDialogRefComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdminGetMangersComponent);
+    fixture = TestBed.createComponent(ManagerDialogRefComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

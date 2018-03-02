@@ -72,7 +72,7 @@
                 <!-- sidenav content -->
                 <mat-nav-list class="menu">
                     <mat-list-item>
-                        <h3 matLine>Nombre: {{user?.username}}</h3>
+                        <h3 matLine>Nombre: {{user?.userName}}</h3>
                     </mat-list-item>
                     <mat-list-item>
                         <h3 matLine>Telefono: {{user?.mobile}}</h3>
@@ -95,42 +95,10 @@
                     <h3 matLine>Home</h3>
                 </mat-list-item>
 
-                <mat-list-item (click)="triggerUsers = !triggerUsers">
+                <mat-list-item routerLink="./users" routerLinkActive="active">
                     <mat-icon matListIcon>person</mat-icon>
                     <h3 matLine>Usuarios</h3>
-                    <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
                 </mat-list-item>
-                <div [@tdCollapse]="triggerUsers">
-
-                    <mat-list-item routerLink="./users/list-users" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Todos los Usuarios</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="./users/list-admins" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Administradores</h3>
-                    </mat-list-item>
-
-
-                    <mat-list-item routerLink="./users/list-managers" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Managers</h3>
-                    </mat-list-item>
-
-
-                    <mat-list-item routerLink="./users/list-teachers" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Profesores</h3>
-                    </mat-list-item>
-
-                    <mat-list-item routerLink="./users/list-students" routerLinkActive="active">
-                        <mat-icon matListIcon></mat-icon>
-                        <h3 matLine>Alumnos</h3>
-                    </mat-list-item>
-
-                </div>
-
 
                 <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
                     <mat-icon matListIcon>cancel</mat-icon>

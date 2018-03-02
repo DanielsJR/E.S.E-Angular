@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Session } from '../models/session';
-import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
+import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
 import { Observable } from 'rxjs/Observable';
 import { HTTPService } from '../services/http.service';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class LoginService {
-    private endpoint = API_SERVER + '/tokens';
+    private endpoint = API_SERVER + URI_TOKEN_AUTH;
 
     isAdmin = false;
     isManager = false;

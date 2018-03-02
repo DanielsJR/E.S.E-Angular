@@ -9,14 +9,10 @@ import { SharedModule } from '../shared/shared.module';
 import { ShellComponent } from './shell/shell.component';
 import { MainContentComponent } from './shell/main-content/main-content.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HTTPService } from '../services/http.service';
-
 import { HomeModule } from '../home/home.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../shared/interceptors/auth-interceptor.interceptor';
 import { LocalStorageService } from '../shared/services/local-storage.service';
-import { UserStoreService } from '../shared/services/user-store.service';
-
 
 
 
@@ -38,9 +34,7 @@ import { UserStoreService } from '../shared/services/user-store.service';
   ],
 
   providers: [
-    HTTPService,
     LocalStorageService,
-    UserStoreService,
     UserService,
     {
       provide: HTTP_INTERCEPTORS,

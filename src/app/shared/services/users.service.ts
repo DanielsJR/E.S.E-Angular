@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { API_SERVER, URI_USERS, URI_MANAGERS, BY_TOKEN, BY_ID, BY_NAME } from '../../app.config';
+import { API_SERVER, URI_USER, URI_MANAGERS_REGISTER, URI_BY_TOKEN, URI_BY_ID, URI_BY_NAME, URI_STUDENTS_LIST, URI_USERS_LIST } from '../../app.config';
 import { User } from '../../models/user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { catchError } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class UserService {
 
-    private usersURL = API_SERVER + URI_USERS;
+    private userURL = API_SERVER + URI_USER;
 
     constructor(private httpCli: HttpClient) { }
 
@@ -21,60 +21,63 @@ export class UserService {
     }
 
     getUserById(id: number): Observable<User> {
-        const url = `${this.usersURL}${BY_ID}/${id}`;
-        console.log('resource called: ' + url);
+        const url = `${this.userURL}${URI_BY_ID}/${id}`;
+        console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User>(url)
             .pipe(catchError(this.handleError));
     }
+
     getUserByToken(token: string): Observable<User> {
-        const url = `${this.usersURL}${BY_TOKEN}/${token}`;
-        console.log('resource called: ' + url);
+        const url = `${this.userURL}${URI_BY_TOKEN}/${token}`;
+        console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User>(url)
             .pipe(catchError(this.handleError));
     }
+    
     getUserByUserName(name: string): Observable<User> {
-        const url = `${this.usersURL}${BY_NAME}/${name}`;
-        console.log('resource called: ' + url);
+        const url = `${this.userURL}${URI_BY_NAME}/${name}`;
+        console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User>(url)
             .pipe(catchError(this.handleError));
     }
 
     getUsers(): Observable<User[]> {
-        console.log('resource called: ' + this.usersURL);
-        return this.httpCli
-            .get<User[]>(this.usersURL)
-            .pipe(catchError(this.handleError));
-    }
-
-    getUsersByRole(role: string): Observable<User[]> {
-        const url = `${this.usersURL}/${role}s-list`;
-        console.log('resource called: ' + url);
+        const url = `${this.userURL}${URI_USERS_LIST}`;
+        console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User[]>(url)
             .pipe(catchError(this.handleError));
     }
 
+    getUsersByRole(role: string): Observable<User[]> {
+        const url = `${this.userURL}/${role}s-list`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli
+            .get<User[]>(url)
+            .pipe(catchError(this.handleError));
+    }
 
     create(user: User): Observable<User> {
-        console.log('resource called: ' + this.usersURL + URI_MANAGERS);
+        const url = `${this.userURL}${URI_MANAGERS_REGISTER}`;
+        console.log(`resource called:  ${url}`);
         return this.httpCli
-            .post(this.usersURL + URI_MANAGERS, JSON.stringify(user), { responseType: 'text' })
+            .post(url, JSON.stringify(user))
             .pipe(catchError(this.handleError));
     }
 
     update(user: User): Observable<User> {
-        console.log('resource called: ' + this.usersURL);
+        console.log('resource called: ' + this.userURL);
         return this.httpCli
-            .put(this.usersURL, JSON.stringify(user), { responseType: 'text' })
+            .put(this.userURL, JSON.stringify(user))
             .pipe(catchError(this.handleError));
     }
 
     delete(id: number): Observable<void> {
-        const url = `${this.usersURL}/${id}`;
-        console.log('resource called: ' + url);
+        const url = `${this.userURL}/${id}`;
+        console.log(`resource called:  ${url}`);
         return this.httpCli
             .delete(url, { responseType: 'text' })
             .pipe(catchError(this.handleError));

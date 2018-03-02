@@ -20,9 +20,6 @@ import { LocalStorageService } from '../shared/services/local-storage.service';
 export class AdminComponent implements OnInit {
 
   user: User;
-
-  triggerUsers = true;
-
   scrolled = false;
   role = this.localStorage.getRole();
 

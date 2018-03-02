@@ -1,12 +1,15 @@
 import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { User } from '../../models/user';
 import { UsersDialogRefComponent } from './dialog/users-dialog-ref.component';
 import { DialogService } from '../dialog.service';
-import { UserStoreService } from '../../shared/services/user-store.service';
+
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl } from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { EventEmitter } from 'events';
+import { UserStoreService } from './user-store.service';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.config';
 
 @Component({
   templateUrl: './admin-get-users.component.html',
@@ -17,13 +20,14 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
 
   // mat table
   users: User[];
-  displayedColumns = ['userName'];
+  displayedColumns = ['userName', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   // mat dialog
   user: User;
+  roles: string[];
   isDark = this.localstorage.getIsDarkTheme();
   styleClasses: {};
 
@@ -31,6 +35,7 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
   constructor(private userStoreService: UserStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
 
   ngOnInit() {
+    this.roles = [ROLE_MANAGER, ROLE_TEACHER,ROLE_STUDENT];
     console.log('OnInit called');
     this.dataSource = new MatTableDataSource();
     this.userStoreService.users$.subscribe(data => this.dataSource.data = data);
@@ -56,6 +61,17 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
+  selectByRol(role: string) {
+    if(role === 'ADMINISTRADOR'){role='manager'}
+    if(role === 'PROFESOR'){role='teacher'}
+    if(role === 'ESTUDIANTE'){role='student'}
+    this.userStoreService.getUsersByRole(role);
+  }
+
+  selectAll() {
+   this.userStoreService.getUsers();
+  }
+
   openDialogDetail(user: User): void {
     this.user = user;
     this.dialogServ.obj = this.user;
@@ -68,6 +84,20 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
     this.dialogServ.obj = this.user;
     this.dialogServ.inputDialogRef = UsersDialogRefComponent;
     this.dialogServ.openDialogCreate();
+  }
+
+  openDialogEdit(user: User): void {
+    this.user = user;
+    this.dialogServ.obj = this.user;
+    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.openDialogEdit();
+  }
+
+  openDialogDelete(user: User): void {
+    this.user = user;
+    this.dialogServ.obj = this.user;
+    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.openDialogDelete();
   }
 
   setDarkClass() {

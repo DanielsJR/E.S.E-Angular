@@ -1,8 +1,9 @@
-import { UserService } from './users.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from '../../models/user';
+import { UserService } from '../../shared/services/users.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserStoreService {
@@ -11,19 +12,15 @@ export class UserStoreService {
     public readonly users$ = this.usersSource.asObservable();
     private dataStore: { users: User[] };
 
-    private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    public readonly managers$ = this.managersSource.asObservable();
-    private managersStore: { users: User[] };
 
-    constructor(private userBackendService: UserService) {
+    constructor(private userBackendService: UserService, private httpCli: HttpClient) {
         this.dataStore = { users: [] };
-        this.managersStore = { users: [] };
-        console.log('************loadInitialData************');
-        this.loadInitialData();
-        this.getUsersByRole('manager');
+        console.log('************initial-data************');
+        //this.getUsers();
+        this.getUsersByRole('teacher');
     }
 
-    loadInitialData() {
+    getUsers() {
         this.userBackendService
             .getUsers()
             .subscribe(data => {
@@ -37,9 +34,9 @@ export class UserStoreService {
         this.userBackendService
             .getUsersByRole(role)
             .subscribe(data => {
-                this.managersStore.users = data;
-                this.managersSource.next(Object.assign({}, this.managersStore).users);
-            }, error => console.log('Error retrieving managers')
+                this.dataStore.users = data;
+                this.usersSource.next(Object.assign({}, this.dataStore).users);
+            }, error => console.log(`Error retrieving ${role}s`)
             );
     }
 
@@ -48,7 +45,6 @@ export class UserStoreService {
             .getUserById(id)
             .subscribe(data => {
                 let notFound = true;
-
                 this.dataStore.users.forEach((item, index) => {
                     if (item.id === data.id) {
                         this.dataStore.users[index] = data;
@@ -66,26 +62,23 @@ export class UserStoreService {
     }
 
     create(user: User) {
-        return this.userBackendService
+        this.userBackendService
             .create(user)
-            .subscribe(() => {
-                let userRecover: User;
-                this.userBackendService.getUserByUserName(user.username).subscribe(resp => {
-                    userRecover = resp;
-                    console.log('userRecover:' + JSON.stringify(userRecover));
-                    this.dataStore.users.push(userRecover);
-                    this.usersSource.next(Object.assign({}, this.dataStore).users);
-                }, error => console.log('Could not recover user or store it' + error));
+            .subscribe(data => {
+                this.dataStore.users.push(data);
+                this.usersSource.next(Object.assign({}, this.dataStore).users);
 
             }, error => console.log('Could not create User ' + error));
     }
 
     update(user: User) {
-        return this.userBackendService
+        this.userBackendService
             .update(user)
             .subscribe(data => {
                 this.dataStore.users.forEach((u, i) => {
-                    if (u.id === data.id) { this.dataStore.users[i] = data; }
+                    if (u.id === data.id) {
+                        this.dataStore.users[i] = data;
+                    }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
 
@@ -93,9 +86,9 @@ export class UserStoreService {
     }
 
     delete(id: number) {
-        return this.userBackendService
+        this.userBackendService
             .delete(id)
-            .subscribe(resp => {
+            .subscribe(() => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === id) { this.dataStore.users.splice(i, 1); }
                 });
