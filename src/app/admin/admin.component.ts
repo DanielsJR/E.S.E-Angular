@@ -6,6 +6,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { URI_ADMINS } from '../app.config';
 
 @Component({
   selector: 'nx-admin',
@@ -31,7 +32,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     const token = this.localStorage.getToken();
-    this.service.getUserByToken(token).subscribe(data => {
+    this.service.getUserByToken(token, URI_ADMINS).subscribe(data => {
       this.user = data;
     },
      error => console.log('error getting the token ' + error));

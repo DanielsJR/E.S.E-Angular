@@ -4,9 +4,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from '../../models/user';
 import { UserService } from '../../shared/services/users.service';
 import { HttpClient } from '@angular/common/http';
+import { URI_MANAGERS, URI_TEACHERS } from '../../app.config';
 
 @Injectable()
-export class UserStoreService {
+export class ManagerGetTeachersStoreService {
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly users$ = this.usersSource.asObservable();
@@ -16,13 +17,13 @@ export class UserStoreService {
     constructor(private userBackendService: UserService, private httpCli: HttpClient) {
         this.dataStore = { users: [] };
         console.log('************initial-data************');
-        //this.getUsers();
-        this.getUsersByRole('teacher');
+        this.getUsers();
+        //this.getUsersByRole('teacher');
     }
 
     getUsers() {
         this.userBackendService
-            .getUsers()
+            .getUsers(URI_TEACHERS)
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -32,7 +33,7 @@ export class UserStoreService {
 
     getUsersByRole(role: string) {
         this.userBackendService
-            .getUsersByRole(role)
+            .getUsersByRole(role, URI_TEACHERS)
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -42,7 +43,7 @@ export class UserStoreService {
 
     findById(id: number) {
         this.userBackendService
-            .getUserById(id)
+            .getUserById(id, URI_TEACHERS)
             .subscribe(data => {
                 let notFound = true;
                 this.dataStore.users.forEach((item, index) => {
@@ -63,7 +64,7 @@ export class UserStoreService {
 
     create(user: User) {
         this.userBackendService
-            .create(user)
+            .create(user, URI_TEACHERS)
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -73,7 +74,7 @@ export class UserStoreService {
 
     update(user: User) {
         this.userBackendService
-            .update(user)
+            .update(user, URI_TEACHERS)
             .subscribe(data => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === data.id) {
@@ -85,12 +86,12 @@ export class UserStoreService {
             }, error => console.log('Could not update user from store ' + error));
     }
 
-    delete(id: number) {
+    delete(username: string) {
         this.userBackendService
-            .delete(id)
+            .delete(username, URI_TEACHERS)
             .subscribe(() => {
                 this.dataStore.users.forEach((u, i) => {
-                    if (u.id === id) { this.dataStore.users.splice(i, 1); }
+                    if (u.username === username) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
 

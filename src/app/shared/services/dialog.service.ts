@@ -61,6 +61,7 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog edit was closed '+ JSON.stringify(result));
       // console.log('The dialog edit was closed');
       // console.log(`Dialog result: ${result}`);
     });

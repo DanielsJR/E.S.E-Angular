@@ -3,18 +3,17 @@ import { User } from '../../models/user';
 import { MatSort, MatPaginator, MatTableDataSource, MatPaginatorIntl } from '@angular/material';
 
 import { DialogService } from '../../shared/services/dialog.service';
-import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.config';
-
 import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { ManagerGetTeachersDialogRefComponent } from './manager-get-teachers-dialog-ref/manager-get-teachers-dialog-ref.component';
-import { ManagerGetTeachersStoreService } from './manager-get-teachers-store.service';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.config';
+import { ManagerGetStudentsStoreService } from './manager-get-students-store.service';
+import { ManagerGetStudentsDialogRefComponent } from './manager-get-students-dialog-ref/manager-get-students-dialog-ref.component';
 
 @Component({
-  selector: 'nx-manager-get-teachers',
-  templateUrl: './manager-get-teachers.component.html',
-  styleUrls: ['./manager-get-teachers.component.css']
+  selector: 'nx-manager-get-students',
+  templateUrl: './manager-get-students.component.html',
+  styleUrls: ['./manager-get-students.component.css']
 })
-export class ManagerGetTeachersComponent implements OnInit {
+export class ManagerGetStudentsComponent implements OnInit {
 
 // mat table
 users: User[];
@@ -30,7 +29,7 @@ isDark = this.localstorage.getIsDarkTheme();
 styleClasses: {};
 
 
-constructor(private userStoreService: ManagerGetTeachersStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
+constructor(private userStoreService: ManagerGetStudentsStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
 
 ngOnInit() {
   this.roles = [ROLE_MANAGER, ROLE_TEACHER,ROLE_STUDENT];
@@ -73,28 +72,28 @@ selectAll() {
 openDialogDetail(user: User): void {
   this.user = user;
   this.dialogServ.obj = this.user;
-  this.dialogServ.inputDialogRef = ManagerGetTeachersDialogRefComponent;
+  this.dialogServ.inputDialogRef = ManagerGetStudentsDialogRefComponent;
   this.dialogServ.openDialogDetail();
 }
 
 openDialogCreate(): void {
   this.user = new User();
   this.dialogServ.obj = this.user;
-  this.dialogServ.inputDialogRef = ManagerGetTeachersDialogRefComponent;
+  this.dialogServ.inputDialogRef = ManagerGetStudentsDialogRefComponent;
   this.dialogServ.openDialogCreate();
 }
 
 openDialogEdit(user: User): void {
   this.user = user;
   this.dialogServ.obj = this.user;
-  this.dialogServ.inputDialogRef = ManagerGetTeachersDialogRefComponent;
+  this.dialogServ.inputDialogRef = ManagerGetStudentsDialogRefComponent;
   this.dialogServ.openDialogEdit();
 }
 
 openDialogDelete(user: User): void {
   this.user = user;
   this.dialogServ.obj = this.user;
-  this.dialogServ.inputDialogRef = ManagerGetTeachersDialogRefComponent;
+  this.dialogServ.inputDialogRef = ManagerGetStudentsDialogRefComponent;
   this.dialogServ.openDialogDelete();
 }
 

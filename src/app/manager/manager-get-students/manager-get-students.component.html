@@ -26,9 +26,9 @@
 
   <mat-table #table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="username">
+    <ng-container matColumnDef="userName">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-      <mat-cell *matCellDef="let user"> {{user.username}}</mat-cell>
+      <mat-cell *matCellDef="let user"> {{user.userName}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="crud">

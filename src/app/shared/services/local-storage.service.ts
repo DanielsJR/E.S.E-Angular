@@ -45,7 +45,7 @@ export class LocalStorageService {
     }
 
     getRole(): string {
-        return this.tokenParsed().rol.toString();
+        return this.tokenParsed().roles.toString();
     }
 
     getToken64(): string {

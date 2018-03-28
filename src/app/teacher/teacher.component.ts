@@ -6,6 +6,7 @@ import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { UserService } from '../shared/services/users.service';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { URI_TEACHERS } from '../app.config';
 
 @Component({
 
@@ -47,7 +48,7 @@ export class TeacherComponent implements OnInit {
 
   ngOnInit() {
     const token = this.localStorage.getToken();
-    this.service.getUserByToken(token).subscribe(data => {
+    this.service.getUserByToken(token, URI_TEACHERS).subscribe(data => {
       this.user = data;
     },
       error => console.log('error getting the token ' + error));

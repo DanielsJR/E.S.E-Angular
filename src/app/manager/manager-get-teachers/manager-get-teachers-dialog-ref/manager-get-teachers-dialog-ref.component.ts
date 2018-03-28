@@ -2,14 +2,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../../../models/user';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { UserStoreService } from '../user-store.service';
+import { ManagerGetTeachersStoreService } from '../manager-get-teachers-store.service';
+
 
 @Component({
-  selector: 'nx-manager-dialog-ref',
-  templateUrl: './manager-dialog-ref.component.html',
-  styleUrls: ['./manager-dialog-ref.component.css']
+  templateUrl: './manager-get-teachers-dialog-ref.component.html',
+  styleUrls: ['./manager-get-teachers-dialog-ref.component.css']
 })
-export class ManagerDialogRefComponent implements OnInit {
+export class ManagerGetTeachersDialogRefComponent implements OnInit {
 
   createForm: FormGroup;
   editForm: FormGroup;
@@ -17,9 +17,9 @@ export class ManagerDialogRefComponent implements OnInit {
  // objs: User[] = [];
 
   constructor(
-      public dialogRef: MatDialogRef<ManagerDialogRefComponent>,
+      public dialogRef: MatDialogRef<ManagerGetTeachersDialogRefComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
-      private userStoreservice: UserStoreService, private formBuilder: FormBuilder
+      private userStoreservice: ManagerGetTeachersStoreService, private formBuilder: FormBuilder
   ) {
       this.obj = data.obj;
     }
@@ -31,11 +31,11 @@ export class ManagerDialogRefComponent implements OnInit {
 
   buildForm() {
       this.createForm = this.formBuilder.group({
-          userName: [this.obj.userName, Validators.required],
+          userName: [this.obj.username, Validators.required],
           firstName: [this.obj.firstName],
           lastName: [this.obj.lastName],
           dni: [this.obj.dni],
-          age:[this.obj.age],
+          age:[this.obj.birthday],
           gender:[this.obj.gender],
           password: [this.obj.password, Validators.required],
           mobile: [this.obj.mobile],
@@ -46,11 +46,11 @@ export class ManagerDialogRefComponent implements OnInit {
       });
       this.editForm = this.formBuilder.group({
           id: [this.obj.id],
-          userName: [this.obj.userName, Validators.required],
+          userName: [this.obj.username, Validators.required],
           firstName: [this.obj.firstName],
           lastName: [this.obj.lastName],
           dni: [this.obj.dni],
-          age:[this.obj.age],
+          age:[this.obj.birthday],
           gender:[this.obj.gender],
           password: [this.obj.password, Validators.required],
           mobile: [this.obj.mobile],
@@ -97,7 +97,7 @@ export class ManagerDialogRefComponent implements OnInit {
 
   delete(): void {
       console.log('deleting... ' + JSON.stringify(this.obj));
-      this.userStoreservice.delete(this.obj.id);
+      this.userStoreservice.delete(this.obj.username);
       this.dialogRef.close('deleted');
   }
 

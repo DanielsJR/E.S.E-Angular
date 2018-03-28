@@ -1,15 +1,16 @@
 import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { User } from '../../models/user';
-import { UsersDialogRefComponent } from './dialog/users-dialog-ref.component';
-import { DialogService } from '../dialog.service';
 
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl } from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { EventEmitter } from 'events';
-import { UserStoreService } from './user-store.service';
+
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.config';
+import { DialogService } from '../../shared/services/dialog.service';
+import { AdminGetUsersStoreService } from './admin-get-users-store.service';
+import { AdminGetUsersDialogRefComponent } from './admin-get-users-dialog-ref/admin-get-users-dialog-ref.component';
 
 @Component({
   templateUrl: './admin-get-users.component.html',
@@ -20,7 +21,7 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
 
   // mat table
   users: User[];
-  displayedColumns = ['userName', 'crud'];
+  displayedColumns = ['username', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -32,7 +33,7 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
   styleClasses: {};
 
 
-  constructor(private userStoreService: UserStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
+  constructor(private userStoreService: AdminGetUsersStoreService, private dialogServ: DialogService, private localstorage: LocalStorageService) { }
 
   ngOnInit() {
     this.roles = [ROLE_MANAGER, ROLE_TEACHER,ROLE_STUDENT];
@@ -62,9 +63,6 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
   }
 
   selectByRol(role: string) {
-    if(role === 'ADMINISTRADOR'){role='manager'}
-    if(role === 'PROFESOR'){role='teacher'}
-    if(role === 'ESTUDIANTE'){role='student'}
     this.userStoreService.getUsersByRole(role);
   }
 
@@ -75,28 +73,28 @@ export class AdminGetUsersComponent implements OnInit, AfterViewInit {
   openDialogDetail(user: User): void {
     this.user = user;
     this.dialogServ.obj = this.user;
-    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.inputDialogRef = AdminGetUsersDialogRefComponent;
     this.dialogServ.openDialogDetail();
   }
 
   openDialogCreate(): void {
     this.user = new User();
     this.dialogServ.obj = this.user;
-    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.inputDialogRef = AdminGetUsersDialogRefComponent;
     this.dialogServ.openDialogCreate();
   }
 
   openDialogEdit(user: User): void {
     this.user = user;
     this.dialogServ.obj = this.user;
-    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.inputDialogRef = AdminGetUsersDialogRefComponent;
     this.dialogServ.openDialogEdit();
   }
 
   openDialogDelete(user: User): void {
     this.user = user;
     this.dialogServ.obj = this.user;
-    this.dialogServ.inputDialogRef = UsersDialogRefComponent;
+    this.dialogServ.inputDialogRef = AdminGetUsersDialogRefComponent;
     this.dialogServ.openDialogDelete();
   }
 

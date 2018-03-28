@@ -6,10 +6,11 @@ import { AdminComponent } from './admin.component';
 import { NgModule } from '@angular/core';
 import { AdminGetUsersComponent, MatPaginatorIntlSpa } from './admin-get-users/admin-get-users.component';
 
-import { UsersDialogRefComponent } from './admin-get-users/dialog/users-dialog-ref.component';
-import { DialogService } from './dialog.service';
+
 import { MatPaginatorIntl } from '@angular/material';
-import { UserStoreService } from './admin-get-users/user-store.service';
+import { DialogService } from '../shared/services/dialog.service';
+import { AdminGetUsersDialogRefComponent } from './admin-get-users/admin-get-users-dialog-ref/admin-get-users-dialog-ref.component';
+import { AdminGetUsersStoreService } from './admin-get-users/admin-get-users-store.service';
 
 
 
@@ -23,17 +24,17 @@ import { UserStoreService } from './admin-get-users/user-store.service';
     AdminComponent,
     AdminHomeComponent,
     AdminGetUsersComponent,
-    UsersDialogRefComponent,
+    AdminGetUsersDialogRefComponent,
    ],
 
   providers: [
     DialogService,
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa},
-    UserStoreService
+    AdminGetUsersStoreService
   ],
 
   entryComponents: [
-    UsersDialogRefComponent,
+    AdminGetUsersDialogRefComponent,
   ],
 })
 export class AdminModule { }

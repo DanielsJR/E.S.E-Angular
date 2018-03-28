@@ -4,6 +4,8 @@ import { ManagerComponent } from './manager.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminAuthGuard } from '../guards/admin-auth-guard.service';
+import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-teachers.component';
+import { ManagerGetStudentsComponent } from './manager-get-students/manager-get-students.component';
 
 
 const adminRoutes: Routes = [
@@ -14,23 +16,28 @@ const adminRoutes: Routes = [
         children: [
 
             {
-                path: 'asuarios',
+                path: 'users',
                 children: [
                     {
-                        path: 'make-test',
-                        component: ManagerComponent,
+                        path: 'teachers-list',
+                        component: ManagerGetTeachersComponent,
                     },
 
                     {
-                        path: 'take-test',
-                        component: ManagerComponent,
-                    },
-
-                    {
-                        path: 'historical',
-                        component: ManagerComponent,
+                        path: 'students-list',
+                        component: ManagerGetStudentsComponent,
                     }
                 ],
+            },
+
+            {
+                path: 'courses',
+                component: ManagerHomeComponent
+            },
+
+            {
+                path: 'assign-subject',
+                component: ManagerHomeComponent
             },
 
             {

@@ -6,6 +6,7 @@ import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.compon
 import { User } from '../models/user';
 import { UserService } from '../shared/services/users.service';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { URI_MANAGERS } from '../app.config';
 
 @Component({
   selector: 'nx-manager',
@@ -21,21 +22,19 @@ export class ManagerComponent implements OnInit {
   user: User;
   role = this.localStorage.getRole();
 
-  triggerAsignaturas = true;
-  triggerMat = true;
-  triggerHist = true;
-
-  triggerPruebas = true;
+  triggerUsers = true;
 
   @ViewChild(ThemePickerComponent)
   themePicker: ThemePickerComponent;
 
   constructor(private router: Router, private loginService: LoginService,
-    private service: UserService, private localStorage: LocalStorageService) { }
+    private service: UserService, private localStorage: LocalStorageService) {
+    
+     }
 
   ngOnInit() {
     const token = this.localStorage.getToken();
-    this.service.getUserByToken(token).subscribe(data => {
+    this.service.getUserByToken(token, URI_MANAGERS).subscribe(data => {
       this.user = data;
     },
      error => console.log('error getting the token ' + error));

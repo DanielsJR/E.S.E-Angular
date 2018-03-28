@@ -17,7 +17,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [(ngModel)]="obj.userName" disabled>
+            <input matInput [(ngModel)]="obj.username" disabled>
             <mat-placeholder>
                 <i class="material-icons app-input-icon">view_column</i>Nombre de usuario
             </mat-placeholder>
@@ -45,9 +45,9 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [(ngModel)]="obj.age" disabled>
+            <input matInput [(ngModel)]="obj.birthday" disabled>
             <mat-placeholder>
-                <i class="material-icons app-input-icon">person</i>Edad
+                <i class="material-icons app-input-icon">person</i>Fecha de Nacimiento
             </mat-placeholder>
         </mat-form-field>
 
@@ -80,9 +80,16 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [(ngModel)]="obj.active" disabled>
+            <input matInput [(ngModel)]="obj.commune" disabled>
             <mat-placeholder>
-                <i class="material-icons app-input-icon">description</i>Activo
+                <i class="material-icons app-input-icon">description</i>Comuna
+            </mat-placeholder>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput [(ngModel)]="obj.roles" disabled>
+            <mat-placeholder>
+                <i class="material-icons app-input-icon">description</i>Roles
             </mat-placeholder>
         </mat-form-field>
 
@@ -119,52 +126,96 @@
         <mat-dialog-content>
 
             <mat-form-field>
-                <input matInput tabindex="1" formControlName="userName">
+                <input matInput tabindex="1" formControlName="username">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Nombre
+                    <i class="material-icons app-input-icon">view_column</i>Username
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="mobile">
+                <input matInput tabindex="2" formControlName="password">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Password
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="3" formControlName="firstName">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Nombres
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="4" formControlName="lastName">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Apellidos
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="5" formControlName="dni">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>RUT
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="6" formControlName="birthday">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Fecha de Nacimiento
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="7" formControlName="gender">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Sexo
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="8" formControlName="mobile">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Telefono
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="password">
+                <input matInput tabindex="9" formControlName="email">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Contraseña
+                    <i class="material-icons app-input-icon">view_column</i>Email
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="4" >
+                <input matInput tabindex="10" formControlName="address">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">person</i>RUT
+                    <i class="material-icons app-input-icon">view_column</i>Direccion
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="5" >
+                <input matInput tabindex="11" formControlName="commune">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">description</i>Dirección
+                    <i class="material-icons app-input-icon">view_column</i>Comuna
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="6">
+                <input matInput tabindex="12" formControlName="roles">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">description</i>Email
+                    <i class="material-icons app-input-icon">view_column</i>Roles
                 </mat-placeholder>
             </mat-form-field>
+
+
 
         </mat-dialog-content>
         <br>
         <mat-dialog-actions>
-            <button type="submit" mat-raised-button color="accent" tabindex="7" [disabled]="!createForm.valid">Agregar</button>
-            <button type="button" mat-raised-button tabindex="8" (click)="cancel()">Cancelar</button>
+            <button type="submit" mat-raised-button color="accent" tabindex="13" [disabled]="!createForm.valid">Agregar</button>
+            <button type="button" mat-raised-button tabindex="14" (click)="cancel()">Cancelar</button>
         </mat-dialog-actions>
 
     </form>
@@ -192,51 +243,51 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="1" formControlName="userName">
+                <input matInput tabindex="1" formControlName="username">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Nombre de Usuario
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="firstName">
+                <input matInput tabindex="2" formControlName="password">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Contraseña
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput tabindex="3" formControlName="firstName">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Nombres
                 </mat-placeholder>
             </mat-form-field> 
             
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="lastName">
+                <input matInput tabindex="4" formControlName="lastName">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Apellidos
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="4" formControlName="dni">
+                <input matInput tabindex="5" formControlName="dni">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">person</i>RUT
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="5" formControlName="age">
+                <input matInput tabindex="6" formControlName="birthday">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Edad
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="6" formControlName="gender">
+                <input matInput tabindex="7" formControlName="gender">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Sexo
-                </mat-placeholder>
-            </mat-form-field>
-
-            <mat-form-field>
-                <input matInput tabindex="7" formControlName="password">
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Contraseña
                 </mat-placeholder>
             </mat-form-field>
 
@@ -255,25 +306,32 @@
             </mat-form-field>
 
             <mat-form-field>
-                    <input matInput tabindex="9" formControlName="address">
+                    <input matInput tabindex="10" formControlName="address">
                     <mat-placeholder>
                         <i class="material-icons app-input-icon">description</i>Direccion
                     </mat-placeholder>
-                </mat-form-field>
+            </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="10" formControlName="active">
+                <input matInput tabindex="11" formControlName="commune">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">description</i>active
+                    <i class="material-icons app-input-icon">description</i>Comuna
                 </mat-placeholder>
-            </mat-form-field>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput tabindex="12" formControlName="roles">
+            <mat-placeholder>
+                <i class="material-icons app-input-icon">description</i>Roles
+            </mat-placeholder>
+    </mat-form-field>
 
 
         </mat-dialog-content>
 
         <mat-dialog-actions>
-            <button type="submit" mat-raised-button color="accent" tabindex="11" [disabled]="!editForm.valid">Guardar</button>
-            <button type="button" mat-raised-button tabindex="12" (click)="cancel()">Cancelar</button>
+            <button type="submit" mat-raised-button color="accent" tabindex="14" [disabled]="!editForm.valid">Guardar</button>
+            <button type="button" mat-raised-button tabindex="15" (click)="cancel()">Cancelar</button>
         </mat-dialog-actions>
 
     </form>
@@ -300,7 +358,7 @@
    
 
     <mat-form-field>
-        <input matInput [(ngModel)]="obj.userName" disabled>
+        <input matInput [(ngModel)]="obj.username" disabled>
         <mat-placeholder>
             <i class="material-icons app-input-icon">view_column</i>Nombre de usuario
         </mat-placeholder>

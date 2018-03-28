@@ -1,87 +1,91 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { API_SERVER, URI_USER, URI_MANAGERS_REGISTER, URI_BY_TOKEN, URI_BY_ID, URI_BY_NAME, URI_STUDENTS_LIST, URI_USERS_LIST } from '../../app.config';
+import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME} from '../../app.config';
 import { User } from '../../models/user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { catchError } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 // import 'rxjs/add/operator/catch';
 
 
 @Injectable()
 export class UserService {
 
-    private userURL = API_SERVER + URI_USER;
+    private userURL = API_SERVER + URI_USERS;
 
     constructor(private httpCli: HttpClient) { }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred!!!!!!', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+    public handleError = (error: Response) => {
+        return ErrorObservable.create(error);
     }
 
-    getUserById(id: number): Observable<User> {
-        const url = `${this.userURL}${URI_BY_ID}/${id}`;
-        console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
-    }
-
-    getUserByToken(token: string): Observable<User> {
-        const url = `${this.userURL}${URI_BY_TOKEN}/${token}`;
-        console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
-    }
-    
-    getUserByUserName(name: string): Observable<User> {
-        const url = `${this.userURL}${URI_BY_NAME}/${name}`;
-        console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
-    }
-
-    getUsers(): Observable<User[]> {
-        const url = `${this.userURL}${URI_USERS_LIST}`;
+    getUsers(uriRole: string): Observable<User[]> {
+        const url = `${this.userURL}${uriRole}`;
         console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User[]>(url)
             .pipe(catchError(this.handleError));
     }
 
-    getUsersByRole(role: string): Observable<User[]> {
-        const url = `${this.userURL}/${role}s-list`;
-        console.log(`resource called:  ${url}`);
-        return this.httpCli
-            .get<User[]>(url)
-            .pipe(catchError(this.handleError));
-    }
-
-    create(user: User): Observable<User> {
-        const url = `${this.userURL}${URI_MANAGERS_REGISTER}`;
+    create(user: User, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli
             .post(url, JSON.stringify(user))
             .pipe(catchError(this.handleError));
     }
 
-    update(user: User): Observable<User> {
-        console.log('resource called: ' + this.userURL);
+    update(user: User, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/${user.id}`;
+        console.log(`resource called:  ${url}`);
         return this.httpCli
             .put(this.userURL, JSON.stringify(user))
             .pipe(catchError(this.handleError));
     }
 
-    delete(id: number): Observable<void> {
-        const url = `${this.userURL}/${id}`;
+    delete(id: string, uriRole: string): Observable<void> {
+        const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli
-            .delete(url, { responseType: 'text' })
+            .delete(url)
             .pipe(catchError(this.handleError));
     }
 
+
+    
+    getUserById(id: number, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli
+            .get<User>(url)
+            .pipe(catchError(this.handleError));
+    }
+
+    getUserByToken(token: string, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/${token}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli
+            .get<User>(url)
+            .pipe(catchError(this.handleError));
+    }
+
+    getUserByUserName(name: string, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/${name}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli
+            .get<User>(url)
+            .pipe(catchError(this.handleError));
+    }
+
+    
+
+    getUsersByRole(role: string, uriRole: string): Observable<User[]> {
+        const url = `${this.userURL}${uriRole}/${role}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli
+            .get<User[]>(url)
+            .pipe(catchError(this.handleError));
+    }
 
 }

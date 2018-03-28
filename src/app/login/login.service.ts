@@ -2,11 +2,13 @@
 import { Injectable } from '@angular/core';
 import { Session } from '../models/session';
 import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
-import { Observable } from 'rxjs/Observable';
-import { HTTPService } from '../services/http.service';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../shared/services/local-storage.service';
+import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+//import { _throw } from 'rxjs/observable/throw';
+//import 'rxjs/add/observable/throw'
 // import 'rxjs/add/operator/catch';
 
 
@@ -19,7 +21,7 @@ export class LoginService {
     isTeacher = false;
     isStudent = false;
 
-    // store the URL so we can redirect after logging in
+    // store the URL so we can redirect after logging in (not in use)
     redirectUrl: string;
 
     constructor(
@@ -27,21 +29,16 @@ export class LoginService {
         private httpCli: HttpClient
     ) { }
 
- /*   private handleError(error: any): Promise<any> {
-        console.error('An error occurred!!!!!!', error); // for demo purposes only
-        return Promise.reject(error.message || error);
-    }
-    */
-
     public handleError = (err: Response) => {
-   
-    return Observable.throw(err);
-}
+        return ErrorObservable.create(err);
+    }
 
     login(userName: string, password: string): Observable<Session> {
         console.log('Login called');
         return this.httpCli
-            .post(this.endpoint, null, { headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) }) })
+            .post(this.endpoint, null, {
+                headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) })
+            })
             .pipe(catchError(this.handleError));
     }
 
@@ -57,6 +54,7 @@ export class LoginService {
         if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
             console.log('checking privileges of: ' + this.localStorageService.getToken()
                 + ' rol: ' + this.localStorageService.getRole());
+                
             this.isAdmin = (this.localStorageService.getRole() === ROLE_ADMIN) ? true : false;
             this.isManager = (this.localStorageService.getRole() === ROLE_MANAGER) ? true : false;
             this.isTeacher = (this.localStorageService.getRole() === ROLE_TEACHER) ? true : false;
