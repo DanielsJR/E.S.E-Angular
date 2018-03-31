@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { error } from 'util';
 
 
+
 @Component({
   selector: 'nx-login',
   templateUrl: './login.component.html',
@@ -22,6 +23,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
   error = false;
+  isAuth = false;
+  //token: Token;
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService,
@@ -35,12 +38,10 @@ export class LoginComponent implements OnInit {
     this.user.password = this.password.value;
     this.loginService
       .login(this.user.username, this.user.password)
-      .subscribe(session => {
+      .subscribe(tokenAuth => {
         console.log('setting local storage');
-        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, session);
-        let role = this.localStorageService.getRole();
-         const route = '/' + role.toLocaleLowerCase();
-        this.router.navigate([route]);
+        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, tokenAuth);
+        this.router.navigate(['/home']);
       }, err => {
         console.error(err.message);
         if (err instanceof HttpErrorResponse) {
@@ -53,9 +54,7 @@ export class LoginComponent implements OnInit {
           }
         }
       }
-
-      );
-
+     );
   }
 
   ngOnInit(): void {

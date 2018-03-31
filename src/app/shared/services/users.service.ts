@@ -37,10 +37,11 @@ export class UserService {
     }
 
     update(user: User, uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}/${user.id}`;
+       const id = user.id;
+        const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli
-            .put(this.userURL, JSON.stringify(user))
+            .put(url, JSON.stringify(user))
             .pipe(catchError(this.handleError));
     }
 
@@ -63,7 +64,7 @@ export class UserService {
     }
 
     getUserByToken(token: string, uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}/${token}`;
+        const url = `${this.userURL}${uriRole}${URI_TOKEN}/${token}`;
         console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User>(url)
@@ -71,12 +72,14 @@ export class UserService {
     }
 
     getUserByUserName(name: string, uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}/${name}`;
+        const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User>(url)
             .pipe(catchError(this.handleError));
     }
+
+    
 
     
 

@@ -1,4 +1,5 @@
 import { LoginService } from '../login/login.service';
+
 import { Injectable } from '@angular/core';
 import {
     ActivatedRouteSnapshot,
@@ -12,14 +13,13 @@ import {
 } from '@angular/router';
 
 
-
 @Injectable()
-export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService,  private router: Router) { }
+export class HomeAuthGuard implements CanActivate, CanActivateChild, CanLoad {
+    constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
-        console.log('AdminAuthGuard#canActivate called');
+        console.log('HomeAuthGuard#canActivate called');
         return this.checkLogin(url);
         //return true;
     }
@@ -33,13 +33,14 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
         return this.checkLogin(url);
     }
 
-
     checkLogin(url: string): boolean {
-       const privilege = this.loginService.getPrivilege();
-        if (privilege === 'ADMIN') {
+        this.loginService.checkPrivileges();
+        if (this.loginService.isAuth) {
             return true;
         }
         
+       //this.loginService.
+
         // Store the attempted URL for redirecting
         this.loginService.redirectUrl = url;
         this.router.navigate(['/login']);

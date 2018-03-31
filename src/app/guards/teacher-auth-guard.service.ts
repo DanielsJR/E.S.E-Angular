@@ -11,11 +11,12 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
+import { LocalStorageService } from '../shared/services/local-storage.service';
 
 
 @Injectable()
 export class TeacherAuthGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService, private router: Router) { }
+    constructor(private loginService: LoginService, private localStorageService: LocalStorageService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
@@ -33,15 +34,16 @@ export class TeacherAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
-        this.loginService.checkPrivileges();
-        if (this.loginService.isTeacher) {
-            return true;
-        }
-        // Store the attempted URL for redirecting
-        this.loginService.redirectUrl = url;
-        this.router.navigate(['/login']);
-        return false;
-    }
+        const privilege = this.loginService.getPrivilege();
+         if (privilege === 'TEACHER') {
+             return true;
+         }
+         
+         // Store the attempted URL for redirecting
+         this.loginService.redirectUrl = url;
+         this.router.navigate(['/login']);
+         return false;
+     }
 
 
 }

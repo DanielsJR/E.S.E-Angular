@@ -11,6 +11,7 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
+import { LocalStorageService } from '../shared/services/local-storage.service';
 
 
 @Injectable()
@@ -33,15 +34,16 @@ export class StudentAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
-        this.loginService.checkPrivileges();
-        if (this.loginService.isStudent) {
-            return true;
-        }
-        // Store the attempted URL for redirecting
-        this.loginService.redirectUrl = url;
-        this.router.navigate(['/login']);
-        return false;
-    }
+        const privilege = this.loginService.getPrivilege();
+         if (privilege === 'STUDENT') {
+             return true;
+         }
+         
+         // Store the attempted URL for redirecting
+         this.loginService.redirectUrl = url;
+         this.router.navigate(['/login']);
+         return false;
+     }
 
 
 }

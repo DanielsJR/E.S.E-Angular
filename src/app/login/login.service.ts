@@ -1,12 +1,11 @@
-
 import { Injectable } from '@angular/core';
-import { Session } from '../models/session';
 import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../shared/services/local-storage.service';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { TokenAuth } from '../models/tokenAuth';
 //import { _throw } from 'rxjs/observable/throw';
 //import 'rxjs/add/observable/throw'
 // import 'rxjs/add/operator/catch';
@@ -15,12 +14,11 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 @Injectable()
 export class LoginService {
     private endpoint = API_SERVER + URI_TOKEN_AUTH;
-
+    isAuth = false;
     isAdmin = false;
     isManager = false;
     isTeacher = false;
     isStudent = false;
-
     // store the URL so we can redirect after logging in (not in use)
     redirectUrl: string;
 
@@ -33,8 +31,8 @@ export class LoginService {
         return ErrorObservable.create(err);
     }
 
-    login(userName: string, password: string): Observable<Session> {
-        console.log('Login called');
+    login(userName: string, password: string): Observable<TokenAuth> {
+        console.log('Login service called');
         return this.httpCli
             .post(this.endpoint, null, {
                 headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) })
@@ -44,24 +42,53 @@ export class LoginService {
 
     logout(): void {
         this.localStorageService.removeItem(LOCAL_STORAGE_TOKEN_KEY);
-        this.isAdmin = false;
-        this.isManager = false;
-        this.isTeacher = false;
-        this.isStudent = false;
+        this.isAuth = false;
+    }
+
+    hasPrivileges(): boolean {
+        if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+            for (var i = 0; i < this.localStorageService.getRolesParsed().length; i++) {
+                let role = this.localStorageService.getRolesParsed()[i];
+                return role === ROLE_ADMIN ||
+                    role === ROLE_MANAGER ||
+                    role === ROLE_TEACHER ||
+                    role === ROLE_STUDENT;
+            }
+        }
     }
 
     checkPrivileges(): void {
         if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-            console.log('checking privileges of: ' + this.localStorageService.getToken()
-                + ' rol: ' + this.localStorageService.getRole());
-                
-            this.isAdmin = (this.localStorageService.getRole() === ROLE_ADMIN) ? true : false;
-            this.isManager = (this.localStorageService.getRole() === ROLE_MANAGER) ? true : false;
-            this.isTeacher = (this.localStorageService.getRole() === ROLE_TEACHER) ? true : false;
-            this.isStudent = (this.localStorageService.getRole() === ROLE_STUDENT) ? true : false;
+            console.log('checking privileges of: ' + this.localStorageService.getTokenParsed()
+                + ' roles: ' + this.localStorageService.getRolesParsed().toString());
+            console.log('is auth????: ' + this.hasPrivileges());
+            this.isAuth = this.hasPrivileges();
         } else {
             console.log('unauthorized redirecting.....');
         }
 
     }
+
+    getPrivilege(): string {
+        if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+            for (var i = 0; i < this.localStorageService.getRolesParsed().length; i++) {
+                let role = this.localStorageService.getRolesParsed()[i];
+                if (role === ROLE_ADMIN) {
+                    return role.toString();
+                }
+                if (role === ROLE_MANAGER) {
+                    return role.toString();
+                }
+                if (role === ROLE_TEACHER) {
+                    return role.toString();
+                }
+                if (role === ROLE_STUDENT) {
+                    return role.toString();
+                };
+            }
+        }
+    }
+
+
+
 }

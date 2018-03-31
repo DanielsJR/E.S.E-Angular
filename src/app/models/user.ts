@@ -22,8 +22,7 @@ export class User {
          public token?: string,
          public active?: boolean
          
-         ) {
-    }
+         ) { }
 
 
     equals(user: User): boolean {

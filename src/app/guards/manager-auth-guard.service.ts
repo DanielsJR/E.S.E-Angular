@@ -33,15 +33,16 @@ export class ManagerAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
-        this.loginService.checkPrivileges();
-        if (this.loginService.isManager) {
-            return true;
-        }
-        // Store the attempted URL for redirecting
-        this.loginService.redirectUrl = url;
-        this.router.navigate(['/login']);
-        return false;
-    }
+        const privilege = this.loginService.getPrivilege();
+         if (privilege === 'MANAGER') {
+             return true;
+         }
+         
+         // Store the attempted URL for redirecting
+         this.loginService.redirectUrl = url;
+         this.router.navigate(['/login']);
+         return false;
+     }
 
 
 }

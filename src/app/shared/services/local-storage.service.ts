@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY } from '../../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN } from '../../app.config';
 import { Subject } from 'rxjs/Subject';
+import { TokenAuth } from '../../models/tokenAuth';
 
 
 @Injectable()
@@ -8,6 +9,7 @@ export class LocalStorageService {
 
     private isThemeDarkSource = new Subject<boolean>();
     isThemeDark$ = this.isThemeDarkSource.asObservable();
+   
 
     private tokenParsed(): any {
         if (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
@@ -16,7 +18,6 @@ export class LocalStorageService {
         }
     }
 
-
     private themeParsed(): any {
         if (this.isStored(LOCAL_STORAGE_THEME_KEY)) {
             const themeFullString: string = this.getItem(LOCAL_STORAGE_THEME_KEY);
@@ -24,8 +25,9 @@ export class LocalStorageService {
         }
     }
 
+
     setItem(key: string, value: any): void {
-        localStorage.setItem(key, JSON.stringify(value));
+         localStorage.setItem(key, JSON.stringify(value));
     }
 
     getItem(key: string): any {
@@ -33,23 +35,23 @@ export class LocalStorageService {
     }
 
     removeItem(key: string): void {
-        localStorage.removeItem(key);
+          localStorage.removeItem(key);
     }
 
     isStored(key: string): boolean {
         return (this.getItem(key) !== null);
     }
 
-    getToken(): string {
+    getTokenParsed(): string {
         return this.tokenParsed().token;
     }
 
-    getRole(): string {
-        return this.tokenParsed().roles.toString();
+    getRolesParsed(): string[] {
+        return this.tokenParsed().roles;
     }
 
     getToken64(): string {
-        return btoa(this.getToken() + ':');
+        return btoa(this.getTokenParsed() + ':');
     }
 
     getTheme(): string {
@@ -58,7 +60,7 @@ export class LocalStorageService {
 
     getIsDarkTheme(): boolean {
         if (this.isStored(LOCAL_STORAGE_THEME_KEY)) {
-          //  console.log('darkTheme: ' + this.themeParsed().isDark);
+            //  console.log('darkTheme: ' + this.themeParsed().isDark);
             this.isThemeDarkSource.next(this.themeParsed().isDark);
             return this.themeParsed().isDark;
         } else {
