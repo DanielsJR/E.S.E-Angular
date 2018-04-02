@@ -1,29 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../../models/user';
-import { UserService } from '../../../shared/services/users.service';
-import { URI_MANAGERS } from '../../../app.config';
+import { User } from '../../models/user';
+import { UserService } from '../../shared/services/users.service';
 
 
 @Injectable()
-export class AdminGetUsersStoreService {
+export class GetManagersStoreService{
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly users$ = this.usersSource.asObservable();
     private dataStore: { users: User[] };
 
     error: any;
+    uriRole: string;
 
     constructor(private userBackendService: UserService, private httpCli: HttpClient) {
         this.dataStore = { users: [] };
-        console.log('************GET_MANAGERS************');
-        this.getUsers();
     }
 
     getUsers() {
+        console.log(`************GET-${this.uriRole}************`);
         this.userBackendService
-            .getUsers(URI_MANAGERS)
+            .getUsers(this.uriRole)
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -33,7 +32,7 @@ export class AdminGetUsersStoreService {
 
     create(user: User) {
         this.userBackendService
-            .create(user, URI_MANAGERS)
+            .create(user, this.uriRole)
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -43,7 +42,7 @@ export class AdminGetUsersStoreService {
 
     update(user: User) {
         this.userBackendService
-            .update(user, URI_MANAGERS)
+            .update(user, this.uriRole)
             .subscribe(data => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === data.id) {
@@ -59,7 +58,7 @@ export class AdminGetUsersStoreService {
 
     delete(id: string) {
         this.userBackendService
-            .delete(id, URI_MANAGERS)
+            .delete(id, this.uriRole)
             .subscribe(() => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === id) { this.dataStore.users.splice(i, 1); }
@@ -72,7 +71,7 @@ export class AdminGetUsersStoreService {
 
     getUsersByRole(role: string) {
         this.userBackendService
-            .getUsersByRole(role, URI_MANAGERS)
+            .getUsersByRole(role, this.uriRole)
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -82,7 +81,7 @@ export class AdminGetUsersStoreService {
 
     findById(id: number) {
         this.userBackendService
-            .getUserById(id, URI_MANAGERS)
+            .getUserById(id, this.uriRole)
             .subscribe(data => {
                 let notFound = true;
                 this.dataStore.users.forEach((item, index) => {

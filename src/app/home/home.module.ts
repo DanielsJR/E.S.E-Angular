@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeRoutingModule } from './home.routing';
+import { HomeMenuComponent } from './home-menu.component';
+import { UsersMenuComponent } from './users-menu.component';
+
 
 
 @NgModule({
@@ -12,8 +15,10 @@ import { HomeRoutingModule } from './home.routing';
   ],
 
   declarations: [
-    HomeComponent
-  ]
+    HomeComponent,
+    HomeMenuComponent,
+    UsersMenuComponent
+    ]
 })
 
 export class HomeModule { }

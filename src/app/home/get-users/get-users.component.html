@@ -8,20 +8,6 @@
       </mat-placeholder>
     </mat-form-field>
 
- <!--   <mat-form-field>
-      <mat-placeholder>
-        <mat-icon>search</mat-icon>Buscar por Rol
-      </mat-placeholder>
-      <mat-select>
-
-        <mat-option (click)="selectAll()">todos</mat-option>
-        <mat-option *ngFor="let role of roles" [value]="role" (click)="selectByRol(role)">
-          {{role}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  -->
-
   </mat-toolbar>
 
   <mat-table #table [dataSource]="dataSource" matSort>

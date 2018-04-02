@@ -1,8 +1,8 @@
-import { AdminGetUsersComponent } from './admin-get-users/admin-get-users.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminAuthGuard } from '../../guards/admin-auth-guard.service';
+import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
 
 
 const adminRoutes: Routes = [
@@ -12,8 +12,8 @@ const adminRoutes: Routes = [
         children: [
 
             {
-                path: 'users',
-                component: AdminGetUsersComponent,
+                path: 'managers-list',
+                component: AdminGetManagersComponent,
             },
 
             {

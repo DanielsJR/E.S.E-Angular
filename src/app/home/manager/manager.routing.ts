@@ -12,20 +12,17 @@ const adminRoutes: Routes = [
         canActivate: [ManagerAuthGuard],
         children: [
 
-            {
-                path: 'users',
-                children: [
-                    {
-                        path: 'teachers-list',
-                        component: ManagerGetTeachersComponent,
-                    },
 
-                    {
-                        path: 'students-list',
-                        component: ManagerGetStudentsComponent,
-                    }
-                ],
+            {
+                path: 'teachers-list',
+                component: ManagerGetTeachersComponent,
             },
+
+            {
+                path: 'students-list',
+                component: ManagerGetStudentsComponent,
+            },
+       
 
             {
                 path: 'courses',

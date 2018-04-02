@@ -35,8 +35,8 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
 
     checkLogin(url: string): boolean {
-       const privilege = this.loginService.getPrivilege();
-        if (privilege === 'ADMIN') {
+       const roles = this.loginService.getRoles();
+        if (roles.includes('ADMIN')) {
             return true;
         }
         

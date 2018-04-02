@@ -5,12 +5,14 @@ import { SubjectListComponent } from './subject-list/subject-list.component';
 import { SubjectDetailComponent } from './subject-list/subject-detail/subject-detail.component';
 import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
 import { SharedModule } from '../../shared/shared.module';
+import { GetUsersModule } from '../get-users/get-users.module';
 
 
 @NgModule({
   imports: [
     SharedModule,
-    TeacherRoutingModule
+    TeacherRoutingModule,
+    GetUsersModule
   ],
 
   declarations: [

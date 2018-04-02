@@ -8,11 +8,13 @@ export class DialogService {
   data: any = [];
   inputDialogRef;
   obj;
+  uriRole: string;
 
   constructor(public dialog: MatDialog) { }
 
   openDialogDetail(): void {
     // console.log('openenig dialog : detail');
+    this.data.uriRole = this.uriRole;
     this.data.type = 'detail';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -34,6 +36,7 @@ export class DialogService {
 
   openDialogCreate(): void {
     // console.log('openenig dialog : create');
+    this.data.uriRole = this.uriRole;
     this.data.type = 'create';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -51,6 +54,7 @@ export class DialogService {
   }
 
   openDialogEdit(): void {
+    this.data.uriRole = this.uriRole;
     this.data.type = 'edit';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
@@ -68,6 +72,7 @@ export class DialogService {
   }
 
   openDialogDelete(): void {
+    this.data.uriRole = this.uriRole;
     this.data.type = 'delete';
     this.data.obj = this.obj;
      const dialogRef = this.dialog.open(this.inputDialogRef, {

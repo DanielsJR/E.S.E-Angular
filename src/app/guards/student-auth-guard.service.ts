@@ -34,10 +34,10 @@ export class StudentAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
-        const privilege = this.loginService.getPrivilege();
-         if (privilege === 'STUDENT') {
-             return true;
-         }
+        const roles = this.loginService.getRoles();
+        if (roles.includes('STUDENT')) {
+            return true;
+        }
          
          // Store the attempted URL for redirecting
          this.loginService.redirectUrl = url;

@@ -1,36 +1,40 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { AdminGetUsersStoreService } from '../admin-get-users-store.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { User } from '../../../../models/user';
+import { User } from '../../../models/user';
+import { GetUsersStoreService } from '../get-users-store.service';
 
 
 @Component({
     // tslint:disable-next-line:component-selector
-    templateUrl: './admin-get-users-dialog-ref.component.html',
+    templateUrl: './get-users-dialog-ref.component.html',
     styles: [`
     .app-input-icon { font-size: 16px; },
     `]
 })
 
-export class AdminGetUsersDialogRefComponent implements OnInit {
+export class GetUsersDialogRefComponent implements OnInit {
 
     createForm: FormGroup;
     editForm: FormGroup;
     obj: User;
-
+    uriRole: string;
+ 
     constructor(
-        public dialogRef: MatDialogRef<AdminGetUsersDialogRefComponent>,
+        public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreservice: AdminGetUsersStoreService, private formBuilder: FormBuilder
+        private userStoreservice: GetUsersStoreService, private formBuilder: FormBuilder
     ) {
         this.obj = data.obj;
+        this.uriRole = data.uriRole;
     }
 
     ngOnInit(): void {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
+        console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
+        this.userStoreservice.uriRole = this.uriRole;
     }
 
     buildForm() {

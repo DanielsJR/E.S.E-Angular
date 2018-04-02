@@ -90,20 +90,17 @@
             <!-- sidenav menu -->
             <mat-nav-list class="menu">
 
-                <mat-list-item routerLink="/home/admin" routerLinkActive="active">
-                    <mat-icon matListIcon>home</mat-icon>
-                    <h3 matLine>Home</h3>
-                </mat-list-item>
+                <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
 
-                <mat-list-item routerLink="/home/admin/users" routerLinkActive="active">
+                <mat-list-item (click)="triggerUsers = !triggerUsers">
                     <mat-icon matListIcon>person</mat-icon>
                     <h3 matLine>Usuarios</h3>
+                    <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
                 </mat-list-item>
+                <div [@tdCollapse]="triggerUsers">
+                    <nx-users-menu [privilege]='privilege' [roles]='roles'></nx-users-menu>
+                </div>
 
-                <mat-list-item routerLink="/dgsgdf" routerLinkActive="active">
-                    <mat-icon matListIcon>cancel</mat-icon>
-                    <h3 matLine>404</h3>
-                </mat-list-item>
 
             </mat-nav-list>
 
