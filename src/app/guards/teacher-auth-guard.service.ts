@@ -1,5 +1,4 @@
 import { LoginService } from '../login/login.service';
-
 import { Injectable } from '@angular/core';
 import {
     ActivatedRouteSnapshot,
@@ -11,12 +10,11 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
-import { LocalStorageService } from '../shared/services/local-storage.service';
 
 
 @Injectable()
 export class TeacherAuthGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService, private localStorageService: LocalStorageService, private router: Router) { }
+    constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;

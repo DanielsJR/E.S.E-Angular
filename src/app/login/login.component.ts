@@ -4,11 +4,10 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
-import { LocalStorageService } from '../shared/services/local-storage.service';
-
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { error } from 'util';
+import { LocalStorageService } from '../services/local-storage.service';
 
 
 
@@ -41,8 +40,8 @@ export class LoginComponent implements OnInit {
       .subscribe(tokenAuth => {
         console.log('setting local storage');
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, tokenAuth);
-       const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
-        this.router.navigate(['/home/'+ uriRol]);
+        const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
+        this.router.navigate(['/home/' + uriRol]);
       }, err => {
         console.error(err.message);
         if (err instanceof HttpErrorResponse) {
@@ -55,7 +54,7 @@ export class LoginComponent implements OnInit {
           }
         }
       }
-     );
+      );
   }
 
   ngOnInit(): void {

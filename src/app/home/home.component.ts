@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { Router } from '@angular/router';
-import { UserService } from '../shared/services/users.service';
-import { LocalStorageService } from '../shared/services/local-storage.service';
 import { LoginService } from '../login/login.service';
-import { URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
+import { URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
+import { UserBackendService } from '../services/user-backend.service';
+import { LocalStorageService } from '../services/local-storage.service';
 
 @Component({
   templateUrl: './home.component.html',
@@ -19,35 +19,35 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 export class HomeComponent implements OnInit {
 
   user: User;
-  roles = this.loginService.getRoles();
   privilege = this.loginService.getPrivilege();
-  
+  roles = this.loginService.getRoles();
+
   @ViewChild(ThemePickerComponent)
   themePicker: ThemePickerComponent;
 
-  scrolled = false;  
+  scrolled = false;
   triggerUsers = true;
 
   constructor(private router: Router, private loginService: LoginService,
-    private userService: UserService, private localStorageService: LocalStorageService ) { }
+    private userBackendService: UserBackendService, private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
     const token = this.localStorageService.getTokenParsed();
-    this.loginService.getPrivilege();
-    let uri;
-    if (this.loginService.isAdmin) {
-      uri = URI_ADMINS;
-    } else if (this.loginService.isManager) {
-      uri = URI_MANAGERS;
-    } else if (this.loginService.isTeacher) {
-      uri = URI_TEACHERS;
-    } else if (this.loginService.isStudent) {
-      uri = URI_STUDENTS;
+    let uriRole;
+    
+    if (this.privilege === ROLE_ADMIN) {
+      uriRole = URI_ADMINS;
+    } else if (this.privilege === ROLE_MANAGER) {
+      uriRole = URI_MANAGERS;
+    } else if (this.privilege === ROLE_TEACHER) {
+      uriRole = URI_TEACHERS;
+    } else if (this.privilege === ROLE_STUDENT) {
+      uriRole = URI_STUDENTS;
     } else {
-      uri = "";
-      error => console.error('error no role');
+    uriRole = "";
+     console.error('error no role');
     }
-    this.userService.getUserByToken(token, uri).subscribe(data => {
+    this.userBackendService.getUserByToken(token, uriRole).subscribe(data => {
       this.user = data;
     },
       error => console.error('error getting the token ' + error));

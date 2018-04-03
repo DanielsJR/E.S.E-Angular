@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Theme } from '../../models/theme';
 import { forEach } from '@angular/router/src/utils/collection';
-
-
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { LocalStorageService } from '../services/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+
 
 @Component({
   selector: 'nx-theme-picker',

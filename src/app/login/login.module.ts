@@ -3,7 +3,6 @@ import { StudentAuthGuard } from '../guards/student-auth-guard.service';
 import { TeacherAuthGuard } from '../guards/teacher-auth-guard.service';
 import { AdminAuthGuard } from '../guards/admin-auth-guard.service';
 import { LoginService } from './login.service';
-
 import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './login.component';

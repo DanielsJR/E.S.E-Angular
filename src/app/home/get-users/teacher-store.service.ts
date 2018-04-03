@@ -2,20 +2,21 @@ import { Injectable} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
-import { UserService } from '../../shared/services/users.service';
+import { URI_TEACHERS } from '../../app.config';
+import { UserBackendService } from '../../services/user-backend.service';
 
 
 @Injectable()
-export class GetUsersStoreService{
+export class TeacherStoreService{
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly users$ = this.usersSource.asObservable();
     private dataStore: { users: User[] };
 
     error: any;
-    uriRole: string;
+    uriRole: string = URI_TEACHERS;
 
-    constructor(private userBackendService: UserService, private httpCli: HttpClient) {
+    constructor(private userBackendService: UserBackendService, private httpCli: HttpClient) {
         this.dataStore = { users: [] };
     }
 

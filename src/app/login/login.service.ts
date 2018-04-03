@@ -1,24 +1,17 @@
 import { Injectable } from '@angular/core';
 import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { LocalStorageService } from '../shared/services/local-storage.service';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { TokenAuth } from '../models/token-auth';
-//import { _throw } from 'rxjs/observable/throw';
-//import 'rxjs/add/observable/throw'
-// import 'rxjs/add/operator/catch';
+import { LocalStorageService } from '../services/local-storage.service';
 
 
 @Injectable()
 export class LoginService {
     private endpoint = API_SERVER + URI_TOKEN_AUTH;
     isAuth = false;
-    isAdmin = false;
-    isManager = false;
-    isTeacher = false;
-    isStudent = false;
     roles: string[];
     // store the URL so we can redirect after logging in (not in use)
     redirectUrl: string;
@@ -45,10 +38,6 @@ export class LoginService {
         this.localStorageService.removeItem(LOCAL_STORAGE_TOKEN_KEY);
         this.isAuth = false;
         this.isAuth = false;
-        this.isAdmin = false;
-        this.isManager = false;
-        this.isTeacher = false;
-        this.isStudent = false;
     }
 
     hasPrivileges(): boolean {
@@ -80,19 +69,15 @@ export class LoginService {
             for (var i = 0; i < this.localStorageService.getRolesParsed().length; i++) {
                 let role = this.localStorageService.getRolesParsed()[i];
                 if (role === ROLE_ADMIN) {
-                    this.isAdmin = true;
                     return role.toString();
                 }
                 if (role === ROLE_MANAGER) {
-                    this.isManager = true;
                     return role.toString();
                 }
                 if (role === ROLE_TEACHER) {
-                    this.isTeacher = true;
                     return role.toString();
                 }
                 if (role === ROLE_STUDENT) {
-                    this.isStudent = true;
                     return role.toString();
                 };
             }

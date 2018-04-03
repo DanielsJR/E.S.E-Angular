@@ -7,7 +7,6 @@ import { HomeMenuComponent } from './home-menu.component';
 import { UsersMenuComponent } from './users-menu.component';
 
 
-
 @NgModule({
   imports: [
     SharedModule,

@@ -1,16 +1,16 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME} from '../../app.config';
-import { User } from '../../models/user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { catchError } from 'rxjs/operators';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { User } from '../models/user';
+import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME } from '../app.config';
 // import 'rxjs/add/operator/catch';
 
 
 @Injectable()
-export class UserService {
+export class UserBackendService {
 
     private userURL = API_SERVER + URI_USERS;
 

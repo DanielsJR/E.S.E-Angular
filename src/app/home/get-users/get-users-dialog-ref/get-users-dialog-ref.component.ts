@@ -3,7 +3,9 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../../../models/user';
-import { GetUsersStoreService } from '../get-users-store.service';
+import { StudentStoreService } from '../student-store.service';
+import { TeacherStoreService } from '../teacher-store.service';
+import { ManagerStoreService } from '../manger-store.service';
 
 
 @Component({
@@ -20,11 +22,14 @@ export class GetUsersDialogRefComponent implements OnInit {
     editForm: FormGroup;
     obj: User;
     uriRole: string;
- 
+
     constructor(
         public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreservice: GetUsersStoreService, private formBuilder: FormBuilder
+        private managerStoreService: ManagerStoreService,
+        private teacherStoreService: TeacherStoreService,
+        private studentStoreService: StudentStoreService,
+        private formBuilder: FormBuilder
     ) {
         this.obj = data.obj;
         this.uriRole = data.uriRole;
@@ -34,7 +39,9 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
-        this.userStoreservice.uriRole = this.uriRole;
+        this.managerStoreService.uriRole = this.uriRole;
+        this.teacherStoreService.uriRole = this.uriRole;
+        this.studentStoreService.uriRole = this.uriRole;
     }
 
     buildForm() {
@@ -50,7 +57,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             email: [this.obj.email],
             address: [this.obj.address],
             commune: [this.obj.commune],
-            roles:[this.obj.roles]
+            roles: [this.obj.roles]
         });
         this.editForm = this.formBuilder.group({
             id: [this.obj.id],
@@ -65,7 +72,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             email: [this.obj.email],
             address: [this.obj.address],
             commune: [this.obj.commune],
-            roles:[this.obj.roles]
+            roles: [this.obj.roles]
 
         });
     }
@@ -92,20 +99,38 @@ export class GetUsersDialogRefComponent implements OnInit {
     create(): void {
         this.obj = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.obj));
-        this.userStoreservice.create(this.obj);
+        if (this.uriRole === '/managers') {
+            this.managerStoreService.create(this.obj);
+        } else if (this.uriRole === '/teachers') {
+            this.teacherStoreService.create(this.obj);
+        } else if (this.uriRole === '/students') {
+            this.studentStoreService.create(this.obj);
+        }
         this.dialogRef.close('created');
     }
 
     save(): void {
         this.obj = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.obj));
-        this.userStoreservice.update(this.obj);
+        if (this.uriRole === '/managers') {
+            this.managerStoreService.update(this.obj);
+        } else if (this.uriRole === '/teachers') {
+            this.teacherStoreService.update(this.obj);
+        } else if (this.uriRole === '/students') {
+            this.studentStoreService.update(this.obj);
+        }
         this.dialogRef.close('');
     }
 
     delete(): void {
         console.log('deleting... ' + JSON.stringify(this.obj));
-        this.userStoreservice.delete(this.obj.id);
+        if (this.uriRole === '/managers') {
+            this.managerStoreService.delete(this.obj.id);
+        } else if (this.uriRole === '/teachers') {
+            this.teacherStoreService.delete(this.obj.id);
+        } else if (this.uriRole === '/students') {
+            this.studentStoreService.delete(this.obj.id);
+        }
         this.dialogRef.close('deleted');
     }
 

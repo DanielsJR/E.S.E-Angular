@@ -8,9 +8,9 @@ import { LoginModule } from './login/login.module';
 import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LocalStorageService } from './shared/services/local-storage.service';
-import { UserService } from './shared/services/users.service';
-import { AuthInterceptor } from './shared/interceptors/auth-interceptor.interceptor';
+import { UserBackendService } from './services/user-backend.service';
+import { LocalStorageService } from './services/local-storage.service';
+import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
 
 
 @NgModule({
@@ -33,10 +33,10 @@ import { AuthInterceptor } from './shared/interceptors/auth-interceptor.intercep
 
   providers: [
     LocalStorageService,
-    UserService,
+    UserBackendService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: AppAuthInterceptor,
       multi: true,
     }
 

@@ -39,8 +39,7 @@ export class HomeAuthGuard implements CanActivate, CanActivateChild, CanLoad {
             return true;
         }
         
-       //this.loginService.
-
+  
         // Store the attempted URL for redirecting
         this.loginService.redirectUrl = url;
         this.router.navigate(['/login']);

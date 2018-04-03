@@ -1,17 +1,16 @@
-
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl } from '@angular/material';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY } from '../../app.config';
 import { User } from '../../models/user';
-import { DialogService } from '../../shared/services/dialog.service';
 import { GetUsersDialogRefComponent } from './get-users-dialog-ref/get-users-dialog-ref.component';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { GetUsersStoreService } from './get-users-store.service';
-import { GetTeachersStoreService } from './get-teachers-store.service';
-import { GetStudentsStoreService } from './get-students-store.service';
-import { GetManagersStoreService } from './get-mangers-store.service';
+import { StudentStoreService } from './student-store.service';
+import { TeacherStoreService } from './teacher-store.service';
+import { ManagerStoreService } from './manger-store.service';
+import { DialogService } from '../../services/dialog.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+
 
 @Component({
   selector: 'nx-get-users',
@@ -35,9 +34,9 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   styleClasses: {};
   @Input() uriRole;
     
-  constructor(private managerStoreService: GetManagersStoreService,
-     private teacherStoreService: GetTeachersStoreService,
-     private studentStoreService: GetStudentsStoreService,
+  constructor(private managerStoreService: ManagerStoreService,
+     private teacherStoreService: TeacherStoreService,
+     private studentStoreService: StudentStoreService,
      private dialogService: DialogService,
      private localstorage: LocalStorageService) {
    
