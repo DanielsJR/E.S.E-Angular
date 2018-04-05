@@ -16,7 +16,7 @@ export class UserBackendService {
 
     constructor(private httpCli: HttpClient) { }
 
-    public handleError = (error: Response) => {
+    handleError = (error: Response) => {
         return ErrorObservable.create(error);
     }
 
@@ -25,7 +25,7 @@ export class UserBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli
             .get<User[]>(url)
-            .pipe(catchError(this.handleError));
+           // .pipe(catchError(this.handleError));
     }
 
     create(user: User, uriRole: string): Observable<User> {

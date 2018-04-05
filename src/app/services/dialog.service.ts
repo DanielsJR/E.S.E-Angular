@@ -12,6 +12,7 @@ export class DialogService {
 
   constructor(public dialog: MatDialog) { }
 
+
   openDialogDetail(): void {
     // console.log('openenig dialog : detail');
     this.data.uriRole = this.uriRole;
@@ -65,7 +66,7 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog edit was closed '+ JSON.stringify(result));
+      console.log('The dialog edit was closed ' + JSON.stringify(result));
       // console.log('The dialog edit was closed');
       // console.log(`Dialog result: ${result}`);
     });
@@ -75,7 +76,7 @@ export class DialogService {
     this.data.uriRole = this.uriRole;
     this.data.type = 'delete';
     this.data.obj = this.obj;
-     const dialogRef = this.dialog.open(this.inputDialogRef, {
+    const dialogRef = this.dialog.open(this.inputDialogRef, {
       width: '300px',
       data: this.data,
       disableClose: true,
@@ -83,12 +84,18 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog delete was closed');
-      // console.log(`Dialog result: ${result}`);
+      if (result === 'deleted') {
+
+      } else if (result === 'error') {
+        console.error('ERROORR!!!!');
+      }
     });
 
   }
 
-
 }
+
+
+
+
 

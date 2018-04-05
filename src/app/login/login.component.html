@@ -15,7 +15,7 @@
           <h1>Login</h1>
         </mat-toolbar>
 
-        <span *ngIf="error && !loginForm.valid" class="unauthMessage">{{unauthMessage}}</span>
+        <span *ngIf="isError && !loginForm.valid" class="unauthMessage">{{unauthMessage}}</span>
 
         <div class="login-content">
 

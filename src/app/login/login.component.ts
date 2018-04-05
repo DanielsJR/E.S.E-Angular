@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   user: User;
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
-  error = false;
+  isError = false;
   isAuth = false;
   //token: Token;
 
@@ -42,15 +42,14 @@ export class LoginComponent implements OnInit {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, tokenAuth);
         const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
         this.router.navigate(['/home/' + uriRol]);
-      }, err => {
-        console.error(err.message);
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            console.error(err.message);
+      }, error => {
+        console.error(error.message);
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 401) {
             this.userName.setValue('');
             this.password.setValue('');
             this.loginForm.reset();
-            this.error = true;
+            this.isError = true;
           }
         }
       }

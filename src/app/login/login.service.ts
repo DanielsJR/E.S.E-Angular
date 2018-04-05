@@ -21,8 +21,8 @@ export class LoginService {
         private httpCli: HttpClient
     ) {  }
 
-    public handleError = (err: Response) => {
-        return ErrorObservable.create(err);
+    public handleError = (error: Response) => {
+        return ErrorObservable.create(error);
     }
 
     login(userName: string, password: string): Observable<TokenAuth> {

@@ -1,11 +1,12 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../../../models/user';
-import { StudentStoreService } from '../student-store.service';
-import { TeacherStoreService } from '../teacher-store.service';
-import { ManagerStoreService } from '../manger-store.service';
+import { ManagerStoreService } from '../../../services/manger-store.service';
+import { TeacherStoreService } from '../../../services/teacher-store.service';
+import { StudentStoreService } from '../../../services/student-store.service';
+import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../../../app.config';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class GetUsersDialogRefComponent implements OnInit {
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        public snackBar: MatSnackBar
     ) {
         this.obj = data.obj;
         this.uriRole = data.uriRole;
@@ -39,10 +41,13 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
-        this.managerStoreService.uriRole = this.uriRole;
-        this.teacherStoreService.uriRole = this.uriRole;
-        this.studentStoreService.uriRole = this.uriRole;
     }
+
+    openSnackBar(message: string, action: string) {
+        this.snackBar.open(message, action, {
+          duration: 2000,
+        });
+      }
 
     buildForm() {
         this.createForm = this.formBuilder.group({
@@ -99,39 +104,39 @@ export class GetUsersDialogRefComponent implements OnInit {
     create(): void {
         this.obj = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.obj));
-        if (this.uriRole === '/managers') {
+        if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.create(this.obj);
-        } else if (this.uriRole === '/teachers') {
+        } else if (this.uriRole === URI_TEACHERS) {
             this.teacherStoreService.create(this.obj);
-        } else if (this.uriRole === '/students') {
+        } else if (this.uriRole === URI_STUDENTS) {
             this.studentStoreService.create(this.obj);
         }
-        this.dialogRef.close('created');
+      //  this.dialogRef.close('created');
     }
 
     save(): void {
         this.obj = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.obj));
-        if (this.uriRole === '/managers') {
+        if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.obj);
-        } else if (this.uriRole === '/teachers') {
+        } else if (this.uriRole === URI_TEACHERS) {
             this.teacherStoreService.update(this.obj);
-        } else if (this.uriRole === '/students') {
+        } else if (this.uriRole === URI_STUDENTS) {
             this.studentStoreService.update(this.obj);
         }
-        this.dialogRef.close('');
+       // this.dialogRef.close('saved');
     }
 
     delete(): void {
         console.log('deleting... ' + JSON.stringify(this.obj));
-        if (this.uriRole === '/managers') {
+        if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.delete(this.obj.id);
-        } else if (this.uriRole === '/teachers') {
+        } else if (this.uriRole === URI_TEACHERS) {
             this.teacherStoreService.delete(this.obj.id);
-        } else if (this.uriRole === '/students') {
+        } else if (this.uriRole === URI_STUDENTS) {
             this.studentStoreService.delete(this.obj.id);
         }
-        this.dialogRef.close('deleted');
+      //  this.dialogRef.close('deleted');
     }
 
 }

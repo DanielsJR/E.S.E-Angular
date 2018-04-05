@@ -1,6 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './error-pages/page-not-found.component';
 import { AppRoutingModule } from './app.routing';
@@ -11,6 +10,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UserBackendService } from './services/user-backend.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
+import { ManagerStoreService } from './services/manger-store.service';
+import { TeacherStoreService } from './services/teacher-store.service';
+import { StudentStoreService } from './services/student-store.service';
 
 
 @NgModule({
@@ -28,7 +30,6 @@ import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-
   ],
 
   providers: [
@@ -38,14 +39,16 @@ import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: AppAuthInterceptor,
       multi: true,
-    }
-
+    },
+    ManagerStoreService,
+    TeacherStoreService,
+    StudentStoreService
   ],
 
   bootstrap: [
     AppComponent
   ],
-  
+
 
 })
 

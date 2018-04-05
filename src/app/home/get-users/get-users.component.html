@@ -1,6 +1,8 @@
 <mat-card class="mat-elevation-z8">
 
   <mat-toolbar>
+
+
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)">
       <mat-placeholder>
@@ -8,6 +10,14 @@
       </mat-placeholder>
     </mat-form-field>
 
+    <span class="spacer-l"></span>
+
+    <mat-chip-list>
+      <mat-chip color="primary" selected="true">
+        <mat-icon>person</mat-icon>
+        {{uriRole | uppercase}}
+      </mat-chip>
+    </mat-chip-list>
   </mat-toolbar>
 
   <mat-table #table [dataSource]="dataSource" matSort>
@@ -46,7 +56,7 @@
   </mat-paginator>
 
   <span class="add">
-    <button mat-fab (click)="openDialogCreate()" matTooltip="Agregar Administrador">
+    <button mat-fab (click)="openDialogCreate()" matTooltip="Agregar {{uriRole}}">
       <mat-icon>person_add</mat-icon>
     </button>
   </span>

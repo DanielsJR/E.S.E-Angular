@@ -1,22 +1,31 @@
-import { Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../models/user';
-import { URI_MANAGERS } from '../../app.config';
-import { UserBackendService } from '../../services/user-backend.service';
+import { User } from '../models/user';
+import { URI_TEACHERS } from '../app.config';
+import { UserBackendService } from './user-backend.service';
+
+
+import { MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
-export class ManagerStoreService{
+export class TeacherStoreService {
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly users$ = this.usersSource.asObservable();
     private dataStore: { users: User[] };
 
-    error: any;
-    uriRole: string = URI_MANAGERS;
+    private errorSubject = <Subject<any>>new Subject();
+    public readonly error$ = this.errorSubject.asObservable();
 
-    constructor(private userBackendService: UserBackendService, private httpCli: HttpClient) {
+    uriRole: string = URI_TEACHERS;
+
+    constructor(private userBackendService: UserBackendService, private httpCli: HttpClient,
+    ) {
         this.dataStore = { users: [] };
     }
 
@@ -27,7 +36,10 @@ export class ManagerStoreService{
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-            }, error => console.error('Error retrieving users')
+            }, error => {
+                console.error('Error retrieving users, ' + error.message);
+                this.errorSubject.next(error);
+            }
             );
     }
 
@@ -37,8 +49,11 @@ export class ManagerStoreService{
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-
-            }, error => console.error('Could not create User ' + error));
+            }, error => {
+                console.error('Could not create User ' + error);
+                this.errorSubject.next(error);
+            }
+            );
     }
 
     update(user: User) {
@@ -52,8 +67,8 @@ export class ManagerStoreService{
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
             }, error => {
-                this.error = error;
                 console.error('Could not update user from store ');
+                this.errorSubject.next(error);
             })
     }
 
@@ -65,8 +80,11 @@ export class ManagerStoreService{
                     if (u.id === id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-
-            }, error => console.error('Could not delete user from store ' + error));
+            }, error => {
+                console.error('Could not delete user from store ' + error);
+                this.errorSubject.next(error);
+            }
+            );
     }
 
 
@@ -76,7 +94,10 @@ export class ManagerStoreService{
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-            }, error => console.error(`Error retrieving ${role}s`)
+            }, error => {
+                console.error(`Error retrieving ${role}s`);
+                this.errorSubject.next(error);
+            }
             );
     }
 
@@ -97,11 +118,15 @@ export class ManagerStoreService{
                 }
 
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-            }, error => console.error('Could not load User.'));
+            }, error => {
+                console.error('Could not load User.');
+                this.errorSubject.next(error);
+            });
 
     }
 
-    deleteStore(): void{
+
+    deleteStore(): void {
         this.dataStore = { users: [] };
         this.usersSource.next(Object.assign({}, this.dataStore).users);
     }
