@@ -52,9 +52,10 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     
 
     if (this.uriRole === URI_MANAGERS) {
-      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error.message,'error')) );
+      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
+      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
       this.managerStoreService.users$.subscribe(data => {
-        if (data.toString() === '' && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
           this.managerStoreService.getUsers();
         }
@@ -63,9 +64,10 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       );
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error.message,'error')) );
+      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
+      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
       this.teacherStoreService.users$.subscribe(data => {
-        if (data.toString() === '' && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
           this.teacherStoreService.getUsers();
         }
@@ -73,9 +75,10 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       }
       );
     } else if (this.uriRole === URI_STUDENTS) {
-      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error.message,'error')) );
+      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
+      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
       this.studentStoreService.users$.subscribe(data => {
-        if (data.toString() === '' && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
           this.studentStoreService.getUsers();
         }

@@ -12,7 +12,7 @@ export class User {
          public firstName?: string,
          public lastName?: string,
          public dni?: string,
-         public birthday?: number,
+         public birthday?: string,
          public gender?:string,
          public mobile?: number,
          public email?: string,

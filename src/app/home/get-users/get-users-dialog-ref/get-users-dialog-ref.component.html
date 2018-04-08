@@ -61,7 +61,7 @@
         <mat-form-field>
             <input matInput [(ngModel)]="obj.mobile" disabled>
             <mat-placeholder>
-                <i class="material-icons app-input-icon">description</i>Telefono
+                <i class="material-icons app-input-icon">description</i>Teléfono
             </mat-placeholder>
         </mat-form-field>
 
@@ -75,7 +75,7 @@
         <mat-form-field>
             <input matInput [(ngModel)]="obj.address" disabled>
             <mat-placeholder>
-                <i class="material-icons app-input-icon">description</i>Direccion
+                <i class="material-icons app-input-icon">description</i>Dirección
             </mat-placeholder>
         </mat-form-field>
 
@@ -93,7 +93,7 @@
             </mat-placeholder>
         </mat-form-field>
 
-  
+
 
     </mat-dialog-content>
 
@@ -128,7 +128,7 @@
             <mat-form-field>
                 <input matInput tabindex="1" formControlName="username">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Username
+                    <i class="material-icons app-input-icon">view_column</i>Nombre de Usuario
                 </mat-placeholder>
             </mat-form-field>
 
@@ -161,11 +161,10 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="6" formControlName="birthday">
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Fecha de Nacimiento
-                </mat-placeholder>
-            </mat-form-field>
+                    <input matInput [matDatepicker]="picker" tabindex="6" formControlName="birthday" placeholder="Fecha de Nacimiento">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+           </mat-form-field>
 
             <mat-form-field>
                 <input matInput tabindex="7" formControlName="gender">
@@ -177,7 +176,7 @@
             <mat-form-field>
                 <input matInput tabindex="8" formControlName="mobile">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Telefono
+                    <i class="material-icons app-input-icon">view_column</i>Teléfono
                 </mat-placeholder>
             </mat-form-field>
 
@@ -191,31 +190,24 @@
             <mat-form-field>
                 <input matInput tabindex="10" formControlName="address">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Direccion
+                    <i class="material-icons app-input-icon">view_column</i>Dirección
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="11" formControlName="commune">
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Comuna
-                </mat-placeholder>
+                    <mat-select placeholder="Comuna" tabindex="11" formControlName="commune">
+                        <mat-option *ngFor="let commune of communes" [value]="commune.value">
+                            {{ commune.viewValue }}
+                        </mat-option>
+                    </mat-select>
             </mat-form-field>
-
-            <mat-form-field>
-                <input matInput tabindex="12" formControlName="roles">
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Roles
-                </mat-placeholder>
-            </mat-form-field>
-
 
 
         </mat-dialog-content>
         <br>
         <mat-dialog-actions>
-            <button type="submit" mat-raised-button color="accent" tabindex="13" [disabled]="!createForm.valid">Agregar</button>
-            <button type="button" mat-raised-button tabindex="14" (click)="cancel()">Cancelar</button>
+            <button type="button" mat-raised-button tabindex="13" (click)="cancel()">Cancelar</button>
+            <button type="submit" mat-raised-button color="accent" tabindex="14" [disabled]="!createForm.valid">Agregar</button>
         </mat-dialog-actions>
 
     </form>
@@ -236,7 +228,7 @@
         <mat-dialog-content>
 
             <mat-form-field>
-                <input matInput value =  {{obj.id}} disabled>
+                <input matInput value={{obj.id}} disabled>
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">title</i>Id
                 </mat-placeholder>
@@ -250,88 +242,84 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="password">
+                <input matInput tabindex="2" formControlName="firstName">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Contraseña
+                    <i class="material-icons app-input-icon">view_column</i>Nombres
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="firstName">
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Nombres
-                </mat-placeholder>
-            </mat-form-field> 
-            
-            <mat-form-field>
-                <input matInput tabindex="4" formControlName="lastName">
+                <input matInput tabindex="3" formControlName="lastName">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Apellidos
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="5" formControlName="dni">
+                <input matInput tabindex="4" formControlName="dni">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">person</i>RUT
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="6" formControlName="birthday">
+                <input matInput [matDatepicker]="picker" tabindex="5" formControlName="birthday">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Edad
+                    <i class="material-icons app-input-icon">person</i>Fecha de Nacimiento
                 </mat-placeholder>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="7" formControlName="gender">
+                <input matInput tabindex="6" formControlName="gender">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Sexo
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="8" formControlName="mobile">
+                <input matInput tabindex="7" formControlName="mobile">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Telefono
+                    <i class="material-icons app-input-icon">view_column</i>Telefóno
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="9" formControlName="email">
+                <input matInput tabindex="8" formControlName="email">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">description</i>Email
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                    <input matInput tabindex="10" formControlName="address">
-                    <mat-placeholder>
-                        <i class="material-icons app-input-icon">description</i>Direccion
-                    </mat-placeholder>
+                <input matInput tabindex="9" formControlName="address">
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">description</i>Dirección
+                </mat-placeholder>
+            </mat-form-field>
+
+             <mat-form-field>
+                <mat-select placeholder="Comuna" tabindex="10" formControlName="commune">
+                    <mat-option *ngFor="let commune of communes" [value]="commune.value">
+                        {{ commune.viewValue }}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="11" formControlName="commune">
+                <input matInput tabindex="11" formControlName="roles">
                 <mat-placeholder>
-                    <i class="material-icons app-input-icon">description</i>Comuna
+                    <i class="material-icons app-input-icon">description</i>Roles
                 </mat-placeholder>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput tabindex="12" formControlName="roles">
-            <mat-placeholder>
-                <i class="material-icons app-input-icon">description</i>Roles
-            </mat-placeholder>
-    </mat-form-field>
+            </mat-form-field>
 
 
         </mat-dialog-content>
 
         <mat-dialog-actions>
-            <button type="submit" mat-raised-button color="accent" tabindex="14" [disabled]="!editForm.valid">Guardar</button>
-            <button type="button" mat-raised-button tabindex="15" (click)="cancel()">Cancelar</button>
+            <button type="button" mat-raised-button tabindex="12" (click)="cancel()">Cancelar</button>
+            <button type="submit" mat-raised-button color="accent" tabindex="13" [disabled]="!editForm.valid">Guardar</button>
         </mat-dialog-actions>
 
     </form>
@@ -350,24 +338,16 @@
     <mat-dialog-content>
 
         <mat-form-field>
-            <input matInput [(ngModel)]="obj.id" disabled>
+            <input matInput [(ngModel)]="obj.username" disabled>
             <mat-placeholder>
-                <i class="material-icons app-input-icon">title</i>Id
+                <i class="material-icons app-input-icon">view_column</i>Nombre de usuario
             </mat-placeholder>
         </mat-form-field>
-   
 
-    <mat-form-field>
-        <input matInput [(ngModel)]="obj.username" disabled>
-        <mat-placeholder>
-            <i class="material-icons app-input-icon">view_column</i>Nombre de usuario
-        </mat-placeholder>
-    </mat-form-field>
-
-</mat-dialog-content>
+    </mat-dialog-content>
 
     <mat-dialog-actions>
-        <button mat-raised-button color="warn" (click)="delete()" tabindex="1">Borrar</button>
-        <button mat-raised-button (click)="cancel()" tabindex="2">Cancelar</button>
+        <button mat-raised-button (click)="cancel()" tabindex="1">Cancelar</button>
+        <button mat-raised-button color="warn" (click)="delete()" tabindex="2">Borrar</button>
     </mat-dialog-actions>
 </div>

@@ -18,7 +18,10 @@ export class ManagerStoreService {
 
     private errorSubject = <Subject<any>>new Subject();
     error$ = this.errorSubject.asObservable();
-    
+
+    private successSubject = <Subject<any>>new Subject();
+    public readonly success$ = this.successSubject.asObservable();
+
     uriRole: string = URI_MANAGERS;
 
     constructor(private userBackendService: UserBackendService, private httpCli: HttpClient,
@@ -33,11 +36,17 @@ export class ManagerStoreService {
         this.userBackendService
             .getUsers(this.uriRole)
             .subscribe(data => {
-                this.dataStore.users = data;
-                this.usersSource.next(Object.assign({}, this.dataStore).users);
+                if (data.length === 0) {
+                    data = null;
+                    this.successSubject.next('lista vacia');
+                } else {
+                    this.dataStore.users = data;
+                    this.usersSource.next(Object.assign({}, this.dataStore).users);
+                    this.successSubject.next('retrieve users ok');
+                }
             }, error => {
-                console.error('Error retrieving users, ' + error.message);
-                this.errorSubject.next(error);
+                console.error('error retrieving users, ' + error.message);
+                this.errorSubject.next('error retrieving users');
             }
             );
     }
@@ -48,9 +57,10 @@ export class ManagerStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('user created');
             }, error => {
-                console.error('Could not create User ' + error);
-                this.errorSubject.next(error);
+                console.error('could not create User, ' + error.message);
+                this.errorSubject.next('could not create user');
             }
             );
     }
@@ -65,9 +75,10 @@ export class ManagerStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('user updated');
             }, error => {
-                console.error('Could not update user from store ');
-                this.errorSubject.next(error);
+                console.error('could not update user from store, ' + error.message);
+                this.errorSubject.next('could not update user');
             })
     }
 
@@ -79,28 +90,16 @@ export class ManagerStoreService {
                     if (u.id === id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('user deleted');
             }, error => {
-                console.error('Could not delete user from store ' + error);
-                this.errorSubject.next(error);
+                console.error('could not delete user from store, ' + error.message);
+                this.errorSubject.next('could not delete user');
             }
             );
     }
 
 
-    getUsersByRole(role: string) {
-        this.userBackendService
-            .getUsersByRole(role, this.uriRole)
-            .subscribe(data => {
-                this.dataStore.users = data;
-                this.usersSource.next(Object.assign({}, this.dataStore).users);
-            }, error => {
-                console.error(`Error retrieving ${role}s`);
-                this.errorSubject.next(error);
-            }
-            );
-    }
-
-    findById(id: number) {
+    getUserById(id: number) {
         this.userBackendService
             .getUserById(id, this.uriRole)
             .subscribe(data => {
@@ -117,11 +116,26 @@ export class ManagerStoreService {
                 }
 
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('success');
             }, error => {
-                console.error('Could not load User.');
-                this.errorSubject.next(error);
+                console.error(`could not load user, ${error.message}`);
+                this.errorSubject.next('could not load user');
             });
 
+    }
+
+    getUsersByRole(role: string) {
+        this.userBackendService
+            .getUsersByRole(role, this.uriRole)
+            .subscribe(data => {
+                this.dataStore.users = data;
+                this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('success');
+            }, error => {
+                console.error('error retrieving users' + error.message);
+                this.errorSubject.next('error retrieving users');
+            }
+            );
     }
 
 

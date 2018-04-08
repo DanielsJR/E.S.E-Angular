@@ -16,79 +16,54 @@ export class UserBackendService {
 
     constructor(private httpCli: HttpClient) { }
 
-    handleError = (error: Response) => {
-        return ErrorObservable.create(error);
-    }
 
     getUsers(uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User[]>(url)
-           // .pipe(catchError(this.handleError));
+        return this.httpCli.get<User[]>(url)
     }
 
     create(user: User, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli
-            .post(url, JSON.stringify(user))
-            .pipe(catchError(this.handleError));
+        return this.httpCli.post<User>(url, user);
     }
 
     update(user: User, uriRole: string): Observable<User> {
-       const id = user.id;
+        const id = user.id;
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli
-            .put(url, JSON.stringify(user))
-            .pipe(catchError(this.handleError));
+        return this.httpCli.put<User>(url, user);
     }
 
-    delete(id: string, uriRole: string): Observable<void> {
+    delete(id: string, uriRole: string): Observable<{}> {
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli
-            .delete(url)
-            .pipe(catchError(this.handleError));
+        return this.httpCli.delete<{}>(url);
     }
 
-
-    
     getUserById(id: number, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
+        return this.httpCli.get<User>(url);
     }
 
     getUserByToken(token: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_TOKEN}/${token}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
+        return this.httpCli.get<User>(url);
     }
 
     getUserByUserName(name: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli
-            .get<User>(url)
-            .pipe(catchError(this.handleError));
+        return this.httpCli.get<User>(url);
     }
-
-    
-
-    
 
     getUsersByRole(role: string, uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli
-            .get<User[]>(url)
-            .pipe(catchError(this.handleError));
+        return this.httpCli.get<User[]>(url);
     }
 
 }

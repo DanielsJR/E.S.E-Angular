@@ -3,9 +3,11 @@
 
 /*MATERIAL DESIGN*/
 
-@import '~https://fonts.googleapis.com/icon?family=Material+Icons';
-@import '~https://fonts.googleapis.com/css?family=Roboto';
-@import '~https://fonts.googleapis.com/css?family=Black+Ops+One';
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@import 'https://fonts.googleapis.com/css?family=Roboto';
+@import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
+
+
 html,
 body,
 mat-sidenav-container {

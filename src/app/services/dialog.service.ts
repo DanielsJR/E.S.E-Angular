@@ -48,8 +48,13 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog create was closed');
-      //  console.log(`Dialog result: ${result}`);
+      if (result === 'canceled') {
+        console.log('canceled!');
+      } else if (result === 'error') {
+        console.error('ERROR!!!, could not create');
+      } else if (result === 'created') {
+        console.log('created!');
+      }
     });
 
   }
@@ -66,9 +71,14 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog edit was closed ' + JSON.stringify(result));
-      // console.log('The dialog edit was closed');
-      // console.log(`Dialog result: ${result}`);
+      // console.log('The dialog edit was closed ' + JSON.stringify(result));
+      if (result === 'canceled') {
+        console.log('canceled!');
+      } else if (result === 'error') {
+        console.error('ERROR!!!, could not edit');
+      } else if (result === 'edited') {
+        console.log('edited!');
+      }
     });
   }
 
@@ -84,10 +94,12 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 'deleted') {
-
+      if (result === 'canceled') {
+        console.log('canceled!');
       } else if (result === 'error') {
-        console.error('ERROORR!!!!');
+        console.error('ERROR!!!, could not delete');
+      } else if (result === 'deleted') {
+        console.log('deleted!');
       }
     });
 
