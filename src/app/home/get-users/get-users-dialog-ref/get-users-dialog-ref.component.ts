@@ -7,15 +7,14 @@ import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
 import { StudentStoreService } from '../../../services/student-store.service';
 import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../../../app.config';
-
 import * as moment from 'moment';
+import { COMMUNNES } from '../../../models/communes';
+import { GENDERS } from '../../../models/genders';
 
 @Component({
     // tslint:disable-next-line:component-selector
     templateUrl: './get-users-dialog-ref.component.html',
-    styles: [`
-    .app-input-icon { font-size: 16px; },
-    `]
+    styleUrls: ['./get-users-dialog-ref.component.css']
 })
 
 export class GetUsersDialogRefComponent implements OnInit {
@@ -24,14 +23,9 @@ export class GetUsersDialogRefComponent implements OnInit {
     editForm: FormGroup;
     obj: User;
     uriRole: string;
-
-
-
-    communes = [
-        { value: 'LO_PRADO', viewValue: 'Lo Prado' },
-        { value: 'QUINTA_NORMAL', viewValue: 'Quinta Normal' },
-        { value: 'LA_FLORIDA', viewValue: 'La Florida' }
-    ];
+    compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
+    communes = COMMUNNES;
+    genders = GENDERS;
 
 
     constructor(
@@ -52,6 +46,16 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
+  
+    }
+
+    convertDate(birthDay: any) {
+       return (this.obj.birthday != null) ? birthDay = moment(this.obj.birthday, 'DD/MM/YYYY'):null;
+    }
+
+    compareByViewValue(a1: any, a2: any) {
+        // console.log('a1: ' + a1 + '    '+'a2: ' + a2);
+        return a1 && a2 && a1 === a2;
     }
 
     openSnackBar(message: string, action: string) {
@@ -62,10 +66,10 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     buildForm() {
         this.createForm = this.formBuilder.group({
-            username: ['', Validators.required],
-            password: ['', Validators.required],
-            firstName: [],
-            lastName: [],
+            username: [],
+            password: [],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
             dni: [],
             birthday: [],
             gender: [],
@@ -76,6 +80,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             //roles: [this.obj.roles]
         });
         
+    
         this.editForm = this.formBuilder.group({
             id: [this.obj.id],
             username: [this.obj.username, Validators.required],
@@ -83,19 +88,25 @@ export class GetUsersDialogRefComponent implements OnInit {
             firstName: [this.obj.firstName],
             lastName: [this.obj.lastName],
             dni: [this.obj.dni],
-            birthday: [moment(this.obj.birthday,'DD/MM/YYYY')],
+            birthday: [(this.obj.birthday != null) ? moment(this.obj.birthday, 'DD/MM/YYYY'):null],
             gender: [this.obj.gender],
             mobile: [this.obj.mobile],
             email: [this.obj.email],
             address: [this.obj.address],
             commune: [this.obj.commune],
-            roles: [this.obj.roles]
+           // roles: [this.obj.roles]
 
         });
+
+       
+            
+        
     }
 
-    // getters create
-    //  get cUserName() { return this.createForm.get('userName'); }
+    // getters create for errors messages
+    get cFirstName() { return this.createForm.get('firstName'); }
+    get cLastName() { return this.createForm.get('lastName'); }
+    get cEmail() { return this.createForm.get('email'); }
     // getters edit
     //  get eUserName() { return this.createForm.get('userName'); }
 
@@ -114,9 +125,9 @@ export class GetUsersDialogRefComponent implements OnInit {
 
 
     create(): void {
-        if (this.createForm.value.birthday != null) {
-            this.createForm.value.birthday = moment(this.createForm.value.birthday).format('DD/MM/YYYY');
-        }
+        this.createForm.value.username = (this.createForm.value.firstName +' '+ this.createForm.value.lastName).replace(/ /g, '_');
+        this.createForm.value.password = this.createForm.value.firstName + '1@';
+        this.createForm.value.birthday = (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
         this.obj = this.createForm.value;
         console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
@@ -136,9 +147,9 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     save(): void {
-        if (this.editForm.value.birthday != null) {
-            this.editForm.value.birthday = moment(this.editForm.value.birthday).format('DD/MM/YYYY');
-        }
+        this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
+        this.editForm.value.gender = (this.editForm.value.gender != null) ?  this.editForm.value.gender.toUpperCase() : null;
+        this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {

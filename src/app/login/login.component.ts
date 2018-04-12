@@ -23,8 +23,7 @@ export class LoginComponent implements OnInit {
   unauthMessage = 'Usuario o Contraseña Incorrecta';
   isError = false;
   isAuth = false;
-  //token: Token;
-
+ 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService,
     private localStorageService: LocalStorageService, private router: Router
@@ -33,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.user.username = this.userName.value;
+    this.user.username = this.username.value;
     this.user.password = this.password.value;
     this.loginService
       .login(this.user.username, this.user.password)
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit {
         console.error(error.message);
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
-            this.userName.setValue('');
+            this.username.setValue('');
             this.password.setValue('');
             this.loginForm.reset();
             this.isError = true;
@@ -62,14 +61,14 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      userName: [this.user.username, Validators.required],
+      username: [this.user.username, Validators.required],
       password: [this.user.password, Validators.required]
     });
   }
 
 
   // getters
-  get userName() { return this.loginForm.get('userName'); }
+  get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
 
 }

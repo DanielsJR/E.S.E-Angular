@@ -31,15 +31,15 @@
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let user">
 
-        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()">
+        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()" matTooltip="Detalles">
           <mat-icon>visibility</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()">
+        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()" matTooltip="Editar">
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()">
+        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()" matTooltip="Borrar">
           <mat-icon>delete</mat-icon>
         </button>
 

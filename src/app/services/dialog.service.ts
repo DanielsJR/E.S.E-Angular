@@ -19,7 +19,7 @@ export class DialogService {
     this.data.type = 'detail';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '300px',
+      width: '700px',
       data: this.data,
       panelClass: 'myDialog'
     });
@@ -41,7 +41,7 @@ export class DialogService {
     this.data.type = 'create';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '300px',
+      width: '700px',
       data: this.data,
       disableClose: true,
       panelClass: 'myDialog'
@@ -64,7 +64,7 @@ export class DialogService {
     this.data.type = 'edit';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '300px',
+      width: '700px',
       data: this.data,
       disableClose: true,
       panelClass: 'myDialog'

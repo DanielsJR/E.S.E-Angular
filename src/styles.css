@@ -39,10 +39,7 @@ mat-sidenav-container {
 }
 
 .home img {
-    position: relative;
-    margin-top: -21px;
     margin-left: 45px;
-    top: 6px;
     height: 40px;
 }
 
@@ -50,7 +47,7 @@ mat-sidenav-container {
     flex: .5 1 auto;
 }
 
-.spacer-l {
+.spacer-r {
     flex: 1 1 auto;
 }
 
@@ -108,10 +105,7 @@ mat-sidenav-container {
 
 /*MATERIAL dialog*/
 
-.bar-icon {
-    margin-bottom: 0px !important;
-    padding: 20px 120px;
-}
+
 
 .myDialog .mat-dialog-container {
     padding: 0;
@@ -119,14 +113,22 @@ mat-sidenav-container {
 }
 
 .myDialog .mat-dialog-content {
-    margin: 0;
-}
-
-.myDialog .mat-dialog-actions {
-    margin-bottom: 0px !important;
     padding: 20px 30px;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
 }
 
+.myDialog .mat-dialog-content > mat-form-field {
+    flex-basis: 200px
+}
+
+.myDialog  .mat-dialog-actions {
+    margin-bottom: 0px !important;
+}    
 
 /*MATERIAL dialog*/
 

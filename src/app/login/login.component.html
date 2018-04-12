@@ -11,7 +11,7 @@
 
         <mat-toolbar color="primary">
           <nx-logo [type]="'mat-mini-fab'"></nx-logo>
-          <span class="spacer"></span>
+          <span class="spacer-r"></span>
           <h1>Login</h1>
         </mat-toolbar>
 
@@ -20,11 +20,11 @@
         <div class="login-content">
 
           <mat-form-field>
-            <input matInput type="text" formControlName="userName">
+            <input matInput type="text" formControlName="username">
             <mat-placeholder>
               <mat-icon class="app-input-icon">face</mat-icon>Nombre de Usuario
             </mat-placeholder>
-            <mat-error *ngIf="userName.hasError('required')">Nombre de Usuario es requerido.</mat-error>
+            <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
           </mat-form-field>
 
           <mat-form-field>
