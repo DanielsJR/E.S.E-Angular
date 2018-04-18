@@ -1,5 +1,7 @@
-import { Input, Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
+
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
@@ -10,6 +12,9 @@ export class DialogService {
   obj;
   uriRole: string;
 
+  private closeSubject = <Subject<any>>new Subject();
+  public readonly close$ = this.closeSubject.asObservable();
+ 
   constructor(public dialog: MatDialog) { }
 
 
@@ -19,15 +24,16 @@ export class DialogService {
     this.data.type = 'detail';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '700px',
+      width: '730px',
       data: this.data,
       panelClass: 'myDialog'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog detail was closed');
-      // console.log(`openenig dialog : ${result}`);
-      if (result === 'edit') {
+      this.closeSubject.next();
+      if (result === 'canceled') {
+        console.log('canceled!');
+      } else if (result === 'edit') {
         this.openDialogEdit();
       } else if (result === 'delete') {
         this.openDialogDelete();
@@ -41,13 +47,14 @@ export class DialogService {
     this.data.type = 'create';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '700px',
+      width: '730px',
       data: this.data,
       disableClose: true,
       panelClass: 'myDialog'
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.closeSubject.next();
       if (result === 'canceled') {
         console.log('canceled!');
       } else if (result === 'error') {
@@ -64,14 +71,14 @@ export class DialogService {
     this.data.type = 'edit';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '700px',
+      width: '730px',
       data: this.data,
       disableClose: true,
       panelClass: 'myDialog'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog edit was closed ' + JSON.stringify(result));
+      this.closeSubject.next();
       if (result === 'canceled') {
         console.log('canceled!');
       } else if (result === 'error') {
@@ -79,6 +86,7 @@ export class DialogService {
       } else if (result === 'edited') {
         console.log('edited!');
       }
+      
     });
   }
 
@@ -87,13 +95,14 @@ export class DialogService {
     this.data.type = 'delete';
     this.data.obj = this.obj;
     const dialogRef = this.dialog.open(this.inputDialogRef, {
-      width: '300px',
+      width: '500px',
       data: this.data,
       disableClose: true,
       panelClass: 'myDialog'
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.closeSubject.next();
       if (result === 'canceled') {
         console.log('canceled!');
       } else if (result === 'error') {

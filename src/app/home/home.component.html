@@ -2,17 +2,12 @@
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
-        <span>
-            <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
-                <mat-icon>menu</mat-icon>
-            </button>
-        </span>
 
-        <span>
-            <a class="home" routerLink='./'>
-                <img alt="Home" title="Home" src="assets/images/logos/ese-logo.png">
-            </a>
-        </span>
+        <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <img id="imgHome" alt="E.S.E" src="assets/images/logos/ese-logo.png">
 
         <span class="spacer-r"></span>
         <nx-full-screen></nx-full-screen>
@@ -30,19 +25,21 @@
 
             <!-- sidenav toobar -->
             <mat-toolbar class="side-toolbar">
-                <mat-list>
+                <mat-list style="flex-grow: 8">
                     <mat-list-item>
-                        <img matListAvatar src="assets/images/users/admin.jpg" alt="admin">
-                        <h3 matLine> {{user?.username}} </h3>
+                        <img matListAvatar src="assets/images/users/{{privilege | lowercase}}.png" alt="{{privilege | lowercase}}">
+                        <h3 matLine> {{user?.firstName}} </h3>
                         <p matLine>
-                            <span>{{role}}</span>
+                            <span>{{user?.roles}}</span>
                         </p>
                     </mat-list-item>
                 </mat-list>
                 <span class="spacer-r"></span>
-                <button mat-icon-button [matMenuTriggerFor]="settings">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
+                <div matTooltip="opciones">
+                    <button mat-icon-button [matMenuTriggerFor]="settings">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
             </mat-toolbar>
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
@@ -62,7 +59,7 @@
 
                 <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="side-toolbar">
-                    <button mat-icon-button (click)="sidenavSettings.toggle()">
+                    <button mat-icon-button (click)="sidenavSettings.toggle()" #btnSettingsBack>
                         <mat-icon> arrow_back </mat-icon>
                     </button>
                     <span class="spacer-c"></span>
@@ -72,7 +69,10 @@
                 <!-- sidenav content -->
                 <mat-nav-list class="menu">
                     <mat-list-item>
-                        <h3 matLine>Nombre: {{user?.userName}}</h3>
+                        <h3 matLine>Nombres: {{user?.firstName}}</h3>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <h3 matLine>Apellidos: {{user?.lastName}}</h3>
                     </mat-list-item>
                     <mat-list-item>
                         <h3 matLine>Telefono: {{user?.mobile}}</h3>
@@ -89,7 +89,7 @@
 
             <!-- sidenav menu -->
             <mat-nav-list class="menu">
-               
+
                 <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
 
                 <mat-list-item (click)="triggerUsers = !triggerUsers">
@@ -97,7 +97,7 @@
                     <h3 matLine>Usuarios</h3>
                     <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
                 </mat-list-item>
-                <div [@tdCollapse]="triggerUsers">
+                <div [style.overflow]="'hidden'" [@tdCollapse]="triggerUsers">
                     <nx-users-menu [privilege]='privilege' [roles]='roles'></nx-users-menu>
                 </div>
 

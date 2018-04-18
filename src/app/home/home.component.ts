@@ -7,6 +7,7 @@ import { URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN, ROLE_
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { UserBackendService } from '../services/user-backend.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { MatSidenav, MatMenu, MatButton, MatSnackBar } from '@angular/material';
 
 @Component({
   templateUrl: './home.component.html',
@@ -18,6 +19,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 })
 export class HomeComponent implements OnInit {
 
+
   user: User;
   privilege = this.loginService.getPrivilege();
   roles = this.loginService.getRoles();
@@ -25,16 +27,33 @@ export class HomeComponent implements OnInit {
   @ViewChild(ThemePickerComponent)
   themePicker: ThemePickerComponent;
 
+  welcome: string;
+
   scrolled = false;
   triggerUsers = true;
+  isTooltipDisabled = false;
+
+  @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
+  @ViewChild("settings") private menu: MatMenu;
+  @ViewChild("btnSettingsBack") private btnSettingsBack: MatButton;
 
   constructor(private router: Router, private loginService: LoginService,
-    private userBackendService: UserBackendService, private localStorageService: LocalStorageService) { }
+    private userBackendService: UserBackendService, private localStorageService: LocalStorageService,
+    public snackBar: MatSnackBar) { }
+
+  ngAfterViewInit() {
+    this.sidenavSettings.openedChange.subscribe(() => {
+      this.btnSettingsBack._elementRef.nativeElement.focus();
+    });
+    this.menu.closed.subscribe(() => {
+      // TODO
+    });
+  }
 
   ngOnInit() {
     const token = this.localStorageService.getTokenParsed();
     let uriRole;
-    
+
     if (this.privilege === ROLE_ADMIN) {
       uriRole = URI_ADMINS;
     } else if (this.privilege === ROLE_MANAGER) {
@@ -44,13 +63,17 @@ export class HomeComponent implements OnInit {
     } else if (this.privilege === ROLE_STUDENT) {
       uriRole = URI_STUDENTS;
     } else {
-    uriRole = "";
-     console.error('error no role');
+      uriRole = "";
+      console.error('error no role');
     }
     this.userBackendService.getUserByToken(token, uriRole).subscribe(data => {
       this.user = data;
+      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.user.firstName : 'Bienvenido ' + this.user.firstName;
+      this.openSnackBar(this.welcome, 'info');
     },
       error => console.error('error getting the token ' + error));
+
+
   }
 
 
@@ -59,6 +82,12 @@ export class HomeComponent implements OnInit {
     this.loginService.logout();
     this.themePicker.removeTheme();
     this.router.navigate(['/']);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 3000,
+    });
   }
 
 }

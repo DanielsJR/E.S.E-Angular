@@ -31,17 +31,19 @@
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let user">
 
-        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()" matTooltip="Detalles">
+
+        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()">
           <mat-icon>visibility</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()" matTooltip="Editar">
+        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()">
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()" matTooltip="Borrar">
+        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()">
           <mat-icon>delete</mat-icon>
         </button>
+
 
       </mat-cell>
     </ng-container>

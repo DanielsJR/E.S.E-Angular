@@ -1,13 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
-
 /*MATERIAL DESIGN*/
 
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 @import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
-
-
 html,
 body,
 mat-sidenav-container {
@@ -17,7 +14,6 @@ mat-sidenav-container {
     height: 100%;
     overflow: hidden;
 }
-
 
 /*mat-toolbar */
 
@@ -38,10 +34,12 @@ mat-sidenav-container {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
 
-.home img {
-    margin-left: 45px;
+#imgHome {
+    position: relative;
+    left:50px;
     height: 40px;
 }
+
 
 .spacer-c {
     flex: .5 1 auto;
@@ -51,22 +49,20 @@ mat-sidenav-container {
     flex: 1 1 auto;
 }
 
-
 /*mat-toolbar */
-
 
 /*mat-sidenav*/
 
 .sidenav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
-    width: 260px;
+    width: 300px;
 }
 
 .side-toolbar {
     position: fixed !important;
     top: 64px;
     left: 0;
-    width: 260px;
+    width: 300px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
 
@@ -93,19 +89,15 @@ mat-sidenav-container {
     top: 128px;
     padding: 0;
     margin: 0;
- }
+}
 
 .content:hover {
     overflow-y: overlay;
- }
-
+}
 
 /*mat-sidenav*/
 
-
 /*MATERIAL dialog*/
-
-
 
 .myDialog .mat-dialog-container {
     padding: 0;
@@ -118,24 +110,26 @@ mat-sidenav-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-content: space-between;
 }
 
-.myDialog .mat-dialog-content > mat-form-field {
-    flex-basis: 200px
+.myDialog .mat-dialog-content>mat-form-field {
+    flex-basis: 200px;
+    margin: 0 10px;
 }
 
-.myDialog  .mat-dialog-actions {
-    margin-bottom: 0px !important;
-}    
+.myDialog .mat-dialog-actions {
+    --margin-bottom: 0px !important;
+    margin: 0;
+    padding: 0;
+}
 
 /*MATERIAL dialog*/
 
-
 /*scrollbar */
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 11px;
 }
 
@@ -155,10 +149,4 @@ mat-sidenav-container {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
 }
 
-
 /*scrollbar */
-
-
-
-
-

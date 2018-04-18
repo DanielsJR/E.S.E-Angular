@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
@@ -10,6 +10,10 @@ import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../models/communes';
 import { GENDERS } from '../../../models/genders';
+import { FileInput } from '../../../shared/input-file/file-input';
+import { InputFileComponent } from '../../../shared/input-file/input-file.component';
+import { FileValidators } from '../../../shared/input-file/file-validators';
+
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -23,6 +27,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     editForm: FormGroup;
     obj: User;
     uriRole: string;
+    privilege: string;
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
     genders = GENDERS;
@@ -34,23 +39,25 @@ export class GetUsersDialogRefComponent implements OnInit {
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
-        private formBuilder: FormBuilder,
-        public snackBar: MatSnackBar
+        private formBuilder: FormBuilder
     ) {
         this.obj = data.obj;
         this.uriRole = data.uriRole;
+        this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
     }
+
 
 
     ngOnInit(): void {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
-  
+        console.log('this.privilege:' + this.privilege);
+
     }
 
     convertDate(birthDay: any) {
-       return (this.obj.birthday != null) ? birthDay = moment(this.obj.birthday, 'DD/MM/YYYY'):null;
+        return (this.obj.birthday != null) ? birthDay = moment(this.obj.birthday, 'DD/MM/YYYY') : null;
     }
 
     compareByViewValue(a1: any, a2: any) {
@@ -58,11 +65,6 @@ export class GetUsersDialogRefComponent implements OnInit {
         return a1 && a2 && a1 === a2;
     }
 
-    openSnackBar(message: string, action: string) {
-        this.snackBar.open(message, action, {
-            duration: 2000,
-        });
-    }
 
     buildForm() {
         this.createForm = this.formBuilder.group({
@@ -73,14 +75,15 @@ export class GetUsersDialogRefComponent implements OnInit {
             dni: [],
             birthday: [],
             gender: [],
+            avatar: [{ value: undefined, disabled: false }, FileValidators.maxContentSize(1000000)],
             mobile: [],
             email: [],
             address: [],
             commune: [],
             //roles: [this.obj.roles]
         });
-        
-    
+
+
         this.editForm = this.formBuilder.group({
             id: [this.obj.id],
             username: [this.obj.username, Validators.required],
@@ -88,25 +91,24 @@ export class GetUsersDialogRefComponent implements OnInit {
             firstName: [this.obj.firstName],
             lastName: [this.obj.lastName],
             dni: [this.obj.dni],
-            birthday: [(this.obj.birthday != null) ? moment(this.obj.birthday, 'DD/MM/YYYY'):null],
+            birthday: [(this.obj.birthday != null) ? moment(this.obj.birthday, 'DD/MM/YYYY') : null],
             gender: [this.obj.gender],
+            avatar: [this.obj.avatar],
             mobile: [this.obj.mobile],
             email: [this.obj.email],
             address: [this.obj.address],
             commune: [this.obj.commune],
-           // roles: [this.obj.roles]
+            // roles: [this.obj.roles]
 
         });
 
-       
-            
-        
     }
 
-    // getters create for errors messages
+    // getters create for errors messages template
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
     get cEmail() { return this.createForm.get('email'); }
+    get cAvatar() { return this.createForm.get('avatar'); }
     // getters edit
     //  get eUserName() { return this.createForm.get('userName'); }
 
@@ -125,10 +127,11 @@ export class GetUsersDialogRefComponent implements OnInit {
 
 
     create(): void {
-        this.createForm.value.username = (this.createForm.value.firstName +' '+ this.createForm.value.lastName).replace(/ /g, '_');
+        this.createForm.value.username = (this.createForm.value.firstName + ' ' + this.createForm.value.lastName).replace(/ /g, '_');
         this.createForm.value.password = this.createForm.value.firstName + '1@';
         this.createForm.value.birthday = (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
         this.obj = this.createForm.value;
+        console.log('avatar fileNames... ' + this.obj.avatar.fileNames);
         console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
@@ -148,7 +151,7 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     save(): void {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
-        this.editForm.value.gender = (this.editForm.value.gender != null) ?  this.editForm.value.gender.toUpperCase() : null;
+        this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
         console.log('saving... ' + JSON.stringify(this.obj));

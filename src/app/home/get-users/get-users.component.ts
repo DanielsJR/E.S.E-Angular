@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatSnackBar } from '@angular/material';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatSnackBar, MatButton } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
 import { User } from '../../models/user';
 import { GetUsersDialogRefComponent } from './get-users-dialog-ref/get-users-dialog-ref.component';
@@ -10,7 +9,6 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { ManagerStoreService } from '../../services/manger-store.service';
 import { TeacherStoreService } from '../../services/teacher-store.service';
 import { StudentStoreService } from '../../services/student-store.service';
-
 
 @Component({
   selector: 'nx-get-users',
@@ -34,14 +32,13 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   styleClasses: {};
   @Input() uriRole;
 
+
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService,
     private studentStoreService: StudentStoreService,
     private dialogService: DialogService,
     private localstorage: LocalStorageService,
-    public snackBar: MatSnackBar) {
-
-  }
+    public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     console.log('OnInit called');
@@ -49,11 +46,10 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     this.dialogService.uriRole = this.uriRole;
     this.dataSource = new MatTableDataSource();
 
-    
 
     if (this.uriRole === URI_MANAGERS) {
-      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
-      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
+      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.managerStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
@@ -64,8 +60,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       );
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
-      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
+      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.teacherStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
@@ -75,8 +71,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       }
       );
     } else if (this.uriRole === URI_STUDENTS) {
-      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message,'info')) );
-      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error,'error')) );
+      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.studentStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store clean...getting users');
@@ -115,32 +111,32 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
+ private setDialogService(): void {
+    this.dialogService.obj = this.user;
+    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+  }
 
   openDialogDetail(user: User): void {
     this.user = user;
-    this.dialogService.obj = this.user;
-    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+    this.setDialogService();
     this.dialogService.openDialogDetail();
   }
 
   openDialogCreate(): void {
     this.user = new User();
-    this.dialogService.obj = this.user;
-    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+    this.setDialogService();
     this.dialogService.openDialogCreate();
   }
 
   openDialogEdit(user: User): void {
     this.user = user;
-    this.dialogService.obj = this.user;
-    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+    this.setDialogService();
     this.dialogService.openDialogEdit();
   }
 
   openDialogDelete(user: User): void {
     this.user = user;
-    this.dialogService.obj = this.user;
-    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+    this.setDialogService();
     this.dialogService.openDialogDelete();
   }
 

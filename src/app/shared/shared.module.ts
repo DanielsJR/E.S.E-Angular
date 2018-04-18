@@ -1,5 +1,4 @@
 import { FullScreenModule } from './full-screen/full-screen.module';
-import { ThemePickerModule } from './theme-picker/theme-picker.module';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -7,6 +6,10 @@ import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
 import { FullscreenDirective } from './directives/fullscreen.directive';
 import { LogoModule } from './logo/logo.module';
+import { InputFileComponent } from './input-file/input-file.component';
+import { ThemePickerComponent } from './theme-picker/theme-picker.component';
+import { ThemePickerModule } from './theme-picker/theme-picker.module';
+import { ByteFormatPipe } from './input-file/byte-format.pipe';
 
 
 @NgModule({
@@ -17,19 +20,23 @@ import { LogoModule } from './logo/logo.module';
   declarations: [
     ScrollerDirective,
     FullscreenDirective,
-
+    InputFileComponent,
+    ByteFormatPipe,
   ],
+
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ThemePickerModule,
+    InputFileComponent,
+    ByteFormatPipe,
     FullScreenModule,
     LogoModule,
     MaterialModule,
+    InputFileComponent,
     ScrollerDirective,
     FullscreenDirective,
-
   ]
 })
 export class SharedModule { }

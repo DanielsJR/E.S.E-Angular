@@ -1,5 +1,6 @@
 import { Directive, HostListener, Inject, Output, ElementRef, EventEmitter } from '@angular/core';
 
+// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @Directive({
     selector: '[nxFullscreen]'
 })

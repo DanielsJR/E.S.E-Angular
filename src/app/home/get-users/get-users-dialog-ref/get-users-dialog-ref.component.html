@@ -5,32 +5,23 @@
         <h1 mat-dialog-title>Detalles de Usuario</h1>
     </mat-toolbar>
 
+    <mat-list>
+        <mat-list-item>
+            <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+            <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+            <p matLine>
+                <span>{{obj.roles}}</span>
+            </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    </mat-list>
+
     <mat-dialog-content>
-        <mat-form-field>
-            <input matInput [(ngModel)]="obj.id" disabled>
-            <mat-placeholder>
-                <i class="material-icons app-input-icon">title</i>Id
-            </mat-placeholder>
-        </mat-form-field>
 
         <mat-form-field>
             <input matInput [(ngModel)]="obj.username" disabled>
             <mat-placeholder>
                 <i class="material-icons app-input-icon">view_column</i>Nombre de usuario
-            </mat-placeholder>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput [(ngModel)]="obj.firstName" disabled>
-            <mat-placeholder>
-                <i class="material-icons app-input-icon">view_column</i>Nombres
-            </mat-placeholder>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput [(ngModel)]="obj.lastName" disabled>
-            <mat-placeholder>
-                <i class="material-icons app-input-icon">view_column</i>Apellidos
             </mat-placeholder>
         </mat-form-field>
 
@@ -83,26 +74,18 @@
             </mat-placeholder>
         </mat-form-field>
 
-        <mat-form-field>
-            <input matInput [(ngModel)]="obj.roles" disabled>
-            <mat-placeholder>
-                <i class="material-icons app-input-icon">description</i>Roles
-            </mat-placeholder>
-        </mat-form-field>
-
     </mat-dialog-content>
 
-    <mat-toolbar>
-        <button button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <span class="spacer-r"></span>
-        <mat-dialog-actions>
+    <mat-dialog-actions>
+        <mat-toolbar>
+            <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <span class="spacer-r"></span>
             <button type="button" mat-raised-button color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
             <button type="submit" mat-raised-button color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
-        </mat-dialog-actions>
-    </mat-toolbar>
-
+        </mat-toolbar>
+    </mat-dialog-actions>
 </div>
 
 <div *ngIf="data.type === 'create'">
@@ -111,13 +94,24 @@
         <mat-toolbar color="primary">
             <img alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
             <span class="spacer-r"></span>
-            <h1 mat-dialog-title>Agregar Usuario</h1>
+            <h1 mat-dialog-title>Agregar {{privilege}}</h1>
         </mat-toolbar>
+
+        <mat-list>
+            <mat-list-item>
+                <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+                <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+                <p matLine>
+                    <span>{{obj.roles}}</span>
+                </p>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
 
         <mat-dialog-content>
 
             <mat-form-field>
-                <input matInput tabindex="1" formControlName="firstName" required>
+                <input matInput formControlName="firstName" required>
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Nombres
                 </mat-placeholder>
@@ -126,7 +120,7 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="lastName" required>
+                <input matInput formControlName="lastName" required>
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Apellidos
                 </mat-placeholder>
@@ -135,14 +129,14 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="dni">
+                <input matInput formControlName="dni">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>RUT
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput [matDatepicker]="picker" tabindex="4" formControlName="birthday">
+                <input matInput [matDatepicker]="picker" formControlName="birthday">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Fecha de Nacimiento
                 </mat-placeholder>
@@ -151,7 +145,7 @@
             </mat-form-field>
 
             <mat-form-field>
-                <mat-select tabindex="5" formControlName="gender">
+                <mat-select formControlName="gender">
                     <mat-option *ngFor="let gender of genders" [value]="gender.value">
                         {{ gender.viewValue }}
                     </mat-option>
@@ -161,8 +155,20 @@
                 </mat-placeholder>
             </mat-form-field>
 
+            <mat-form-field>
+                <app-input-file formControlName="avatar"></app-input-file>
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Avatar
+                </mat-placeholder>
+                <mat-icon matSuffix>folder</mat-icon>
+                <mat-error *ngIf="cAvatar.hasError('maxContentSize')">
+                    El tamaño total no debe exceder {{cAvatar?.getError('maxContentSize').maxSize | byteFormat}}
+                    ({{cAvatar?.getError('maxContentSize').actualSize | byteFormat}}).
+                  </mat-error>
+              </mat-form-field>
+
             <mat-form-field hintLabel="9 numeros">
-                <input matInput tabindex="6" formControlName="mobile" #input maxlength="9">
+                <input matInput formControlName="mobile" #input maxlength="9">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">phone</i>Teléfono
                 </mat-placeholder>
@@ -170,21 +176,21 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="7" formControlName="email">
+                <input matInput formControlName="email">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Email
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="8" formControlName="address">
+                <input matInput formControlName="address">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Dirección
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <mat-select tabindex="9" formControlName="commune">
+                <mat-select formControlName="commune">
                     <mat-option *ngFor="let commune of communes" [value]="commune.value">
                         {{ commune.viewValue }}
                     </mat-option>
@@ -194,19 +200,17 @@
                 </mat-placeholder>
             </mat-form-field>
 
-
         </mat-dialog-content>
 
-        <mat-toolbar>
-            <button button type="button" mat-mini-fab color="primary" tabindex="10" (click)="cancel()" matTooltip="volver">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <span class="spacer-r"></span>
-            <mat-dialog-actions>
-                <button type="submit" mat-raised-button color="accent" tabindex="11" [disabled]="!createForm.valid">Agregar</button>
-            </mat-dialog-actions>
-        </mat-toolbar>
-
+        <mat-dialog-actions>
+            <mat-toolbar>
+                <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <span class="spacer-r"></span>
+                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!createForm.valid">Agregar</button>
+            </mat-toolbar>
+        </mat-dialog-actions>
     </form>
 </div>
 
@@ -219,45 +223,48 @@
             <h1 mat-dialog-title>Editar Usuario</h1>
         </mat-toolbar>
 
+        <mat-list>
+            <mat-list-item>
+                <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+                <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+                <p matLine>
+                    <span>{{obj.roles}}</span>
+                </p>
+            </mat-list-item>
+        </mat-list>
+
         <mat-dialog-content>
 
             <mat-form-field>
-                <input matInput value={{obj.id}} disabled>
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">title</i>Id
-                </mat-placeholder>
-            </mat-form-field>
-
-            <mat-form-field>
-                <input matInput tabindex="1" formControlName="username">
+                <input matInput formControlName="username">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Nombre de Usuario
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="2" formControlName="firstName">
+                <input matInput formControlName="firstName">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Nombres
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="3" formControlName="lastName">
+                <input matInput formControlName="lastName">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Apellidos
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="4" formControlName="dni">
+                <input matInput formControlName="dni">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">person</i>RUT
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput [matDatepicker]="picker" tabindex="5" formControlName="birthday">
+                <input matInput [matDatepicker]="picker" formControlName="birthday">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">person</i>Fecha de Nacimiento
                 </mat-placeholder>
@@ -266,7 +273,7 @@
             </mat-form-field>
 
             <mat-form-field>
-                <mat-select tabindex="6" formControlName="gender" [compareWith]="compareFn">
+                <mat-select formControlName="gender" [compareWith]="compareFn">
                     <mat-option *ngFor="let gender of genders" [value]="gender.viewValue">
                         {{ gender.viewValue }}
                     </mat-option>
@@ -277,28 +284,36 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="7" formControlName="mobile">
+                <app-input-file formControlName="avatar"></app-input-file>
+                <mat-placeholder>
+                    <i class="material-icons app-input-icon">view_column</i>Avatar
+                </mat-placeholder>
+                <mat-icon matSuffix>folder</mat-icon>
+              </mat-form-field>
+
+            <mat-form-field>
+                <input matInput formControlName="mobile">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Telefóno
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="8" formControlName="email">
+                <input matInput formControlName="email">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">description</i>Email
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput tabindex="9" formControlName="address">
+                <input matInput formControlName="address">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">description</i>Dirección
                 </mat-placeholder>
             </mat-form-field>
 
             <mat-form-field>
-                <mat-select tabindex="10" formControlName="commune" [compareWith]="compareFn">
+                <mat-select formControlName="commune" [compareWith]="compareFn">
                     <mat-option *ngFor="let commune of communes" [value]="commune.viewValue">
                         {{ commune.viewValue }}
                     </mat-option>
@@ -310,16 +325,15 @@
 
         </mat-dialog-content>
 
-        <mat-toolbar>
-            <button button type="button" mat-mini-fab color="primary" tabindex="11" (click)="cancel()" matTooltip="volver">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <span class="spacer-r"></span>
-            <mat-dialog-actions>
-                <button type="submit" mat-raised-button color="accent" tabindex="12" [disabled]="!editForm.valid">Guardar</button>
-            </mat-dialog-actions>
-        </mat-toolbar>
-
+        <mat-dialog-actions>
+            <mat-toolbar>
+                <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <span class="spacer-r"></span>
+                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editForm.valid">Guardar</button>
+            </mat-toolbar>
+        </mat-dialog-actions>
     </form>
 </div>
 
@@ -329,6 +343,17 @@
         <span class="spacer-r"></span>
         <h1 mat-dialog-title>Borrar Usuario</h1>
     </mat-toolbar>
+
+    <mat-list>
+        <mat-list-item>
+            <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+            <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+            <p matLine>
+                <span>{{obj.roles}}</span>
+            </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    </mat-list>
 
     <mat-dialog-content>
 
@@ -341,13 +366,13 @@
 
     </mat-dialog-content>
 
-    <mat-toolbar>
-        <button button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <span class="spacer-r"></span>
-        <mat-dialog-actions>
+    <mat-dialog-actions>
+        <mat-toolbar>
+            <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <span class="spacer-r"></span>
             <button mat-raised-button color="warn" (click)="delete()" tabindex="2">Borrar</button>
-        </mat-dialog-actions>
-    </mat-toolbar>
+        </mat-toolbar>
+    </mat-dialog-actions>
 </div>
