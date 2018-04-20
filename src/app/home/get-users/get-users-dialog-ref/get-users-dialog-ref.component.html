@@ -7,7 +7,7 @@
 
     <mat-list>
         <mat-list-item>
-            <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)" alt="{{privilege}}">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span>{{obj.roles}}</span>
@@ -99,10 +99,10 @@
 
         <mat-list>
             <mat-list-item>
-                <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+                <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
                 <p matLine>
-                    <span>{{obj.roles}}</span>
+                    <span>{{privilege | uppercase}}</span>
                 </p>
             </mat-list-item>
             <mat-divider></mat-divider>
@@ -155,17 +155,11 @@
                 </mat-placeholder>
             </mat-form-field>
 
-            <mat-form-field>
-                <app-input-file formControlName="avatar"></app-input-file>
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Avatar
-                </mat-placeholder>
-                <mat-icon matSuffix>folder</mat-icon>
-                <mat-error *ngIf="cAvatar.hasError('maxContentSize')">
-                    El tamaño total no debe exceder {{cAvatar?.getError('maxContentSize').maxSize | byteFormat}}
-                    ({{cAvatar?.getError('maxContentSize').actualSize | byteFormat}}).
-                  </mat-error>
-              </mat-form-field>
+
+
+            <label for="avatar">Avatar</label>
+            <input type="file" id="avatar" (change)="onFileChange($event)">
+           
 
             <mat-form-field hintLabel="9 numeros">
                 <input matInput formControlName="mobile" #input maxlength="9">
@@ -225,7 +219,7 @@
 
         <mat-list>
             <mat-list-item>
-                <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)" alt="{{privilege}}">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
                 <p matLine>
                     <span>{{obj.roles}}</span>
@@ -284,14 +278,6 @@
             </mat-form-field>
 
             <mat-form-field>
-                <app-input-file formControlName="avatar"></app-input-file>
-                <mat-placeholder>
-                    <i class="material-icons app-input-icon">view_column</i>Avatar
-                </mat-placeholder>
-                <mat-icon matSuffix>folder</mat-icon>
-              </mat-form-field>
-
-            <mat-form-field>
                 <input matInput formControlName="mobile">
                 <mat-placeholder>
                     <i class="material-icons app-input-icon">view_column</i>Telefóno
@@ -346,7 +332,7 @@
 
     <mat-list>
         <mat-list-item>
-            <img matListAvatar src="assets/images/users/{{privilege}}.png" alt="{{privilege}}">
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)" alt="{{privilege}}">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span>{{obj.roles}}</span>

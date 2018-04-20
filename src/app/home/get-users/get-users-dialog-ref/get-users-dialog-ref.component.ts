@@ -13,6 +13,7 @@ import { GENDERS } from '../../../models/genders';
 import { FileInput } from '../../../shared/input-file/file-input';
 import { InputFileComponent } from '../../../shared/input-file/input-file.component';
 import { FileValidators } from '../../../shared/input-file/file-validators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -33,14 +34,13 @@ export class GetUsersDialogRefComponent implements OnInit {
     genders = GENDERS;
 
 
-    constructor(
-        public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
+    constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
-        private formBuilder: FormBuilder
-    ) {
+        private formBuilder: FormBuilder, public sanitizer: DomSanitizer) {
+
         this.obj = data.obj;
         this.uriRole = data.uriRole;
         this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
@@ -75,7 +75,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             dni: [],
             birthday: [],
             gender: [],
-            avatar: [{ value: undefined, disabled: false }, FileValidators.maxContentSize(1000000)],
+            avatar: [],
             mobile: [],
             email: [],
             address: [],
@@ -102,6 +102,21 @@ export class GetUsersDialogRefComponent implements OnInit {
 
         });
 
+    }
+
+    onFileChange(event) {
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let file = event.target.files[0];
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                this.createForm.get('avatar').setValue({
+                    name: file.name,
+                    type: file.type,
+                    data: reader.result.split(',')[1]
+                })
+            };
+        }
     }
 
     // getters create for errors messages template
@@ -131,7 +146,6 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.createForm.value.password = this.createForm.value.firstName + '1@';
         this.createForm.value.birthday = (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
         this.obj = this.createForm.value;
-        console.log('avatar fileNames... ' + this.obj.avatar.fileNames);
         console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));

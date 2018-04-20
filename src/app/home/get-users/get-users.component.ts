@@ -10,6 +10,8 @@ import { ManagerStoreService } from '../../services/manger-store.service';
 import { TeacherStoreService } from '../../services/teacher-store.service';
 import { StudentStoreService } from '../../services/student-store.service';
 
+import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: 'nx-get-users',
   templateUrl: './get-users.component.html',
@@ -38,7 +40,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     private studentStoreService: StudentStoreService,
     private dialogService: DialogService,
     private localstorage: LocalStorageService,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     console.log('OnInit called');

@@ -8,6 +8,7 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { UserBackendService } from '../services/user-backend.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton, MatSnackBar } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   templateUrl: './home.component.html',
@@ -39,7 +40,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router, private loginService: LoginService,
     private userBackendService: UserBackendService, private localStorageService: LocalStorageService,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, public sanitizer: DomSanitizer) { }
 
   ngAfterViewInit() {
     this.sidenavSettings.openedChange.subscribe(() => {

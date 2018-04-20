@@ -24,7 +24,16 @@
 
     <ng-container matColumnDef="username">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-      <mat-cell *matCellDef="let user"> {{user.username}}</mat-cell>
+      <mat-cell *matCellDef="let user">
+
+          <mat-list style="flex-grow: 8">
+              <mat-list-item>
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)" alt="{{user.username}}">
+                <h3 matLine>  {{user.username}} </h3>
+              </mat-list-item>
+            </mat-list>
+     
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="crud">
