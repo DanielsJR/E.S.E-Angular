@@ -113,7 +113,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
- private setDialogService(): void {
+  private setDialogService(): void {
     this.dialogService.obj = this.user;
     this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
   }
@@ -151,7 +151,12 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       'fila-dark': this.isDark
     };
   }
-
+  
+  shortName(user: User): string {
+    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName; 
+    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName; 
+        return n1 + ' ' + n2;
+  }
 }
 
 export class MatPaginatorIntlSpa extends MatPaginatorIntl {

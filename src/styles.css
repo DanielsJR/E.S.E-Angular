@@ -36,10 +36,9 @@ mat-sidenav-container {
 
 #imgHome {
     position: relative;
-    left:50px;
+    left: 50px;
     height: 40px;
 }
-
 
 .spacer-c {
     flex: .5 1 auto;
@@ -104,9 +103,19 @@ mat-sidenav-container {
     overflow: hidden;
 }
 
-.myDialog .mat-dialog-content {
-    padding: 20px 30px;
+.myDialog mat-dialog-content {
+    overflow: hidden;
+    padding: 10px 30px;
     margin: 0;
+}
+
+.mat-tab-body-content {
+    overflow: hidden; 
+}
+
+.myDialog .tab-content {
+    padding: 16px 0;
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -114,13 +123,13 @@ mat-sidenav-container {
     align-content: space-between;
 }
 
-.myDialog .mat-dialog-content>mat-form-field {
-    flex-basis: 200px;
+.myDialog mat-dialog-content mat-form-field {
+    --flex-basis: 600px;
+    width: 45%;
     margin: 0 10px;
 }
 
-.myDialog .mat-dialog-actions {
-    --margin-bottom: 0px !important;
+.myDialog mat-dialog-actions {
     margin: 0;
     padding: 0;
 }

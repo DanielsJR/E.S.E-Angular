@@ -28,7 +28,7 @@
                 <mat-list style="flex-grow: 8">
                     <mat-list-item>
                         <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)" alt="{{privilege | lowercase}}">
-                        <h3 matLine> {{user?.firstName}} </h3>
+                        <h3 *ngIf="user" matLine> {{shortName(user)}} </h3>
                         <p matLine>
                             <span>{{user?.roles}}</span>
                         </p>

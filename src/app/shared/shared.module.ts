@@ -6,10 +6,8 @@ import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
 import { FullscreenDirective } from './directives/fullscreen.directive';
 import { LogoModule } from './logo/logo.module';
-import { InputFileComponent } from './input-file/input-file.component';
 import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { ThemePickerModule } from './theme-picker/theme-picker.module';
-import { ByteFormatPipe } from './input-file/byte-format.pipe';
 
 
 @NgModule({
@@ -19,9 +17,7 @@ import { ByteFormatPipe } from './input-file/byte-format.pipe';
 
   declarations: [
     ScrollerDirective,
-    FullscreenDirective,
-    InputFileComponent,
-    ByteFormatPipe,
+    FullscreenDirective
   ],
 
   exports: [
@@ -29,12 +25,9 @@ import { ByteFormatPipe } from './input-file/byte-format.pipe';
     FormsModule,
     ReactiveFormsModule,
     ThemePickerModule,
-    InputFileComponent,
-    ByteFormatPipe,
     FullScreenModule,
     LogoModule,
     MaterialModule,
-    InputFileComponent,
     ScrollerDirective,
     FullscreenDirective,
   ]

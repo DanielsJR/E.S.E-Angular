@@ -10,9 +10,6 @@ import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../models/communes';
 import { GENDERS } from '../../../models/genders';
-import { FileInput } from '../../../shared/input-file/file-input';
-import { InputFileComponent } from '../../../shared/input-file/input-file.component';
-import { FileValidators } from '../../../shared/input-file/file-validators';
 import { DomSanitizer } from '@angular/platform-browser';
 
 
@@ -32,6 +29,9 @@ export class GetUsersDialogRefComponent implements OnInit {
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
     genders = GENDERS;
+
+    files: File | FileList;
+ 
 
 
     constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
@@ -104,20 +104,42 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     }
 
-    onFileChange(event) {
-        let reader = new FileReader();
-        if (event.target.files && event.target.files.length > 0) {
-            let file = event.target.files[0];
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                this.createForm.get('avatar').setValue({
-                    name: file.name,
-                    type: file.type,
-                    data: reader.result.split(',')[1]
-                })
-            };
-        }
+
+    
+  selectEventCreate(files: FileList | File): void {
+    let reader = new FileReader();
+    if (files instanceof FileList) {
+      
+    } else {
+        reader.readAsDataURL(files);
+        reader.onload = () => {
+            this.createForm.get('avatar').setValue({
+                name: files.name,
+                type: files.type,
+                data: reader.result.split(',')[1]
+            })
+        };
     }
+  };
+
+  selectEventEdit(files: FileList | File): void {
+    let reader = new FileReader();
+    if (files instanceof FileList) {
+      
+    } else {
+        reader.readAsDataURL(files);
+        reader.onload = () => {
+            this.editForm.get('avatar').setValue({
+                name: files.name,
+                type: files.type,
+                data: reader.result.split(',')[1]
+            })
+        };
+    }
+  };
+
+
+
 
     // getters create for errors messages template
     get cFirstName() { return this.createForm.get('firstName'); }

@@ -69,12 +69,18 @@ export class HomeComponent implements OnInit {
     }
     this.userBackendService.getUserByToken(token, uriRole).subscribe(data => {
       this.user = data;
-      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.user.firstName : 'Bienvenido ' + this.user.firstName;
+      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user): 'Bienvenido ' + this.shortName(this.user);
       this.openSnackBar(this.welcome, 'info');
     },
       error => console.error('error getting the token ' + error));
 
 
+  }
+
+  shortName(user: User): string {
+    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName; 
+    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName; 
+        return n1 + ' ' + n2;
   }
 
 

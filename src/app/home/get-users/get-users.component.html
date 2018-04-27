@@ -29,7 +29,7 @@
           <mat-list style="flex-grow: 8">
               <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)" alt="{{user.username}}">
-                <h3 matLine>  {{user.username}} </h3>
+                <h3 matLine> {{shortName(user)}} </h3>
               </mat-list-item>
             </mat-list>
      
