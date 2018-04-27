@@ -1,11 +1,11 @@
 <div *ngIf="data.type === 'detail'">
     <mat-toolbar color="primary">
-        <img alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+        <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
         <h1 mat-dialog-title>Detalles de Usuario</h1>
     </mat-toolbar>
 
-    <mat-list>
+    <mat-list class="listSize"> 
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
                 alt="{{privilege}}">
@@ -20,7 +20,7 @@
     <mat-dialog-content>
 
         <mat-tab-group dynamicHeight="true">
-            <mat-tab label="Informacion Personal">
+            <mat-tab label="Información Personal">
                 <div class="tab-content">
                     <mat-form-field>
                         <input matInput [(ngModel)]="obj.username" disabled>
@@ -52,7 +52,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Informacion de Contacto">
+            <mat-tab label="Información de Contacto">
                 <div class="tab-content">
                     <mat-form-field>
                         <input matInput [(ngModel)]="obj.mobile" disabled>
@@ -104,12 +104,12 @@
     <form [formGroup]="createForm" (ngSubmit)="create()">
 
         <mat-toolbar color="primary">
-            <img alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+            <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
             <span class="spacer-r"></span>
             <h1 mat-dialog-title>Agregar {{privilege}}</h1>
         </mat-toolbar>
 
-        <mat-list>
+        <mat-list class="listSize">
             <mat-list-item>
                 <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
@@ -122,7 +122,7 @@
 
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
-                <mat-tab label="Informacion Personal">
+                <mat-tab label="Información Personal">
                     <div class="tab-content">
 
                         <mat-form-field>
@@ -175,7 +175,7 @@
 
                             <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" readonly>
                             <mat-placeholder>
-                                <i class="material-icons app-input-icon">view_column</i>Foto de Perfil"
+                                <i class="material-icons app-input-icon">view_column</i>Foto de Perfil
                             </mat-placeholder>
 
                             <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
@@ -192,7 +192,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Informacion de Contacto">
+                <mat-tab label="Información de Contacto">
                     <div class="tab-content">
 
                         <mat-form-field hintLabel="9 numeros">
@@ -249,12 +249,12 @@
     <form [formGroup]="editForm" (ngSubmit)="save()">
 
         <mat-toolbar color="primary">
-            <img alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+            <img  class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
             <span class="spacer-r"></span>
             <h1 mat-dialog-title>Editar Usuario</h1>
         </mat-toolbar>
 
-        <mat-list>
+        <mat-list class="listSize">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
                     alt="{{privilege}}">
@@ -268,7 +268,7 @@
 
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
-                <mat-tab label="Informacion Personal">
+                <mat-tab label="Información Personal">
                     <div class="tab-content">
 
                         <mat-form-field>
@@ -323,7 +323,7 @@
                             (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
                             <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" readonly>
                             <mat-placeholder>
-                                <i class="material-icons app-input-icon">view_column</i>Foto de Perfil"
+                                <i class="material-icons app-input-icon">view_column</i>Foto de Perfil
                             </mat-placeholder>
 
                             <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
@@ -339,7 +339,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Informacion de Contacto">
+                <mat-tab label="Información de Contacto">
                     <div class="tab-content">
 
                         <mat-form-field>
@@ -393,12 +393,12 @@
 
 <div *ngIf="data.type === 'delete'">
     <mat-toolbar color="primary">
-        <img alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+        <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
         <h1 mat-dialog-title>Borrar Usuario</h1>
     </mat-toolbar>
 
-    <mat-list>
+    <mat-list class="listSize">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
                 alt="{{privilege}}">

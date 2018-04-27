@@ -41,15 +41,15 @@
       <mat-cell *matCellDef="let user">
 
 
-        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()">
+        <button mat-icon-button color="primary" (click)="openDialog('detail', user); $event.stopPropagation()">
           <mat-icon>visibility</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()">
+        <button mat-icon-button color="accent" (click)="openDialog('edit', user); $event.stopPropagation()">
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()">
+        <button mat-icon-button color="warn" (click)="openDialog('delete', user); $event.stopPropagation()">
           <mat-icon>delete</mat-icon>
         </button>
 
@@ -58,7 +58,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="styleClasses" (click)="openDialogDetail(row)">
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="styleClasses" (click)="openDialog('detail', row)">
     </mat-row>
 
   </mat-table>
@@ -67,7 +67,7 @@
   </mat-paginator>
 
   <span class="add">
-    <button mat-fab (click)="openDialogCreate()" matTooltip="Agregar {{uriRole}}">
+    <button mat-fab (click)="openDialog('create')" matTooltip="Agregar {{uriRole}}">
       <mat-icon>person_add</mat-icon>
     </button>
   </span>

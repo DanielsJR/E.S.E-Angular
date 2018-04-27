@@ -15,8 +15,9 @@ mat-sidenav-container {
     overflow: hidden;
 }
 
-/*mat-toolbar */
 
+
+/*mat-toolbar */
 .toolbar1 {
     position: absolute;
     top: 0px;
@@ -47,11 +48,12 @@ mat-sidenav-container {
 .spacer-r {
     flex: 1 1 auto;
 }
-
 /*mat-toolbar */
 
-/*mat-sidenav*/
 
+
+
+/*mat-sidenav*/
 .sidenav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
     width: 300px;
@@ -93,29 +95,26 @@ mat-sidenav-container {
 .content:hover {
     overflow-y: overlay;
 }
-
 /*mat-sidenav*/
+
+
+
 
 /*MATERIAL dialog*/
 
-.myDialog .mat-dialog-container {
+.dialogService .mat-dialog-container {
     padding: 0;
-    overflow: hidden;
 }
 
-.myDialog mat-dialog-content {
-    overflow: hidden;
+.dialogService mat-dialog-content {
+    overflow-x: hidden;
     padding: 10px 30px;
     margin: 0;
 }
 
-.mat-tab-body-content {
-    overflow: hidden; 
-}
-
-.myDialog .tab-content {
+.dialogService .tab-content {
     padding: 16px 0;
-    overflow: hidden;
+    --overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -123,21 +122,21 @@ mat-sidenav-container {
     align-content: space-between;
 }
 
-.myDialog mat-dialog-content mat-form-field {
+.dialogService mat-dialog-content mat-form-field {
     --flex-basis: 600px;
     width: 45%;
     margin: 0 10px;
 }
 
-.myDialog mat-dialog-actions {
+.dialogService mat-dialog-actions {
     margin: 0;
     padding: 0;
 }
-
 /*MATERIAL dialog*/
 
-/*scrollbar */
 
+
+/*scrollbar */
 ::-webkit-scrollbar {
     width: 11px;
 }
@@ -157,5 +156,4 @@ mat-sidenav-container {
 ::-webkit-scrollbar-thumb:active {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
 }
-
 /*scrollbar */

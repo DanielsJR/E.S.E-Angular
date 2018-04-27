@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatSnackBar, MatButton } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatSnackBar, MatButton, MatDialogConfig } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
 import { User } from '../../models/user';
 import { GetUsersDialogRefComponent } from './get-users-dialog-ref/get-users-dialog-ref.component';
@@ -45,7 +45,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     console.log('OnInit called');
     console.log('uriRole:' + this.uriRole);
-    this.dialogService.uriRole = this.uriRole;
+    //this.dialogService.uriRole = this.uriRole;
     this.dataSource = new MatTableDataSource();
 
 
@@ -113,34 +113,29 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  private setDialogService(): void {
-    this.dialogService.obj = this.user;
-    this.dialogService.inputDialogRef = GetUsersDialogRefComponent;
+  openDialog(DialogType: string, user?: User): void {
+    let config = new MatDialogConfig();
+    config.data = {
+      model: (DialogType === 'create') ? this.user = new User() : user,
+      uriRole: this.uriRole,
+    };
+    config.panelClass = 'dialogService';
+    config.width = '700px';// (DialogType === 'delete') ? '500px' : '700px';
+    
+    if (DialogType === 'detail') {
+      this.dialogService.openDialogDetail(GetUsersDialogRefComponent, config);
+    } else if (DialogType === 'edit') {
+      this.dialogService.openDialogEdit(GetUsersDialogRefComponent, config);
+    } else if (DialogType === 'delete') {
+      this.dialogService.openDialogDelete(GetUsersDialogRefComponent, config);
+    } else if (DialogType === 'create') {
+      this.dialogService.openDialogCreate(GetUsersDialogRefComponent, config);
+    } else {
+      console.error('NO TYPE!!!');
+    }
+
   }
 
-  openDialogDetail(user: User): void {
-    this.user = user;
-    this.setDialogService();
-    this.dialogService.openDialogDetail();
-  }
-
-  openDialogCreate(): void {
-    this.user = new User();
-    this.setDialogService();
-    this.dialogService.openDialogCreate();
-  }
-
-  openDialogEdit(user: User): void {
-    this.user = user;
-    this.setDialogService();
-    this.dialogService.openDialogEdit();
-  }
-
-  openDialogDelete(user: User): void {
-    this.user = user;
-    this.setDialogService();
-    this.dialogService.openDialogDelete();
-  }
 
   setDarkClass() {
     // [ngClass]="{'fila': !isDark, 'fila-dark': isDark}" other way in the template
@@ -151,11 +146,11 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       'fila-dark': this.isDark
     };
   }
-  
+
   shortName(user: User): string {
-    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName; 
-    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName; 
-        return n1 + ' ' + n2;
+    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
+    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
+    return n1 + ' ' + n2;
   }
 }
 

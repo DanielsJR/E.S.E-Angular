@@ -2,7 +2,7 @@
     font-size: 16px;
 }
 
-img {
+.imgEse {
     height: 40px;
 }
 
@@ -10,3 +10,15 @@ span {
     color: darkgray;
 }
 
+.listSize {
+    padding-top: 0;
+}
+
+.listSize .mat-list-item {
+    height: 90px;
+}
+
+.listSize .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}

@@ -1,7 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
@@ -14,7 +13,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
-    // tslint:disable-next-line:component-selector
     templateUrl: './get-users-dialog-ref.component.html',
     styleUrls: ['./get-users-dialog-ref.component.css']
 })
@@ -29,10 +27,8 @@ export class GetUsersDialogRefComponent implements OnInit {
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
     genders = GENDERS;
-
     files: File | FileList;
  
-
 
     constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -41,19 +37,16 @@ export class GetUsersDialogRefComponent implements OnInit {
         private studentStoreService: StudentStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer) {
 
-        this.obj = data.obj;
+        this.obj = data.model;
         this.uriRole = data.uriRole;
         this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
     }
-
-
 
     ngOnInit(): void {
         this.buildForm();
         console.log('objDialogRef:' + JSON.stringify(this.obj.id));
         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
         console.log('this.privilege:' + this.privilege);
-
     }
 
     convertDate(birthDay: any) {
@@ -139,8 +132,6 @@ export class GetUsersDialogRefComponent implements OnInit {
   };
 
 
-
-
     // getters create for errors messages template
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
@@ -162,6 +153,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.dialogRef.close('delete');
     }
 
+    
 
     create(): void {
         this.createForm.value.username = (this.createForm.value.firstName + ' ' + this.createForm.value.lastName).replace(/ /g, '_');
