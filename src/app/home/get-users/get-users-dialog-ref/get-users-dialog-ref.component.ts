@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
@@ -10,6 +10,8 @@ import * as moment from 'moment';
 import { COMMUNNES } from '../../../models/communes';
 import { GENDERS } from '../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DialogService } from '../../../services/dialog.service';
+import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user-dialog-ref.component';
 
 
 @Component({
@@ -28,14 +30,15 @@ export class GetUsersDialogRefComponent implements OnInit {
     communes = COMMUNNES;
     genders = GENDERS;
     files: File | FileList;
- 
+
 
     constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
-        private formBuilder: FormBuilder, public sanitizer: DomSanitizer) {
+        private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
+        private dialogService: DialogService, ) {
 
         this.obj = data.model;
         this.uriRole = data.uriRole;
@@ -98,38 +101,38 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
 
-    
-  selectEventCreate(files: FileList | File): void {
-    let reader = new FileReader();
-    if (files instanceof FileList) {
-      
-    } else {
-        reader.readAsDataURL(files);
-        reader.onload = () => {
-            this.createForm.get('avatar').setValue({
-                name: files.name,
-                type: files.type,
-                data: reader.result.split(',')[1]
-            })
-        };
-    }
-  };
 
-  selectEventEdit(files: FileList | File): void {
-    let reader = new FileReader();
-    if (files instanceof FileList) {
-      
-    } else {
-        reader.readAsDataURL(files);
-        reader.onload = () => {
-            this.editForm.get('avatar').setValue({
-                name: files.name,
-                type: files.type,
-                data: reader.result.split(',')[1]
-            })
-        };
-    }
-  };
+    selectEventCreate(files: FileList | File): void {
+        let reader = new FileReader();
+        if (files instanceof FileList) {
+
+        } else {
+            reader.readAsDataURL(files);
+            reader.onload = () => {
+                this.createForm.get('avatar').setValue({
+                    name: files.name,
+                    type: files.type,
+                    data: reader.result.split(',')[1]
+                })
+            };
+        }
+    };
+
+    selectEventEdit(files: FileList | File): void {
+        let reader = new FileReader();
+        if (files instanceof FileList) {
+
+        } else {
+            reader.readAsDataURL(files);
+            reader.onload = () => {
+                this.editForm.get('avatar').setValue({
+                    name: files.name,
+                    type: files.type,
+                    data: reader.result.split(',')[1]
+                })
+            };
+        }
+    };
 
 
     // getters create for errors messages template
@@ -153,26 +156,24 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.dialogRef.close('delete');
     }
 
-    
-
     create(): void {
         this.createForm.value.username = (this.createForm.value.firstName + ' ' + this.createForm.value.lastName).replace(/ /g, '_');
         this.createForm.value.password = this.createForm.value.firstName + '1@';
         this.createForm.value.birthday = (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
         this.obj = this.createForm.value;
-        console.log('creating... ' + JSON.stringify(this.obj));
+      //  console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
+            this.managerStoreService.create(this.obj);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
             this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.managerStoreService.create(this.obj);
         } else if (this.uriRole === URI_TEACHERS) {
+            this.teacherStoreService.create(this.obj);
             this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('created'));
             this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.teacherStoreService.create(this.obj);
         } else if (this.uriRole === URI_STUDENTS) {
+            this.studentStoreService.create(this.obj);
             this.studentStoreService.success$.subscribe(() => this.dialogRef.close('created'));
             this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.studentStoreService.create(this.obj);
         }
 
     }
@@ -182,39 +183,51 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
-        console.log('saving... ' + JSON.stringify(this.obj));
+      //  console.log('saving... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
+            this.managerStoreService.update(this.obj);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
             this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.managerStoreService.update(this.obj);
         } else if (this.uriRole === URI_TEACHERS) {
+            this.teacherStoreService.update(this.obj);
             this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
             this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.teacherStoreService.update(this.obj);
         } else if (this.uriRole === URI_STUDENTS) {
+            this.studentStoreService.update(this.obj);
             this.studentStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
             this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.studentStoreService.update(this.obj);
         }
 
     }
 
     delete(): void {
-        console.log('deleting... ' + JSON.stringify(this.obj));
+      //  console.log('deleting... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
+            this.managerStoreService.delete(this.obj.id);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
             this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.managerStoreService.delete(this.obj.id);
         } else if (this.uriRole === URI_TEACHERS) {
+            this.teacherStoreService.delete(this.obj.id);
             this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
             this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.teacherStoreService.delete(this.obj.id);
         } else if (this.uriRole === URI_STUDENTS) {
+            this.studentStoreService.delete(this.obj.id);
             this.studentStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
             this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-            this.studentStoreService.delete(this.obj.id);
         }
 
     }
 
+    openDialog(DialogType: string, user?: User): void {
+        let config = new MatDialogConfig();
+        config.data = {
+            model: user,
+            uriRole: this.uriRole,
+        };
+        config.panelClass = 'dialogService';
+        config.width = 'auto';
+        config.height = 'auto';
+
+        this.dialogService.openDialogImage(ImageUserDialogRefComponent, config);
+    }
 }

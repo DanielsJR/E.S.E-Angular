@@ -7,11 +7,6 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class DialogService {
 
-  data: any = [];
-  inputDialogRef;
-  model;
-  uriRole: string;
-
   private closeSubject = <Subject<any>>new Subject();
   public readonly close$ = this.closeSubject.asObservable();
 
@@ -82,6 +77,19 @@ export class DialogService {
         console.error('ERROR!!!, could not create');
       } else if (result === 'created') {
         console.log('created!');
+      }
+    });
+
+  }
+
+  openDialogImage(ref, config: MatDialogConfig): void {
+    config.data.type = 'image';
+    const dialogRef = this.dialog.open(ref, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.closeSubject.next();
+      if (result === 'canceled') {
+        console.log('canceled!');
       }
     });
 

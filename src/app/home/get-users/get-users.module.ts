@@ -7,6 +7,7 @@ import { MatPaginatorIntl } from '@angular/material';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MatMomentDateModule} from '@angular/material-moment-adapter';
 import { CovalentFileModule } from '@covalent/core';
+import { ImageUserDialogRefComponent } from './image-user-dialog-ref/image-user-dialog-ref.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { CovalentFileModule } from '@covalent/core';
   declarations: [
     GetUsersComponent,
     GetUsersDialogRefComponent,
+    ImageUserDialogRefComponent,
     
   ],
 
@@ -33,6 +35,7 @@ import { CovalentFileModule } from '@covalent/core';
 
   entryComponents: [
     GetUsersDialogRefComponent,
+    ImageUserDialogRefComponent,
   ],
 
   exports: [

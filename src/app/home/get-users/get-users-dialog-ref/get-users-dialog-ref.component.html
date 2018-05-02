@@ -8,7 +8,7 @@
     <mat-list class="listSize"> 
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}">
+                alt="{{privilege}}" (click)="openDialog('image', obj)">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span>{{obj.roles}}</span>
@@ -111,7 +111,8 @@
 
         <mat-list class="listSize">
             <mat-list-item>
-                <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}">
+                <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}" 
+                (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
                 <p matLine>
                     <span>{{privilege | uppercase}}</span>
@@ -166,7 +167,7 @@
                                 </mat-option>
                             </mat-select>
                             <mat-placeholder>
-                                <i class="material-icons app-input-icon">view_column</i>Sexo
+                                <i class="material-icons app-input-icon">view_column</i>Genero
                             </mat-placeholder>
                         </mat-form-field>
 
@@ -257,7 +258,7 @@
         <mat-list class="listSize">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                    alt="{{privilege}}">
+                    alt="{{privilege}}" (click)="openDialog('image', obj)">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
                 <p matLine>
                     <span>{{obj.roles}}</span>
@@ -401,7 +402,7 @@
     <mat-list class="listSize">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}">
+                alt="{{privilege}}" (click)="openDialog('image', obj)">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span>{{obj.roles}}</span>
