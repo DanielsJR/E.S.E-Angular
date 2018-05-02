@@ -11,7 +11,8 @@ import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.
   imports: [
     SharedModule,
     AdminRoutingModule,
-    GetUsersModule
+    GetUsersModule,
+    
   ],
 
   declarations: [

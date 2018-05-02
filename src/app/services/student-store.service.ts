@@ -40,7 +40,7 @@ export class StudentStoreService {
                 } else {
                     this.dataStore.users = data;
                     this.usersSource.next(Object.assign({}, this.dataStore).users);
-                    this.successSubject.next('retrieve users ok');
+                  //  this.successSubject.next('retrieve users ok');
                 }
             }, error => {
                 console.error('error retrieving users, ' + error.message);
@@ -114,7 +114,7 @@ export class StudentStoreService {
                 }
 
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('success');
+               // this.successSubject.next('success');
             }, error => {
                 console.error(`could not load user, ${error.message}`);
                 this.errorSubject.next('could not load user');
@@ -128,7 +128,7 @@ export class StudentStoreService {
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('success');
+               // this.successSubject.next('success');
             }, error => {
                 console.error('error retrieving users' + error.message);
                 this.errorSubject.next('error retrieving users');

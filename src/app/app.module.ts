@@ -13,6 +13,8 @@ import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
 import { ManagerStoreService } from './services/manger-store.service';
 import { TeacherStoreService } from './services/teacher-store.service';
 import { StudentStoreService } from './services/student-store.service';
+import { NgProgressModule } from '@ngx-progressbar/core';
+import { NgProgressHttpModule } from '@ngx-progressbar/http';
 
 
 @NgModule({
@@ -24,7 +26,10 @@ import { StudentStoreService } from './services/student-store.service';
     WelcomeModule,
     LoginModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgProgressModule.forRoot(),
+    NgProgressHttpModule,
+       
   ],
 
   declarations: [
@@ -42,11 +47,11 @@ import { StudentStoreService } from './services/student-store.service';
     },
     ManagerStoreService,
     TeacherStoreService,
-    StudentStoreService
+    StudentStoreService,
   ],
 
   bootstrap: [
-    AppComponent
+    AppComponent,
   ],
 
 
