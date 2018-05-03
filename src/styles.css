@@ -1,10 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*MATERIAL DESIGN*/
-
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 @import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
+
+
 html,
 body,
 mat-sidenav-container {
@@ -135,6 +136,20 @@ mat-sidenav-container {
 /*MATERIAL dialog*/
 
 
+
+/*MAT icons*/
+
+button.mat-menu-item {
+    line-height: 24px !important;
+  }
+  a.mat-menu-item > mat-icon {
+    margin-bottom: 14px;
+  }
+  .mat-icon svg {
+    height: 24px;
+    width: 24px;
+  }
+  /*MAT icons*/
 
 /*scrollbar */
 ::-webkit-scrollbar {

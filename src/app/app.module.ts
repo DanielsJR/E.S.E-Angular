@@ -15,6 +15,8 @@ import { TeacherStoreService } from './services/teacher-store.service';
 import { StudentStoreService } from './services/student-store.service';
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import { NgProgressHttpModule } from '@ngx-progressbar/http';
     HttpClientModule,
     NgProgressModule.forRoot(),
     NgProgressHttpModule,
-       
+
+
   ],
 
   declarations: [
@@ -58,4 +61,7 @@ import { NgProgressHttpModule } from '@ngx-progressbar/http';
 })
 
 export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+  }
 }

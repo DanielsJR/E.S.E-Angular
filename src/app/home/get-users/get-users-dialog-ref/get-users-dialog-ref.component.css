@@ -6,7 +6,7 @@
     height: 40px;
 }
 
-span {
+.role-style {
     color: darkgray;
 }
 
@@ -28,10 +28,9 @@ span {
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
-  }
+}
 
 .mat-list-avatar:hover {
     opacity: 0.3;
-  }
-  
-  
+}
+

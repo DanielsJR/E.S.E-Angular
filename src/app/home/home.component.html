@@ -2,7 +2,7 @@
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
-
+  
         <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
             <mat-icon>menu</mat-icon>
         </button>
@@ -94,7 +94,7 @@
                 <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
 
                 <mat-list-item (click)="triggerUsers = !triggerUsers">
-                    <mat-icon matListIcon>person</mat-icon>
+                    <mat-icon matListIcon svgIcon="account-multiple"></mat-icon>
                     <h3 matLine>Usuarios</h3>
                     <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
                 </mat-list-item>

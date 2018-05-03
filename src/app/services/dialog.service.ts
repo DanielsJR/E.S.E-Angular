@@ -67,6 +67,7 @@ export class DialogService {
 
   openDialogCreate(ref, config: MatDialogConfig): void {
     config.data.type = 'create';
+    config.disableClose = true;
     const dialogRef = this.dialog.open(ref, config);
 
     dialogRef.afterClosed().subscribe(result => {

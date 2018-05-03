@@ -13,7 +13,7 @@
 
     <mat-chip-list>
       <mat-chip color="primary" selected="true">
-        <mat-icon>person</mat-icon>
+        <mat-icon svgIcon="account-multiple"></mat-icon>
         {{uriRole | uppercase}}
       </mat-chip>
     </mat-chip-list>
@@ -41,7 +41,7 @@
 
 
         <button mat-icon-button color="primary" (click)="openDialog('detail', user); $event.stopPropagation()">
-          <mat-icon>visibility</mat-icon>
+            <mat-icon>visibility</mat-icon>
         </button>
 
         <button mat-icon-button color="accent" (click)="openDialog('edit', user); $event.stopPropagation()">

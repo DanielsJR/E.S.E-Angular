@@ -12,6 +12,8 @@
         <mat-toolbar color="primary">
           <nx-logo [type]="'mat-mini-fab'"></nx-logo>
           <span class="spacer-r"></span>
+          <mat-icon svgIcon="login"></mat-icon>
+          <span>&nbsp;&nbsp;</span>
           <h1>Login</h1>
         </mat-toolbar>
 
@@ -22,7 +24,7 @@
           <mat-form-field>
             <input matInput type="text" formControlName="username">
             <mat-placeholder>
-              <mat-icon class="app-input-icon">face</mat-icon>Nombre de Usuario
+              <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de Usuario
             </mat-placeholder>
             <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
           </mat-form-field>
@@ -30,7 +32,7 @@
           <mat-form-field>
             <input matInput type="password" formControlName="password">
             <mat-placeholder>
-              <mat-icon class="app-input-icon">lock_open</mat-icon>Contraseña
+              <i class="mdi mdi-lock-open material-icons app-input-icon"></i>Contraseña
             </mat-placeholder>
             <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
           </mat-form-field>
