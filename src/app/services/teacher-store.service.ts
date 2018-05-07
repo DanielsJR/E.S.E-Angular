@@ -100,7 +100,7 @@ export class TeacherStoreService {
     }
 
 
-    getUserById(id: number) {
+    getUserById(id: string) {
         this.userBackendService
             .getUserById(id, this.uriRole)
             .subscribe(data => {

@@ -1,6 +1,6 @@
 <div *ngIf="data.type === 'detail'">
     <mat-toolbar color="primary">
-        <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+        <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
         <mat-icon svgIcon="account-card-details"></mat-icon>
         <span>&nbsp;&nbsp;</span>
@@ -10,7 +10,7 @@
     <mat-list class="listSize">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}" (click)="openDialog('image', obj)">
+                alt="{{privilege}}" (click)="openDialogImage(obj)">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span class="role-style">{{obj.roles}}</span>
@@ -93,7 +93,7 @@
     <mat-dialog-actions>
         <mat-toolbar>
             <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
-                <mat-icon>arrow_back</mat-icon>
+                    <mat-icon svgIcon="arrow-left"></mat-icon>
             </button>
             <span class="spacer-r"></span>
             <button type="button" mat-raised-button color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
@@ -106,7 +106,7 @@
     <form [formGroup]="createForm" (ngSubmit)="create()">
 
         <mat-toolbar color="primary">
-            <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+            <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
             <span class="spacer-r"></span>
             <mat-icon svgIcon="account-plus"></mat-icon>
             <span>&nbsp;&nbsp;</span>
@@ -178,13 +178,13 @@
                         <mat-form-field tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
                             (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
 
-                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" readonly>
+                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
                             <mat-placeholder>
                                 <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
                             </mat-placeholder>
 
                             <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
-                                <mat-icon>cancel</mat-icon>
+                                <mat-icon>close</mat-icon>
                             </button>
 
                             <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
@@ -241,7 +241,7 @@
         <mat-dialog-actions>
             <mat-toolbar>
                 <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
-                    <mat-icon>arrow_back</mat-icon>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
                 <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!createForm.valid">Agregar</button>
@@ -254,7 +254,7 @@
     <form [formGroup]="editForm" (ngSubmit)="save()">
 
         <mat-toolbar color="primary">
-            <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+            <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
             <span class="spacer-r"></span>
             <mat-icon svgIcon="account-edit"></mat-icon>
             <span>&nbsp;&nbsp;</span>
@@ -264,18 +264,30 @@
         <mat-list class="listSize">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                    alt="{{privilege}}" (click)="openDialog('image', obj)">
+                    alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
                 <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
                 <p matLine>
                     <span class="role-style">{{obj.roles}}</span>
                 </p>
+
+                <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
+                    <button mat-menu-item (click)="openDialogImage(obj)">
+                        <mat-icon svgIcon="eye"></mat-icon>
+                        <span> Ver Imagen </span>
+                    </button>
+                    <button mat-menu-item (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
+                        <mat-icon svgIcon="camera"></mat-icon>
+                        <span> Cambiar Imagen </span>
+                    </button>
+                </mat-menu>
+
             </mat-list-item>
             <mat-divider></mat-divider>
         </mat-list>
 
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
-                <mat-tab label="Información Personal">
+                <mat-tab label="Datos de Usuario">
                     <div class="tab-content">
 
                         <mat-form-field>
@@ -283,13 +295,50 @@
                             <mat-placeholder>
                                 <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de Usuario
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
+
+                        <mat-form-field tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+                            (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
+                            <mat-placeholder>
+                                <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
+                            </mat-placeholder>
+
+                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+
+                            <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
+                                (select)="selectEventEdit($event)">
+                                <mat-icon>folder</mat-icon>
+                                <span class="text-upper">Buscar...</span>
+                            </td-file-input>
+                        </mat-form-field>
+
+                        <mat-form-field>
+
+                            <button type="button" mat-raised-button color="warn" style="width: 100%" (click)="openDialogResetPass(obj)">
+                                <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
+                            </button>
+                            <input matInput hidden>
+                            <mat-hint>
+                                <strong>Esto cambiará la contraseña del usuario</strong>
+                            </mat-hint>
+                        </mat-form-field>
+
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Datos Personales">
+                    <div class="tab-content">
 
                         <mat-form-field>
                             <input matInput formControlName="firstName">
                             <mat-placeholder>
                                 <i class="mdi mdi-account material-icons app-input-icon"></i>Nombres
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -297,6 +346,7 @@
                             <mat-placeholder>
                                 <i class="mdi mdi-account-outline material-icons app-input-icon"></i>Apellidos
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -304,6 +354,7 @@
                             <mat-placeholder>
                                 <i class="mdi mdi-barcode material-icons app-input-icon"></i>RUT
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -326,35 +377,20 @@
                             </mat-placeholder>
                         </mat-form-field>
 
-                        <mat-form-field tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
-                            (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
-                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" readonly>
-                            <mat-placeholder>
-                                <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
-                            </mat-placeholder>
 
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-
-                            <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
-                                (select)="selectEventEdit($event)">
-                                <mat-icon>folder</mat-icon>
-                                <span class="text-upper">Buscar...</span>
-                            </td-file-input>
-                        </mat-form-field>
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Información de Contacto">
+                <mat-tab label="Datos de Contacto">
                     <div class="tab-content">
 
                         <mat-form-field>
-                            <input matInput formControlName="mobile" #mobileEdit maxlength="9">
+                            <input matInput [type]="tel" formControlName="mobile" #mobileEdit maxlength="9">
                             <mat-placeholder>
                                 <i class="mdi mdi-phone material-icons app-input-icon"></i>Telefóno
                             </mat-placeholder>
-                                                        <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+                            <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -362,6 +398,7 @@
                             <mat-placeholder>
                                 <i class="mdi mdi-email material-icons app-input-icon"></i>Email
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -369,6 +406,7 @@
                             <mat-placeholder>
                                 <i class="mdi mdi-account-location material-icons app-input-icon"></i>Dirección
                             </mat-placeholder>
+                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
                         </mat-form-field>
 
                         <mat-form-field>
@@ -390,7 +428,7 @@
         <mat-dialog-actions>
             <mat-toolbar>
                 <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
-                    <mat-icon>arrow_back</mat-icon>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
                 <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editForm.valid">Guardar</button>
@@ -401,7 +439,7 @@
 
 <div *ngIf="data.type === 'delete'">
     <mat-toolbar color="primary">
-        <img class="imgEse" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+        <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
         <mat-icon svgIcon="account-remove"></mat-icon>
         <span>&nbsp;&nbsp;</span>
@@ -411,7 +449,7 @@
     <mat-list class="listSize">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}" (click)="openDialog('image', obj)">
+                alt="{{privilege}}" (click)="openDialogImage(obj)">
             <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
             <p matLine>
                 <span class="role-style">{{obj.roles}}</span>
@@ -434,7 +472,7 @@
     <mat-dialog-actions>
         <mat-toolbar>
             <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
-                <mat-icon>arrow_back</mat-icon>
+                    <mat-icon svgIcon="arrow-left"></mat-icon>
             </button>
             <span class="spacer-r"></span>
             <button mat-raised-button color="warn" (click)="delete()" tabindex="2">Borrar</button>

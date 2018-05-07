@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*MATERIAL DESIGN*/
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 @import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
 
@@ -133,6 +133,8 @@ mat-sidenav-container {
     margin: 0;
     padding: 0;
 }
+
+
 /*MATERIAL dialog*/
 
 

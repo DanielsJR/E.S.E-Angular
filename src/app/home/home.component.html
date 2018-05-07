@@ -2,9 +2,9 @@
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
-  
-        <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
-            <mat-icon>menu</mat-icon>
+
+        <button type="button" mat-icon-button (click)="sidenavMenu.toggle(); menuUser = !menuUser">
+            <mat-icon svgIcon="backburger" [@tdRotate]="!menuUser"></mat-icon>
         </button>
 
         <img id="imgHome" alt="E.S.E" src="assets/images/logos/ese-logo.png">
@@ -13,9 +13,11 @@
         <nx-full-screen></nx-full-screen>
         <nx-theme-picker></nx-theme-picker>
 
-        <button type="button" mat-icon-button (click)="sidenavChat.toggle()" matTooltip="chat">
-            <mat-icon>chat</mat-icon>
-        </button>
+        <div matTooltip="chat">
+            <button type="button" mat-icon-button (click)="sidenavChat.toggle()">
+                <mat-icon svgIcon="message-text"></mat-icon>
+            </button>
+        </div>
     </mat-toolbar>
 
     <mat-sidenav-container id="container2">
@@ -38,18 +40,18 @@
                 <span class="spacer-r"></span>
                 <div matTooltip="opciones">
                     <button mat-icon-button [matMenuTriggerFor]="settings">
-                        <mat-icon>more_vert</mat-icon>
+                        <mat-icon svgIcon="dots-vertical"></mat-icon>
                     </button>
                 </div>
             </mat-toolbar>
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
                 <button mat-menu-item (click)="sidenavSettings.toggle()">
-                    <mat-icon> settings </mat-icon>
+                    <mat-icon svgIcon="account-settings-variant"></mat-icon>
                     <span> Preferencias </span>
                 </button>
                 <button mat-menu-item (click)="logout()">
-                    <mat-icon> power_settings_new </mat-icon>
+                    <mat-icon svgIcon="logout"></mat-icon>
                     <span> Salir </span>
                 </button>
             </mat-menu>
@@ -61,7 +63,7 @@
                 <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="side-toolbar">
                     <button mat-icon-button (click)="sidenavSettings.toggle()" #btnSettingsBack>
-                        <mat-icon> arrow_back </mat-icon>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-c"></span>
                     <h1>Preferencias</h1>
@@ -96,12 +98,11 @@
                 <mat-list-item (click)="triggerUsers = !triggerUsers">
                     <mat-icon matListIcon svgIcon="account-multiple"></mat-icon>
                     <h3 matLine>Usuarios</h3>
-                    <mat-icon [@tdRotate]="!triggerUsers">arrow_drop_down</mat-icon>
+                    <mat-icon [@tdRotate]="!triggerUsers" svgIcon="menu-down"></mat-icon>
                 </mat-list-item>
                 <div [style.overflow]="'hidden'" [@tdCollapse]="triggerUsers">
                     <nx-users-menu [privilege]='privilege' [roles]='roles'></nx-users-menu>
                 </div>
-
 
             </mat-nav-list>
 

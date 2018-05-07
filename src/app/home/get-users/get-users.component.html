@@ -5,7 +5,7 @@
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)">
       <mat-placeholder>
-        <mat-icon>search</mat-icon>Buscar
+          <i class="mdi mdi-magnify material-icons"></i>Buscar
       </mat-placeholder>
     </mat-form-field>
 
@@ -41,15 +41,15 @@
 
 
         <button mat-icon-button color="primary" (click)="openDialog('detail', user); $event.stopPropagation()">
-            <mat-icon>visibility</mat-icon>
+            <mat-icon svgIcon="eye"></mat-icon>
         </button>
 
         <button mat-icon-button color="accent" (click)="openDialog('edit', user); $event.stopPropagation()">
-          <mat-icon>edit</mat-icon>
+          <mat-icon svgIcon="pencil"></mat-icon>
         </button>
 
         <button mat-icon-button color="warn" (click)="openDialog('delete', user); $event.stopPropagation()">
-          <mat-icon>delete</mat-icon>
+          <mat-icon svgIcon="delete"></mat-icon>
         </button>
 
 
@@ -67,7 +67,7 @@
 
   <span class="add">
     <button mat-fab (click)="openDialog('create')" matTooltip="Agregar {{uriRole}}">
-      <mat-icon>person_add</mat-icon>
+      <mat-icon svgIcon="account-plus"></mat-icon>
     </button>
   </span>
 </mat-card>

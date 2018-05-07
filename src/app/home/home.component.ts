@@ -10,6 +10,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton, MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 
+
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -33,6 +34,7 @@ export class HomeComponent implements OnInit {
   scrolled = false;
   triggerUsers = true;
   isTooltipDisabled = false;
+  menuUser = true;
 
   @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
   @ViewChild("settings") private menu: MatMenu;
@@ -69,20 +71,17 @@ export class HomeComponent implements OnInit {
     }
     this.userBackendService.getUserByToken(token, uriRole).subscribe(data => {
       this.user = data;
-      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user): 'Bienvenido ' + this.shortName(this.user);
+      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       this.openSnackBar(this.welcome, 'info');
     },
       error => console.error('error getting the token ' + error));
-
-
   }
 
   shortName(user: User): string {
-    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName; 
-    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName; 
-        return n1 + ' ' + n2;
+    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
+    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
+    return n1 + ' ' + n2;
   }
-
 
   private logout(): void {
     location.reload();//cache clean

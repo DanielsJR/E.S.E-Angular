@@ -12,6 +12,7 @@ import { GENDERS } from '../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from '../../../services/dialog.service';
 import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user-dialog-ref.component';
+import { ResetPassDialogRefComponent } from '../reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     communes = COMMUNNES;
     genders = GENDERS;
     files: File | FileList;
+    hidePass = true;
 
 
     constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
@@ -83,7 +85,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm = this.formBuilder.group({
             id: [this.obj.id],
             username: [this.obj.username, Validators.required],
-            // password: [this.obj.password],
+            //password: [],
             firstName: [this.obj.firstName],
             lastName: [this.obj.lastName],
             dni: [this.obj.dni],
@@ -99,8 +101,6 @@ export class GetUsersDialogRefComponent implements OnInit {
         });
 
     }
-
-
 
     selectEventCreate(files: FileList | File): void {
         let reader = new FileReader();
@@ -134,6 +134,19 @@ export class GetUsersDialogRefComponent implements OnInit {
         }
     };
 
+    private createAutoUsername(): string {
+        const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName; 
+        const n2 = this.createForm.value.lastName.substr(0, this.createForm.value.lastName.indexOf(' ')) || this.createForm.value.lastName; 
+            return n1 + '_' + n2;
+    }
+
+    private createAutoPassword(): string {
+        return this.createAutoUsername().toLowerCase() + '@ESE1';
+    }
+
+    private createBirthday(): string {
+        return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
+    }
 
     // getters create for errors messages template
     get cFirstName() { return this.createForm.get('firstName'); }
@@ -157,11 +170,11 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     create(): void {
-        this.createForm.value.username = (this.createForm.value.firstName + ' ' + this.createForm.value.lastName).replace(/ /g, '_');
-        this.createForm.value.password = this.createForm.value.firstName + '1@';
-        this.createForm.value.birthday = (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
+        this.createForm.value.username = this.createAutoUsername();
+        this.createForm.value.password = this.createAutoPassword();
+        this.createForm.value.birthday = this.createBirthday();
         this.obj = this.createForm.value;
-      //  console.log('creating... ' + JSON.stringify(this.obj));
+        //  console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.create(this.obj);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
@@ -183,7 +196,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
-      //  console.log('saving... ' + JSON.stringify(this.obj));
+        //  console.log('saving... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.obj);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
@@ -201,7 +214,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     delete(): void {
-      //  console.log('deleting... ' + JSON.stringify(this.obj));
+        //  console.log('deleting... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.delete(this.obj.id);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
@@ -218,16 +231,33 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     }
 
-    openDialog(DialogType: string, user?: User): void {
+    openDialogImage(user: User): void {
         let config = new MatDialogConfig();
         config.data = {
             model: user,
             uriRole: this.uriRole,
         };
         config.panelClass = 'dialogService';
-        config.width = 'auto';
-        config.height = 'auto';
+        //config.width = 'auto';
+        //config.height = 'auto';
+        config.maxWidth = '420px';
+        config.maxHeight = '420px';
+        config.minWidth = '300px';
+        config.minHeight = '300px';
 
         this.dialogService.openDialogImage(ImageUserDialogRefComponent, config);
+    }
+
+
+    openDialogResetPass( user: User): void {
+        let config = new MatDialogConfig();
+        config.data = {
+            model: user,
+            uriRole: this.uriRole,
+        };
+        config.panelClass = 'dialogService';
+        config.width = '500px';
+        config.height = 'auto';
+         this.dialogService.openDialogResetPass(ResetPassDialogRefComponent, config);
     }
 }

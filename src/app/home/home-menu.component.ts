@@ -6,22 +6,22 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
   template: `
 
 <mat-list-item *ngIf="privilege === 'ADMIN' " routerLink="/home/admin" routerLinkActive="active">
-  <mat-icon matListIcon>home</mat-icon>
+  <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>
   
 <mat-list-item *ngIf ="privilege === 'MANAGER' " routerLink="/home/manager" routerLinkActive="active">
-  <mat-icon matListIcon>home</mat-icon>
+<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>  
 
 <mat-list-item *ngIf="privilege === 'TEACHER' " routerLink="/home/teacher" routerLinkActive="active">
-  <mat-icon matListIcon>home</mat-icon>
+<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>
 
 <mat-list-item *ngIf="privilege === 'STUDENT' " routerLink="/home/student" routerLinkActive="active">
-  <mat-icon matListIcon>home</mat-icon>
+<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>
   

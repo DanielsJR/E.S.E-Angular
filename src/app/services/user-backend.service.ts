@@ -42,7 +42,7 @@ export class UserBackendService {
         return this.httpCli.delete<{}>(url);
     }
 
-    getUserById(id: number, uriRole: string): Observable<User> {
+    getUserById(id: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url);
@@ -64,6 +64,13 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.get<User[]>(url);
+    }
+
+    resetUserPassword(id: string, resetedPass: string, uriRole: string): Observable<boolean> {
+        const url = `${this.userURL}${uriRole}/${id}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.patch<boolean>(url, resetedPass);
+
     }
 
 }

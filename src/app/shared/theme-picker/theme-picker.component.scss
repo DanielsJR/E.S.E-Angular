@@ -25,10 +25,10 @@ $theme-picker-accent-stripe-size: 6px;
     overflow: hidden;
 
     .docs-theme-chosen-icon {
-      color: white;
       position: absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
+      left: 50%; top: 5%;
+      transform: translate(-50%, -5%);
+      fill: #ffffff;
     }
 
     &::after {
@@ -55,4 +55,6 @@ $theme-picker-accent-stripe-size: 6px;
     width: 100%;
     height: $theme-picker-accent-stripe-size;
   }
+
+
 }

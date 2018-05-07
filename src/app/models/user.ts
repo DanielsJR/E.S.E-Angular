@@ -1,8 +1,3 @@
-export const MOBILE_ATTRIBUTE_NAME = 'mobile';
-export const DNI_ATTRIBUTE_NAME = 'dni';
-export const EMAIL_ATTRIBUTE_NAME = 'email';
-export const ID_ATTRIBUTE_NAME = 'id';
-export const USERNAME_ATTRIBUTE_NAME = 'username';
 
 export class User {
     constructor(
@@ -30,5 +25,10 @@ export class User {
         return ((user.username === this.username) && (user.mobile === this.mobile) && (user.dni === this.dni) && (user.email === this.email));
     }
 
+    shortName(): string {
+        const n1 = this.firstName.substr(0, this.firstName.indexOf(' ')) || this.firstName; 
+        const n2 = this.lastName.substr(0, this.lastName.indexOf(' ')) || this.lastName; 
+            return n1 + ' ' + n2;
+      }
 
 }

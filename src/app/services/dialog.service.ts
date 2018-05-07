@@ -96,6 +96,23 @@ export class DialogService {
 
   }
 
+  openDialogResetPass(ref, config: MatDialogConfig): void {
+    config.data.type = 'resetPass';
+    const dialogRef = this.dialog.open(ref, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.closeSubject.next();
+      if (result === 'canceled') {
+        console.log('canceled!');
+      } else if (result === 'reseted') {
+        console.log('reseted!');
+      } else if (result === 'error') {
+        console.log('error!');
+      }
+    });
+
+  }
+
 }
 
 
