@@ -1,11 +1,11 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
 import { StudentStoreService } from '../../../services/student-store.service';
-import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../../../app.config';
+import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../models/communes';
 import { GENDERS } from '../../../models/genders';
@@ -13,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from '../../../services/dialog.service';
 import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user-dialog-ref.component';
 import { ResetPassDialogRefComponent } from '../reset-pass-dialog-ref/reset-pass-dialog-ref.component';
+import { PRIVILEGES } from '../../../models/privileges';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
     genders = GENDERS;
+    rolesList = PRIVILEGES;
     files: File | FileList;
     hidePass = true;
 
@@ -63,6 +65,44 @@ export class GetUsersDialogRefComponent implements OnInit {
         return a1 && a2 && a1 === a2;
     }
 
+    privilegeToSpanish(privilege: string): string {
+        let role = privilege.toUpperCase();
+        
+        if (role === ROLE_ADMIN) {
+            return role = ROLE_ADMIN_SPANISH;
+        }
+        else if (role === ROLE_MANAGER) {
+            return role = ROLE_MANAGER_SPANISH;
+        }
+        else if (role === ROLE_TEACHER) {
+           return role = ROLE_TEACHER_SPANISH;
+        }
+        else if (role === ROLE_STUDENT) {
+            return role = ROLE_STUDENT_SPANISH;
+        }
+        console.error('no privilege');
+        return 'no privilege';
+    }
+
+    rolesToSpanish(roles: string[]): string {
+        let rolesSpanish: string[] = [];
+        for (let role of roles) {
+            if (role === ROLE_ADMIN) {
+                role = ROLE_ADMIN_SPANISH;
+            }
+            if (role === ROLE_MANAGER) {
+                role = ROLE_MANAGER_SPANISH;
+            }
+            if (role === ROLE_TEACHER) {
+                role = ROLE_TEACHER_SPANISH;
+            }
+            if (role === ROLE_STUDENT) {
+                role = ROLE_STUDENT_SPANISH;
+            };
+            rolesSpanish.push(role);
+        }
+        return rolesSpanish.toString().replace(/,/g, ', ');
+    }
 
     buildForm() {
         this.createForm = this.formBuilder.group({
@@ -86,8 +126,8 @@ export class GetUsersDialogRefComponent implements OnInit {
             id: [this.obj.id],
             username: [this.obj.username, Validators.required],
             //password: [],
-            firstName: [this.obj.firstName],
-            lastName: [this.obj.lastName],
+            firstName: [this.obj.firstName, Validators.required],
+            lastName: [this.obj.lastName, Validators.required],
             dni: [this.obj.dni],
             birthday: [(this.obj.birthday != null) ? moment(this.obj.birthday, 'DD/MM/YYYY') : null],
             gender: [this.obj.gender],
@@ -96,7 +136,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             email: [this.obj.email],
             address: [this.obj.address],
             commune: [this.obj.commune],
-            // roles: [this.obj.roles]
+            roles: [this.obj.roles, Validators.required]
 
         });
 
@@ -135,9 +175,9 @@ export class GetUsersDialogRefComponent implements OnInit {
     };
 
     private createAutoUsername(): string {
-        const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName; 
-        const n2 = this.createForm.value.lastName.substr(0, this.createForm.value.lastName.indexOf(' ')) || this.createForm.value.lastName; 
-            return n1 + '_' + n2;
+        const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName;
+        const n2 = this.createForm.value.lastName.substr(0, this.createForm.value.lastName.indexOf(' ')) || this.createForm.value.lastName;
+        return n1 + '_' + n2;
     }
 
     private createAutoPassword(): string {
@@ -148,13 +188,20 @@ export class GetUsersDialogRefComponent implements OnInit {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
     }
 
-    // getters create for errors messages template
+    setRole(){
+        
+    }
+
+    // getters create for template
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
     get cEmail() { return this.createForm.get('email'); }
     get cAvatar() { return this.createForm.get('avatar'); }
     // getters edit
-    //  get eUserName() { return this.createForm.get('userName'); }
+    get eUsername() { return this.editForm.get('username'); }
+    get eFirstName() { return this.editForm.get('firstName'); }
+    get eLastName() { return this.editForm.get('lastName'); }
+    get eRoles() { return this.editForm.get('roles'); }
 
 
     cancel(): void {
@@ -196,7 +243,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
-        //  console.log('saving... ' + JSON.stringify(this.obj));
+          console.log('saving... ' + JSON.stringify(this.obj.roles));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.obj);
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
@@ -249,7 +296,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
 
-    openDialogResetPass( user: User): void {
+    openDialogResetPass(user: User): void {
         let config = new MatDialogConfig();
         config.data = {
             model: user,
@@ -258,6 +305,6 @@ export class GetUsersDialogRefComponent implements OnInit {
         config.panelClass = 'dialogService';
         config.width = '500px';
         config.height = 'auto';
-         this.dialogService.openDialogResetPass(ResetPassDialogRefComponent, config);
+        this.dialogService.openDialogResetPass(ResetPassDialogRefComponent, config);
     }
 }

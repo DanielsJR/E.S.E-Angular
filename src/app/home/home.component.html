@@ -33,7 +33,7 @@
                             alt="{{privilege | lowercase}}">
                         <h3 *ngIf="user" matLine> {{shortName(user)}} </h3>
                         <p matLine>
-                            <span>{{user?.roles}}</span>
+                            <span *ngIf="user" >{{rolesToSpanish(user.roles)}}</span>
                         </p>
                     </mat-list-item>
                 </mat-list>

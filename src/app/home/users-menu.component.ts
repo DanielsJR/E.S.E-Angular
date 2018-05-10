@@ -5,17 +5,17 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
   selector: 'nx-users-menu',
   template: `
 
-<mat-list-item *ngIf="roles.includes('ADMIN')" routerLink="/home/admin/managers-list/" routerLinkActive="active">
+<mat-list-item *ngIf="roles?.includes('ADMIN')" routerLink="/home/admin/managers-list/" routerLinkActive="active">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
     <h3 matLine>Managers</h3>
 </mat-list-item>
 
-<mat-list-item *ngIf = "roles.includes('MANAGER')" routerLink="/home/manager/teachers-list" routerLinkActive="active">
+<mat-list-item *ngIf = "roles?.includes('MANAGER')" routerLink="/home/manager/teachers-list" routerLinkActive="active">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
     <h3 matLine>Profesores</h3>
 </mat-list-item>
 
-<mat-list-item *ngIf = "roles.includes('MANAGER')" routerLink="/home/manager/students-list" routerLinkActive="active">
+<mat-list-item *ngIf = "roles?.includes('MANAGER')" routerLink="/home/manager/students-list" routerLinkActive="active">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
     <h3 matLine>Alumnos</h3>
 </mat-list-item>

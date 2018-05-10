@@ -4,8 +4,6 @@
 
 @import 'https://fonts.googleapis.com/css?family=Roboto';
 @import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
-
-
 html,
 body,
 mat-sidenav-container {
@@ -16,9 +14,8 @@ mat-sidenav-container {
     overflow: hidden;
 }
 
-
-
 /*mat-toolbar */
+
 .toolbar1 {
     position: absolute;
     top: 0px;
@@ -49,12 +46,11 @@ mat-sidenav-container {
 .spacer-r {
     flex: 1 1 auto;
 }
+
 /*mat-toolbar */
 
-
-
-
 /*mat-sidenav*/
+
 .sidenav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
     width: 300px;
@@ -96,10 +92,8 @@ mat-sidenav-container {
 .content:hover {
     overflow-y: overlay;
 }
+
 /*mat-sidenav*/
-
-
-
 
 /*MATERIAL dialog*/
 
@@ -120,11 +114,10 @@ mat-sidenav-container {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-start;
-    align-content: space-between;
+    align-items: flex-end;
 }
 
 .dialogService mat-dialog-content mat-form-field {
-    --flex-basis: 600px;
     width: 45%;
     margin: 0 10px;
 }
@@ -134,26 +127,27 @@ mat-sidenav-container {
     padding: 0;
 }
 
-
 /*MATERIAL dialog*/
-
-
 
 /*MAT icons*/
 
 button.mat-menu-item {
     line-height: 24px !important;
-  }
-  a.mat-menu-item > mat-icon {
+}
+
+a.mat-menu-item>mat-icon {
     margin-bottom: 14px;
-  }
-  .mat-icon svg {
+}
+
+.mat-icon svg {
     height: 24px;
     width: 24px;
-  }
-  /*MAT icons*/
+}
+
+/*MAT icons*/
 
 /*scrollbar */
+
 ::-webkit-scrollbar {
     width: 11px;
 }
@@ -173,4 +167,5 @@ button.mat-menu-item {
 ::-webkit-scrollbar-thumb:active {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
 }
+
 /*scrollbar */
