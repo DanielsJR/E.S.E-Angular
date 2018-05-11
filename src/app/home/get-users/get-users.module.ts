@@ -15,7 +15,7 @@ import { ResetPassDialogRefComponent } from './reset-pass-dialog-ref/reset-pass-
   imports: [
     SharedModule,
     MatMomentDateModule,
-    CovalentFileModule,
+    CovalentFileModule
   ],
 
   declarations: [

@@ -176,6 +176,9 @@
                             </mat-placeholder>
                         </mat-form-field>
 
+                       
+                       
+                       
                         <mat-form-field tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
                             (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
 
@@ -185,15 +188,18 @@
                             </mat-placeholder>
 
                             <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
-                                <mat-icon>close</mat-icon>
+                                <mat-icon svgIcon="close-circle"></mat-icon>
                             </button>
 
                             <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
                                 (select)="selectEventCreate($event)">
-                                <mat-icon>folder</mat-icon>
+                                <mat-icon svgIcon="folder-upload"></mat-icon>
                                 <span class="text-upper">Buscar...</span>
                             </td-file-input>
                         </mat-form-field>
+
+
+                        
 
                     </div>
                 </mat-tab>
@@ -310,12 +316,12 @@
                             </mat-placeholder>
 
                             <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
-                                <mat-icon>close</mat-icon>
+                                <mat-icon svgIcon="close-circle"></mat-icon>
                             </button>
 
                             <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
                                 (select)="selectEventEdit($event)">
-                                <mat-icon>folder</mat-icon>
+                                <mat-icon svgIcon="folder-upload"></mat-icon>
                                 <span class="text-upper">Buscar...</span>
                             </td-file-input>
                         </mat-form-field>

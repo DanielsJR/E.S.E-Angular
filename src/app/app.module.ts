@@ -31,8 +31,6 @@ import { MatIconRegistry } from '@angular/material';
     HttpClientModule,
     NgProgressModule.forRoot(),
     NgProgressHttpModule,
-
-
   ],
 
   declarations: [

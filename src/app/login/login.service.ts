@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { catchError } from 'rxjs/operators';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { TokenAuth } from '../models/token-auth';
 import { LocalStorageService } from '../services/local-storage.service';
-
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class LoginService {
@@ -19,17 +17,19 @@ export class LoginService {
     constructor(
         private localStorageService: LocalStorageService,
         private httpCli: HttpClient
-    ) {  }
+    ) { }
 
     public handleError = (error: Response) => {
-        return ErrorObservable.create(error);
+        return throwError(error);
     }
 
     login(userName: string, password: string): Observable<TokenAuth> {
         console.log('Login service called');
         return this.httpCli
-            .post(this.endpoint, null, {
-                headers: new HttpHeaders({ 'Authorization': 'Basic ' + btoa(userName + ':' + password) })
+            .post<TokenAuth>(this.endpoint, null, {
+                headers: new HttpHeaders({
+                    'Authorization': 'Basic ' + btoa(userName + ':' + password)
+                })
             })
             .pipe(catchError(this.handleError));
     }
@@ -84,9 +84,9 @@ export class LoginService {
         }
     }
 
-    getRoles(): string[]{
+    getRoles(): string[] {
         if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-           return this.roles = this.localStorageService.getRolesParsed();
+            return this.roles = this.localStorageService.getRolesParsed();
         }
     }
 

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject ,  Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { URI_STUDENTS } from '../app.config';
 import { UserBackendService } from './user-backend.service';
 import { MatSnackBar } from '@angular/material';
-import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()

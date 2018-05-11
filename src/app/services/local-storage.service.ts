@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN } from '../app.config';
 
 

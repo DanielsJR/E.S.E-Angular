@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { LOCAL_STORAGE_TOKEN_KEY } from './app.config';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 
 
 @Injectable()
@@ -26,7 +27,7 @@ export class AppAuthInterceptor implements HttpInterceptor {
                 });
 
                 // Pass on the cloned request instead of the original request.
-                return next.handle(authReq).do((event: HttpEvent<any>) => {
+                return next.handle(authReq).pipe(tap((event: HttpEvent<any>) => {
                     if (event instanceof HttpResponse) {
                         // do stuff with response if you want
                     }
@@ -39,10 +40,10 @@ export class AppAuthInterceptor implements HttpInterceptor {
                                 this.router.navigate(['/login']);
                             }
                         }
-                    });
+                    }));
             }
 
-            return next.handle(req).do((event: HttpEvent<any>) => {
+            return next.handle(req).pipe(tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     // do stuff with response if you want
                 }
@@ -55,7 +56,7 @@ export class AppAuthInterceptor implements HttpInterceptor {
                             this.router.navigate(['/login']);
                         }
                     }
-                });
+                }));
         }
         // has authorization (login)
         return next.handle(req);
