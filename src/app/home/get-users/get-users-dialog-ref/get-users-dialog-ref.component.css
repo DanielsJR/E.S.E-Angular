@@ -2,7 +2,7 @@
     font-size: 16px;
 }
 
-.imgEseDialog{
+.imgEseDialog {
     height: 40px;
 }
 
@@ -10,15 +10,33 @@
     color: darkgray;
 }
 
-.listSize {
+.listContainer {
+    display: flex;
+    justify-content: flex-start;
     padding-top: 0;
 }
 
-.listSize .mat-list-item {
+
+.listContainer .mat-list-item {
     height: 90px;
 }
 
-.listSize .mat-list-avatar {
+.listContainer .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}
+
+.listContainer2 {
+    display: flex;
+    justify-content: center;
+    padding-top: 0;
+}
+
+.listContainer2 .mat-list-item {
+    height: 90px;
+}
+
+.listContainer2 .mat-list-avatar {
     height: 65px;
     width: 65px;
 }
@@ -34,22 +52,29 @@
     opacity: 0.3;
 }
 
-
 .example-additional-selection {
     opacity: 0.75;
     font-size: 0.75em;
     display: flex;
-  }
+}
 
-  .chip-selection {
+.chip-selection {
     opacity: 0.75;
     font-size: 0.75em;
     display: flex;
     flex-wrap: nowrap;
-  }
+}
 
-  .buttonInput{
-      width: 100%;
-      margin: 7px 0;
-  }
+.buttonResetPass {
+    width: 100%;
+    --margin: 7px 0;
+}
 
+.iconRemove:hover {
+    fill: red;
+}
+
+.centerField {
+    width: 100%;
+    margin: 0;
+}

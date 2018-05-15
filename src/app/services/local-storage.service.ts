@@ -3,7 +3,9 @@ import { Subject } from 'rxjs';
 import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN } from '../app.config';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class LocalStorageService {
 
     private isThemeDarkSource = new Subject<boolean>();

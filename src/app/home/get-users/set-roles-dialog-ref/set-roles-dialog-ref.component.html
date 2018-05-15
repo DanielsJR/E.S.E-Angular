@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
   <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
   <span class="spacer-r"></span>
-  <mat-icon svgIcon="lock-reset"></mat-icon>
+  <mat-icon svgIcon="account"></mat-icon>
   <span>&nbsp;&nbsp;</span>
-  <h1 mat-dialog-title>Restablecer Contraseña</h1>
+  <h1 mat-dialog-title>Asignar Roles</h1>
 </mat-toolbar>
 
 <br>
@@ -11,7 +11,7 @@
     <mat-form-field appearance="outline" class="centerField">
       <input matInput [value]="obj.firstName +' '+ obj.lastName" readonly>
       <mat-label>
-        <i class="mdi mdi-lock-reset material-icons app-input-icon"></i>Se restablecerá la contraseña de:
+        <i class="mdi mdi-lock-reset material-icons app-input-icon"></i>Se asignarán roles a:
       </mat-label>
     </mat-form-field>
 </mat-dialog-content>
@@ -22,6 +22,6 @@
       Cancelar
     </button>
     <span class="spacer-r"></span>
-    <button mat-raised-button color="warn" (click)="resetPassword()" tabindex="2">Restablecer Contraseña</button>
+    <button mat-raised-button color="warn" (click)="setRoles()" tabindex="2">Asignar Roles</button>
   </mat-toolbar>
 </mat-dialog-actions>

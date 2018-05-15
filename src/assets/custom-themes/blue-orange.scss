@@ -4,18 +4,18 @@
 
 
 $primary: mat-palette($mat-blue);
-$accent:  mat-palette($mat-red, A200, A100, A400);
+$accent:  mat-palette($mat-orange, A200, A100, A400);
 
 // Define a light theme.
 $theme:   mat-light-theme($primary, $accent);
-.blue-red {
+.blue-orange {
   @include angular-material-theme($theme);
   @include theme-color-grabber($theme);
 }
 
 // Define a dark theme.
 $theme:   mat-dark-theme($primary, $accent);
-.blue-red-dark {
+.blue-orange-dark {
   @include angular-material-theme($theme);
   @include theme-color-grabber($theme);
 }

@@ -21,19 +21,19 @@
 
         <div class="login-content">
 
-          <mat-form-field>
+          <mat-form-field appearance="standard">
             <input matInput type="text" formControlName="username">
-            <mat-placeholder>
+            <mat-label>
               <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de Usuario
-            </mat-placeholder>
+            </mat-label>
             <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
           </mat-form-field>
 
-          <mat-form-field>
+          <mat-form-field appearance="standard">
             <input matInput type="password" formControlName="password">
-            <mat-placeholder>
+            <mat-label>
               <i class="mdi mdi-lock-open material-icons app-input-icon"></i>Contraseña
-            </mat-placeholder>
+            </mat-label>
             <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
           </mat-form-field>
 

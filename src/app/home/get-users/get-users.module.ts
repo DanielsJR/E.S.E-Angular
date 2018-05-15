@@ -9,6 +9,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MatMomentDateModule} from '@
 import { CovalentFileModule } from '@covalent/core';
 import { ImageUserDialogRefComponent } from './image-user-dialog-ref/image-user-dialog-ref.component';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog-ref/reset-pass-dialog-ref.component';
+import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dialog-ref.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { ResetPassDialogRefComponent } from './reset-pass-dialog-ref/reset-pass-
     GetUsersDialogRefComponent,
     ImageUserDialogRefComponent,
     ResetPassDialogRefComponent,
+    SetRolesDialogRefComponent,
     
   ],
 
@@ -39,6 +41,7 @@ import { ResetPassDialogRefComponent } from './reset-pass-dialog-ref/reset-pass-
     GetUsersDialogRefComponent,
     ImageUserDialogRefComponent,
     ResetPassDialogRefComponent,
+    SetRolesDialogRefComponent,
   ],
 
   exports: [

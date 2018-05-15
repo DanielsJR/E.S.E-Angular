@@ -7,7 +7,9 @@ import { UserBackendService } from './user-backend.service';
 import { MatSnackBar } from '@angular/material';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class StudentStoreService {
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
@@ -79,15 +81,15 @@ export class StudentStoreService {
             })
     }
 
-    delete(id: string) {
+    delete(user: User) {
         this.userBackendService
-            .delete(id, this.uriRole)
+            .delete(user.id, this.uriRole)
             .subscribe(() => {
                 this.dataStore.users.forEach((u, i) => {
-                    if (u.id === id) { this.dataStore.users.splice(i, 1); }
+                    if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('user deleted');
+                this.successSubject.next(user);
             }, error => {
                 console.error('could not delete user from store, ' + error.message);
                 this.errorSubject.next('could not delete user');

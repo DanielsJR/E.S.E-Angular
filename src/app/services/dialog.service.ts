@@ -113,6 +113,23 @@ export class DialogService {
 
   }
 
+  openDialogSetRoles(ref, config: MatDialogConfig): void {
+    config.data.type = 'setRoles';
+    const dialogRef = this.dialog.open(ref, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.closeSubject.next();
+      if (result === 'canceled') {
+        console.log('canceled!');
+      } else if (result === 'set') {
+        console.log('set!');
+      } else if (result === 'error') {
+        console.log('error!');
+      }
+    });
+
+  }
+
 }
 
 

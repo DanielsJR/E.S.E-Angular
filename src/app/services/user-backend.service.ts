@@ -1,4 +1,4 @@
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
@@ -6,7 +6,9 @@ import { User } from '../models/user';
 import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME } from '../app.config';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class UserBackendService {
 
     private userURL = API_SERVER + URI_USERS;
@@ -57,6 +59,13 @@ export class UserBackendService {
         return this.httpCli.get<User>(url);
     }
 
+  /*  TODO
+  getUserByRole(role: string, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/${role}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.get<User>(url);
+    }*/
+
     getUsersByRole(role: string, uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
@@ -68,6 +77,12 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, resetedPass);
 
+    }
+
+    setRoles(id: string, roles: string[], uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/role/${id}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.patch<User>(url, roles);
     }
 
 }

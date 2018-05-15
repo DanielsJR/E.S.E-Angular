@@ -43,46 +43,45 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     public snackBar: MatSnackBar, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    console.log('OnInit called');
-    console.log('uriRole:' + this.uriRole);
+    // console.log('uriRole:' + this.uriRole);
     //this.dialogService.uriRole = this.uriRole;
     this.dataSource = new MatTableDataSource();
 
-
     if (this.uriRole === URI_MANAGERS) {
-      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
-      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.managerStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-          console.log('store clean...getting users');
+          console.log('store empty...getting ' + this.uriRole);
           this.managerStoreService.getUsers();
         }
         this.dataSource.data = data;
-      }
-      );
+      });
+      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
-      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.teacherStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-          console.log('store clean...getting users');
+          console.log('store empty...getting ' + this.uriRole);
           this.teacherStoreService.getUsers();
         }
         this.dataSource.data = data;
-      }
-      );
+      });
+      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
+
     } else if (this.uriRole === URI_STUDENTS) {
-      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
-      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
       this.studentStoreService.users$.subscribe(data => {
         if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-          console.log('store clean...getting users');
+          console.log('store empty...getting ' + this.uriRole);
           this.studentStoreService.getUsers();
         }
         this.dataSource.data = data;
-      }
-      );
+      });
+      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'info')));
+      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
+
+    } else {
+      console.error('NO uriRole');
     }
 
 
@@ -121,7 +120,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     };
     config.panelClass = 'dialogService';
     config.width = '700px';// (DialogType === 'delete') ? '500px' : '700px';
-    
+
     if (DialogType === 'detail') {
       this.dialogService.openDialogDetail(GetUsersDialogRefComponent, config);
     } else if (DialogType === 'edit') {

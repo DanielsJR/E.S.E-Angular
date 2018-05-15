@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
@@ -14,6 +14,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user-dialog-ref.component';
 import { ResetPassDialogRefComponent } from '../reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { PRIVILEGES } from '../../../models/privileges';
+import { SetRolesDialogRefComponent } from '../set-roles-dialog-ref/set-roles-dialog-ref.component';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private dialogService: DialogService, ) {
+        private dialogService: DialogService, public snackBar: MatSnackBar, ) {
 
         this.obj = data.model;
         this.uriRole = data.uriRole;
@@ -51,9 +52,62 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
-        console.log('objDialogRef:' + JSON.stringify(this.obj.id));
-        console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
-        console.log('this.privilege:' + this.privilege);
+        /* console.log('objDialogRef:' + JSON.stringify(this.obj.id));
+         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
+         console.log('this.privilege:' + this.privilege); */
+        if (this.uriRole === URI_MANAGERS) {
+            this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
+            this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
+            this.managerStoreService.setRoles$.subscribe(user => {
+                if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
+            });
+
+            this.managerStoreService.updateSuccess$.subscribe(user => {
+                this.teacherStoreService.updateUserFromStore(user);
+                this.dialogRef.close('edited');
+                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'info'));
+
+            })
+            this.managerStoreService.deleteSuccess$.subscribe((user) => {
+                this.teacherStoreService.deleteUserFromStore(user);
+                this.dialogRef.close('deleted');
+                setTimeout(() => this.openSnackBar('Usuario Borrado', 'info'));
+            });
+
+        } else if (this.uriRole === URI_TEACHERS) {
+            this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('created'));
+            this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
+            this.teacherStoreService.setRoles$.subscribe(user => {
+                if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
+            });
+
+            this.teacherStoreService.updateSuccess$.subscribe(user => {
+                this.managerStoreService.updateUserFromStore(user);
+                this.dialogRef.close('edited');
+                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'info'));
+            });
+            this.teacherStoreService.deleteSuccess$.subscribe((user) => {
+                this.managerStoreService.deleteUserFromStore(user);
+                this.dialogRef.close('deleted');
+                setTimeout(() => this.openSnackBar('Usuario Borrado', 'info'));
+            });
+
+
+        } else if (this.uriRole === URI_STUDENTS) {
+            this.studentStoreService.success$.subscribe(() => this.dialogRef.close('created'));
+            this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+        } else {
+            console.error('NO uriRole');
+        }
+
+    }
+
+    openSnackBar(message: string, action: string) {
+        this.snackBar.open(message, action, {
+            duration: 3000,
+        });
     }
 
     convertDate(birthDay: any) {
@@ -67,7 +121,7 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     privilegeToSpanish(privilege: string): string {
         let role = privilege.toUpperCase();
-        
+
         if (role === ROLE_ADMIN) {
             return role = ROLE_ADMIN_SPANISH;
         }
@@ -75,7 +129,7 @@ export class GetUsersDialogRefComponent implements OnInit {
             return role = ROLE_MANAGER_SPANISH;
         }
         else if (role === ROLE_TEACHER) {
-           return role = ROLE_TEACHER_SPANISH;
+            return role = ROLE_TEACHER_SPANISH;
         }
         else if (role === ROLE_STUDENT) {
             return role = ROLE_STUDENT_SPANISH;
@@ -188,9 +242,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
     }
 
-    setRole(){
-        
-    }
+
 
     // getters create for template
     get cFirstName() { return this.createForm.get('firstName'); }
@@ -224,16 +276,15 @@ export class GetUsersDialogRefComponent implements OnInit {
         //  console.log('creating... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.create(this.obj);
-            this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
         } else if (this.uriRole === URI_TEACHERS) {
             this.teacherStoreService.create(this.obj);
-            this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
         } else if (this.uriRole === URI_STUDENTS) {
             this.studentStoreService.create(this.obj);
-            this.studentStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
+        } else {
+            console.error('NO uriRole');
         }
 
     }
@@ -243,19 +294,18 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
-          console.log('saving... ' + JSON.stringify(this.obj.roles));
+        console.log('saving roles... ' + JSON.stringify(this.obj.roles));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.obj);
-            this.managerStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
-            this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
         } else if (this.uriRole === URI_TEACHERS) {
             this.teacherStoreService.update(this.obj);
-            this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
-            this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
         } else if (this.uriRole === URI_STUDENTS) {
             this.studentStoreService.update(this.obj);
-            this.studentStoreService.success$.subscribe(() => this.dialogRef.close('edited'));
-            this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+
+        } else {
+            console.error('NO uriRole');
         }
 
     }
@@ -263,25 +313,24 @@ export class GetUsersDialogRefComponent implements OnInit {
     delete(): void {
         //  console.log('deleting... ' + JSON.stringify(this.obj));
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.delete(this.obj.id);
-            this.managerStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
-            this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+            this.managerStoreService.delete(this.obj);
+
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.delete(this.obj.id);
-            this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
-            this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+            this.teacherStoreService.delete(this.obj);
+
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.delete(this.obj.id);
-            this.studentStoreService.success$.subscribe(() => this.dialogRef.close('deleted'));
-            this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+            this.studentStoreService.delete(this.obj);
+
+        } else {
+            console.error('NO uriRole');
         }
 
     }
 
-    openDialogImage(user: User): void {
+    openDialogImage(): void {
         let config = new MatDialogConfig();
         config.data = {
-            model: user,
+            model: this.obj,
             uriRole: this.uriRole,
         };
         config.panelClass = 'dialogService';
@@ -296,15 +345,28 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
 
-    openDialogResetPass(user: User): void {
+    openDialogResetPass(): void {
         let config = new MatDialogConfig();
         config.data = {
-            model: user,
+            model: this.obj,
             uriRole: this.uriRole,
         };
         config.panelClass = 'dialogService';
         config.width = '500px';
         config.height = 'auto';
         this.dialogService.openDialogResetPass(ResetPassDialogRefComponent, config);
+    }
+
+    openDialogSetRoles(): void {
+        this.obj.roles = this.editForm.value.roles;
+        let config = new MatDialogConfig();
+        config.data = {
+            model: this.obj,
+            uriRole: this.uriRole,
+        };
+        config.panelClass = 'dialogService';
+        config.width = '500px';
+        config.height = 'auto';
+        this.dialogService.openDialogSetRoles(SetRolesDialogRefComponent, config);
     }
 }
