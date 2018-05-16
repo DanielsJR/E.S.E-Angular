@@ -15,6 +15,7 @@ import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user
 import { ResetPassDialogRefComponent } from '../reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { PRIVILEGES } from '../../../models/privileges';
 import { SetRolesDialogRefComponent } from '../set-roles-dialog-ref/set-roles-dialog-ref.component';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     rolesList = PRIVILEGES;
     files: File | FileList;
     hidePass = true;
+    isAdmin = false;
 
 
     constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
@@ -43,7 +45,8 @@ export class GetUsersDialogRefComponent implements OnInit {
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private dialogService: DialogService, public snackBar: MatSnackBar, ) {
+        private dialogService: DialogService, public snackBar: MatSnackBar,
+        private localStorageService: LocalStorageService) {
 
         this.obj = data.model;
         this.uriRole = data.uriRole;
@@ -52,6 +55,7 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
+        this.isAdmin = this.checkForAdmin(this.localStorageService.getRolesParsed());
         /* console.log('objDialogRef:' + JSON.stringify(this.obj.id));
          console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
          console.log('this.privilege:' + this.privilege); */
@@ -156,6 +160,15 @@ export class GetUsersDialogRefComponent implements OnInit {
             rolesSpanish.push(role);
         }
         return rolesSpanish.toString().replace(/,/g, ', ');
+    }
+
+    checkForAdmin(roles: string[]): boolean {
+        for (let role of roles) {
+            if (role === ROLE_ADMIN) {
+                return true;
+            }
+        }
+        return false;
     }
 
     buildForm() {
@@ -294,7 +307,6 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.obj = this.editForm.value;
-        console.log('saving roles... ' + JSON.stringify(this.obj.roles));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.obj);
 
@@ -358,10 +370,10 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     openDialogSetRoles(): void {
-        this.obj.roles = this.editForm.value.roles;
+
         let config = new MatDialogConfig();
         config.data = {
-            model: this.obj,
+            model: this.editForm.value,
             uriRole: this.uriRole,
         };
         config.panelClass = 'dialogService';

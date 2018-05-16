@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatSnackBar, MatButton, MatDialogConfig } from '@angular/material';
-import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
 import { GetUsersDialogRefComponent } from './get-users-dialog-ref/get-users-dialog-ref.component';
 import { DialogService } from '../../services/dialog.service';
@@ -11,6 +11,7 @@ import { TeacherStoreService } from '../../services/teacher-store.service';
 import { StudentStoreService } from '../../services/student-store.service';
 
 import { DomSanitizer } from '@angular/platform-browser';
+import { ImageUserDialogRefComponent } from './image-user-dialog-ref/image-user-dialog-ref.component';
 
 @Component({
   selector: 'nx-get-users',
@@ -20,6 +21,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 export class GetUsersComponent implements OnInit, AfterViewInit {
 
+  privilege: string;
   // mat table
   users: User[];
   displayedColumns = ['username', 'crud'];
@@ -40,9 +42,12 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     private studentStoreService: StudentStoreService,
     private dialogService: DialogService,
     private localstorage: LocalStorageService,
-    public snackBar: MatSnackBar, public sanitizer: DomSanitizer) { }
+    public snackBar: MatSnackBar, public sanitizer: DomSanitizer) {
+      
+     }
 
   ngOnInit() {
+    this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
     // console.log('uriRole:' + this.uriRole);
     //this.dialogService.uriRole = this.uriRole;
     this.dataSource = new MatTableDataSource();
@@ -134,6 +139,42 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+  openDialogImage(user: User): void {
+    let config = new MatDialogConfig();
+    config.data = {
+        model: user,
+        uriRole: this.uriRole,
+    };
+    config.panelClass = 'dialogService';
+    //config.width = 'auto';
+    //config.height = 'auto';
+    config.maxWidth = '420px';
+    config.maxHeight = '420px';
+    config.minWidth = '300px';
+    config.minHeight = '300px';
+
+    this.dialogService.openDialogImage(ImageUserDialogRefComponent, config);
+}
+
+privilegeToSpanish(privilege: string): string {
+  let role = privilege.toUpperCase();
+
+  if (role === ROLE_ADMIN) {
+      return role = ROLE_ADMIN_SPANISH;
+  }
+  else if (role === ROLE_MANAGER) {
+      return role = ROLE_MANAGER_SPANISH +'es';
+  }
+  else if (role === ROLE_TEACHER) {
+      return role = ROLE_TEACHER_SPANISH +'s';
+  }
+  else if (role === ROLE_STUDENT) {
+      return role = ROLE_STUDENT_SPANISH +'s';
+  }
+  console.error('no privilege');
+  return 'no privilege';
+}
 
 
   setDarkClass() {

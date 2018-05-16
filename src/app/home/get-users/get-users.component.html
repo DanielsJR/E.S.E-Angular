@@ -5,16 +5,16 @@
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)">
       <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
+        <i class="mdi mdi-magnify material-icons"></i>Buscar
       </mat-placeholder>
     </mat-form-field>
 
     <span class="spacer-l"></span>
 
-    <mat-chip-list>
+    <mat-chip-list *ngIf="privilege">
       <mat-chip color="primary" selected="true">
         <mat-icon svgIcon="account-multiple"></mat-icon>
-        {{uriRole | uppercase}}
+        &nbsp; {{privilegeToSpanish(privilege)}}
       </mat-chip>
     </mat-chip-list>
   </mat-toolbar>
@@ -25,13 +25,14 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
       <mat-cell *matCellDef="let user">
 
-          <mat-list style="flex-grow: 8">
-              <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)" alt="{{user.username}}">
-                <h3 matLine> {{shortName(user)}} </h3>
-              </mat-list-item>
-            </mat-list>
-     
+        <mat-list style="flex-grow: 8">
+          <mat-list-item>
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+              alt="{{user.username}}" (click)="openDialogImage(user); $event.stopPropagation()">
+            <h3 matLine> {{shortName(user)}} </h3>
+          </mat-list-item>
+        </mat-list>
+
       </mat-cell>
     </ng-container>
 
@@ -41,7 +42,7 @@
 
 
         <button mat-icon-button color="primary" (click)="openDialog('detail', user); $event.stopPropagation()">
-            <mat-icon svgIcon="eye"></mat-icon>
+          <mat-icon svgIcon="eye"></mat-icon>
         </button>
 
         <button mat-icon-button color="accent" (click)="openDialog('edit', user); $event.stopPropagation()">

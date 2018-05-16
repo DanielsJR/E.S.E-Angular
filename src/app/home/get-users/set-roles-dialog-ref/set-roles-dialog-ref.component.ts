@@ -7,7 +7,7 @@ import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
 import { StudentStoreService } from '../../../services/student-store.service';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER } from '../../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../../app.config';
 
 @Component({
   selector: 'nx-set-roles-dialog-ref',
@@ -77,6 +77,26 @@ export class SetRolesDialogRefComponent implements OnInit {
   cancel(): void {
     this.dialogRef.close('canceled');
   }
+
+  privilegeToSpanish(privilege: string): string {
+    let role = privilege.toUpperCase();
+
+    if (role === ROLE_ADMIN) {
+        return role = ROLE_ADMIN_SPANISH;
+    }
+    else if (role === ROLE_MANAGER) {
+        return role = ROLE_MANAGER_SPANISH;
+    }
+    else if (role === ROLE_TEACHER) {
+        return role = ROLE_TEACHER_SPANISH;
+    }
+    else if (role === ROLE_STUDENT) {
+        return role = ROLE_STUDENT_SPANISH;
+    }
+    console.error('no privilege');
+    return 'no privilege';
+}
+
 
 
 }

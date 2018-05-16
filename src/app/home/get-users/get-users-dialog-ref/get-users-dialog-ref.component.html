@@ -319,7 +319,7 @@
                             </td-file-input>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline" floatLabel="always">
                             <mat-label>
                                 <i class="mdi mdi-lock material-icons app-input-icon"></i>Contraseña de Usuario
                             </mat-label>
@@ -332,7 +332,7 @@
                             </button>
                         </mat-form-field>
 
-                        <mat-form-field appearance="standard">
+                        <mat-form-field appearance="standard" *ngIf="isAdmin && (privilege!='student')">
                             <mat-select formControlName="roles" multiple required>
                                 <!--  <mat-select-trigger>
                                     {{eRoles.value ? eRoles.value[0] : ''}}
@@ -342,7 +342,9 @@
                                 </mat-select-trigger>!-->
                                 <mat-select-trigger>
                                     <mat-chip-list>
-                                        <mat-chip *ngFor="let eRole of eRoles.value" class="chip-selection">{{privilegeToSpanish(eRole)}}</mat-chip>
+                                        <mat-chip *ngFor="let eRole of eRoles.value" class="chip-selection" [color]="(eRole ==='MANAGER')? 'primary':'accent' " selected="true">
+                                            {{privilegeToSpanish(eRole)}}
+                                        </mat-chip>
                                     </mat-chip-list>
                                 </mat-select-trigger>
                                 <mat-option *ngFor="let role of rolesList" [value]="role.value">
@@ -350,13 +352,13 @@
                                 </mat-option>
                             </mat-select>
                             <mat-label>
-                                <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Añadir o Remover Privilegios
+                                <i class="mdi mdi-security-account material-icons app-input-icon"></i>Añadir o remover Privilegios
                             </mat-label>
                             <mat-error *ngIf="eRoles.hasError('required')">Al menos un privilegio es
                                 <strong>requerido</strong>.
                             </mat-error>
-                            <button type="button" mat-mini-fab color="warn" (click)="openDialogSetRoles(); $event.stopPropagation()" matSuffix
-                             matTooltip="Guardar Privilegio(s)" [disabled]="eRoles.pristine || eRoles.invalid">
+                            <button type="button" mat-mini-fab color="warn" (click)="openDialogSetRoles(); $event.stopPropagation()" matSuffix matTooltip="Guardar Privilegio(s)"
+                                [disabled]="eRoles.pristine || eRoles.invalid">
                                 <mat-icon svgIcon="content-save"></mat-icon>
                             </button>
                             <mat-hint>

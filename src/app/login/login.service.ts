@@ -25,12 +25,11 @@ export class LoginService {
 
     login(userName: string, password: string): Observable<TokenAuth> {
         console.log('Login service called');
-        return this.httpCli
-            .post<TokenAuth>(this.endpoint, null, {
-                headers: new HttpHeaders({
-                    'Authorization': 'Basic ' + btoa(userName + ':' + password)
-                })
+        return this.httpCli.post<TokenAuth>(this.endpoint, null, {
+            headers: new HttpHeaders({
+                'Authorization': 'Basic ' + btoa(userName + ':' + password)
             })
+        })
             .pipe(catchError(this.handleError));
     }
 

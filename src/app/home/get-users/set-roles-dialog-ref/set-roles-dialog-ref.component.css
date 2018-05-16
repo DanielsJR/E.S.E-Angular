@@ -2,3 +2,10 @@
     width: 100%;
     margin: 0;
 }
+
+.chip-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+    display: flex;
+    flex-wrap: nowrap;
+}
