@@ -9,12 +9,13 @@
     <mat-divider></mat-divider>
     <mat-list class="listContainer">
         <mat-list-item>
-            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}" (click)="openDialogImage()">
-            <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+            <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
             <p matLine>
-                <span class="role-style">{{rolesToSpanish(obj.roles)}}</span>
+                <span class="role-style">{{rolesToSpanish(user.roles)}}</span>
             </p>
+            <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
         </mat-list-item>
 
     </mat-list>
@@ -25,28 +26,28 @@
                 <div class="tab-content">
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.username" readonly>
+                        <input matInput [(ngModel)]="user.username" readonly>
                         <mat-label>
                             <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de usuario
                         </mat-label>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.dni" readonly>
+                        <input matInput [(ngModel)]="user.dni" readonly>
                         <mat-label>
                             <i class="mdi mdi-barcode material-icons app-input-icon"></i>RUT
                         </mat-label>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.birthday" readonly>
+                        <input matInput [(ngModel)]="user.birthday" readonly>
                         <mat-label>
                             <i class="mdi mdi-cake-variant material-icons app-input-icon"></i>Fecha de Nacimiento
                         </mat-label>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.gender" readonly>
+                        <input matInput [(ngModel)]="user.gender" readonly>
                         <mat-label>
                             <i class="mdi mdi-gender-male-female material-icons app-input-icon"></i>Genero
                         </mat-label>
@@ -62,25 +63,25 @@
                         <mat-label>
                             <i class="mdi mdi-phone material-icons app-input-icon"></i>Teléfono
                         </mat-label>
-                        <input matInput [(ngModel)]="obj.mobile" readonly>
+                        <input matInput [(ngModel)]="user.mobile" readonly>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.email" readonly>
+                        <input matInput [(ngModel)]="user.email" readonly>
                         <mat-label>
                             <i class="mdi mdi-email material-icons app-input-icon"></i>Email
                         </mat-label>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.address" readonly>
+                        <input matInput [(ngModel)]="user.address" readonly>
                         <mat-label>
                             <i class="mdi mdi-account-location material-icons app-input-icon"></i>Dirección
                         </mat-label>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="obj.commune" readonly>
+                        <input matInput [(ngModel)]="user.commune" readonly>
                         <mat-label>
                             <i class="mdi mdi-map-marker material-icons app-input-icon"></i>Comuna
                         </mat-label>
@@ -118,7 +119,7 @@
             <mat-list-item>
                 <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}" (click)="fileInput.inputElement.click()"
                     (keyup.enter)="fileInput.inputElement.click()">
-                <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+                <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
                 <p matLine>
                     <span *ngIf="privilege" class="role-style">{{privilegeToSpanish(privilege)}}</span>
                 </p>
@@ -263,15 +264,15 @@
         <mat-divider></mat-divider>
         <mat-list class="listContainer">
             <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                     alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
-                <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+                <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
                 <p matLine>
-                    <span class="role-style">{{rolesToSpanish(obj.roles)}}</span>
+                    <span class="role-style">{{rolesToSpanish(user.roles)}}</span>
                 </p>
 
                 <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
-                    <button mat-menu-item (click)="openDialogImage()">
+                    <button mat-menu-item (click)="imageZoom.openDialogImage()">
                         <mat-icon svgIcon="eye"></mat-icon>
                         <span> Ver Imagen </span>
                     </button>
@@ -280,8 +281,8 @@
                         <span> Cambiar Imagen </span>
                     </button>
                 </mat-menu>
-
             </mat-list-item>
+            <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
         </mat-list>
         <mat-divider></mat-divider>
         <mat-dialog-content>
@@ -327,9 +328,10 @@
                             <mat-hint>
                                 <strong>Esto cambiará la contraseña del usuario</strong>
                             </mat-hint>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="openDialogResetPass()">
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="resetPass.openDialogResetPass()">
                                 <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
                             </button>
+                            <nx-reset-pass #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard" *ngIf="isAdmin && (privilege!='student')">
@@ -357,13 +359,14 @@
                             <mat-error *ngIf="eRoles.hasError('required')">Al menos un privilegio es
                                 <strong>requerido</strong>.
                             </mat-error>
-                            <button type="button" mat-mini-fab color="warn" (click)="openDialogSetRoles(); $event.stopPropagation()" matSuffix matTooltip="Guardar Privilegio(s)"
-                                [disabled]="eRoles.pristine || eRoles.invalid">
+                            <button type="button" mat-mini-fab color="warn" (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()" matSuffix
+                                matTooltip="Guardar Privilegio(s)" [disabled]="eRoles.pristine || eRoles.invalid">
                                 <mat-icon svgIcon="content-save"></mat-icon>
                             </button>
                             <mat-hint>
                                 <strong>Esto cambiará los privilegios del usuario</strong>
                             </mat-hint>
+                            <nx-set-roles #setRoles [user]="editForm.value" [uriRole]="uriRole"></nx-set-roles>
                         </mat-form-field>
 
                     </div>
@@ -493,13 +496,14 @@
     <mat-divider></mat-divider>
     <mat-list class="listContainer2">
         <mat-list-item>
-            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+obj?.avatar.type+';base64,' + obj?.avatar.data)"
-                alt="{{privilege}}" (click)="openDialogImage()">
-            <h3 matLine> {{obj.firstName}} {{obj.lastName}} </h3>
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+            <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
             <p matLine>
-                <span class="role-style">{{rolesToSpanish(obj.roles)}}</span>
+                <span class="role-style">{{rolesToSpanish(user.roles)}}</span>
             </p>
         </mat-list-item>
+        <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
     </mat-list>
     <mat-divider></mat-divider>
     <mat-dialog-actions>

@@ -1,133 +1,90 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-
 import { Subject } from 'rxjs';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { ImageUserDialogRefComponent } from '../home/get-users/image-user-dialog-ref/image-user-dialog-ref.component';
+import { ResetPassDialogRefComponent } from '../home/get-users/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
+import { SetRolesDialogRefComponent } from '../home/get-users/set-roles-dialog-ref/set-roles-dialog-ref.component';
+import { GetUsersDialogRefComponent } from '../home/get-users/get-users-dialog-ref/get-users-dialog-ref.component';
 
 
 @Injectable()
 export class DialogService {
 
-  private closeSubject = <Subject<any>>new Subject();
-  public readonly close$ = this.closeSubject.asObservable();
+
 
   constructor(public dialog: MatDialog) { }
 
-  openDialogDetail(ref, config: MatDialogConfig): void {
-    config.data.type = 'detail';
-    const dialogRef = this.dialog.open(ref, config);
+  openDialogDetail(data: any): MatDialogRef<GetUsersDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'edit') {
-        this.openDialogEdit(ref, config);
-      } else if (result === 'delete') {
-        this.openDialogDelete(ref, config);
-      }
-    });
+    return this.dialog.open(GetUsersDialogRefComponent, config);
   }
 
-  openDialogEdit(ref, config: MatDialogConfig): void {
-    config.data.type = 'edit';
+  openDialogEdit(data: any): MatDialogRef<GetUsersDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
     config.disableClose = true;
-    const dialogRef = this.dialog.open(ref, config);
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not edit');
-      } else if (result === 'edited') {
-        console.log('edited!');
-      }
-
-    });
+    return this.dialog.open(GetUsersDialogRefComponent, config);
   }
 
-  openDialogDelete(ref, config: MatDialogConfig): void {
-    config.data.type = 'delete';
+  openDialogDelete(data: any): MatDialogRef<GetUsersDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '500px';
     config.disableClose = true;
-    config.width = ((Number)(config.width.replace('px', ''))  / 1.4).toString() + 'px';
-    const dialogRef = this.dialog.open(ref, config);
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not delete');
-      } else if (result === 'deleted') {
-        console.log('deleted!');
-      }
-    });
-
+   
+    return this.dialog.open(GetUsersDialogRefComponent, config);
   }
 
-  openDialogCreate(ref, config: MatDialogConfig): void {
-    config.data.type = 'create';
+  openDialogCreate(data: any): MatDialogRef<GetUsersDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
     config.disableClose = true;
-    const dialogRef = this.dialog.open(ref, config);
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not create');
-      } else if (result === 'created') {
-        console.log('created!');
-      }
-    });
-
+    return this.dialog.open(GetUsersDialogRefComponent, config);
   }
 
-  openDialogImage(ref, config: MatDialogConfig): void {
-    config.data.type = 'image';
-    const dialogRef = this.dialog.open(ref, config);
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      }
-    });
 
+  openDialogImage(data: any): MatDialogRef<ImageUserDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.maxWidth = '420px';
+    config.maxHeight = '420px';
+    config.minWidth = '300px';
+    config.minHeight = '300px';
+
+    return this.dialog.open(ImageUserDialogRefComponent, config);
   }
 
-  openDialogResetPass(ref, config: MatDialogConfig): void {
-    config.data.type = 'resetPass';
-    const dialogRef = this.dialog.open(ref, config);
+  openDialogResetPass(data: any): MatDialogRef<ResetPassDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '500px';
+    config.height = 'auto';
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'reseted') {
-        console.log('reseted!');
-      } else if (result === 'error') {
-        console.log('error!');
-      }
-    });
-
+    return this.dialog.open(ResetPassDialogRefComponent, config);
   }
 
-  openDialogSetRoles(ref, config: MatDialogConfig): void {
-    config.data.type = 'setRoles';
-    const dialogRef = this.dialog.open(ref, config);
+  openDialogSetRoles(data: any): MatDialogRef<SetRolesDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '500px';
+    config.height = 'auto';
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.closeSubject.next();
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'set') {
-        console.log('set!');
-      } else if (result === 'error') {
-        console.log('error!');
-      }
-    });
-
+    return this.dialog.open(SetRolesDialogRefComponent, config);
   }
 
 }

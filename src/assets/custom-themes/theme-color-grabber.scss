@@ -6,9 +6,7 @@
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
     $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background); 
-    
-    // Create theme specfic styles
+    $background: map-get($theme, background); // Create theme specfic styles
     .primaryColorBG {
         background-color: mat-color($primary);
         color: mat-contrast($primary, 500); // color: mat-color($foreground, text);
@@ -21,5 +19,16 @@
         background-color: mat-color($warn);
         color: mat-contrast($warn, 500);
     }
+    .primaryColor {
+        color: mat-color($primary);
+    }
+    .accentColor {
+        color: mat-color($accent);
+    }
+    .warnColor {
+        color: mat-color($warn);
+    }
+
 
 }
+

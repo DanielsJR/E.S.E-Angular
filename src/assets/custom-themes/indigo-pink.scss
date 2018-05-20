@@ -9,7 +9,7 @@ $theme: mat-light-theme($primary, $accent);
 .indigo-pink {
     @include angular-material-theme($theme);
     @include theme-color-grabber($theme);
-}
+ }
 
 // Define the dark theme.
 $theme: mat-dark-theme($primary, $accent);

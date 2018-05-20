@@ -1,0 +1,68 @@
+<div *ngIf="type==='success'" class="snackBarContainer primaryColorBG">
+
+  <div class="logoItem">
+    <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  </div>
+
+  <div class="messageItem">
+    <i class="mdi mdi-email-variant material-icons app-input-icon"></i>
+    <span>&nbsp;&nbsp;</span>
+    <span>{{message}}
+      <span>&nbsp;&nbsp;</span>
+      <span class="mdi mdi-checkbox-marked-circle material-icons accentColor snackIcon"></span>
+    </span>
+  </div>
+
+  <button mat-icon-button (click)="close()" class="btnItem" [class.warnColor]="mouseOvered" (mouseover)="mouseOvered=true"
+    (mouseout)="mouseOvered=false">
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+
+</div>
+
+<div *ngIf="type==='warn'" class="snackBarContainer accentColorBG">
+
+  <div class="logoItem">
+    <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  </div>
+
+  <div class="messageItem">
+    <i class="mdi mdi-email-variant material-icons app-input-icon"></i>
+    <span>&nbsp;&nbsp;</span>
+    <span>{{message}}
+      <span>&nbsp;&nbsp;</span>
+      <span class="mdi mdi-alert material-icons primaryColor snackIcon"></span>
+    </span>
+  </div>
+
+  <button mat-icon-button (click)="close()" class="btnItem" [class.warnColor]="mouseOvered" (mouseover)="mouseOvered=true"
+    (mouseout)="mouseOvered=false">
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+
+</div>
+
+<div *ngIf="type==='error'" class="snackBarContainer warnColorBG">
+
+  <div class="logoItem">
+    <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  </div>
+
+  <div class="messageItem">
+    <i class="mdi mdi-email-variant material-icons app-input-icon"></i>
+    <span>&nbsp;&nbsp;</span>
+    <span>{{message}}
+      <span>&nbsp;&nbsp;</span>
+      <span class="mdi mdi-alert-decagram material-icons accentColor snackIcon"></span>
+    </span>
+  </div>
+
+
+
+
+  <button mat-icon-button (click)="close()" class="btnItem" [class.primaryColor]="mouseOvered" (mouseover)="mouseOvered=true"
+    (mouseout)="mouseOvered=false">
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+
+</div>

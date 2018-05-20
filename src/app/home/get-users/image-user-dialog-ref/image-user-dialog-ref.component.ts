@@ -10,12 +10,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ImageUserDialogRefComponent implements OnInit {
 
-  obj: User;
+  user: User;
 
   constructor(public dialogRef: MatDialogRef<ImageUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
   ) {
-    this.obj = data.model;
+    this.user = data.user;
+    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
    }
 
   ngOnInit() {

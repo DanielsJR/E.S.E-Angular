@@ -7,8 +7,9 @@ import { URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN, ROLE_
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { UserBackendService } from '../services/user-backend.service';
 import { LocalStorageService } from '../services/local-storage.service';
-import { MatSidenav, MatMenu, MatButton, MatSnackBar } from '@angular/material';
+import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SnackbarService } from '../services/snackbar.service';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router, private loginService: LoginService,
     private userBackendService: UserBackendService, private localStorageService: LocalStorageService,
-    public snackBar: MatSnackBar, public sanitizer: DomSanitizer) { }
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
   ngAfterViewInit() {
     this.sidenavSettings.openedChange.subscribe(() => {
@@ -72,7 +73,7 @@ export class HomeComponent implements OnInit {
     this.userBackendService.getUserByToken(token, uriRole).subscribe(data => {
       this.user = data;
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      this.openSnackBar(this.welcome, 'info');
+      this.openSnackBar(this.welcome, 'success');
     },
       error => console.error('error getting the token ' + error));
   }
@@ -82,11 +83,11 @@ export class HomeComponent implements OnInit {
     const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
     return n1 + ' ' + n2;
   }
-  rolesToSpanish(roles:string[]): string {
-     let rolesSpanish: string[]=[];
+  rolesToSpanish(roles: string[]): string {
+    let rolesSpanish: string[] = [];
     for (let role of roles) {
       if (role === ROLE_ADMIN) {
-         role = ROLE_ADMIN_SPANISH;
+        role = ROLE_ADMIN_SPANISH;
       }
       if (role === ROLE_MANAGER) {
         role = ROLE_MANAGER_SPANISH;
@@ -109,10 +110,19 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3000,
-    });
+
+  openSnackBar(message: string, type: any): void {
+    let data = {
+      message: message,
+      uriRole: 'none',
+      type: type
+    };
+
+    let snackBarRef = this.snackbarService.openSnackBar(data);
+    snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
+    snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
+    snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
+
 
 }

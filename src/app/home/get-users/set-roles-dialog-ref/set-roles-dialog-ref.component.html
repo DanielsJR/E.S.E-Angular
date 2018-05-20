@@ -11,10 +11,10 @@
   <mat-form-field appearance="outline" class="centerField" floatLabel="always">
     <input matInput readonly>
     <mat-label>
-      <i class="mdi mdi-security-account material-icons app-input-icon"></i> Se asignará a <strong>{{obj.firstName +' '+ obj.lastName}}</strong> privilégios(s) de:
+      <i class="mdi mdi-security-account material-icons app-input-icon"></i> Se asignará a <strong>{{user.firstName +' '+ user.lastName}}</strong> privilégios(s) de:
     </mat-label>
     <mat-chip-list>
-      <mat-chip *ngFor="let role of obj.roles" class="chip-selection" [color]="(role ==='MANAGER')? 'primary':'accent' " selected="true" >
+      <mat-chip *ngFor="let role of user.roles" class="chip-selection" [color]="(role ==='MANAGER')? 'primary':'accent' " selected="true" >
         {{privilegeToSpanish(role)}}
       </mat-chip>
     </mat-chip-list>

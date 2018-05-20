@@ -1,21 +1,21 @@
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../models/user';
 import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
 import { StudentStoreService } from '../../../services/student-store.service';
-import { URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../../app.config';
+import {
+    URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
+    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH
+} from '../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../models/communes';
 import { GENDERS } from '../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
-import { DialogService } from '../../../services/dialog.service';
-import { ImageUserDialogRefComponent } from '../image-user-dialog-ref/image-user-dialog-ref.component';
-import { ResetPassDialogRefComponent } from '../reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { PRIVILEGES } from '../../../models/privileges';
-import { SetRolesDialogRefComponent } from '../set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { LocalStorageService } from '../../../services/local-storage.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     createForm: FormGroup;
     editForm: FormGroup;
-    obj: User;
+    user: User;
     uriRole: string;
     privilege: string;
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
@@ -45,20 +45,20 @@ export class GetUsersDialogRefComponent implements OnInit {
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private dialogService: DialogService, public snackBar: MatSnackBar,
-        private localStorageService: LocalStorageService) {
+        private localStorageService: LocalStorageService,
+        private snackbarService: SnackbarService) {
 
-        this.obj = data.model;
+        this.user = data.user;
         this.uriRole = data.uriRole;
         this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
+        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
     }
 
     ngOnInit(): void {
         this.buildForm();
         this.isAdmin = this.checkForAdmin(this.localStorageService.getRolesParsed());
-        /* console.log('objDialogRef:' + JSON.stringify(this.obj.id));
-         console.log('dataDialogRef:' + JSON.stringify(this.uriRole));
-         console.log('this.privilege:' + this.privilege); */
+        //JSON.stringify(this.user.id);
+
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
             this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
@@ -70,13 +70,13 @@ export class GetUsersDialogRefComponent implements OnInit {
             this.managerStoreService.updateSuccess$.subscribe(user => {
                 this.teacherStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
-                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'info'));
+                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'success'));
 
             })
             this.managerStoreService.deleteSuccess$.subscribe((user) => {
                 this.teacherStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
-                setTimeout(() => this.openSnackBar('Usuario Borrado', 'info'));
+                setTimeout(() => this.openSnackBar('Usuario Borrado', 'success'));
             });
 
         } else if (this.uriRole === URI_TEACHERS) {
@@ -90,12 +90,12 @@ export class GetUsersDialogRefComponent implements OnInit {
             this.teacherStoreService.updateSuccess$.subscribe(user => {
                 this.managerStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
-                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'info'));
+                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'success'));
             });
             this.teacherStoreService.deleteSuccess$.subscribe((user) => {
                 this.managerStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
-                setTimeout(() => this.openSnackBar('Usuario Borrado', 'info'));
+                setTimeout(() => this.openSnackBar('Usuario Borrado', 'success'));
             });
 
 
@@ -108,14 +108,22 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     }
 
-    openSnackBar(message: string, action: string) {
-        this.snackBar.open(message, action, {
-            duration: 3000,
-        });
+    openSnackBar(message: string, type: any): void {
+        let data = {
+            message: message,
+            uriRole: this.uriRole,
+            type: type
+        };
+
+        let snackBarRef = this.snackbarService.openSnackBar(data);
+        snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
+        snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
+        snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
     }
 
+
     convertDate(birthDay: any) {
-        return (this.obj.birthday != null) ? birthDay = moment(this.obj.birthday, 'DD/MM/YYYY') : null;
+        return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, 'DD/MM/YYYY') : null;
     }
 
     compareByViewValue(a1: any, a2: any) {
@@ -185,25 +193,24 @@ export class GetUsersDialogRefComponent implements OnInit {
             email: [],
             address: [],
             commune: [],
-            //roles: [this.obj.roles]
         });
 
 
         this.editForm = this.formBuilder.group({
-            id: [this.obj.id],
-            username: [this.obj.username, Validators.required],
+            id: [this.user.id],
+            username: [this.user.username, Validators.required],
             //password: [],
-            firstName: [this.obj.firstName, Validators.required],
-            lastName: [this.obj.lastName, Validators.required],
-            dni: [this.obj.dni],
-            birthday: [(this.obj.birthday != null) ? moment(this.obj.birthday, 'DD/MM/YYYY') : null],
-            gender: [this.obj.gender],
-            avatar: [this.obj.avatar],
-            mobile: [this.obj.mobile],
-            email: [this.obj.email],
-            address: [this.obj.address],
-            commune: [this.obj.commune],
-            roles: [this.obj.roles, Validators.required]
+            firstName: [this.user.firstName, Validators.required],
+            lastName: [this.user.lastName, Validators.required],
+            dni: [this.user.dni],
+            birthday: [(this.user.birthday != null) ? moment(this.user.birthday, 'DD/MM/YYYY') : null],
+            gender: [this.user.gender],
+            avatar: [this.user.avatar],
+            mobile: [this.user.mobile],
+            email: [this.user.email],
+            address: [this.user.address],
+            commune: [this.user.commune],
+            roles: [this.user.roles, Validators.required]
 
         });
 
@@ -285,16 +292,16 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
         this.createForm.value.birthday = this.createBirthday();
-        this.obj = this.createForm.value;
-        //  console.log('creating... ' + JSON.stringify(this.obj));
+        this.user = this.createForm.value;
+        //  console.log('creating... ' + JSON.stringify(this.user));
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.create(this.obj);
+            this.managerStoreService.create(this.user);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.create(this.obj);
+            this.teacherStoreService.create(this.user);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.create(this.obj);
+            this.studentStoreService.create(this.user);
 
         } else {
             console.error('NO uriRole');
@@ -306,15 +313,15 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-        this.obj = this.editForm.value;
+        this.user = this.editForm.value;
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.update(this.obj);
+            this.managerStoreService.update(this.user);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.update(this.obj);
+            this.teacherStoreService.update(this.user);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.update(this.obj);
+            this.studentStoreService.update(this.user);
 
         } else {
             console.error('NO uriRole');
@@ -323,15 +330,15 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     delete(): void {
-        //  console.log('deleting... ' + JSON.stringify(this.obj));
+        //  console.log('deleting... ' + JSON.stringify(this.user));
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.delete(this.obj);
+            this.managerStoreService.delete(this.user);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.delete(this.obj);
+            this.teacherStoreService.delete(this.user);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.delete(this.obj);
+            this.studentStoreService.delete(this.user);
 
         } else {
             console.error('NO uriRole');
@@ -339,46 +346,5 @@ export class GetUsersDialogRefComponent implements OnInit {
 
     }
 
-    openDialogImage(): void {
-        let config = new MatDialogConfig();
-        config.data = {
-            model: this.obj,
-            uriRole: this.uriRole,
-        };
-        config.panelClass = 'dialogService';
-        //config.width = 'auto';
-        //config.height = 'auto';
-        config.maxWidth = '420px';
-        config.maxHeight = '420px';
-        config.minWidth = '300px';
-        config.minHeight = '300px';
-
-        this.dialogService.openDialogImage(ImageUserDialogRefComponent, config);
-    }
-
-
-    openDialogResetPass(): void {
-        let config = new MatDialogConfig();
-        config.data = {
-            model: this.obj,
-            uriRole: this.uriRole,
-        };
-        config.panelClass = 'dialogService';
-        config.width = '500px';
-        config.height = 'auto';
-        this.dialogService.openDialogResetPass(ResetPassDialogRefComponent, config);
-    }
-
-    openDialogSetRoles(): void {
-
-        let config = new MatDialogConfig();
-        config.data = {
-            model: this.editForm.value,
-            uriRole: this.uriRole,
-        };
-        config.panelClass = 'dialogService';
-        config.width = '500px';
-        config.height = 'auto';
-        this.dialogService.openDialogSetRoles(SetRolesDialogRefComponent, config);
-    }
 }
+

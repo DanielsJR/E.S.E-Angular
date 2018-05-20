@@ -1,0 +1,29 @@
+.snackBarContainer {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    --box-shadow: 10px 10px 5px grey;
+    opacity: 0.75;
+    --font-size: 0.95em;
+    
+}
+
+.logoItem {
+    padding: 0 20px;
+    align-self: center;
+}
+
+.messageItem {
+    padding: 0 20px;
+    align-self: center;
+    
+}
+
+.btnItem {
+    align-self: start;
+}
+
+.snackIcon {
+    font-size: 24px;
+ }
+

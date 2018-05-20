@@ -12,6 +12,7 @@ import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
+import { SnackbarsRefComponent } from './shared/snackbars-ref/snackbars-ref.component';
 
 
 @NgModule({
@@ -31,6 +32,8 @@ import { MatIconRegistry } from '@angular/material';
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+    SnackbarsRefComponent,
+        
   ],
 
   providers: [
@@ -45,6 +48,10 @@ import { MatIconRegistry } from '@angular/material';
   bootstrap: [
     AppComponent,
   ],
+
+  entryComponents:[
+    SnackbarsRefComponent,
+  ]
 
 
 })
