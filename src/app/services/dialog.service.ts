@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ImageUserDialogRefComponent } from '../home/get-users/image-user-dialog-ref/image-user-dialog-ref.component';
 import { ResetPassDialogRefComponent } from '../home/get-users/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
@@ -9,8 +8,6 @@ import { GetUsersDialogRefComponent } from '../home/get-users/get-users-dialog-r
 
 @Injectable()
 export class DialogService {
-
-
 
   constructor(public dialog: MatDialog) { }
 
@@ -52,8 +49,6 @@ export class DialogService {
 
     return this.dialog.open(GetUsersDialogRefComponent, config);
   }
-
-
 
   openDialogImage(data: any): MatDialogRef<ImageUserDialogRefComponent> {
     let config = new MatDialogConfig();

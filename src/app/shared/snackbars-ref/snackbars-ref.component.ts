@@ -9,9 +9,9 @@ import { User } from '../../models/user';
 })
 export class SnackbarsRefComponent implements OnInit {
 
-  uriRole: any;
+  uriRole: string;
   user: User;
-  type;
+  type: string;
   message: string;
 
   constructor(public snackBarRef: MatSnackBarRef<SnackbarsRefComponent>,

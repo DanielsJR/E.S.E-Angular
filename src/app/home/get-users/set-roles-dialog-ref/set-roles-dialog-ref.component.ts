@@ -6,7 +6,7 @@ import { ManagerStoreService } from '../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../services/teacher-store.service';
 import { StudentStoreService } from '../../../services/student-store.service';
 import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../../app.config';
-import { SnackbarService } from '../../../services/snackbar.service';
+
 
 @Component({
   selector: 'nx-set-roles-dialog-ref',
@@ -23,7 +23,7 @@ export class SetRolesDialogRefComponent implements OnInit {
     private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService,
     private studentStoreService: StudentStoreService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) {
+    public sanitizer: DomSanitizer) {
 
     this.user = data.user;
     this.uriRole = this.data.uriRole;
@@ -33,46 +33,29 @@ export class SetRolesDialogRefComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.uriRole === URI_MANAGERS) {
-      this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
       this.managerStoreService.setRoles$.subscribe(user => {
         this.teacherStoreService.updateUserFromStore(user);
         this.dialogRef.close('set');
-        setTimeout(() => this.openSnackBar('Privilegios Asignados', 'success'));
       });
 
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
       this.teacherStoreService.setRoles$.subscribe(user => {
         this.managerStoreService.updateUserFromStore(user);
         this.dialogRef.close('set');
-        setTimeout(() => this.openSnackBar('Privilegios Asignados', 'success'));
+
       });
+
     } else {
       console.error('NO uriRole');
     }
 
   }
 
-  openSnackBar(message: string, type: any): void {
-    let data = {
-      message: message,
-      uriRole: this.uriRole,
-      type: type
-    };
-
-    let snackBarRef = this.snackbarService.openSnackBar(data);
-    snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-    snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-    snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
-  }
-
 
   setRoles(): void {
-
     if (this.uriRole === URI_MANAGERS) {
       this.managerStoreService.setRoles(this.user);
-
 
     } else if (this.uriRole === URI_TEACHERS) {
       this.teacherStoreService.setRoles(this.user);

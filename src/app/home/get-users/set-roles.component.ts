@@ -4,41 +4,44 @@ import { User } from '../../models/user';
 
 
 @Component({
-  selector: 'nx-set-roles',
-  template: ``,
-  styles: []
+    selector: 'nx-set-roles',
+    template: ``,
+    styles: []
 })
 export class SetRolesComponent implements OnInit {
 
-  @Input()
-  user:User;
+    @Input()
+    user: User;
 
-  @Input()
-  uriRole:string;
+    @Input()
+    uriRole: string;
 
-  constructor(private dialogService: DialogService) { }
+    constructor(private dialogService: DialogService) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  openDialogSetRoles(): void {
-    let data = {
-        user: this.user,
-        uriRole: this.uriRole,
-        type: 'setRoles'
-    };
+    openDialogSetRoles(): void {
+        let data = {
+            user: this.user,
+            uriRole: this.uriRole,
+            type: 'setRoles'
+        };
 
-    let dialogRef = this.dialogService.openDialogSetRoles(data);
-    dialogRef.afterClosed().subscribe(result => {
-        if (result === 'canceled') {
-            console.log('canceled!');
-        } else if (result === 'set') {
-            console.log('set!');
-        } else if (result === 'error') {
-            console.log('error!');
-        }
-    });
+        let dialogRef = this.dialogService.openDialogSetRoles(data);
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === 'canceled') {
+                console.log('canceled!');
+            } else if (result === 'set') {
+                console.log('set!');
+            } else if (result === 'error') {
+                console.log('error!');
 
-}
+            }
+        });
+
+    }
+
+
 
 }

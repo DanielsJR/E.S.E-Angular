@@ -28,7 +28,7 @@
         <mat-list style="flex-grow: 8">
           <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-              alt="{{user.username}}" (click)="openDialogImage(user); $event.stopPropagation()">
+              alt="{{user?.username}}" (click)="openDialogImage(user); $event.stopPropagation()">
             <h3 matLine> {{shortName(user)}} </h3>
           </mat-list-item>
         </mat-list>

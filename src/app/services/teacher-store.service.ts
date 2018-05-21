@@ -20,10 +20,13 @@ export class TeacherStoreService {
     private dataStore: { users: User[] };
 
     private errorSubject = <Subject<any>>new Subject();
-    public readonly error$ = this.errorSubject.asObservable();
+    public readonly errorMessage$ = this.errorSubject.asObservable();
 
     private successSubject = <Subject<any>>new Subject();
-    public readonly success$ = this.successSubject.asObservable();
+    public readonly successMessage$ = this.successSubject.asObservable();
+
+    private createSuccessSubject = <Subject<User>>new Subject();
+    public readonly createSuccess$ = this.createSuccessSubject.asObservable();
 
     private updateSuccessSubject = <Subject<User>>new Subject();
     public readonly updateSuccess$ = this.updateSuccessSubject.asObservable();
@@ -48,7 +51,7 @@ export class TeacherStoreService {
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
-                    this.successSubject.next('lista vacia');
+                    this.successSubject.next('Lista de Docentes vacia');
                 } else {
                     this.dataStore.users = data;
                     this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -56,7 +59,7 @@ export class TeacherStoreService {
                 }
             }, error => {
                 console.error('error retrieving users, ' + error.message);
-                this.errorSubject.next('Error al obtener usuarios');
+                this.errorSubject.next('Error al obtener lista de Docentes');
             });
     }
 
@@ -66,10 +69,11 @@ export class TeacherStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('user created');
+                this.successSubject.next('Docente Creado');
+                this.createSuccessSubject.next(data);
             }, error => {
                 console.error('could not create User, ' + error.message);
-                this.errorSubject.next('Error al crear usuario');
+                this.errorSubject.next('Error al crear Docente');
             });
     }
 
@@ -83,10 +87,11 @@ export class TeacherStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('Docente Actualizado');
                 this.updateSuccessSubject.next(data);
             }, error => {
                 console.error('could not update user from store, ' + error.message);
-                this.errorSubject.next('Error al actualizar usuario');
+                this.errorSubject.next('Error al actualizar Docente');
             });
     }
 
@@ -98,10 +103,11 @@ export class TeacherStoreService {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('Docente Eliminado');
                 this.deleteSuccessSubject.next(user);
             }, error => {
                 console.error('could not delete user from store, ' + error.message);
-                this.errorSubject.next('Error al borrar usuario');
+                this.errorSubject.next('Error al borrar Docente');
             });
     }
 
@@ -126,7 +132,7 @@ export class TeacherStoreService {
                 //  this.successSubject.next('success');
             }, error => {
                 console.error(`could not load user, ${error.message}`);
-                this.errorSubject.next('Error al obtener usuario');
+                this.errorSubject.next('Error al obtener Docente');
             });
 
     }
@@ -140,7 +146,7 @@ export class TeacherStoreService {
                 //  this.successSubject.next('success');
             }, error => {
                 console.error('error retrieving user by role' + error.message);
-                this.errorSubject.next('Error al obtener usuarios');
+                this.errorSubject.next('Error al obtener Docentes');
             });
     }
 
@@ -194,6 +200,7 @@ export class TeacherStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
+                this.successSubject.next('Privilégios asignados');
                 this.setRolesSubject.next(data);
             }, error => {
                 console.error('could not set user role from store, ' + error.message);

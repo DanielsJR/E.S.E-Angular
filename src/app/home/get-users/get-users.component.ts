@@ -54,8 +54,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
         }
         this.dataSource.data = data;
       });
-      this.managerStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
-      this.managerStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
+      this.managerStoreService.successMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
+      this.managerStoreService.errorMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'error')));
 
     } else if (this.uriRole === URI_TEACHERS) {
       this.teacherStoreService.users$.subscribe(data => {
@@ -65,8 +65,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
         }
         this.dataSource.data = data;
       });
-      this.teacherStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
-      this.teacherStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
+      this.teacherStoreService.successMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
+      this.teacherStoreService.errorMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'error')));
 
     } else if (this.uriRole === URI_STUDENTS) {
       this.studentStoreService.users$.subscribe(data => {
@@ -76,8 +76,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
         }
         this.dataSource.data = data;
       });
-      this.studentStoreService.success$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
-      this.studentStoreService.error$.subscribe(error => setTimeout(() => this.openSnackBar(error, 'error')));
+      this.studentStoreService.successMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
+      this.studentStoreService.errorMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'error')));
 
     } else {
       console.error('NO uriRole');

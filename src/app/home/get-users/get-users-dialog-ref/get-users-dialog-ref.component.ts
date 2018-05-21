@@ -15,7 +15,6 @@ import { GENDERS } from '../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../models/privileges';
 import { LocalStorageService } from '../../../services/local-storage.service';
-import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -45,8 +44,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private localStorageService: LocalStorageService,
-        private snackbarService: SnackbarService) {
+        private localStorageService: LocalStorageService) {
 
         this.user = data.user;
         this.uriRole = data.uriRole;
@@ -60,65 +58,64 @@ export class GetUsersDialogRefComponent implements OnInit {
         //JSON.stringify(this.user.id);
 
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.managerStoreService.error$.subscribe(() => this.dialogRef.close('error'));
-
-            this.managerStoreService.setRoles$.subscribe(user => {
-                if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
+            this.managerStoreService.createSuccess$.subscribe(_ => {
+                this.dialogRef.close('created');
             });
 
             this.managerStoreService.updateSuccess$.subscribe(user => {
                 this.teacherStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
-                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'success'));
+            });
 
-            })
             this.managerStoreService.deleteSuccess$.subscribe((user) => {
                 this.teacherStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
-                setTimeout(() => this.openSnackBar('Usuario Borrado', 'success'));
             });
 
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.teacherStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+            this.managerStoreService.setRoles$.subscribe(user => {
+                this.user = user;
+                if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
+            });
 
-            this.teacherStoreService.setRoles$.subscribe(user => {
-                if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
+
+        } else if (this.uriRole === URI_TEACHERS) {
+            this.teacherStoreService.createSuccess$.subscribe(_ => {
+                this.dialogRef.close('created');
             });
 
             this.teacherStoreService.updateSuccess$.subscribe(user => {
                 this.managerStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
-                setTimeout(() => this.openSnackBar('Usuario Actualizado', 'success'));
             });
+
             this.teacherStoreService.deleteSuccess$.subscribe((user) => {
                 this.managerStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
-                setTimeout(() => this.openSnackBar('Usuario Borrado', 'success'));
+            });
+
+            this.teacherStoreService.setRoles$.subscribe(user => {
+                this.user = user;
+                if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
             });
 
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.success$.subscribe(() => this.dialogRef.close('created'));
-            this.studentStoreService.error$.subscribe(() => this.dialogRef.close('error'));
+            this.studentStoreService.createSuccess$.subscribe(_ => {
+                this.dialogRef.close('created');
+            });
+
+            this.studentStoreService.updateSuccess$.subscribe(user => {
+                this.dialogRef.close('edited');
+            });
+
+            this.studentStoreService.deleteSuccess$.subscribe((user) => {
+                this.dialogRef.close('deleted');
+            });
+
         } else {
             console.error('NO uriRole');
         }
 
-    }
-
-    openSnackBar(message: string, type: any): void {
-        let data = {
-            message: message,
-            uriRole: this.uriRole,
-            type: type
-        };
-
-        let snackBarRef = this.snackbarService.openSnackBar(data);
-        snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-        snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-        snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
     }
 
 
@@ -314,6 +311,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.user = this.editForm.value;
+
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.update(this.user);
 
@@ -330,7 +328,6 @@ export class GetUsersDialogRefComponent implements OnInit {
     }
 
     delete(): void {
-        //  console.log('deleting... ' + JSON.stringify(this.user));
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.delete(this.user);
 

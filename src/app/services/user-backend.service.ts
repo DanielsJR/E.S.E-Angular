@@ -21,8 +21,8 @@ export class UserBackendService {
         console.log(`resource called: ${url}`)
         return this.httpCli.get<User[]>(url)
             .pipe(
-                tap(users => console.log(`N° Users: ${users.length}`)),
-                catchError(this.handleError('getUsers', []))
+                tap(users => console.log(`N° Users: ${users.length}`))
+                // ,catchError(this.handleError('getUsers', []))
             );
     }
 
@@ -31,7 +31,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<User>(url, user)
             .pipe(
-                catchError(this.handleError<User>(`createUser`))
+                tap(_ => console.log(`created user name=${user.firstName}`))
+                // ,catchError(this.handleError<User>(`createUser`))
             );
     }
 
@@ -41,7 +42,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user)
             .pipe(
-                catchError(this.handleError<User>(`updateUser`))
+                tap(_ => console.log(`edited user id=${id}`))
+                // ,catchError(this.handleError<User>(`updateUser`))
             );
     }
 
@@ -51,7 +53,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<{}>(url)
             .pipe(
-                catchError(this.handleError<{}>(`deleteUser`))
+                tap(_ => console.log(`deleted user id=${id}`))
+                // ,catchError(this.handleError<{}>(`deleteUser`))
             );
     }
 
@@ -60,8 +63,8 @@ export class UserBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(
-                tap(_ => console.log(`fetched user id=${id}`)),
-                catchError(this.handleError<User>(`getUser id=${id}`))
+                tap(_ => console.log(`fetched user id=${id}`))
+                // ,catchError(this.handleError<User>(`getUser id=${id}`))
             );
     }
 
@@ -70,7 +73,8 @@ export class UserBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(
-                catchError(this.handleError<User>(`getUser token=${token}`))
+                tap(_ => console.log(`fetched user token=${token}`))
+                // ,catchError(this.handleError<User>(`getUser token=${token}`))
             );
     }
 
@@ -79,7 +83,8 @@ export class UserBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(
-                catchError(this.handleError<User>(`getUser name=${name}`))
+                tap(_ => console.log(`fetched user username=${name}`))
+                // ,catchError(this.handleError<User>(`getUser name=${name}`))
             );
     }
 
@@ -95,7 +100,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.get<User[]>(url)
             .pipe(
-                catchError(this.handleError(`getUsersByRole`, []))
+                tap(_ => console.log(`fetched user role=${role}`))
+                // ,catchError(this.handleError(`getUsersByRole`, []))
             );
     }
 
@@ -104,7 +110,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, resetedPass)
             .pipe(
-                catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
+                tap(result => console.log(`pass reseted: ${result}`))
+                // ,catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
             );
 
     }
@@ -114,8 +121,8 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<User>(url, roles)
             .pipe(
-                tap(user => console.log(`fetched user id=${user.id} new roles=${user.roles}`)),
-                catchError(this.handleError<User>(`setRoles id=${id}`))
+                tap(user => console.log(`fetched user id=${user.id} new roles=${user.roles}`))
+                // , catchError(this.handleError<User>(`setRoles id=${id}`))
             );
     }
 

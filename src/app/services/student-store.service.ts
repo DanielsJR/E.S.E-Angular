@@ -17,10 +17,19 @@ export class StudentStoreService {
     private dataStore: { users: User[] };
 
     private errorSubject = <Subject<any>>new Subject();
-    error$ = this.errorSubject.asObservable();
+    public readonly errorMessage$ = this.errorSubject.asObservable();
 
     private successSubject = <Subject<any>>new Subject();
-    public readonly success$ = this.successSubject.asObservable();
+    public readonly successMessage$ = this.successSubject.asObservable();
+
+    private createSuccessSubject = <Subject<User>>new Subject();
+    public readonly createSuccess$ = this.createSuccessSubject.asObservable();
+
+    private updateSuccessSubject = <Subject<User>>new Subject();
+    public readonly updateSuccess$ = this.updateSuccessSubject.asObservable();
+
+    private deleteSuccessSubject = <Subject<User>>new Subject();
+    public readonly deleteSuccess$ = this.deleteSuccessSubject.asObservable();
 
     uriRole: string = URI_STUDENTS;
 
@@ -37,7 +46,7 @@ export class StudentStoreService {
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
-                    this.successSubject.next('lista vacia');
+                    this.successSubject.next('Lista de Alumnos vacia');
                 } else {
                     this.dataStore.users = data;
                     this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -45,7 +54,7 @@ export class StudentStoreService {
                 }
             }, error => {
                 console.error('error retrieving users, ' + error.message);
-                this.errorSubject.next('error retrieving users');
+                this.errorSubject.next('Error al conseguir lista de Alumnos');
             }
             );
     }
@@ -56,10 +65,11 @@ export class StudentStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('user created');
+                this.successSubject.next('Alumno Creado');
+                this.createSuccessSubject.next(data);
             }, error => {
                 console.error('could not create User, ' + error.message);
-                this.errorSubject.next('could not create user');
+                this.errorSubject.next('Error al crear Alumno');
             }
             );
     }
@@ -74,10 +84,11 @@ export class StudentStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('user updated');
+                this.successSubject.next('Alumno Actualizado');
+                this.updateSuccessSubject.next(data);
             }, error => {
                 console.error('could not update user from store, ' + error.message);
-                this.errorSubject.next('could not update user');
+                this.errorSubject.next('Error al actualizar Alumno');
             })
     }
 
@@ -89,10 +100,11 @@ export class StudentStoreService {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next(user);
+                this.successSubject.next('Alumno Eliminado');
+                this.deleteSuccessSubject.next(user);
             }, error => {
                 console.error('could not delete user from store, ' + error.message);
-                this.errorSubject.next('could not delete user');
+                this.errorSubject.next('Error al borrar Alumno');
             }
             );
     }

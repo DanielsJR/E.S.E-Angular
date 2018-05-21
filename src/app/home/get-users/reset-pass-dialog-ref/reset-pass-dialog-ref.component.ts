@@ -26,10 +26,7 @@ export class ResetPassDialogRefComponent implements OnInit {
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
-  ngOnInit() {
-
-  }
-
+  ngOnInit() { }
 
   openSnackBar(message: string, type: any): void {
     let data = {
@@ -43,7 +40,6 @@ export class ResetPassDialogRefComponent implements OnInit {
     snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
     snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
-
 
   resetPassword(): void {
     const n1 = this.user.firstName.substr(0, this.user.firstName.indexOf(' ')) || this.user.firstName;
@@ -61,8 +57,7 @@ export class ResetPassDialogRefComponent implements OnInit {
           setTimeout(() => this.openSnackBar('Error al restablecer contraseña', 'Error'));
         };
 
-      }
-      );
+      });
   }
 
   cancel(): void {
