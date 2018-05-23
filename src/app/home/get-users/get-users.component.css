@@ -52,12 +52,16 @@ mat-table {
 }
 
 .mat-list-avatar {
-    cursor: pointer;
+    --cursor: pointer;
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
 }
 
-.mat-list-avatar:hover {
-    opacity: 0.3;
+.fila:hover .mat-list-avatar {
+   opacity: 0.3;
 }
+
+.fila-dark:hover .mat-list-avatar {
+    opacity: 0.3;
+ }

@@ -119,9 +119,6 @@ export class HomeComponent implements OnInit {
     };
 
     let snackBarRef = this.snackbarService.openSnackBar(data);
-    snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-    snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-    snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
 
 

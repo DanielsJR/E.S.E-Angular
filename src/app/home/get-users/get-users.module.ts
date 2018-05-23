@@ -13,6 +13,7 @@ import { DialogService } from '../../services/dialog.service';
 import { SetRolesComponent } from './set-roles.component';
 import { ResetPassComponent } from './reset-pass.component';
 import { ImageZoomComponent } from './image-zoom.component';
+import { CardUserDialogRefComponent } from './card-user-dialog-ref/card-user-dialog-ref.component';
 
 
 
@@ -32,6 +33,8 @@ import { ImageZoomComponent } from './image-zoom.component';
     SetRolesComponent,
     ResetPassComponent,
     ImageZoomComponent,
+    CardUserDialogRefComponent,
+
 
   ],
 
@@ -49,6 +52,7 @@ import { ImageZoomComponent } from './image-zoom.component';
     ImageUserDialogRefComponent,
     ResetPassDialogRefComponent,
     SetRolesDialogRefComponent,
+    CardUserDialogRefComponent,
 
   ],
 

@@ -28,7 +28,7 @@
         <mat-list style="flex-grow: 8">
           <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-              alt="{{user?.username}}" (click)="openDialogImage(user); $event.stopPropagation()">
+              alt="{{user?.username}}">
             <h3 matLine> {{shortName(user)}} </h3>
           </mat-list-item>
         </mat-list>
@@ -58,7 +58,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="styleClasses" (click)="openDialogDetail(row)">
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="styleDarkClasses" (click)="openDialogCardUser(row)">
     </mat-row>
 
   </mat-table>

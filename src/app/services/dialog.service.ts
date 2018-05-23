@@ -4,6 +4,7 @@ import { ImageUserDialogRefComponent } from '../home/get-users/image-user-dialog
 import { ResetPassDialogRefComponent } from '../home/get-users/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from '../home/get-users/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { GetUsersDialogRefComponent } from '../home/get-users/get-users-dialog-ref/get-users-dialog-ref.component';
+import { CardUserDialogRefComponent } from '../home/get-users/card-user-dialog-ref/card-user-dialog-ref.component';
 
 
 @Injectable()
@@ -60,6 +61,15 @@ export class DialogService {
     config.minHeight = '300px';
 
     return this.dialog.open(ImageUserDialogRefComponent, config);
+  }
+
+  openDialogCardUser(data: any): MatDialogRef<CardUserDialogRefComponent> {
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '320px';
+   
+    return this.dialog.open(CardUserDialogRefComponent, config);
   }
 
   openDialogResetPass(data: any): MatDialogRef<ResetPassDialogRefComponent> {

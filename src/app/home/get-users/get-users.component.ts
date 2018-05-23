@@ -32,7 +32,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   user: User;
   roles: string[];
   isDark = this.localstorage.getIsDarkTheme();
-  styleClasses: {};
+  styleDarkClasses: {};
   @Input() uriRole;
 
 
@@ -186,17 +186,23 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openDialogImage(user: User): void {
+  openDialogCardUser(user: User): void {
     let data = {
       user: user,
       uriRole: this.uriRole,
-      type: 'imageZoom'
+      type: 'cardUser'
     };
 
-    let dialogRef = this.dialogService.openDialogImage(data);
+    let dialogRef = this.dialogService.openDialogCardUser(data);
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'canceled') {
         console.log('canceled!');
+      } else if (result === 'detail') {
+        this.openDialogDetail(user);
+      } else if (result === 'edit') {
+        this.openDialogEdit(user);
+      } else if (result === 'delete') {
+        this.openDialogDelete(user);
       }
     });
   }
@@ -238,7 +244,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     // [ngClass]="{'fila': !isDark, 'fila-dark': isDark}" other way in the template
 
     // CSS classes: added/removed per current state of component properties
-    this.styleClasses = {
+    this.styleDarkClasses = {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };

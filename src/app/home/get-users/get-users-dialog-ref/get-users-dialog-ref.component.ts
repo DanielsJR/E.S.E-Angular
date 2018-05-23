@@ -310,6 +310,7 @@ export class GetUsersDialogRefComponent implements OnInit {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
+        this.editForm.value.roles = this.user.roles;
         this.user = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
