@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatButton } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatButton, MatDialogRef } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
 import { DialogService } from '../../services/dialog.service';
@@ -10,6 +10,8 @@ import { TeacherStoreService } from '../../services/teacher-store.service';
 import { StudentStoreService } from '../../services/student-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../services/snackbar.service';
+import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 
 
 @Component({
@@ -21,6 +23,7 @@ import { SnackbarService } from '../../services/snackbar.service';
 export class GetUsersComponent implements OnInit, AfterViewInit {
 
   privilege: string;
+
   // mat table
   users: User[];
   displayedColumns = ['username', 'crud'];
@@ -32,9 +35,9 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   user: User;
   roles: string[];
   isDark = this.localstorage.getIsDarkTheme();
-  styleDarkClasses: {};
+  rowClasses: {};
   @Input() uriRole;
-
+  @ViewChild(CrudUserDialogComponent) private crudUserDialog: CrudUserDialogComponent;
 
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService,
@@ -83,17 +86,21 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       console.error('NO uriRole');
     }
 
+    this.localstorage.isThemeDark$.subscribe(isDark => {
+      this.isDark = isDark;
+      this.setRowClass();
+    });
 
-    this.localstorage.isThemeDark$.subscribe(
-      isDark => {
-        this.isDark = isDark;
-        this.setDarkClass();
-      }
-    );
-    this.setDarkClass();
+    this.setRowClass();
 
   }
 
+  setRowClass() {
+    this.rowClasses = {
+      'fila': !this.isDark,
+      'fila-dark': this.isDark
+    };
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -107,102 +114,17 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   }
 
 
-  openDialogDetail(user: User) {
-    let data = {
-      user: user,
-      uriRole: this.uriRole,
-      type: 'detail'
-    };
-
-    let dialogRef = this.dialogService.openDialogDetail(data);
+  openDialogCardUser(dialogRef: MatDialogRef<CardUserDialogRefComponent>, user: User): void {
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'edit') {
-        this.openDialogEdit(user);
-      } else if (result === 'delete') {
-        this.openDialogDelete(user);
-      }
-    });
-  }
-
-  openDialogEdit(user: User) {
-    let data = {
-      user: user,
-      uriRole: this.uriRole,
-      type: 'edit'
-    };
-
-    let dialogRef = this.dialogService.openDialogEdit(data);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not edit');
-      } else if (result === 'edited') {
-        console.log('edited!');
-      }
-
-    });
-  }
-
-  openDialogDelete(user: User) {
-    let data = {
-      user: user,
-      uriRole: this.uriRole,
-      type: 'delete'
-    };
-
-    let dialogRef = this.dialogService.openDialogDelete(data);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not delete');
-      } else if (result === 'deleted') {
-        console.log('deleted!');
-      }
-    });
-
-  }
-
-  openDialogCreate() {
-    let data = {
-      user: this.user = new User(),
-      uriRole: this.uriRole,
-      type: 'create'
-    };
-
-    let dialogRef = this.dialogService.openDialogCreate(data);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'canceled') {
-        console.log('canceled!');
-      } else if (result === 'error') {
-        console.error('ERROR!!!, could not create');
-      } else if (result === 'created') {
-        console.log('created!');
-      }
-    });
-  }
-
-  openDialogCardUser(user: User): void {
-    let data = {
-      user: user,
-      uriRole: this.uriRole,
-      type: 'cardUser'
-    };
-
-    let dialogRef = this.dialogService.openDialogCardUser(data);
-    dialogRef.afterClosed().subscribe(result => {
+      this.crudUserDialog.user = user;
       if (result === 'canceled') {
         console.log('canceled!');
       } else if (result === 'detail') {
-        this.openDialogDetail(user);
+        this.crudUserDialog.openDialogDetail();
       } else if (result === 'edit') {
-        this.openDialogEdit(user);
+        this.crudUserDialog.openDialogEdit();
       } else if (result === 'delete') {
-        this.openDialogDelete(user);
+        this.crudUserDialog.openDialogDelete();
       }
     });
   }
@@ -239,23 +161,14 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     return 'no privilege';
   }
 
-
-  setDarkClass() {
-    // [ngClass]="{'fila': !isDark, 'fila-dark': isDark}" other way in the template
-
-    // CSS classes: added/removed per current state of component properties
-    this.styleDarkClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
-  }
-
   shortName(user: User): string {
     const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
     const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
     return n1 + ' ' + n2;
   }
 }
+
+
 
 export class MatPaginatorIntlSpa extends MatPaginatorIntl {
   itemsPerPageLabel = 'Items por pagina:';

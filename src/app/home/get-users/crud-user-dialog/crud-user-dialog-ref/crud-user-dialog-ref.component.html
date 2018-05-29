@@ -15,7 +15,7 @@
             <p matLine>
                 <span class="role-style">{{rolesToSpanish(user.roles)}}</span>
             </p>
-            <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
+            <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
         </mat-list-item>
 
     </mat-list>
@@ -282,7 +282,7 @@
                     </button>
                 </mat-menu>
             </mat-list-item>
-            <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
+            <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
         </mat-list>
         <mat-divider></mat-divider>
         <mat-dialog-content>
@@ -331,7 +331,7 @@
                             <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="resetPass.openDialogResetPass()">
                                 <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
                             </button>
-                            <nx-reset-pass #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass>
+                            <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard" *ngIf="isAdmin && (privilege!='student')">
@@ -366,7 +366,7 @@
                             <mat-hint>
                                 <strong>Esto cambiará los privilegios del usuario</strong>
                             </mat-hint>
-                            <nx-set-roles #setRoles [user]="editForm.value" [uriRole]="uriRole"></nx-set-roles>
+                            <nx-set-roles-dialog #setRoles [user]="editForm.value" [uriRole]="uriRole"></nx-set-roles-dialog>
                         </mat-form-field>
 
                     </div>
@@ -503,7 +503,7 @@
                 <span class="role-style">{{rolesToSpanish(user.roles)}}</span>
             </p>
         </mat-list-item>
-        <nx-image-zoom #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom>
+        <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
     </mat-list>
     <mat-divider></mat-divider>
     <mat-dialog-actions>

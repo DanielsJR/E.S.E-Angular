@@ -1,18 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { User } from '../../../models/user';
+
 import { DomSanitizer } from '@angular/platform-browser';
+import { User } from '../../../../models/user';
 
 @Component({
-  selector: 'nx-image-user-dialog-ref',
-  templateUrl: './image-user-dialog-ref.component.html',
-  styleUrls: ['./image-user-dialog-ref.component.css']
+  selector: 'nx-image-zoom-user-dialog-ref',
+  templateUrl: './image-zoom-user-dialog-ref.component.html',
+  styleUrls: ['./image-zoom-user-dialog-ref.component.css']
 })
-export class ImageUserDialogRefComponent implements OnInit {
+export class ImageZoomUserDialogRefComponent implements OnInit {
 
   user: User;
 
-  constructor(public dialogRef: MatDialogRef<ImageUserDialogRefComponent>,
+  constructor(public dialogRef: MatDialogRef<ImageZoomUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
   ) {
     this.user = data.user;

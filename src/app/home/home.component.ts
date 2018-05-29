@@ -32,10 +32,15 @@ export class HomeComponent implements OnInit {
 
   welcome: string;
 
-  scrolled = false;
+  isScrolled = false;
   triggerUsers = true;
   isTooltipDisabled = false;
   menuUser = true;
+
+  profileAction = '';
+
+  profileTitle = '';
+
 
   @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
   @ViewChild("settings") private menu: MatMenu;
@@ -52,9 +57,11 @@ export class HomeComponent implements OnInit {
     this.menu.closed.subscribe(() => {
       // TODO
     });
+
   }
 
   ngOnInit() {
+
     const token = this.localStorageService.getTokenParsed();
     let uriRole;
 
@@ -76,6 +83,8 @@ export class HomeComponent implements OnInit {
       this.openSnackBar(this.welcome, 'success');
     },
       error => console.error('error getting the token ' + error));
+
+
   }
 
   shortName(user: User): string {
@@ -83,6 +92,7 @@ export class HomeComponent implements OnInit {
     const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
     return n1 + ' ' + n2;
   }
+
   rolesToSpanish(roles: string[]): string {
     let rolesSpanish: string[] = [];
     for (let role of roles) {
@@ -109,7 +119,6 @@ export class HomeComponent implements OnInit {
     this.themePicker.removeTheme();
     this.router.navigate(['/']);
   }
-
 
   openSnackBar(message: string, type: any): void {
     let data = {

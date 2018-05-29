@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { User } from '../../../models/user';
-import { ManagerStoreService } from '../../../services/manger-store.service';
-import { TeacherStoreService } from '../../../services/teacher-store.service';
-import { StudentStoreService } from '../../../services/student-store.service';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../../../app.config';
+import { User } from '../../../../models/user';
+import { ManagerStoreService } from '../../../../services/manger-store.service';
+import { TeacherStoreService } from '../../../../services/teacher-store.service';
+import { StudentStoreService } from '../../../../services/student-store.service';
 
 
 @Component({

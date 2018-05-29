@@ -1,28 +1,28 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { User } from '../../../models/user';
-import { ManagerStoreService } from '../../../services/manger-store.service';
-import { TeacherStoreService } from '../../../services/teacher-store.service';
-import { StudentStoreService } from '../../../services/student-store.service';
+import { User } from '../../../../models/user';
+import { ManagerStoreService } from '../../../../services/manger-store.service';
+import { TeacherStoreService } from '../../../../services/teacher-store.service';
+import { StudentStoreService } from '../../../../services/student-store.service';
 import {
     URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
     ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH
-} from '../../../app.config';
+} from '../../../../app.config';
 import * as moment from 'moment';
-import { COMMUNNES } from '../../../models/communes';
-import { GENDERS } from '../../../models/genders';
+import { COMMUNNES } from '../../../../models/communes';
+import { GENDERS } from '../../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PRIVILEGES } from '../../../models/privileges';
-import { LocalStorageService } from '../../../services/local-storage.service';
+import { PRIVILEGES } from '../../../../models/privileges';
+import { LocalStorageService } from '../../../../services/local-storage.service';
 
 
 @Component({
-    templateUrl: './get-users-dialog-ref.component.html',
-    styleUrls: ['./get-users-dialog-ref.component.css']
+    templateUrl: './crud-user-dialog-ref.component.html',
+    styleUrls: ['./crud-user-dialog-ref.component.css']
 })
 
-export class GetUsersDialogRefComponent implements OnInit {
+export class CrudUserDialogRefComponent implements OnInit {
 
     createForm: FormGroup;
     editForm: FormGroup;
@@ -38,7 +38,7 @@ export class GetUsersDialogRefComponent implements OnInit {
     isAdmin = false;
 
 
-    constructor(public dialogRef: MatDialogRef<GetUsersDialogRefComponent>,
+    constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,

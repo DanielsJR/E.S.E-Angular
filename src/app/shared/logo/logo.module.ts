@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MaterialModule } from '../material.module';
 import { LogoComponent } from './logo.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    MatButtonModule,
   ],
 
   declarations: [

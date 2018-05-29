@@ -1,4 +1,4 @@
-<mat-sidenav-container id="container" #container [class]="themePicker.themeName">
+<mat-sidenav-container [class]="themePicker.themeName">
 
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
@@ -33,7 +33,7 @@
                             alt="{{privilege | lowercase}}">
                         <h3 *ngIf="user" matLine> {{shortName(user)}} </h3>
                         <p matLine>
-                            <span *ngIf="user" >{{rolesToSpanish(user.roles)}}</span>
+                            <span *ngIf="user" class="roles">{{rolesToSpanish(user.roles)}}</span>
                         </p>
                     </mat-list-item>
                 </mat-list>
@@ -46,16 +46,85 @@
             </mat-toolbar>
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
+
+                <button mat-menu-item (click)="sidenavMenuProfile.toggle()">
+                    <mat-icon svgIcon="account-circle"></mat-icon>
+                    <span> Perfil </span>
+                </button>
+
                 <button mat-menu-item (click)="sidenavSettings.toggle()">
                     <mat-icon svgIcon="account-settings-variant"></mat-icon>
                     <span> Preferencias </span>
                 </button>
+
                 <button mat-menu-item (click)="logout()">
                     <mat-icon svgIcon="logout"></mat-icon>
                     <span> Salir </span>
                 </button>
+
             </mat-menu>
 
+
+            <!-- sidenav user-menu-profile -->
+            <mat-sidenav mode="side" opened="false" #sidenavMenuProfile class="sidenav">
+
+                <mat-toolbar color="accent" class="side-toolbar">
+                    <button mat-icon-button (click)="sidenavMenuProfile.toggle()" #btnMenuProfileBack>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
+                    </button>
+                    <span class="spacer-r"></span>
+                    <h1>Perfil</h1>
+                </mat-toolbar>
+
+                <mat-list class="listAvatarContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+                    <mat-list-item>
+                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                            alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+                    </mat-list-item>
+                    <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
+                </mat-list>
+
+                <mat-nav-list class="menuProfile">
+                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='usuario'">
+                        <h4 mat-line>Usuario</h4>
+                        <mat-icon matListIcon svgIcon="account-circle"></mat-icon>
+                    </mat-list-item>
+
+                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='personal'">
+                        <h4 mat-line>Informacion Personal</h4>
+                        <mat-icon matListIcon svgIcon="account"></mat-icon>
+                    </mat-list-item>
+
+                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='contacto'">
+                        <h4 mat-line>Contacto</h4>
+                        <mat-icon matListIcon svgIcon="phone"></mat-icon>
+                    </mat-list-item>
+                </mat-nav-list>
+
+            </mat-sidenav>
+
+            <!-- sidenav user-profile -->
+            <mat-sidenav mode="side" opened="false" #sidenavProfile class="sidenav">
+
+                <mat-toolbar color="accent" class="side-toolbar">
+                    <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
+                    </button>
+                    <mat-list style="flex-grow: 8">
+                        <mat-list-item>
+                            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                                alt="{{privilege | lowercase}}">
+                        </mat-list-item>
+                    </mat-list>
+                    <span class="spacer-r"></span>
+                    <span>{{profileTitle}}</span>
+                    <span>&nbsp;&nbsp;</span>
+                    <mat-icon svgIcon="account-edit"></mat-icon>
+                </mat-toolbar>
+
+                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction" (title)="profileTitle=$event"></nx-user-profile>
+
+            </mat-sidenav>
 
             <!-- sidenav settings -->
             <mat-sidenav mode="side" opened="false" #sidenavSettings class="sidenav">
@@ -69,25 +138,8 @@
                     <h1>Preferencias</h1>
                 </mat-toolbar>
 
-                <!-- sidenav content //TODO -->
-                <mat-nav-list class="menu">
-                    <mat-list-item>
-                        <h3 matLine>Nombres: {{user?.firstName}}</h3>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <h3 matLine>Apellidos: {{user?.lastName}}</h3>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <h3 matLine>Telefono: {{user?.mobile}}</h3>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <h3 matLine>Dirección: {{user?.address}}</h3>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <h3 matLine>Mail: {{user?.email}}</h3>
-                    </mat-list-item>
-                </mat-nav-list>
-
+                <!-- sidenav user-settings //TODO -->
+                <nx-user-settings [user]="user"></nx-user-settings>
             </mat-sidenav>
 
             <!-- sidenav menu -->
@@ -126,11 +178,11 @@
         <!-- toolbar2 -->
         <mat-toolbar class="toolbar2">
             <span class="spacer-c"></span>
-            <nx-logo [jelloState]=scrolled></nx-logo>
+            <nx-logo [jelloState]=isScrolled></nx-logo>
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" nxScroller (scrollEvent)="scrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+        <div class="content" nxScroller (scrollEvent)="isScrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
             <router-outlet></router-outlet>
         </div>
 

@@ -8,6 +8,9 @@ import { FullscreenDirective } from './directives/fullscreen.directive';
 import { LogoModule } from './logo/logo.module';
 import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { ThemePickerModule } from './theme-picker/theme-picker.module';
+import { SnackbarsRefComponent } from './snackbars-ref/snackbars-ref.component';
+import { SnackbarRefModule } from './snackbars-ref/snackbars-ref.module';
+import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 
 
 @NgModule({
@@ -17,7 +20,7 @@ import { ThemePickerModule } from './theme-picker/theme-picker.module';
 
   declarations: [
     ScrollerDirective,
-    FullscreenDirective
+    FullscreenDirective,
   ],
 
   exports: [
@@ -30,6 +33,8 @@ import { ThemePickerModule } from './theme-picker/theme-picker.module';
     MaterialModule,
     ScrollerDirective,
     FullscreenDirective,
+    SnackbarRefModule,
+
   ]
 })
 export class SharedModule { }

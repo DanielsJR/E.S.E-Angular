@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../material.module';
 import { FullScreenComponent } from './full-screen.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule
   ],
 
   declarations: [

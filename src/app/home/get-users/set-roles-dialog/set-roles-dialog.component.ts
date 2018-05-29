@@ -1,14 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DialogService } from '../../services/dialog.service';
-import { User } from '../../models/user';
+import { User } from '../../../models/user';
+import { DialogService } from '../../../services/dialog.service';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dialog-ref.component';
+
 
 
 @Component({
-    selector: 'nx-set-roles',
+    selector: 'nx-set-roles-dialog',
     template: ``,
     styles: []
 })
-export class SetRolesComponent implements OnInit {
+export class SetRolesDialogComponent implements OnInit {
 
     @Input()
     user: User;
@@ -16,10 +19,11 @@ export class SetRolesComponent implements OnInit {
     @Input()
     uriRole: string;
 
-    constructor(private dialogService: DialogService) { }
+    constructor(public dialog: MatDialog) { }
 
     ngOnInit() {
     }
+
 
     openDialogSetRoles(): void {
         let data = {
@@ -27,8 +31,13 @@ export class SetRolesComponent implements OnInit {
             uriRole: this.uriRole,
             type: 'setRoles'
         };
+        let config = new MatDialogConfig();
+        config.data = data;
+        config.panelClass = 'dialogService';
+        config.width = '500px';
+        config.height = 'auto';
 
-        let dialogRef = this.dialogService.openDialogSetRoles(data);
+        let dialogRef = this.dialog.open(SetRolesDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
             if (result === 'canceled') {
                 console.log('canceled!');
@@ -39,9 +48,7 @@ export class SetRolesComponent implements OnInit {
 
             }
         });
-
     }
-
 
 
 }

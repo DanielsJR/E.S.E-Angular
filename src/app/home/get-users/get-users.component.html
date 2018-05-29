@@ -41,24 +41,26 @@
       <mat-cell *matCellDef="let user">
 
 
-        <button mat-icon-button color="primary" (click)="openDialogDetail(user); $event.stopPropagation()">
+        <button mat-icon-button color="primary" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
           <mat-icon svgIcon="eye"></mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="openDialogEdit(user); $event.stopPropagation()">
+        <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
           <mat-icon svgIcon="pencil"></mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="openDialogDelete(user); $event.stopPropagation()">
+        <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
 
+        <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole"></nx-crud-user-dialog>
 
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="styleDarkClasses" (click)="openDialogCardUser(row)">
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" (click)="openDialogCardUser(cardUserDialog.openDialogCardUser(),row)">
+      <nx-card-user-dialog #cardUserDialog [user]="row" [uriRole]="uriRole"></nx-card-user-dialog>
     </mat-row>
 
   </mat-table>
@@ -67,10 +69,9 @@
   </mat-paginator>
 
   <span class="add">
-    <button mat-fab (click)="openDialogCreate()" matTooltip="Agregar {{uriRole}}">
+    <button mat-fab (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{uriRole}}">
       <mat-icon svgIcon="account-plus"></mat-icon>
     </button>
   </span>
   
-   
 </mat-card>

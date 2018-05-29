@@ -12,7 +12,10 @@ import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
-import { SnackbarsRefComponent } from './shared/snackbars-ref/snackbars-ref.component';
+
+import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from '@angular/material-moment-adapter';
+
 
 
 @NgModule({
@@ -25,32 +28,42 @@ import { SnackbarsRefComponent } from './shared/snackbars-ref/snackbars-ref.comp
     LoginModule,
     AppRoutingModule,
     HttpClientModule,
+
     NgProgressModule.forRoot(),
     NgProgressHttpModule,
+
+    MatMomentDateModule,
+
   ],
 
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    SnackbarsRefComponent,
-        
+
+
   ],
 
   providers: [
-
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AppAuthInterceptor,
       multi: true,
     },
+
+    { provide: MAT_DATE_LOCALE, useValue: 'es' },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+
+
   ],
+
 
   bootstrap: [
     AppComponent,
   ],
 
-  entryComponents:[
-    SnackbarsRefComponent,
+  entryComponents: [
+
   ]
 
 

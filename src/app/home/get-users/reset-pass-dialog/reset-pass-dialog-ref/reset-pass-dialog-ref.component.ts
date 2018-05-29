@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { User } from '../../../models/user';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UserBackendService } from '../../../services/user-backend.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { User } from '../../../../models/user';
+import { UserBackendService } from '../../../../services/user-backend.service';
+import { SnackbarService } from '../../../../services/snackbar.service';
+
 
 @Component({
   selector: 'nx-reset-pass-dialog-ref',

@@ -1,0 +1,162 @@
+<div class="profileSideNav">
+  <form [formGroup]="editProfileForm" (ngSubmit)="save()" [ngSwitch]="profileAction">
+
+    <div *ngSwitchCase="'usuario'">
+
+      <mat-form-field appearance="standard">
+        <mat-label>
+          <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de Usuario
+        </mat-label>
+        <input matInput formControlName="username" required>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="eUsername.hasError('required')">Nombre de Usuario es
+          <strong>requerido</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+        (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+
+        <mat-label>
+          <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
+        </mat-label>
+        <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
+
+        <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
+          <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
+        </button>
+
+        <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
+          (select)="selectEventEdit($event)">
+          <mat-icon svgIcon="folder-upload"></mat-icon>
+          <span class="text-upper">Buscar...</span>
+        </td-file-input>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>
+          <i class="mdi mdi-lock material-icons app-input-icon"></i>Contraseña de Usuario
+        </mat-label>
+        <input matInput readonly>
+        <mat-hint>
+          <strong>Esto cambiará tu contraseña de usuario</strong>
+        </mat-hint>
+        <button type="button" mat-raised-button color="warn" class="btnResetPass">
+          <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Cambiar Contraseña
+        </button>
+
+
+      </mat-form-field>
+
+      <div class="btnSave">
+        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editProfileForm.valid">Guardar</button>
+      </div>
+
+
+    </div>
+
+    <div *ngSwitchCase="'personal'">
+      <mat-form-field appearance="standard">
+        <input matInput formControlName="firstName" required>
+        <mat-label>
+          <i class="mdi mdi-account material-icons app-input-icon"></i>Nombres
+        </mat-label>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="eFirstName.hasError('required')">Nombre es
+          <strong>requerido</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-label>
+          <i class="mdi mdi-account-outline material-icons app-input-icon"></i>Apellidos
+        </mat-label>
+        <input matInput formControlName="lastName" required>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="eLastName.hasError('required')">Apellido es
+          <strong>requerido</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <input matInput formControlName="dni">
+        <mat-label>
+          <i class="mdi mdi-barcode material-icons app-input-icon"></i>RUT
+        </mat-label>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <input matInput [matDatepicker]="picker" formControlName="birthday">
+        <mat-label>
+          <i class="mdi mdi-cake-variant material-icons app-input-icon"></i>Fecha de Nacimiento
+        </mat-label>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="standard">
+        <mat-select formControlName="gender" [compareWith]="compareFn">
+          <mat-option *ngFor="let gender of genders" [value]="gender.viewValue">
+            {{ gender.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-label>
+          <i class="mdi mdi-gender-male-female material-icons app-input-icon"></i>Genero
+        </mat-label>
+      </mat-form-field>
+
+      <div class="btnSave">
+        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editProfileForm.valid">Guardar</button>
+      </div>
+
+    </div>
+
+    <div *ngSwitchCase="'contacto'">
+
+      <mat-form-field appearance="standard">
+        <input matInput [type]="tel" formControlName="mobile" #mobileEdit maxlength="9">
+        <mat-label>
+          <i class="mdi mdi-phone material-icons app-input-icon"></i>Telefóno
+        </mat-label>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <input matInput formControlName="email">
+        <mat-label>
+          <i class="mdi mdi-email material-icons app-input-icon"></i>Email
+        </mat-label>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <input matInput formControlName="address">
+        <mat-label>
+          <i class="mdi mdi-account-location material-icons app-input-icon"></i>Dirección
+        </mat-label>
+        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+      </mat-form-field>
+
+      <mat-form-field appearance="standard">
+        <mat-select formControlName="commune" [compareWith]="compareFn">
+          <mat-option *ngFor="let commune of communes" [value]="commune.viewValue">
+            {{ commune.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-label>
+          <i class="mdi mdi-map-marker material-icons app-input-icon"></i>Comuna
+        </mat-label>
+      </mat-form-field>
+
+      <div class="btnSave">
+        <button type="submit" mat-raised-button color="accent" tabindex="4" [disabled]="!editProfileForm.valid">Guardar</button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
