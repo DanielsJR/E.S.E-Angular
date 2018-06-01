@@ -8,6 +8,8 @@ import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { error } from 'util';
 import { LocalStorageService } from '../services/local-storage.service';
+import { TokenAuth } from '../models/token-auth';
+import { UserLoggedService } from '../services/user-logged.service';
 
 
 
@@ -23,15 +25,14 @@ export class LoginComponent implements OnInit {
   unauthMessage = 'Usuario o Contraseña Incorrecta';
   isError = false;
   isAuth = false;
- 
+
   constructor(
-    private formBuilder: FormBuilder, private loginService: LoginService,
-    private localStorageService: LocalStorageService, private router: Router
-  ) {
+    private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
+    private localStorageService: LocalStorageService, private router: Router) {
     this.user = new User();
   }
 
-  onSubmit(): void {
+  onSubmit2(): void {
     this.user.username = this.username.value;
     this.user.password = this.password.value;
     this.loginService
@@ -55,8 +56,33 @@ export class LoginComponent implements OnInit {
       );
   }
 
+  onSubmit(): void {
+    this.user.username = this.username.value;
+    this.user.password = this.password.value;
+    this.loginService.login(this.user.username, this.user.password).subscribe(user => {
+      console.log('setting local storage');
+      let tokenAuth = new TokenAuth(user.token, user.roles);
+      this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, tokenAuth);
+      const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
+      this.userLoggedService.userLogged(user);
+      this.router.navigate(['/home/' + uriRol]);
+    }, error => {
+      console.error(error.message);
+      if (error instanceof HttpErrorResponse) {
+        if (error.status === 401) {
+          this.username.setValue('');
+          this.password.setValue('');
+          this.loginForm.reset();
+          this.isError = true;
+        }
+      }
+    }
+    );
+  }
+
   ngOnInit(): void {
     this.buildForm();
+
   }
 
   buildForm(): void {

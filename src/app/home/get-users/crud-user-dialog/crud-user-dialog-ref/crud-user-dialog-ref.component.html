@@ -6,7 +6,9 @@
         <span>&nbsp;&nbsp;</span>
         <h1 mat-dialog-title>Detalles de Usuario</h1>
     </mat-toolbar>
+
     <mat-divider></mat-divider>
+
     <mat-list class="listContainer">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
@@ -19,7 +21,9 @@
         </mat-list-item>
 
     </mat-list>
+
     <mat-divider></mat-divider>
+
     <mat-dialog-content>
         <mat-tab-group dynamicHeight="true">
             <mat-tab label="Información Personal">
@@ -91,7 +95,9 @@
             </mat-tab>
         </mat-tab-group>
     </mat-dialog-content>
+
     <mat-divider></mat-divider>
+
     <mat-dialog-actions>
         <mat-toolbar>
             <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
@@ -114,7 +120,9 @@
             <span>&nbsp;&nbsp;</span>
             <h1 mat-dialog-title>Agregar {{privilege}}</h1>
         </mat-toolbar>
+
         <mat-divider></mat-divider>
+
         <mat-list class="listContainer">
             <mat-list-item>
                 <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}" (click)="fileInput.inputElement.click()"
@@ -125,7 +133,9 @@
                 </p>
             </mat-list-item>
         </mat-list>
+
         <mat-divider></mat-divider>
+
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
                 <mat-tab label="Información Personal">
@@ -178,14 +188,16 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
-                            (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+                            (keyup.delete)="fileInput.clear(); resetCreateAvatar()" (keyup.backspace)="fileInput.clear(); resetCreateAvatar()"
+                            flex>
 
                             <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
                             <mat-label>
                                 <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
                             </mat-label>
 
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
+                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetCreateAvatar(); $event.stopPropagation()"
+                                (keyup.enter)="fileInput.clear(); resetCreateAvatar()">
                                 <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
                             </button>
 
@@ -238,14 +250,16 @@
             </mat-tab-group>
 
         </mat-dialog-content>
+
         <mat-divider></mat-divider>
+
         <mat-dialog-actions>
             <mat-toolbar>
                 <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
-                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!createForm.valid">Agregar</button>
+                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine">Agregar</button>
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
@@ -261,7 +275,9 @@
             <span>&nbsp;&nbsp;</span>
             <h1 mat-dialog-title>Editar Usuario</h1>
         </mat-toolbar>
+
         <mat-divider></mat-divider>
+
         <mat-list class="listContainer">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
@@ -284,7 +300,9 @@
             </mat-list-item>
             <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
         </mat-list>
+
         <mat-divider></mat-divider>
+
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
                 <mat-tab label="Datos de Usuario">
@@ -302,14 +320,16 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
-                            (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+                            (keyup.delete)="fileInput.clear(); resetEditAvatar()" (keyup.backspace)="fileInput.clear(); resetEditAvatar()"
+                            flex>
 
                             <mat-label>
                                 <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
                             </mat-label>
                             <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
 
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
+                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetEditAvatar(); $event.stopPropagation()"
+                                (keyup.enter)="fileInput.clear(); resetEditAvatar()">
                                 <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
                             </button>
 
@@ -334,39 +354,18 @@
                             <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
-                        <mat-form-field appearance="standard" *ngIf="isAdmin && (privilege!='student')">
-                            <mat-select formControlName="roles" multiple required>
-                                <!--  <mat-select-trigger>
-                                    {{eRoles.value ? eRoles.value[0] : ''}}
-                                    <span *ngIf="eRoles.value?.length > 1" class="example-additional-selection">
-                                        (+{{eRoles.value.length - 1}} otros)
-                                    </span>
-                                </mat-select-trigger>!-->
-                                <mat-select-trigger>
-                                    <mat-chip-list>
-                                        <mat-chip *ngFor="let eRole of eRoles.value" class="chip-selection" [color]="(eRole ==='MANAGER')? 'primary':'accent' " selected="true">
-                                            {{privilegeToSpanish(eRole)}}
-                                        </mat-chip>
-                                    </mat-chip-list>
-                                </mat-select-trigger>
-                                <mat-option *ngFor="let role of rolesList" [value]="role.value">
-                                    {{role.viewValue}}
-                                </mat-option>
-                            </mat-select>
+                        <mat-form-field appearance="outline" floatLabel="always" *ngIf="isAdmin && (privilege!='student')">
                             <mat-label>
-                                <i class="mdi mdi-security-account material-icons app-input-icon"></i>Añadir o remover Privilegios
+                                <i class="mdi mdi-security-account material-icons app-input-icon"></i>Privilegios de Usuario
                             </mat-label>
-                            <mat-error *ngIf="eRoles.hasError('required')">Al menos un privilegio es
-                                <strong>requerido</strong>.
-                            </mat-error>
-                            <button type="button" mat-mini-fab color="warn" (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()" matSuffix
-                                matTooltip="Guardar Privilegio(s)" [disabled]="eRoles.pristine || eRoles.invalid">
-                                <mat-icon svgIcon="content-save"></mat-icon>
-                            </button>
+                            <input matInput readonly>
                             <mat-hint>
                                 <strong>Esto cambiará los privilegios del usuario</strong>
                             </mat-hint>
-                            <nx-set-roles-dialog #setRoles [user]="editForm.value" [uriRole]="uriRole"></nx-set-roles-dialog>
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="setRoles.openDialogSetRoles()">
+                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
+                            </button>
+                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
                         </mat-form-field>
 
                     </div>
@@ -472,14 +471,16 @@
                 </mat-tab>
             </mat-tab-group>
         </mat-dialog-content>
+
         <mat-divider></mat-divider>
+
         <mat-dialog-actions>
             <mat-toolbar>
                 <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver" cdkFocusRegionstart>
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
-                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editForm.valid">Guardar</button>
+                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="editForm.invalid || editForm.pristine">Guardar</button>
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
@@ -493,7 +494,9 @@
         <span>&nbsp;&nbsp;</span>
         <h1 mat-dialog-title>Borrar Usuario</h1>
     </mat-toolbar>
+
     <mat-divider></mat-divider>
+
     <mat-list class="listContainer2">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
@@ -505,7 +508,9 @@
         </mat-list-item>
         <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
     </mat-list>
+
     <mat-divider></mat-divider>
+
     <mat-dialog-actions>
         <mat-toolbar>
             <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>

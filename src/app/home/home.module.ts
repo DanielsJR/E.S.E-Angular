@@ -11,6 +11,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 
 import { CovalentFileModule } from '@covalent/core';
 import { ImageZoomUserDialogModule } from '../shared/dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
+import { SetPassDialogRefComponent } from './user-profile/set-pass-dialog/set-pass-dialog-ref/set-pass-dialog-ref.component';
+import { SetPassDialogComponent } from './user-profile/set-pass-dialog/set-pass-dialog.component';
 
 
 
@@ -19,8 +21,8 @@ import { ImageZoomUserDialogModule } from '../shared/dialogs/image-zoom-user-dia
     SharedModule,
     HomeRoutingModule,
     CovalentFileModule,
-    ImageZoomUserDialogModule,  
-   
+    ImageZoomUserDialogModule,
+
   ],
 
   declarations: [
@@ -29,8 +31,13 @@ import { ImageZoomUserDialogModule } from '../shared/dialogs/image-zoom-user-dia
     UsersMenuComponent,
     UserSettingsComponent,
     UserProfileComponent,
+    SetPassDialogComponent,
+    SetPassDialogRefComponent,
 
-    ],
+  ],
+  entryComponents: [
+    SetPassDialogRefComponent,
+  ]
 
 
 })

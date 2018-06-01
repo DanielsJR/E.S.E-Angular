@@ -26,9 +26,9 @@ export class CrudUserDialogComponent implements OnInit {
     }
 
 
-    openDialogDetail(): void {
+    openDialogDetail(user: User): void {
         let data = {
-            user: this.user,
+            user: (user) ? user : this.user,
             uriRole: this.uriRole,
             type: 'detail'
         };
@@ -42,16 +42,16 @@ export class CrudUserDialogComponent implements OnInit {
             if (result === 'canceled') {
                 console.log('canceled!');
             } else if (result === 'edit') {
-                this.openDialogEdit();
+                this.openDialogEdit(user);
             } else if (result === 'delete') {
-                this.openDialogDelete();//user
+                this.openDialogDelete(user);//user
             }
         });
     }
 
-    openDialogEdit(): void {
+    openDialogEdit(user: User): void {
         let data = {
-            user: this.user,
+            user: (user) ? user : this.user,
             uriRole: this.uriRole,
             type: 'edit'
         };
@@ -74,9 +74,9 @@ export class CrudUserDialogComponent implements OnInit {
         });
     }
 
-    openDialogDelete(): void {
+    openDialogDelete(user: User): void {
         let data = {
-            user: this.user,
+            user: (user) ? user : this.user,
             uriRole: this.uriRole,
             type: 'delete'
         };
@@ -98,7 +98,6 @@ export class CrudUserDialogComponent implements OnInit {
             }
         });
     }
-
 
     openDialogCreate(): void {
         let data = {

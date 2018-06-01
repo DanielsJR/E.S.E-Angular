@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Inject, OnInit, Input } from '@angular/core';
+import { Component, Inject, OnInit, Input, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
 import { ManagerStoreService } from '../../../../services/manger-store.service';
@@ -15,6 +15,7 @@ import { GENDERS } from '../../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { LocalStorageService } from '../../../../services/local-storage.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -37,6 +38,12 @@ export class CrudUserDialogRefComponent implements OnInit {
     hidePass = true;
     isAdmin = false;
 
+    subscriptionCreateSuccess: Subscription;
+    subscriptionUpdateSuccess: Subscription;
+    subscriptionDeleteSuccess: Subscription;
+    subscriptionSetRolesSuccess: Subscription;
+
+
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -58,57 +65,57 @@ export class CrudUserDialogRefComponent implements OnInit {
         //JSON.stringify(this.user.id);
 
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionCreateSuccess = this.managerStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.managerStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUpdateSuccess = this.managerStoreService.updateSuccess$.subscribe(user => {
                 this.teacherStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.managerStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionDeleteSuccess = this.managerStoreService.deleteSuccess$.subscribe((user) => {
                 this.teacherStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
             });
 
-            this.managerStoreService.setRoles$.subscribe(user => {
+            this.subscriptionSetRolesSuccess = this.managerStoreService.setRoles$.subscribe(user => {
                 this.user = user;
                 if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
             });
 
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionCreateSuccess = this.teacherStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.teacherStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUpdateSuccess = this.teacherStoreService.updateSuccess$.subscribe(user => {
                 this.managerStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.teacherStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionDeleteSuccess = this.teacherStoreService.deleteSuccess$.subscribe((user) => {
                 this.managerStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
             });
 
-            this.teacherStoreService.setRoles$.subscribe(user => {
+            this.subscriptionSetRolesSuccess = this.teacherStoreService.setRoles$.subscribe(user => {
                 this.user = user;
                 if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
             });
 
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionCreateSuccess = this.studentStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.studentStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUpdateSuccess = this.studentStoreService.updateSuccess$.subscribe(user => {
                 this.dialogRef.close('edited');
             });
 
-            this.studentStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionDeleteSuccess = this.studentStoreService.deleteSuccess$.subscribe((user) => {
                 this.dialogRef.close('deleted');
             });
 
@@ -116,6 +123,13 @@ export class CrudUserDialogRefComponent implements OnInit {
             console.error('NO uriRole');
         }
 
+    }
+
+    ngOnDestroy() {
+        this.subscriptionCreateSuccess.unsubscribe();
+        this.subscriptionUpdateSuccess.unsubscribe();
+        this.subscriptionDeleteSuccess.unsubscribe();
+        if (this.subscriptionSetRolesSuccess) this.subscriptionSetRolesSuccess.unsubscribe();
     }
 
 
@@ -207,11 +221,13 @@ export class CrudUserDialogRefComponent implements OnInit {
             email: [this.user.email],
             address: [this.user.address],
             commune: [this.user.commune],
-            roles: [this.user.roles, Validators.required]
+            //roles: [this.user.roles]
 
         });
 
     }
+
+
 
     selectEventCreate(files: FileList | File): void {
         let reader = new FileReader();
@@ -227,7 +243,13 @@ export class CrudUserDialogRefComponent implements OnInit {
                 })
             };
         }
+        this.createForm.markAsDirty();
     };
+
+    resetCreateAvatar() {
+        this.createForm.get('avatar').setValue(this.user.avatar);
+        this.createForm.markAsPristine();
+    }
 
     selectEventEdit(files: FileList | File): void {
         let reader = new FileReader();
@@ -243,7 +265,14 @@ export class CrudUserDialogRefComponent implements OnInit {
                 })
             };
         }
+
+        this.editForm.markAsDirty();
     };
+
+    resetEditAvatar() {
+        this.editForm.get('avatar').setValue(this.user.avatar);
+        this.editForm.markAsPristine();
+    }
 
     private createAutoUsername(): string {
         const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName;
@@ -270,7 +299,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     get eUsername() { return this.editForm.get('username'); }
     get eFirstName() { return this.editForm.get('firstName'); }
     get eLastName() { return this.editForm.get('lastName'); }
-    get eRoles() { return this.editForm.get('roles'); }
+    //get eRoles() { return this.editForm.get('roles'); }
 
 
     cancel(): void {
@@ -310,7 +339,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-        this.editForm.value.roles = this.user.roles;
+        // this.editForm.value.roles = this.user.roles;
         this.user = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {

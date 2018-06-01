@@ -15,14 +15,14 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
-        (keyup.delete)="fileInput.clear()" (keyup.backspace)="fileInput.clear()" flex>
+        (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>
           <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
         </mat-label>
         <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
 
-        <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); $event.stopPropagation()" (keyup.enter)="fileInput.clear()">
+        <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear();resetAvatar(); $event.stopPropagation()" (keyup.enter)="fileInput.clear();resetAvatar()">
           <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
         </button>
 
@@ -41,15 +41,15 @@
         <mat-hint>
           <strong>Esto cambiará tu contraseña de usuario</strong>
         </mat-hint>
-        <button type="button" mat-raised-button color="warn" class="btnResetPass">
+        <button type="button" mat-raised-button color="warn" class="btnResetPass" (click)="setPass.openDialogSetPass()">
           <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Cambiar Contraseña
         </button>
-
+        <nx-reset-pass-dialog #setPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
 
       </mat-form-field>
 
       <div class="btnSave">
-        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editProfileForm.valid">Guardar</button>
+        <button type="submit"  mat-raised-button color="accent" tabindex="2" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
       </div>
 
 
@@ -108,7 +108,7 @@
       </mat-form-field>
 
       <div class="btnSave">
-        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="!editProfileForm.valid">Guardar</button>
+        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
       </div>
 
     </div>
@@ -152,7 +152,7 @@
       </mat-form-field>
 
       <div class="btnSave">
-        <button type="submit" mat-raised-button color="accent" tabindex="4" [disabled]="!editProfileForm.valid">Guardar</button>
+        <button type="submit" mat-raised-button color="accent" tabindex="4" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
       </div>
 
     </div>

@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN } from '../app.config';
+import { User } from '../models/user';
 
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class LocalStorageService {
 
     private isThemeDarkSource = new Subject<boolean>();
     isThemeDark$ = this.isThemeDarkSource.asObservable();
-   
 
     private tokenParsed(): any {
         if (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
@@ -26,9 +26,8 @@ export class LocalStorageService {
         }
     }
 
-
     setItem(key: string, value: any): void {
-         localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
     getItem(key: string): any {
@@ -36,7 +35,7 @@ export class LocalStorageService {
     }
 
     removeItem(key: string): void {
-          localStorage.removeItem(key);
+        localStorage.removeItem(key);
     }
 
     isStored(key: string): boolean {
@@ -44,7 +43,7 @@ export class LocalStorageService {
     }
 
     getTokenParsed(): string {
-        return this.tokenParsed().token;
+        return this.tokenParsed().token.value;
     }
 
     getRolesParsed(): string[] {

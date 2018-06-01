@@ -1,11 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { User } from '../../models/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GENDERS } from '../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER, ROLE_MANAGER_SPANISH, ROLE_TEACHER, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../app.config';
+import { ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER, ROLE_MANAGER_SPANISH, ROLE_TEACHER, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
 import { COMMUNNES } from '../../models/communes';
 import * as moment from 'moment';
+import { UserBackendService } from '../../services/user-backend.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import { UserLoggedService } from '../../services/user-logged.service';
+import { TdFileInputComponent } from '@covalent/core';
+
 
 @Component({
     selector: 'nx-user-profile',
@@ -16,6 +21,9 @@ export class UserProfileComponent implements OnInit {
 
     @Input()
     user: User;
+
+    @Input()
+    uriRole: string;
 
     private _profileAction: string;
 
@@ -31,18 +39,29 @@ export class UserProfileComponent implements OnInit {
         this.title.emit(this.profileActionTitle);
     }
 
-    
+
     @Output()
     title = new EventEmitter<string>();
 
     profileActionTitle: string = '';
+
 
     editProfileForm: FormGroup;
     genders = GENDERS;
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
 
-    constructor(private formBuilder: FormBuilder, public sanitizer: DomSanitizer) { }
+    files: File | FileList;
+
+    @ViewChild(TdFileInputComponent)
+    fileInput: TdFileInputComponent;
+
+
+    constructor(private formBuilder: FormBuilder, private userService: UserBackendService,
+        private userLoggedService: UserLoggedService,
+        public sanitizer: DomSanitizer, private snackbarService: SnackbarService) {
+        //console.log('*** UserName: ' + this.user.firstName + ' uriRol: ' + this.uriRole);
+    }
 
     ngOnInit() {
         this.buildForm();
@@ -51,6 +70,7 @@ export class UserProfileComponent implements OnInit {
     buildForm() {
 
         this.editProfileForm = this.formBuilder.group({
+            id: [this.user.id],
             username: [this.user.username, Validators.required],
             firstName: [this.user.firstName, Validators.required],
             lastName: [this.user.lastName, Validators.required],
@@ -81,7 +101,13 @@ export class UserProfileComponent implements OnInit {
                 })
             };
         }
+        this.editProfileForm.markAsDirty();
     };
+
+    resetAvatar(){
+        this.editProfileForm.get('avatar').setValue(this.user.avatar);
+        this.editProfileForm.markAsPristine();
+    }
 
     compareByViewValue(a1: any, a2: any) {
         // console.log('a1: ' + a1 + '    '+'a2: ' + a2);
@@ -114,8 +140,35 @@ export class UserProfileComponent implements OnInit {
     get eFirstName() { return this.editProfileForm.get('firstName'); }
     get eLastName() { return this.editProfileForm.get('lastName'); }
 
-    convertDate(birthDay: any) {
-        return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, 'DD/MM/YYYY') : null;
+
+
+    save(): void {
+        this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
+        this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
+        this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
+        this.user = this.editProfileForm.value;
+        this.userService.update(this.user, this.uriRole).subscribe(user => {
+           // this.user = user;
+            this.userLoggedService.userLogged(user);
+            if (this.fileInput) this.fileInput.clear();
+            this.editProfileForm.markAsPristine();
+            this.openSnackBar('Datos Actualizados', 'success');
+        },
+            error => {
+                this.openSnackBar(error, 'error');
+                console.error('error updating user ' + error)
+            });
+
+    }
+
+    openSnackBar(message: string, type: any): void {
+        let data = {
+            message: message,
+            uriRole: 'none',
+            type: type
+        };
+
+        let snackBarRef = this.snackbarService.openSnackBar(data);
     }
 
 

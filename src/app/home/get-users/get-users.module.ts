@@ -5,9 +5,6 @@ import { MatPaginatorIntl } from '@angular/material';
 
 import { CovalentFileModule } from '@covalent/core';
 
-import { DialogService } from '../../services/dialog.service';
-
-
 import { ImageZoomUserDialogModule } from '../../shared/dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
@@ -42,7 +39,7 @@ import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.com
   ],
 
   providers: [
-    DialogService,
+
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
 
   ],

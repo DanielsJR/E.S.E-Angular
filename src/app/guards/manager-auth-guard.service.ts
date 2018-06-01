@@ -33,6 +33,7 @@ export class ManagerAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
+
         const roles = this.loginService.getRoles();
         if (roles.includes('MANAGER')) {
             return true;

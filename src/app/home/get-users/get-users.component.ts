@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatButton, MatDialogRef } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
-import { DialogService } from '../../services/dialog.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ManagerStoreService } from '../../services/manger-store.service';
 import { TeacherStoreService } from '../../services/teacher-store.service';
@@ -42,7 +41,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService,
     private studentStoreService: StudentStoreService,
-    private dialogService: DialogService, private localstorage: LocalStorageService,
+    private localstorage: LocalStorageService,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -116,15 +115,14 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   openDialogCardUser(dialogRef: MatDialogRef<CardUserDialogRefComponent>, user: User): void {
     dialogRef.afterClosed().subscribe(result => {
-      this.crudUserDialog.user = user;
       if (result === 'canceled') {
         console.log('canceled!');
       } else if (result === 'detail') {
-        this.crudUserDialog.openDialogDetail();
+        this.crudUserDialog.openDialogDetail(user);
       } else if (result === 'edit') {
-        this.crudUserDialog.openDialogEdit();
+        this.crudUserDialog.openDialogEdit(user);
       } else if (result === 'delete') {
-        this.crudUserDialog.openDialogDelete();
+        this.crudUserDialog.openDialogDelete(user);
       }
     });
   }

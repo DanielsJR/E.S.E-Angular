@@ -122,7 +122,7 @@
                     <mat-icon svgIcon="account-edit"></mat-icon>
                 </mat-toolbar>
 
-                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction" (title)="profileTitle=$event"></nx-user-profile>
+                <nx-user-profile *ngIf="user" [user]="user" [uriRole]="uriRole" [profileAction]="profileAction" (title)="profileTitle=$event"></nx-user-profile>
 
             </mat-sidenav>
 
