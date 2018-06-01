@@ -1,61 +1,71 @@
-<mat-toolbar color="primary">
-  <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
-  <span class="spacer-r"></span>
-  <mat-icon svgIcon="security-account"></mat-icon>
-  <span>&nbsp;&nbsp;</span>
-  <h1 mat-dialog-title>Asignar Privilégios</h1>
-</mat-toolbar>
+<form [formGroup]="setRolesForm" (ngSubmit)="setRoles()">
 
-<br>
-
-<mat-dialog-content>
-
-  <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.checked && !slideToggleTeacher.checked">
-
-    <mat-label>
-      <i class="mdi mdi-security-account material-icons app-input-icon"></i>
-      Asignar a
-      <strong>{{user.firstName +' '+ user.lastName}}</strong> Privilégio(s) de:
-    </mat-label>
-
-    <div class="container">
-
-      <mat-slide-toggle #slideToggleManager color="primary">
-        <mat-chip-list>
-          <mat-chip class="chip-selection" selected="true" [color]="(slideToggleManager.checked) ?  'primary' :  'default' ">
-            Administrador
-          </mat-chip>
-        </mat-chip-list>
-      </mat-slide-toggle>
-
-      <mat-slide-toggle #slideToggleTeacher color="accent">
-        <mat-chip-list>
-          <mat-chip class="chip-selection" selected="true" [color]="(slideToggleTeacher.checked) ?  'accent' :  'default' ">
-            Docente
-          </mat-chip>
-        </mat-chip-list>
-      </mat-slide-toggle>
-
-    </div>
-
-  </mat-form-field>
+  <mat-toolbar color="primary">
+    <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="security-account"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Asignar Privilégios</h1>
+  </mat-toolbar>
 
   <br>
-  <div *ngIf="!slideToggleManager.checked && !slideToggleTeacher.checked" class="errorRoles centerField">
-    <i class="mdi mdi-alert-circle material-icons app-input-icon"></i>
-    <span>&nbsp;</span>
-    Al menos un Privilégio es &nbsp;<strong>Requerido</strong>
-  </div>
-</mat-dialog-content>
 
-<mat-dialog-actions>
-  <mat-toolbar>
-    <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
-      Cancelar
-    </button>
-    <span class="spacer-r"></span>
-    <button mat-raised-button color="warn" (click)="setRoles()" tabindex="2" [disabled]="!slideToggleManager.checked && !slideToggleTeacher.checked">
-      Asignar Privilégios
-    </button>
-  </mat-toolbar>
-</mat-dialog-actions>
+  <mat-dialog-content>
+
+    <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.checked && !slideToggleTeacher.checked">
+
+      <mat-label>
+        <i class="mdi mdi-security-account material-icons app-input-icon"></i>
+        Asignar a
+        <strong>{{user.firstName +' '+ user.lastName}}</strong> Privilégio(s) de:
+      </mat-label>
+
+      <div class="container">
+
+        <mat-slide-toggle #slideToggleManager formControlName="toggleManager" color="primary">
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleManager.checked) ?  'primary' :  'default' ">
+              Administrador
+            </mat-chip>
+          </mat-chip-list>
+        </mat-slide-toggle>
+
+        <mat-slide-toggle #slideToggleTeacher formControlName="toggleTeacher" color="accent">
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleTeacher.checked) ?  'accent' :  'default' ">
+              Docente
+            </mat-chip>
+          </mat-chip-list>
+        </mat-slide-toggle>
+
+      </div>
+
+    </mat-form-field>
+
+    <br>
+    <div *ngIf="!slideToggleManager.checked && !slideToggleTeacher.checked" class="errorRoles centerField">
+      <i class="mdi mdi-alert-circle material-icons app-input-icon"></i>
+      <span>&nbsp;</span>
+      Al menos un Privilégio es &nbsp;
+      <strong>Requerido</strong>
+    </div>
+
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <mat-toolbar>
+
+      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+        Cancelar
+      </button>
+
+      <span class="spacer-r"></span>
+      <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="(!slideToggleManager.checked && !slideToggleTeacher.checked) || (setRolesForm.pristine)">
+        Asignar Privilégios
+      </button>
+
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</form>
