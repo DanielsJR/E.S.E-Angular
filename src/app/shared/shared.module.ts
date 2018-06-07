@@ -4,13 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
-import { FullscreenDirective } from './directives/fullscreen.directive';
 import { LogoModule } from './logo/logo.module';
 import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { ThemePickerModule } from './theme-picker/theme-picker.module';
 import { SnackbarsRefComponent } from './snackbars-ref/snackbars-ref.component';
 import { SnackbarRefModule } from './snackbars-ref/snackbars-ref.module';
 import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
+import { ShortNamePipe } from './pipes/short-name.pipe';
+import { RolesToSpanishPipe } from './pipes/roles-to-spanish.pipe';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/imag
 
   declarations: [
     ScrollerDirective,
-    FullscreenDirective,
+    ShortNamePipe,
+    RolesToSpanishPipe,
   ],
 
   exports: [
@@ -32,8 +34,9 @@ import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/imag
     LogoModule,
     MaterialModule,
     ScrollerDirective,
-    FullscreenDirective,
     SnackbarRefModule,
+    ShortNamePipe,
+    RolesToSpanishPipe,
 
   ]
 })

@@ -8,8 +8,12 @@ mat-dialog-content {
     height: 40px;
 }
 
+mat-card > img {
+    margin-bottom: 0 !important;
+}
+
 mat-card-actions {
-    padding: 0 0 5px 0 !important;
+    padding: 15px 0 5px 0 !important;
     margin: 0;
     display: flex;
     justify-content: space-between;

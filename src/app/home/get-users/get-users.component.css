@@ -65,3 +65,7 @@ mat-table {
 .fila-dark:hover .mat-list-avatar {
     opacity: 0.3;
  }
+
+ .role-style {
+    color: darkgray;
+}

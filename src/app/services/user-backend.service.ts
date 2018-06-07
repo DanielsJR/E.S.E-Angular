@@ -11,6 +11,7 @@ import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME } 
 })
 export class UserBackendService {
 
+
     private userURL = API_SERVER + URI_USERS;
 
     constructor(private httpCli: HttpClient) { }
@@ -114,6 +115,16 @@ export class UserBackendService {
                 // ,catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
             );
 
+    }
+
+    setUserPassword(id: string, uriRole: string, pass: string[]): Observable<boolean> {
+        const url = `${this.userURL}${uriRole}/${id}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.patch<boolean>(url, pass)
+        .pipe(
+            tap(result => console.log(`pass set: ${result}`))
+            // ,catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
+        );
     }
 
     setRoles(id: string, roles: string[], uriRole: string): Observable<User> {

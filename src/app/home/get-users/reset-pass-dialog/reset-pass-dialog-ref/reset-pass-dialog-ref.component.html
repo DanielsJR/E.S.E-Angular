@@ -5,17 +5,20 @@
   <span>&nbsp;&nbsp;</span>
   <h1 mat-dialog-title>Restablecer Contraseña</h1>
 </mat-toolbar>
+<mat-divider></mat-divider>
 
 <br>
 <mat-dialog-content>
     <mat-form-field appearance="outline" class="centerField">
-      <input matInput [value]="user.firstName +' '+ user.lastName" readonly>
+      <input matInput [value]="this.resetedPass()" readonly>
       <mat-label>
-        <i class="mdi mdi-lock-reset material-icons app-input-icon"></i>Se restablecerá la contraseña de:
+        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Se restablecerá la contraseña de
+        <strong>{{user | shortName}}&nbsp;</strong>a:
       </mat-label>
     </mat-form-field>
 </mat-dialog-content>
 
+<mat-divider></mat-divider>
 <mat-dialog-actions>
   <mat-toolbar>
     <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>

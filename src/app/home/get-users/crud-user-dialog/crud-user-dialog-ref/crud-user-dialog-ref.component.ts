@@ -161,26 +161,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         return 'no privilege';
     }
 
-    rolesToSpanish(roles: string[]): string {
-        let rolesSpanish: string[] = [];
-        for (let role of roles) {
-            if (role === ROLE_ADMIN) {
-                role = ROLE_ADMIN_SPANISH;
-            }
-            if (role === ROLE_MANAGER) {
-                role = ROLE_MANAGER_SPANISH;
-            }
-            if (role === ROLE_TEACHER) {
-                role = ROLE_TEACHER_SPANISH;
-            }
-            if (role === ROLE_STUDENT) {
-                role = ROLE_STUDENT_SPANISH;
-            };
-            rolesSpanish.push(role);
-        }
-        return rolesSpanish.toString().replace(/,/g, ', ');
-    }
-
+   
     checkForAdmin(roles: string[]): boolean {
         for (let role of roles) {
             if (role === ROLE_ADMIN) {
@@ -221,7 +202,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             email: [this.user.email],
             address: [this.user.address],
             commune: [this.user.commune],
-            //roles: [this.user.roles]
+            roles: [this.user.roles]
 
         });
 
@@ -318,16 +299,17 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
         this.createForm.value.birthday = this.createBirthday();
-        this.user = this.createForm.value;
-        //  console.log('creating... ' + JSON.stringify(this.user));
+       // this.user = this.createForm.value;
+       let userCreate: User = this.createForm.value;
+
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.create(this.user);
+            this.managerStoreService.create(userCreate);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.create(this.user);
+            this.teacherStoreService.create(userCreate);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.create(this.user);
+            this.studentStoreService.create(userCreate);
 
         } else {
             console.error('NO uriRole');
@@ -339,17 +321,17 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-        // this.editForm.value.roles = this.user.roles;
-        this.user = this.editForm.value;
+        // this.user = this.editForm.value;
+        let userEdit: User = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.update(this.user);
+            this.managerStoreService.update(userEdit);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.update(this.user);
+            this.teacherStoreService.update(userEdit);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.update(this.user);
+            this.studentStoreService.update(userEdit);
 
         } else {
             console.error('NO uriRole');

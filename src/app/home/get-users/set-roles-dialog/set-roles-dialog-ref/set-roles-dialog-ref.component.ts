@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, RootRenderer } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../../../app.config';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSlideToggleChange } from '@angular/material';
+import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { ManagerStoreService } from '../../../../services/manger-store.service';
 import { TeacherStoreService } from '../../../../services/teacher-store.service';
@@ -24,6 +24,10 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
   setRolesForm: FormGroup;
   subscriptionsetRoles: Subscription;
 
+  roles: string[] = [];
+  rolesMapping: { [k: string]: string } = { '=0': '', '=1': 'Privilégio', 'other': 'Privilégios' };
+
+
 
   constructor(public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,13 +36,17 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     public sanitizer: DomSanitizer) {
 
     this.user = data.user;
-    this.uriRole = this.data.uriRole;
+    this.uriRole = data.uriRole;
 
+    //this.roles = this.user.roles;
+    if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
+    if (this.user.roles.includes(ROLE_TEACHER)) this.roles.push(ROLE_TEACHER);
 
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
   ngOnInit(): void {
+
     this.buildForm();
 
     if (this.uriRole === URI_MANAGERS) {
@@ -72,11 +80,23 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleManager(event: MatSlideToggleChange) {
+    (event.checked) ? this.roles.push(ROLE_MANAGER) : this.roles = this.roles.filter(e => e !== (ROLE_MANAGER));
+  }
+
+  toggleTeacher(event: MatSlideToggleChange) {
+    (event.checked) ? this.roles.push(ROLE_TEACHER) : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
+  }
+
   setRoles(): void {
-    let roles: string[] = [];
-    if (this.setRolesForm.get('toggleManager').value === true) roles.push(ROLE_MANAGER);
-    if (this.setRolesForm.get('toggleTeacher').value === true) roles.push(ROLE_TEACHER);
-    if (roles.length > 0) this.user.roles = roles;
+    let rolesOrdained: string[] = [];
+    if (this.setRolesForm.get('toggleManager').value) rolesOrdained.push(ROLE_MANAGER);
+    if (this.setRolesForm.get('toggleTeacher').value) rolesOrdained.push(ROLE_TEACHER);
+
+   // if (this.setRolesForm.value.toggleManager) rolesOrdained.push(ROLE_MANAGER);
+   // if (this.setRolesForm.value.toggleTeacher) rolesOrdained.push(ROLE_TEACHER);
+
+    if (this.roles.length > 0) this.user.roles = rolesOrdained;
 
     if (this.uriRole === URI_MANAGERS) {
       this.managerStoreService.setRoles(this.user);
@@ -93,25 +113,5 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     this.dialogRef.close('canceled');
   }
 
-  privilegeToSpanish(privilege: string): string {
-    let role = privilege.toUpperCase();
-
-    if (role === ROLE_ADMIN) {
-      return role = ROLE_ADMIN_SPANISH;
-    }
-    else if (role === ROLE_MANAGER) {
-      return role = ROLE_MANAGER_SPANISH;
-    }
-    else if (role === ROLE_TEACHER) {
-      return role = ROLE_TEACHER_SPANISH;
-    }
-    else if (role === ROLE_STUDENT) {
-      return role = ROLE_STUDENT_SPANISH;
-    }
-    console.error('no privilege');
-    return 'no privilege';
-  }
-
-
-
+  
 }

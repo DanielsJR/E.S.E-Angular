@@ -3,25 +3,61 @@
   <span class="spacer-r"></span>
   <mat-icon svgIcon="lock-reset"></mat-icon>
   <span>&nbsp;&nbsp;</span>
-  <h1 mat-dialog-title>Restablecer Contraseña</h1>
+  <h1 mat-dialog-title>Cambiar Contraseña</h1>
 </mat-toolbar>
+<mat-divider></mat-divider>
 
 <br>
-<mat-dialog-content>
-    <mat-form-field appearance="outline" class="centerField">
-      <input matInput [value]="user.firstName +' '+ user.lastName" readonly>
-      <mat-label>
-        <i class="mdi mdi-lock-reset material-icons app-input-icon"></i>Se restablecerá la contraseña de:
-      </mat-label>
-    </mat-form-field>
-</mat-dialog-content>
+<form [formGroup]="setPassForm" (ngSubmit)="setPassword()">
+  <mat-dialog-content>
 
-<mat-dialog-actions>
-  <mat-toolbar>
-    <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
-      Cancelar
-    </button>
-    <span class="spacer-r"></span>
-    <button mat-raised-button color="warn" (click)="resetPassword()" tabindex="2">Restablecer Contraseña</button>
-  </mat-toolbar>
-</mat-dialog-actions>
+    <mat-form-field appearance="fill" >
+      <mat-label>
+        <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña
+      </mat-label>
+      <input matInput formControlName="currentPass" placeholder="Ingresa tu contraseña actual" [type]="hideCurrentPass ? 'password' : 'text'"
+        required>
+      <mat-icon matSuffix (click)="hideCurrentPass = !hideCurrentPass" svgIcon="{{hideCurrentPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-error *ngIf="currentPass.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" > 
+      <mat-label>
+        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
+      </mat-label>
+      <input matInput formControlName="newPass1" placeholder="Ingresa tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
+        required>
+      <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-error *ngIf="newPass1.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" >
+      <mat-label>
+        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
+      </mat-label>
+      <input matInput formControlName="newPass2" placeholder="Vuelve a ingresar tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
+        required>
+      <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-error *ngIf="newPass2.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+        Cancelar
+      </button>
+      <span class="spacer-r"></span>
+      <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="setPassForm.invalid || setPassForm.pristine">Cambiar Contraseña</button>
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</form>

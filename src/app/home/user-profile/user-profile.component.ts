@@ -3,7 +3,6 @@ import { User } from '../../models/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GENDERS } from '../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER, ROLE_MANAGER_SPANISH, ROLE_TEACHER, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
 import { COMMUNNES } from '../../models/communes';
 import * as moment from 'moment';
 import { UserBackendService } from '../../services/user-backend.service';
@@ -45,6 +44,14 @@ export class UserProfileComponent implements OnInit {
 
     profileActionTitle: string = '';
 
+    @Input()
+    set sidenavProfileIsOpen(sidenavProfileIsOpen) {
+        if (!sidenavProfileIsOpen && this.editProfileForm) {
+            if (this.fileInput) this.fileInput.clear();
+            this.buildForm();
+        }
+    }
+
 
     editProfileForm: FormGroup;
     genders = GENDERS;
@@ -72,6 +79,7 @@ export class UserProfileComponent implements OnInit {
         this.editProfileForm = this.formBuilder.group({
             id: [this.user.id],
             username: [this.user.username, Validators.required],
+            //password: [],
             firstName: [this.user.firstName, Validators.required],
             lastName: [this.user.lastName, Validators.required],
             dni: [this.user.dni],
@@ -82,6 +90,7 @@ export class UserProfileComponent implements OnInit {
             email: [this.user.email],
             address: [this.user.address],
             commune: [this.user.commune],
+            roles: [this.user.roles]
 
         });
 
@@ -102,9 +111,9 @@ export class UserProfileComponent implements OnInit {
             };
         }
         this.editProfileForm.markAsDirty();
-    };
+    }
 
-    resetAvatar(){
+    resetAvatar() {
         this.editProfileForm.get('avatar').setValue(this.user.avatar);
         this.editProfileForm.markAsPristine();
     }
@@ -114,41 +123,20 @@ export class UserProfileComponent implements OnInit {
         return a1 && a2 && a1 === a2;
     }
 
-    rolesToSpanish(roles: string[]): string {
-        let rolesSpanish: string[] = [];
-        for (let role of roles) {
-            if (role === ROLE_ADMIN) {
-                role = ROLE_ADMIN_SPANISH;
-            }
-            if (role === ROLE_MANAGER) {
-                role = ROLE_MANAGER_SPANISH;
-            }
-            if (role === ROLE_TEACHER) {
-                role = ROLE_TEACHER_SPANISH;
-            }
-            if (role === ROLE_STUDENT) {
-                role = ROLE_STUDENT_SPANISH;
-            };
-            rolesSpanish.push(role);
-        }
-        return rolesSpanish.toString().replace(/,/g, ', ');
-    }
-
-
-    // getters edit
-    get eUsername() { return this.editProfileForm.get('username'); }
-    get eFirstName() { return this.editProfileForm.get('firstName'); }
-    get eLastName() { return this.editProfileForm.get('lastName'); }
-
-
+  
+    // getters required
+    get username() { return this.editProfileForm.get('username'); }
+    get firstName() { return this.editProfileForm.get('firstName'); }
+    get lastName() { return this.editProfileForm.get('lastName'); }
 
     save(): void {
         this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
         this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-        this.user = this.editProfileForm.value;
-        this.userService.update(this.user, this.uriRole).subscribe(user => {
-           // this.user = user;
+
+        //this.user = this.editProfileForm.value;
+        let userEdit: User = this.editProfileForm.value;
+        this.userService.update(userEdit, this.uriRole).subscribe(user => {
             this.userLoggedService.userLogged(user);
             if (this.fileInput) this.fileInput.clear();
             this.editProfileForm.markAsPristine();

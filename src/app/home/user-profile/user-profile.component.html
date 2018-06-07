@@ -5,11 +5,11 @@
 
       <mat-form-field appearance="standard">
         <mat-label>
-          <i class="mdi mdi-account-circle material-icons app-input-icon"></i>Nombre de Usuario
+          <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
         </mat-label>
         <input matInput formControlName="username" required>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="eUsername.hasError('required')">Nombre de Usuario es
+        <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es
           <strong>requerido</strong>.
         </mat-error>
       </mat-form-field>
@@ -18,7 +18,7 @@
         (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>
-          <i class="mdi mdi-camera material-icons app-input-icon"></i>Foto de Perfil
+          <i class="mdi mdi-camera material-icons app-input-icon">&nbsp;</i>Foto de Perfil
         </mat-label>
         <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
 
@@ -35,7 +35,7 @@
 
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>
-          <i class="mdi mdi-lock material-icons app-input-icon"></i>Contraseña de Usuario
+          <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña de Usuario
         </mat-label>
         <input matInput readonly>
         <mat-hint>
@@ -44,7 +44,7 @@
         <button type="button" mat-raised-button color="warn" class="btnResetPass" (click)="setPass.openDialogSetPass()">
           <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Cambiar Contraseña
         </button>
-        <nx-reset-pass-dialog #setPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
+        <nx-set-pass-dialog #setPass [user]="user" [uriRole]="uriRole"></nx-set-pass-dialog>
 
       </mat-form-field>
 
@@ -59,21 +59,21 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="firstName" required>
         <mat-label>
-          <i class="mdi mdi-account material-icons app-input-icon"></i>Nombres
+          <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="eFirstName.hasError('required')">Nombre es
+        <mat-error *ngIf="firstName.hasError('required')">Nombre es
           <strong>requerido</strong>.
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
         <mat-label>
-          <i class="mdi mdi-account-outline material-icons app-input-icon"></i>Apellidos
+          <i class="mdi mdi-account-outline material-icons app-input-icon">&nbsp;</i>Apellidos
         </mat-label>
         <input matInput formControlName="lastName" required>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="eLastName.hasError('required')">Apellido es
+        <mat-error *ngIf="lastName.hasError('required')">Apellido es
           <strong>requerido</strong>.
         </mat-error>
       </mat-form-field>
@@ -81,7 +81,7 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="dni">
         <mat-label>
-          <i class="mdi mdi-barcode material-icons app-input-icon"></i>RUT
+          <i class="mdi mdi-barcode material-icons app-input-icon">&nbsp;</i>RUT
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
       </mat-form-field>
@@ -89,7 +89,7 @@
       <mat-form-field appearance="standard">
         <input matInput [matDatepicker]="picker" formControlName="birthday">
         <mat-label>
-          <i class="mdi mdi-cake-variant material-icons app-input-icon"></i>Fecha de Nacimiento
+          <i class="mdi mdi-cake-variant material-icons app-input-icon">&nbsp;</i>Fecha de Nacimiento
         </mat-label>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -103,7 +103,7 @@
           </mat-option>
         </mat-select>
         <mat-label>
-          <i class="mdi mdi-gender-male-female material-icons app-input-icon"></i>Genero
+          <i class="mdi mdi-gender-male-female material-icons app-input-icon">&nbsp;</i>Genero
         </mat-label>
       </mat-form-field>
 
@@ -118,7 +118,7 @@
       <mat-form-field appearance="standard">
         <input matInput [type]="tel" formControlName="mobile" #mobileEdit maxlength="9">
         <mat-label>
-          <i class="mdi mdi-phone material-icons app-input-icon"></i>Telefóno
+          <i class="mdi mdi-phone material-icons app-input-icon">&nbsp;</i>Telefóno
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
         <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
@@ -127,7 +127,7 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="email">
         <mat-label>
-          <i class="mdi mdi-email material-icons app-input-icon"></i>Email
+          <i class="mdi mdi-email material-icons app-input-icon">&nbsp;</i>Email
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
       </mat-form-field>
@@ -135,7 +135,7 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="address">
         <mat-label>
-          <i class="mdi mdi-account-location material-icons app-input-icon"></i>Dirección
+          <i class="mdi mdi-account-location material-icons app-input-icon">&nbsp;</i>Dirección
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
       </mat-form-field>
@@ -147,7 +147,7 @@
           </mat-option>
         </mat-select>
         <mat-label>
-          <i class="mdi mdi-map-marker material-icons app-input-icon"></i>Comuna
+          <i class="mdi mdi-map-marker material-icons app-input-icon">&nbsp;</i>Comuna
         </mat-label>
       </mat-form-field>
 

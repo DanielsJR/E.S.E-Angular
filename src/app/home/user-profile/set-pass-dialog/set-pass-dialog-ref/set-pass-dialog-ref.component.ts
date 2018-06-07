@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -12,12 +13,15 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 })
 export class SetPassDialogRefComponent implements OnInit {
 
+  setPassForm: FormGroup;
   uriRole: any;
   user: User;
+  hideCurrentPass = true;
+  hideNewPass = true;
 
   constructor(public dialogRef: MatDialogRef<SetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public sanitizer: DomSanitizer,
+    public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
     private userBackendService: UserBackendService,
     private snackbarService: SnackbarService) {
 
@@ -26,7 +30,9 @@ export class SetPassDialogRefComponent implements OnInit {
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.buildForm();
+  }
 
   openSnackBar(message: string, type: any): void {
     let data = {
@@ -36,25 +42,38 @@ export class SetPassDialogRefComponent implements OnInit {
     };
 
     let snackBarRef = this.snackbarService.openSnackBar(data);
-    snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-    snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-    snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
 
-  resetPassword(): void {
-    const n1 = this.user.firstName.substr(0, this.user.firstName.indexOf(' ')) || this.user.firstName;
-    const n2 = this.user.lastName.substr(0, this.user.lastName.indexOf(' ')) || this.user.lastName;
-    const resetedPass = n1.toLowerCase() + '_' + n2.toLowerCase() + '@ESE1';
+  buildForm() {
 
+    this.setPassForm = this.formBuilder.group({
+      currentPass: ['', Validators.required],
+      newPass1: ['', Validators.required],
+      newPass2: ['', Validators.required],
+    });
+
+  }
+
+  get currentPass() { return this.setPassForm.get('currentPass'); }
+  get newPass1() { return this.setPassForm.get('newPass1'); }
+  get newPass2() { return this.setPassForm.get('newPass2'); }
+
+  setPassword(): void {
+
+    this.currentPass;
+    this.newPass1;
+    this.newPass2;
+
+    let pass: string[] = [];
     this.userBackendService
-      .resetUserPassword(this.user.id, resetedPass, this.uriRole)
+      .setUserPassword(this.user.id, this.uriRole, pass)
       .subscribe(response => {
         if (response) {
-          this.dialogRef.close('reseted');
-          setTimeout(() => this.openSnackBar('Contraseña restablecida', 'success'));
+          this.dialogRef.close('set');
+          setTimeout(() => this.openSnackBar('Contraseña cambiada', 'success'));
         } else {
           this.dialogRef.close('error');
-          setTimeout(() => this.openSnackBar('Error al restablecer contraseña', 'Error'));
+          setTimeout(() => this.openSnackBar('Error al cambiar contraseña', 'Error'));
         };
 
       });

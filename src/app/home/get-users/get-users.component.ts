@@ -112,7 +112,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-
   openDialogCardUser(dialogRef: MatDialogRef<CardUserDialogRefComponent>, user: User): void {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'canceled') {
@@ -135,9 +134,9 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     };
 
     let snackBarRef = this.snackbarService.openSnackBar(data);
-    snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-    snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-    snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
+    //snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
+    //snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
+    //snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
 
   privilegeToSpanish(privilege: string): string {
@@ -159,11 +158,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     return 'no privilege';
   }
 
-  shortName(user: User): string {
-    const n1 = user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
-    const n2 = user.lastName.substr(0, user.lastName.indexOf(' ')) || user.lastName;
-    return n1 + ' ' + n2;
-  }
+ 
 }
 
 

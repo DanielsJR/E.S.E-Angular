@@ -5,7 +5,7 @@ export const ROLE_STUDENT = 'STUDENT';
 export const ROLE_ADMIN_SPANISH  = 'Admin';
 export const ROLE_MANAGER_SPANISH = 'Administrador';
 export const ROLE_TEACHER_SPANISH  = 'Docente';
-export const ROLE_STUDENT_SPANISH  = 'Alumno';
+export const ROLE_STUDENT_SPANISH  = 'Estudiante';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 export const LOCAL_STORAGE_THEME_KEY = 'theme';

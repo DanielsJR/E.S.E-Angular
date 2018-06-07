@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { LoginService } from '../login/login.service';
-import { URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../app.config';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { UserBackendService } from '../services/user-backend.service';
 import { LocalStorageService } from '../services/local-storage.service';
@@ -12,6 +11,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
+import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_TEACHERS, ROLE_STUDENT, URI_STUDENTS } from '../app.config';
 
 
 @Component({
@@ -28,27 +28,12 @@ export class HomeComponent implements OnInit {
   user: User;
   privilege = this.loginService.getPrivilege();
   roles = this.loginService.getRoles();
-
-  @ViewChild(ThemePickerComponent)
-  themePicker: ThemePickerComponent;
-
-  welcome: string;
-
-  isScrolled = false;
-  triggerUsers = true;
-  isTooltipDisabled = false;
-  menuUser = true;
-
-  profileAction = '';
-
-  profileTitle = '';
-
   private token = this.localStorageService.getTokenParsed();
 
   private _uriRole: string;
 
   get uriRole(): string {
-    
+
     if (this.privilege === ROLE_ADMIN) {
       return this._uriRole = URI_ADMINS;
     } else if (this.privilege === ROLE_MANAGER) {
@@ -65,9 +50,30 @@ export class HomeComponent implements OnInit {
   }
 
 
+  @ViewChild(ThemePickerComponent)
+  themePicker: ThemePickerComponent;
+
+  welcome: string;
+
+  isScrolled = false;
+  triggerUsers = true;
+  menuUser = true;
+
+  //profile
+  profileAction = '';
+  profileTitle = '';
+  _sidenavProfileIsOpen = new EventEmitter<boolean>();
+  sidenavProfileIsOpen: boolean = false;
+  @ViewChild("sidenavMenuProfile") private sidenavMenuProfile: MatSidenav;
+  @ViewChild("btnMenuProfileBack") private btnMenuProfileBack: MatButton;
+  @ViewChild("sidenavProfile") private sidenavProfile: MatSidenav;
+  @ViewChild("btnProfileBack") private btnProfileBack: MatButton;
+
+  //settings
   @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
   @ViewChild("settings") private menu: MatMenu;
   @ViewChild("btnSettingsBack") private btnSettingsBack: MatButton;
+
 
   constructor(private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private userBackendService: UserBackendService,
@@ -77,12 +83,19 @@ export class HomeComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sidenavSettings.openedChange.subscribe(() => {
-      this.btnSettingsBack._elementRef.nativeElement.focus();
+    this.sidenavMenuProfile.openedChange.subscribe(() => {
+      //this.btnMenuProfileBack._elementRef.nativeElement.focus();
+
     });
     this.menu.closed.subscribe(() => {
       // TODO
     });
+
+    this.sidenavProfile.openedChange.subscribe(isOpen => {
+      // this.btnProfileBack._elementRef.nativeElement.focus();
+      this._sidenavProfileIsOpen.emit(this.sidenavProfileIsOpen = isOpen);
+    });
+
 
   }
 
@@ -93,12 +106,9 @@ export class HomeComponent implements OnInit {
       setTimeout(() => this.openSnackBar(this.welcome, 'success'));
     } else {
       console.log('user:null');
-      
 
       this.userBackendService.getUserByToken(this.token, this.uriRole).subscribe(user => {
         this.user = user;
-        //this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-        //this.openSnackBar(this.welcome, 'success');
       },
         error => console.error('error getting the token ' + error));
     }
@@ -114,25 +124,6 @@ export class HomeComponent implements OnInit {
     return n1 + ' ' + n2;
   }
 
-  rolesToSpanish(roles: string[]): string {
-    let rolesSpanish: string[] = [];
-    for (let role of roles) {
-      if (role === ROLE_ADMIN) {
-        role = ROLE_ADMIN_SPANISH;
-      }
-      if (role === ROLE_MANAGER) {
-        role = ROLE_MANAGER_SPANISH;
-      }
-      if (role === ROLE_TEACHER) {
-        role = ROLE_TEACHER_SPANISH;
-      }
-      if (role === ROLE_STUDENT) {
-        role = ROLE_STUDENT_SPANISH;
-      };
-      rolesSpanish.push(role);
-    }
-    return rolesSpanish.toString().replace(/,/g, ', ');
-  }
 
   private logout(): void {
     location.reload();//cache clean

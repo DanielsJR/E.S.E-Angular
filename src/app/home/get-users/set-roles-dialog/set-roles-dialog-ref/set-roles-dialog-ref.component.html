@@ -7,9 +7,9 @@
     <span>&nbsp;&nbsp;</span>
     <h1 mat-dialog-title>Asignar Privilégios</h1>
   </mat-toolbar>
-
+  <mat-divider></mat-divider>
+  
   <br>
-
   <mat-dialog-content>
 
     <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.checked && !slideToggleTeacher.checked">
@@ -17,12 +17,15 @@
       <mat-label>
         <i class="mdi mdi-security-account material-icons app-input-icon"></i>
         Asignar a
-        <strong>{{user.firstName +' '+ user.lastName}}</strong> Privilégio(s) de:
+        <strong>{{user | shortName}}&nbsp;
+        </strong>{{roles.length | i18nPlural: rolesMapping}}
+        <ng-container *ngIf="roles.length > 0">de:</ng-container>
+        &nbsp;
       </mat-label>
 
       <div class="container">
 
-        <mat-slide-toggle #slideToggleManager formControlName="toggleManager" color="primary">
+        <mat-slide-toggle #slideToggleManager formControlName="toggleManager" color="primary" (change)="toggleManager($event)">
           <mat-chip-list>
             <mat-chip class="chip-selection" selected="true" [color]="(slideToggleManager.checked) ?  'primary' :  'default' ">
               Administrador
@@ -30,7 +33,7 @@
           </mat-chip-list>
         </mat-slide-toggle>
 
-        <mat-slide-toggle #slideToggleTeacher formControlName="toggleTeacher" color="accent">
+        <mat-slide-toggle #slideToggleTeacher formControlName="toggleTeacher" color="accent" (change)="toggleTeacher($event)">
           <mat-chip-list>
             <mat-chip class="chip-selection" selected="true" [color]="(slideToggleTeacher.checked) ?  'accent' :  'default' ">
               Docente
@@ -44,15 +47,14 @@
 
     <br>
     <div *ngIf="!slideToggleManager.checked && !slideToggleTeacher.checked" class="errorRoles centerField">
-      <i class="mdi mdi-alert-circle material-icons app-input-icon"></i>
-      <span>&nbsp;</span>
+      <i class="mdi mdi-alert-circle material-icons app-input-icon">&nbsp;</i>
       Al menos un Privilégio es &nbsp;
       <strong>Requerido</strong>
     </div>
 
-
   </mat-dialog-content>
 
+  <mat-divider></mat-divider>
   <mat-dialog-actions>
     <mat-toolbar>
 
@@ -62,7 +64,7 @@
 
       <span class="spacer-r"></span>
       <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="(!slideToggleManager.checked && !slideToggleTeacher.checked) || (setRolesForm.pristine)">
-        Asignar Privilégios
+        Asignar {{roles.length | i18nPlural: rolesMapping}}
       </button>
 
     </mat-toolbar>

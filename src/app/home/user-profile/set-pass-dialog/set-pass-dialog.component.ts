@@ -5,7 +5,7 @@ import { SetPassDialogRefComponent } from './set-pass-dialog-ref/set-pass-dialog
 
 
 @Component({
-    selector: 'nx-reset-pass-dialog',
+    selector: 'nx-set-pass-dialog',
     template: ``,
     styles: []
 })
@@ -27,14 +27,15 @@ export class SetPassDialogComponent implements OnInit {
         let data = {
             user: this.user,
             uriRole: this.uriRole,
-            type: 'resetPass'
+            type: 'setPass'
         };
 
         let config = new MatDialogConfig();
         config.data = data;
         config.panelClass = 'dialogService';
-        config.width = '500px';
+        config.width = '450px';
         config.height = 'auto';
+        config.disableClose = true;
 
         let dialogRef = this.dialog.open(SetPassDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {

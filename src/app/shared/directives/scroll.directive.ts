@@ -6,7 +6,7 @@ import { Directive, HostListener, Inject, Output, ElementRef, EventEmitter } fro
 export class ScrollerDirective {
 
     scrolled = false;
-    @Output() public scrollEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output('nxScroller') public scrollEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @HostListener('scroll') onScroll() {
         const nPixels = this.el.nativeElement.scrollTop || 0;

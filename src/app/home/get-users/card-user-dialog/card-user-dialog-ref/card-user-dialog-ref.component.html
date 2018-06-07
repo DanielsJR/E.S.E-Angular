@@ -2,14 +2,18 @@
   <mat-card class="card">
 
     <mat-card-header>
-      <mat-card-title>{{user.firstName}} {{user.lastName}}</mat-card-title>
-      <mat-card-subtitle>{{rolesToSpanish(user.roles)}}</mat-card-subtitle>
+      <mat-card-title>{{user | shortName}}</mat-card-title>
+      <mat-card-subtitle>{{user.roles | rolesToSpanish}}</mat-card-subtitle>
       <span class="spacer-r"></span>
       <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
     </mat-card-header>
 
+
+
     <img mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
       alt="{{privilege}}">
+
+    
 
     <mat-card-actions>
       <button type="button" mat-button color="primary" tabindex="1" (click)="detail()">Detalles</button>
