@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Component, Inject, OnInit, Input, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
@@ -16,6 +16,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { LocalStorageService } from '../../../../services/local-storage.service';
 import { Subscription } from 'rxjs';
+import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
+import { rutValidator } from '../../../../shared/validators/rut-validator';
+import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
 
 
 @Component({
@@ -161,7 +164,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         return 'no privilege';
     }
 
-   
+
     checkForAdmin(roles: string[]): boolean {
         for (let role of roles) {
             if (role === ROLE_ADMIN) {
@@ -175,32 +178,32 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm = this.formBuilder.group({
             username: [],
             password: [],
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            dni: [],
+            firstName: [null, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            lastName: [null, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            dni: [null, [noWhitespaceValidator, rutValidator]],//Validators.pattern(/^[0-9]+[-|‐]{1}[0-9kK]{1}$/)
             birthday: [],
             gender: [],
             avatar: [],
-            mobile: [],
-            email: [],
-            address: [],
+            mobile: [null, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
+            email: [null, [Validators.email, noWhitespaceValidator]],
+            address: [null, noWhitespaceValidator],
             commune: [],
         });
 
 
         this.editForm = this.formBuilder.group({
             id: [this.user.id],
-            username: [this.user.username, Validators.required],
+            username: [this.user.username, [Validators.required, noWhitespaceValidator]],
             //password: [],
-            firstName: [this.user.firstName, Validators.required],
-            lastName: [this.user.lastName, Validators.required],
-            dni: [this.user.dni],
+            firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            dni: [this.user.dni, [noWhitespaceValidator, rutValidator]],
             birthday: [(this.user.birthday != null) ? moment(this.user.birthday, 'DD/MM/YYYY') : null],
             gender: [this.user.gender],
             avatar: [this.user.avatar],
-            mobile: [this.user.mobile],
-            email: [this.user.email],
-            address: [this.user.address],
+            mobile: [this.user.mobile, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
+            email: [this.user.email, [Validators.email, noWhitespaceValidator]],
+            address: [this.user.address, noWhitespaceValidator],
             commune: [this.user.commune],
             roles: [this.user.roles]
 
@@ -208,6 +211,26 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     }
 
+    // getters create for template
+    get cFirstName() { return this.createForm.get('firstName'); }
+    get cLastName() { return this.createForm.get('lastName'); }
+    get cBirthday() { return this.createForm.get('birthday'); }
+    get cDni() { return this.createForm.get('dni'); }
+    get cEmail() { return this.createForm.get('email'); }
+    get cMobile() { return this.createForm.get('mobile'); }
+    get cAddress() { return this.createForm.get('address'); }
+    get cAvatar() { return this.createForm.get('avatar'); }
+
+    // getters edit
+    get eUsername() { return this.editForm.get('username'); }
+    get eFirstName() { return this.editForm.get('firstName'); }
+    get eLastName() { return this.editForm.get('lastName'); }
+    get eBirthday() { return this.editForm.get('birthday'); }
+    get eDni() { return this.editForm.get('dni'); }
+    get eEmail() { return this.editForm.get('email'); }
+    get eMobile() { return this.editForm.get('mobile'); }
+    get eAddress() { return this.editForm.get('address'); }
+    get eAvatar() { return this.editForm.get('avatar'); }
 
 
     selectEventCreate(files: FileList | File): void {
@@ -224,12 +247,12 @@ export class CrudUserDialogRefComponent implements OnInit {
                 })
             };
         }
-        this.createForm.markAsDirty();
+        this.createForm.get('avatar').markAsDirty();
     };
 
     resetCreateAvatar() {
         this.createForm.get('avatar').setValue(this.user.avatar);
-        this.createForm.markAsPristine();
+        this.createForm.get('avatar').markAsPristine();
     }
 
     selectEventEdit(files: FileList | File): void {
@@ -247,12 +270,12 @@ export class CrudUserDialogRefComponent implements OnInit {
             };
         }
 
-        this.editForm.markAsDirty();
+        this.editForm.get('avatar').markAsDirty();
     };
 
     resetEditAvatar() {
         this.editForm.get('avatar').setValue(this.user.avatar);
-        this.editForm.markAsPristine();
+        this.editForm.get('avatar').markAsPristine();
     }
 
     private createAutoUsername(): string {
@@ -271,16 +294,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
 
 
-    // getters create for template
-    get cFirstName() { return this.createForm.get('firstName'); }
-    get cLastName() { return this.createForm.get('lastName'); }
-    get cEmail() { return this.createForm.get('email'); }
-    get cAvatar() { return this.createForm.get('avatar'); }
-    // getters edit
-    get eUsername() { return this.editForm.get('username'); }
-    get eFirstName() { return this.editForm.get('firstName'); }
-    get eLastName() { return this.editForm.get('lastName'); }
-    //get eRoles() { return this.editForm.get('roles'); }
+
 
 
     cancel(): void {
@@ -299,8 +313,12 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
         this.createForm.value.birthday = this.createBirthday();
-       // this.user = this.createForm.value;
-       let userCreate: User = this.createForm.value;
+        this.createForm.value.dni = (this.cDni.value === "") ? null : this.cDni.value;
+        this.createForm.value.mobile = (this.cMobile.value === "") ? null : this.cMobile.value;
+        this.createForm.value.email = (this.cEmail.value === "") ? null : this.cEmail.value;
+        this.createForm.value.address = (this.cAddress.value === "") ? null : this.cAddress.value;
+
+        let userCreate: User = this.createForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
             this.managerStoreService.create(userCreate);
@@ -321,6 +339,10 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
+        this.editForm.value.dni = (this.eDni.value === "") ? null : this.eDni.value;
+        this.editForm.value.mobile = (this.eMobile.value === "") ? null : this.eMobile.value;
+        this.editForm.value.email = (this.eEmail.value === "") ? null : this.eEmail.value;
+        this.editForm.value.address = (this.eAddress.value === "") ? null : this.eAddress.value;
         // this.user = this.editForm.value;
         let userEdit: User = this.editForm.value;
 

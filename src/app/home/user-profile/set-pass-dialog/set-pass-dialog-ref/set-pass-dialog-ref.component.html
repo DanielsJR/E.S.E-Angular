@@ -11,9 +11,9 @@
 <form [formGroup]="setPassForm" (ngSubmit)="setPassword()">
   <mat-dialog-content>
 
-    <mat-form-field appearance="fill" >
+    <mat-form-field appearance="fill">
       <mat-label>
-        <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña
+        <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña Actual
       </mat-label>
       <input matInput formControlName="currentPass" placeholder="Ingresa tu contraseña actual" [type]="hideCurrentPass ? 'password' : 'text'"
         required>
@@ -23,27 +23,39 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" > 
+    <mat-form-field appearance="outline">
       <mat-label>
         <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
       </mat-label>
       <input matInput formControlName="newPass1" placeholder="Ingresa tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
-        required>
+        (keyup)="comparePass()" required minlength="8">
       <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-hint align="end">{{newPass1.value?.length || 0}}/min 8</mat-hint>
       <mat-error *ngIf="newPass1.hasError('required')">Este campo es
         <strong>requerido</strong>.
       </mat-error>
+      <mat-error *ngIf="newPass1.hasError('minlength')">minimo <strong>8</strong> caracteres.
+      </mat-error>
+      <mat-error *ngIf="newPass1.hasError('noMatch')">
+        <strong>Las contraseñas no coinciden</strong>.
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" >
+    <mat-form-field appearance="outline">
       <mat-label>
         <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
       </mat-label>
       <input matInput formControlName="newPass2" placeholder="Vuelve a ingresar tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
-        required>
+        (keyup)="comparePass()" required minlength="8">
       <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-hint align="end">{{newPass2.value?.length || 0}}/min 8</mat-hint>
       <mat-error *ngIf="newPass2.hasError('required')">Este campo es
         <strong>requerido</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('minlength')">minimo <strong>8</strong> caracteres.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('noMatch')">
+        <strong>Las contraseñas no coinciden</strong>.
       </mat-error>
     </mat-form-field>
 

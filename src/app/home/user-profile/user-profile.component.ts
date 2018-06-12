@@ -9,6 +9,9 @@ import { UserBackendService } from '../../services/user-backend.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { TdFileInputComponent } from '@covalent/core';
+import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
+import { rutValidator } from '../../shared/validators/rut-validator';
+import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 
 
 @Component({
@@ -45,8 +48,8 @@ export class UserProfileComponent implements OnInit {
     profileActionTitle: string = '';
 
     @Input()
-    set sidenavProfileIsOpen(sidenavProfileIsOpen) {
-        if (!sidenavProfileIsOpen && this.editProfileForm) {
+    set isSidenavProfileOpen(isSidenavProfileOpen) {
+        if (!isSidenavProfileOpen && this.editProfileForm) {
             if (this.fileInput) this.fileInput.clear();
             this.buildForm();
         }
@@ -66,9 +69,7 @@ export class UserProfileComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder, private userService: UserBackendService,
         private userLoggedService: UserLoggedService,
-        public sanitizer: DomSanitizer, private snackbarService: SnackbarService) {
-        //console.log('*** UserName: ' + this.user.firstName + ' uriRol: ' + this.uriRole);
-    }
+        public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
 
     ngOnInit() {
         this.buildForm();
@@ -78,17 +79,17 @@ export class UserProfileComponent implements OnInit {
 
         this.editProfileForm = this.formBuilder.group({
             id: [this.user.id],
-            username: [this.user.username, Validators.required],
+            username: [this.user.username, [Validators.required, noWhitespaceValidator]],
             //password: [],
-            firstName: [this.user.firstName, Validators.required],
-            lastName: [this.user.lastName, Validators.required],
-            dni: [this.user.dni],
+            firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
+            dni: [this.user.dni, [noWhitespaceValidator, rutValidator]],
             birthday: [(this.user.birthday != null) ? moment(this.user.birthday, 'DD/MM/YYYY') : null],
             gender: [this.user.gender],
             avatar: [this.user.avatar],
-            mobile: [this.user.mobile],
-            email: [this.user.email],
-            address: [this.user.address],
+            mobile: [this.user.mobile, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
+            email: [this.user.email, [Validators.email, noWhitespaceValidator]],
+            address: [this.user.address, noWhitespaceValidator],
             commune: [this.user.commune],
             roles: [this.user.roles]
 
@@ -110,12 +111,12 @@ export class UserProfileComponent implements OnInit {
                 })
             };
         }
-        this.editProfileForm.markAsDirty();
+        this.editProfileForm.get('avatar').markAsDirty();
     }
 
     resetAvatar() {
         this.editProfileForm.get('avatar').setValue(this.user.avatar);
-        this.editProfileForm.markAsPristine();
+        this.editProfileForm.get('avatar').markAsPristine();
     }
 
     compareByViewValue(a1: any, a2: any) {
@@ -123,17 +124,26 @@ export class UserProfileComponent implements OnInit {
         return a1 && a2 && a1 === a2;
     }
 
-  
+
     // getters required
     get username() { return this.editProfileForm.get('username'); }
     get firstName() { return this.editProfileForm.get('firstName'); }
     get lastName() { return this.editProfileForm.get('lastName'); }
+    get birthday() { return this.editProfileForm.get('birthday'); }
+    get dni() { return this.editProfileForm.get('dni'); }
+    get email() { return this.editProfileForm.get('email'); }
+    get mobile() { return this.editProfileForm.get('mobile'); }
+    get address() { return this.editProfileForm.get('address'); }
+    get avatar() { return this.editProfileForm.get('avatar'); }
 
     save(): void {
         this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
         this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-
+        this.editProfileForm.value.dni = (this.dni.value === "") ? null : this.dni.value;
+        this.editProfileForm.value.mobile = (this.mobile.value === "") ? null : this.mobile.value;
+        this.editProfileForm.value.email = (this.email.value === "") ? null : this.email.value;
+        this.editProfileForm.value.address = (this.address.value === "") ? null : this.address.value;
         //this.user = this.editProfileForm.value;
         let userEdit: User = this.editProfileForm.value;
         this.userService.update(userEdit, this.uriRole).subscribe(user => {

@@ -62,8 +62,8 @@ export class HomeComponent implements OnInit {
   //profile
   profileAction = '';
   profileTitle = '';
-  _sidenavProfileIsOpen = new EventEmitter<boolean>();
-  sidenavProfileIsOpen: boolean = false;
+  _isSidenavProfileOpen = new EventEmitter<boolean>();
+  isSidenavProfileOpen: boolean = false;
   @ViewChild("sidenavMenuProfile") private sidenavMenuProfile: MatSidenav;
   @ViewChild("btnMenuProfileBack") private btnMenuProfileBack: MatButton;
   @ViewChild("sidenavProfile") private sidenavProfile: MatSidenav;
@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
 
     this.sidenavProfile.openedChange.subscribe(isOpen => {
       // this.btnProfileBack._elementRef.nativeElement.focus();
-      this._sidenavProfileIsOpen.emit(this.sidenavProfileIsOpen = isOpen);
+      this._isSidenavProfileOpen.emit(this.isSidenavProfileOpen = isOpen);
     });
 
 
@@ -115,6 +115,7 @@ export class HomeComponent implements OnInit {
 
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
+      if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     });
   }
 

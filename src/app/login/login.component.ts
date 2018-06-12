@@ -32,6 +32,24 @@ export class LoginComponent implements OnInit {
     this.user = new User();
   }
 
+
+  ngOnInit(): void {
+    this.buildForm();
+
+  }
+
+  buildForm(): void {
+    this.loginForm = this.formBuilder.group({
+      username: [this.user.username, Validators.required],
+      password: [this.user.password, Validators.required]
+    });
+  }
+
+
+  // getters
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
+
   onSubmit2(): void {
     this.user.username = this.username.value;
     this.user.password = this.password.value;
@@ -80,21 +98,5 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.buildForm();
-
-  }
-
-  buildForm(): void {
-    this.loginForm = this.formBuilder.group({
-      username: [this.user.username, Validators.required],
-      password: [this.user.password, Validators.required]
-    });
-  }
-
-
-  // getters
-  get username() { return this.loginForm.get('username'); }
-  get password() { return this.loginForm.get('password'); }
 
 }

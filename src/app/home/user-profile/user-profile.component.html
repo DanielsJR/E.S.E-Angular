@@ -12,6 +12,9 @@
         <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es
           <strong>requerido</strong>.
         </mat-error>
+        <mat-error *ngIf="username.hasError('whitespace')">No se permiten espacios en
+          <strong>blanco</strong>.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
@@ -48,10 +51,6 @@
 
       </mat-form-field>
 
-      <div class="btnSave">
-        <button type="submit"  mat-raised-button color="accent" tabindex="2" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
-      </div>
-
 
     </div>
 
@@ -62,8 +61,11 @@
           <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="firstName.hasError('required')">Nombre es
-          <strong>requerido</strong>.
+        <mat-error *ngIf="firstName.hasError('required')">Nombres son
+          <strong>requeridos</strong>.
+        </mat-error>
+        <mat-error *ngIf="firstName.hasError('pattern')">Ingrese Nombres
+          <strong>válidos</strong>.
         </mat-error>
       </mat-form-field>
 
@@ -73,26 +75,38 @@
         </mat-label>
         <input matInput formControlName="lastName" required>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="lastName.hasError('required')">Apellido es
-          <strong>requerido</strong>.
+        <mat-error *ngIf="lastName.hasError('required')">Apellidos son
+          <strong>requeridos</strong>.
+        </mat-error>
+        <mat-error *ngIf="lastName.hasError('pattern')">Ingrese Apellidos
+          <strong>válidos</strong>.
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
-        <input matInput formControlName="dni">
+        <input matInput formControlName="dni" placeholder="11111111-1">
         <mat-label>
           <i class="mdi mdi-barcode material-icons app-input-icon">&nbsp;</i>RUT
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="dni.hasError('whitespace')">No se permiten espacios en
+          <strong>blanco</strong>.
+        </mat-error>
+        <mat-error *ngIf="dni.hasError('checkrut') && !dni.hasError('whitespace')">Ingrese un RUT
+          <strong>válido</strong>.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
-        <input matInput [matDatepicker]="picker" formControlName="birthday">
+        <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="1/11/1990">
         <mat-label>
           <i class="mdi mdi-cake-variant material-icons app-input-icon">&nbsp;</i>Fecha de Nacimiento
         </mat-label>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="!birthday.valid">ingrese un Formato de Fecha
+          <strong>válido</strong>.
+        </mat-error>
       </mat-form-field>
 
 
@@ -107,37 +121,52 @@
         </mat-label>
       </mat-form-field>
 
-      <div class="btnSave">
-        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
-      </div>
 
     </div>
 
     <div *ngSwitchCase="'contacto'">
 
       <mat-form-field appearance="standard">
-        <input matInput [type]="tel" formControlName="mobile" #mobileEdit maxlength="9">
+        <input matInput [type]="tel" formControlName="mobile" maxlength="9" placeholder="911222333" placeholder="911222333">
         <mat-label>
           <i class="mdi mdi-phone material-icons app-input-icon">&nbsp;</i>Telefóno
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
+        <mat-hint align="end">{{mobile.value?.length || 0}}/9</mat-hint>
+        <mat-error *ngIf="mobile.hasError('whitespace')">No se permiten espacios en
+          <strong>blanco</strong>.
+        </mat-error>
+        <mat-error *ngIf="mobile.hasError('pattern') && !mobile.hasError('whitespace')">Ingrese un número de telefono
+          <strong>válido</strong>.
+        </mat-error>
+        <mat-error *ngIf="mobile.hasError('minlength') && !mobile.hasError('pattern')">Teléfono debe ser de
+          <strong>9 dígitos</strong>.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
-        <input matInput formControlName="email">
+        <input matInput formControlName="email" placeholder="usuario@email.com">
         <mat-label>
           <i class="mdi mdi-email material-icons app-input-icon">&nbsp;</i>Email
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="email.hasError('whitespace')">No se permiten espacios en
+          <strong>blanco</strong>.
+        </mat-error>
+        <mat-error *ngIf="email.hasError('email') && !email.hasError('whitespace')">Ingrese una dirección Email
+          <strong>válida</strong>.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
-        <input matInput formControlName="address">
+        <input matInput formControlName="address" placeholder="Mi Calle 334">
         <mat-label>
           <i class="mdi mdi-account-location material-icons app-input-icon">&nbsp;</i>Dirección
         </mat-label>
         <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <mat-error *ngIf="address.hasError('whitespace')">No se permiten espacios en
+          <strong>blanco</strong>.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="standard">
@@ -151,10 +180,12 @@
         </mat-label>
       </mat-form-field>
 
-      <div class="btnSave">
-        <button type="submit" mat-raised-button color="accent" tabindex="4" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
-      </div>
 
+
+    </div>
+
+    <div class="btnSave">
+      <button type="submit" mat-raised-button color="accent" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
     </div>
 
   </form>

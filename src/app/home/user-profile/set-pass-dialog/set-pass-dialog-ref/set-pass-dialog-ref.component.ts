@@ -19,6 +19,8 @@ export class SetPassDialogRefComponent implements OnInit {
   hideCurrentPass = true;
   hideNewPass = true;
 
+  //passError = false;
+
   constructor(public dialogRef: MatDialogRef<SetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
@@ -48,8 +50,8 @@ export class SetPassDialogRefComponent implements OnInit {
 
     this.setPassForm = this.formBuilder.group({
       currentPass: ['', Validators.required],
-      newPass1: ['', Validators.required],
-      newPass2: ['', Validators.required],
+      newPass1: ['', [Validators.required,Validators.minLength(8)]],
+      newPass2: ['', [Validators.required,Validators.minLength(8)]],
     });
 
   }
@@ -58,13 +60,32 @@ export class SetPassDialogRefComponent implements OnInit {
   get newPass1() { return this.setPassForm.get('newPass1'); }
   get newPass2() { return this.setPassForm.get('newPass2'); }
 
+  comparePass() {
+
+    if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required')) && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength')) ) {
+
+      if (this.newPass1.value !== this.newPass2.value) {
+        console.log('no match');
+        this.newPass1.setErrors({
+          'noMatch': true
+        });
+        this.newPass2.setErrors({
+          'noMatch': true
+        });
+      } else {
+        console.log('match');
+        this.newPass1.setErrors(null);
+        this.newPass2.setErrors(null);
+      }
+    }
+  }
+
   setPassword(): void {
 
-    this.currentPass;
-    this.newPass1;
-    this.newPass2;
-
     let pass: string[] = [];
+    pass.push(this.currentPass.value);
+    pass.push(this.newPass1.value);
+
     this.userBackendService
       .setUserPassword(this.user.id, this.uriRole, pass)
       .subscribe(response => {
@@ -77,6 +98,7 @@ export class SetPassDialogRefComponent implements OnInit {
         };
 
       });
+
   }
 
   cancel(): void {

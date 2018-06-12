@@ -146,8 +146,11 @@
                             <mat-label>
                                 <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
                             </mat-label>
-                            <mat-error *ngIf="cFirstName.hasError('required')">Nombre de Usuario es
-                                <strong>requerido</strong>.
+                            <mat-error *ngIf="cFirstName.hasError('required')">Nombres son
+                                <strong>requeridos</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cFirstName.hasError('pattern')">Ingrese Nombres
+                                <strong>válidos</strong>.
                             </mat-error>
                         </mat-form-field>
 
@@ -156,24 +159,37 @@
                             <mat-label>
                                 <i class="mdi mdi-account-outline material-icons app-input-icon">&nbsp;</i>Apellidos
                             </mat-label>
-                            <mat-error *ngIf="cLastName.hasError('required')">Nombre de Usuario es
-                                <strong>requerido</strong>.</mat-error>
+                            <mat-error *ngIf="cLastName.hasError('required')">Apellidos son
+                                <strong>requeridos</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cLastName.hasError('pattern')">Ingrese Apellidos
+                                <strong>válidos</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="dni">
+                            <input matInput formControlName="dni" placeholder="11111111-1">
                             <mat-label>
                                 <i class="mdi mdi-barcode material-icons app-input-icon">&nbsp;</i>RUT
                             </mat-label>
+                            <mat-error *ngIf="cDni.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cDni.hasError('checkrut') && !cDni.hasError('whitespace')">Ingrese un RUT
+                                <strong>válido</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput [matDatepicker]="picker" formControlName="birthday">
+                            <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="1/11/1990">
                             <mat-label>
                                 <i class="mdi mdi-cake-variant material-icons app-input-icon">&nbsp;</i>Fecha de Nacimiento
                             </mat-label>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="!cBirthday.valid">ingrese un Formato de Fecha
+                                <strong>válido</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
@@ -214,25 +230,43 @@
                     <div class="tab-content">
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="mobile" #mobileCreate maxlength="9">
+                            <input matInput formControlName="mobile" placeholder="911222333" maxlength="9">
                             <mat-label>
                                 <i class="mdi mdi-phone material-icons app-input-icon">&nbsp;</i>Teléfono
                             </mat-label>
-                            <mat-hint align="end">{{mobileCreate.value?.length || 0}}/9</mat-hint>
+                            <mat-hint align="end">{{cMobile?.value?.length || 0}}/9</mat-hint>
+                            <mat-error *ngIf="cMobile.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cMobile.hasError('pattern') && !cMobile.hasError('whitespace')">Ingrese un número de telefono
+                                <strong>válido</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cMobile.hasError('minlength') && !cMobile.hasError('pattern')">Teléfono debe ser de
+                                <strong>9 dígitos</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="email">
+                            <input matInput formControlName="email" placeholder="usuario@email.com">
                             <mat-label>
                                 <i class="mdi mdi-email material-icons app-input-icon">&nbsp;</i>Email
                             </mat-label>
+                            <mat-error *ngIf="cEmail.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="cEmail.hasError('email') && !cEmail.hasError('whitespace')">Ingrese una dirección Email
+                                <strong>válida</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="address">
+                            <input matInput formControlName="address" placeholder="Mi Calle 334">
                             <mat-label>
                                 <i class="mdi mdi-account-location material-icons app-input-icon">&nbsp;</i>Dirección
                             </mat-label>
+                            <mat-error *ngIf="cAddress.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
@@ -317,6 +351,9 @@
                             <mat-error *ngIf="eUsername.hasError('required')">Nombre de Usuario es
                                 <strong>requerido</strong>.
                             </mat-error>
+                            <mat-error *ngIf="eUsername.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
@@ -380,8 +417,11 @@
                                 <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
                             </mat-label>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-                            <mat-error *ngIf="eFirstName.hasError('required')">Nombre es
-                                <strong>requerido</strong>.
+                            <mat-error *ngIf="eFirstName.hasError('required')">Nombres son
+                                <strong>requeridos</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eFirstName.hasError('pattern')">Ingrese Nombres
+                                <strong>válidos</strong>.
                             </mat-error>
                         </mat-form-field>
 
@@ -391,26 +431,38 @@
                             </mat-label>
                             <input matInput formControlName="lastName" required>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-                            <mat-error *ngIf="eLastName.hasError('required')">Apellido es
-                                <strong>requerido</strong>.
+                            <mat-error *ngIf="eLastName.hasError('required')">Apellidos son
+                                <strong>requeridos</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eLastName.hasError('pattern')">Ingrese Apellidos
+                                <strong>válidos</strong>.
                             </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="dni">
+                            <input matInput formControlName="dni" placeholder="11111111-1">
                             <mat-label>
                                 <i class="mdi mdi-barcode material-icons app-input-icon">&nbsp;</i>RUT
                             </mat-label>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+                            <mat-error *ngIf="eDni.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eDni.hasError('checkrut') && !eDni.hasError('whitespace')">Ingrese un RUT
+                                <strong>válido</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput [matDatepicker]="picker" formControlName="birthday">
+                            <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="1/11/1990">
                             <mat-label>
                                 <i class="mdi mdi-cake-variant material-icons app-input-icon">&nbsp;</i>Fecha de Nacimiento
                             </mat-label>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="!eBirthday.valid">ingrese un Formato de Fecha
+                                <strong>válido</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
@@ -432,28 +484,46 @@
                     <div class="tab-content">
 
                         <mat-form-field appearance="standard">
-                            <input matInput [type]="tel" formControlName="mobile" #mobileEdit maxlength="9">
+                            <input matInput [type]="tel" formControlName="mobile" maxlength="9" placeholder="911222333">
                             <mat-label>
                                 <i class="mdi mdi-phone material-icons app-input-icon">&nbsp;</i>Telefóno
                             </mat-label>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-                            <mat-hint align="end">{{mobileEdit.value?.length || 0}}/9</mat-hint>
+                            <mat-hint align="end">{{eMobile.value?.length || 0}}/9</mat-hint>
+                            <mat-error *ngIf="eMobile.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eMobile.hasError('pattern') && !eMobile.hasError('whitespace')">Ingrese un número de telefono
+                                <strong>válido</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eMobile.hasError('minlength') && !eMobile.hasError('pattern')">Teléfono debe ser de
+                                <strong>9 dígitos</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="email">
+                            <input matInput formControlName="email" placeholder="usuario@email.com">
                             <mat-label>
                                 <i class="mdi mdi-email material-icons app-input-icon">&nbsp;</i>Email
                             </mat-label>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+                            <mat-error *ngIf="eEmail.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
+                            <mat-error *ngIf="eEmail.hasError('email') && !eEmail.hasError('whitespace')">Ingrese una dirección Email
+                                <strong>válida</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <input matInput formControlName="address">
+                            <input matInput formControlName="address" placeholder="Mi Calle 334">
                             <mat-label>
                                 <i class="mdi mdi-account-location material-icons app-input-icon">&nbsp;</i>Dirección
                             </mat-label>
                             <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+                            <mat-error *ngIf="eAddress.hasError('whitespace')">No se permiten espacios en
+                                <strong>blanco</strong>.
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">

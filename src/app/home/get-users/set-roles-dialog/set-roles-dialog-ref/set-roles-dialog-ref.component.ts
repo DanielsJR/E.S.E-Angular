@@ -75,26 +75,29 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.setRolesForm = this.formBuilder.group({
-      toggleManager: [(this.user.roles.includes(ROLE_MANAGER)) ? true : false],
-      toggleTeacher: [(this.user.roles.includes(ROLE_TEACHER)) ? true : false],
+      slideToggleManager: [(this.user.roles.includes(ROLE_MANAGER)) ? true : false],
+      slideToggleTeacher: [(this.user.roles.includes(ROLE_TEACHER)) ? true : false],
     });
   }
 
-  toggleManager(event: MatSlideToggleChange) {
-    (event.checked) ? this.roles.push(ROLE_MANAGER) : this.roles = this.roles.filter(e => e !== (ROLE_MANAGER));
+  get slideToggleManager() { return this.setRolesForm.get('slideToggleManager') };
+  get slideToggleTeacher() { return this.setRolesForm.get('slideToggleTeacher') };
+
+  toggleManager() {
+    (this.slideToggleManager.value) ? this.roles.push(ROLE_MANAGER) : this.roles = this.roles.filter(e => e !== (ROLE_MANAGER));
   }
 
-  toggleTeacher(event: MatSlideToggleChange) {
-    (event.checked) ? this.roles.push(ROLE_TEACHER) : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
+  toggleTeacher() {
+    (this.slideToggleTeacher.value) ? this.roles.push(ROLE_TEACHER) : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
   }
 
   setRoles(): void {
     let rolesOrdained: string[] = [];
-    if (this.setRolesForm.get('toggleManager').value) rolesOrdained.push(ROLE_MANAGER);
-    if (this.setRolesForm.get('toggleTeacher').value) rolesOrdained.push(ROLE_TEACHER);
+    if (this.slideToggleManager.value) rolesOrdained.push(ROLE_MANAGER);
+    if (this.slideToggleTeacher.value) rolesOrdained.push(ROLE_TEACHER);
 
-   // if (this.setRolesForm.value.toggleManager) rolesOrdained.push(ROLE_MANAGER);
-   // if (this.setRolesForm.value.toggleTeacher) rolesOrdained.push(ROLE_TEACHER);
+    // if (this.setRolesForm.value.slideToggleManager) rolesOrdained.push(ROLE_MANAGER);
+    // if (this.setRolesForm.value.slideToggleTeacher) rolesOrdained.push(ROLE_TEACHER);
 
     if (this.roles.length > 0) this.user.roles = rolesOrdained;
 
@@ -113,5 +116,5 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     this.dialogRef.close('canceled');
   }
 
-  
+
 }
