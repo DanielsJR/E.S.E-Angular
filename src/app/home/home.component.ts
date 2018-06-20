@@ -11,7 +11,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_TEACHERS, ROLE_STUDENT, URI_STUDENTS } from '../app.config';
+import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_TEACHERS, ROLE_STUDENT, URI_STUDENTS, LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 
 
 @Component({
@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
   user: User;
   privilege = this.loginService.getPrivilege();
   roles = this.loginService.getRoles();
-  private token = this.localStorageService.getTokenParsed();
 
   private _uriRole: string;
 
@@ -107,10 +106,10 @@ export class HomeComponent implements OnInit {
     } else {
       console.log('user:null');
 
-      this.userBackendService.getUserByToken(this.token, this.uriRole).subscribe(user => {
+      this.userBackendService.getUserByUserName(this.localStorageService.getTokenUsername(), this.uriRole).subscribe(user => {
         this.user = user;
       },
-        error => console.error('error getting the token ' + error));
+        error => console.error('error getting the user ' + error));
     }
 
     this.userLoggedService.userLogged$.subscribe(user => {
@@ -125,11 +124,10 @@ export class HomeComponent implements OnInit {
     return n1 + ' ' + n2;
   }
 
-
-  private logout(): void {
+  logout(): void {
     location.reload();//cache clean
     this.loginService.logout();
-    this.themePicker.removeTheme();
+    //this.themePicker.removeTheme();
     this.router.navigate(['/']);
   }
 

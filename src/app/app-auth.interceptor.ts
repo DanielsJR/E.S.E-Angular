@@ -9,56 +9,49 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 
-
 @Injectable()
 export class AppAuthInterceptor implements HttpInterceptor {
-    constructor(private localStorageService: LocalStorageService,
-        private router: Router) { }
+    constructor(private localStorageService: LocalStorageService, private router: Router) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (!req.headers.has('Authorization')) {
             if (this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-                const base64Token: string = this.localStorageService.getToken64();
+                let token = this.localStorageService.getFullToken();
                 const authReq = req.clone({
                     setHeaders: {
-                        'Authorization': `Basic ${base64Token}`,
+                        'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json'
                     }
                 });
+
+              // const authReq = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + token)});
 
                 // Pass on the cloned request instead of the original request.
                 return next.handle(authReq).pipe(tap((event: HttpEvent<any>) => {
                     if (event instanceof HttpResponse) {
                         // do stuff with response if you want
                     }
-                }
-                    // token expired
-                    , (err: any) => {
-
-                        if (err instanceof HttpErrorResponse) {
-                            if (err.status === 401) {
-                                this.router.navigate(['/login']);
-                            }
-                        }
-                    }));
+                }, (err: any) => {
+                    if (err instanceof HttpErrorResponse) {
+                        console.error('token expired!');
+                        if (err.status === 401) this.router.navigate(['/login']);
+                    }
+                }));
             }
 
             return next.handle(req).pipe(tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     // do stuff with response if you want
                 }
-            }
-                // no local storage
-                , (err: any) => {
-                    if (err instanceof HttpErrorResponse) {
-                        if (err.status === 401) {
-                            // redirect to the login route
-                            this.router.navigate(['/login']);
-                        }
-                    }
-                }));
+            }, (err: any) => {
+                if (err instanceof HttpErrorResponse) {
+                    console.error('no token in local storage!');
+                    if (err.status === 401) this.router.navigate(['/login']);
+                }
+            }));
         }
         // has authorization (login)
+        console.error('it already has authorization!');
         return next.handle(req);
     }
 

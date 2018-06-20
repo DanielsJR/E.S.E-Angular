@@ -46,12 +46,15 @@
     </mat-form-field>
 
     <br>
+
+    <!--{{roles | json}}-->
+
     <div *ngIf="!slideToggleManager.value && !slideToggleTeacher.value" class="errorRoles centerField">
       <i class="mdi mdi-alert-circle material-icons app-input-icon">&nbsp;</i>
       Al menos un Privilégio es &nbsp;
-      <strong>Requerido</strong>
+      <strong>requerido</strong>
     </div>
-    <!--{{roles | json}}-->
+
   </mat-dialog-content>
 
   <mat-divider></mat-divider>

@@ -64,7 +64,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
-        this.isAdmin = this.checkForAdmin(this.localStorageService.getRolesParsed());
+        this.isAdmin = this.checkForAdmin(this.localStorageService.getTokenRoles());
         //JSON.stringify(this.user.id);
 
         if (this.uriRole === URI_MANAGERS) {

@@ -69,15 +69,6 @@ export class UserBackendService {
             );
     }
 
-    getUserByToken(token: string, uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}${URI_TOKEN}/${token}`;
-        console.log(`resource called: ${url}`);
-        return this.httpCli.get<User>(url)
-            .pipe(
-                tap(_ => console.log(`fetched user token=${token}`))
-                // ,catchError(this.handleError<User>(`getUser token=${token}`))
-            );
-    }
 
     getUserByUserName(name: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;

@@ -11,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../services/snackbar.service';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
+import { SessionStorageService } from '../../services/session-storage.service';
 
 
 @Component({
@@ -33,15 +34,14 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   // mat dialog
   user: User;
   roles: string[];
-  isDark = this.localstorage.getIsDarkTheme();
+  isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
   @Input() uriRole;
-  @ViewChild(CrudUserDialogComponent) private crudUserDialog: CrudUserDialogComponent;
+  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
   constructor(private managerStoreService: ManagerStoreService,
-    private teacherStoreService: TeacherStoreService,
-    private studentStoreService: StudentStoreService,
-    private localstorage: LocalStorageService,
+    private teacherStoreService: TeacherStoreService, private studentStoreService: StudentStoreService,
+    private localstorage: LocalStorageService, private sessionStorage: SessionStorageService,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -85,7 +85,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       console.error('NO uriRole');
     }
 
-    this.localstorage.isThemeDark$.subscribe(isDark => {
+    this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
     });

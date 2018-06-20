@@ -18,9 +18,9 @@ mat-dialog-actions {
     margin: 0;
 }
 
-.errorRoles{
+.errorRoles {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     font-size: 0.75em;
     color: red;

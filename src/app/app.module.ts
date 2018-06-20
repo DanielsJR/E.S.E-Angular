@@ -7,7 +7,7 @@ import { LoginModule } from './login/login.module';
 import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppAuthInterceptor } from './app-auth-interceptor.interceptor';
+import { AppAuthInterceptor } from './app-auth.interceptor';
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
 import { DomSanitizer } from '@angular/platform-browser';

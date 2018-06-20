@@ -9,6 +9,10 @@ export const ROLE_STUDENT_SPANISH  = 'Estudiante';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 export const LOCAL_STORAGE_THEME_KEY = 'theme';
+
+export const SESSION_STORAGE_TOKEN_KEY = 'token';
+export const SESSION_STORAGE_THEME_KEY = 'theme';
+
 export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
 export const API_SERVER = 'http://192.168.1.30:8080/api/v0';

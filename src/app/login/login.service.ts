@@ -6,6 +6,8 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../models/user';
+import { SessionStorageService } from '../services/session-storage.service';
+
 
 @Injectable()
 export class LoginService {
@@ -15,47 +17,51 @@ export class LoginService {
     // store the URL so we can redirect after logging in (not in use)
     redirectUrl: string;
 
+    
 
-    constructor(private localStorageService: LocalStorageService, private httpCli: HttpClient) { }
+    constructor(private localStorageService: LocalStorageService, private sessionStorageService: SessionStorageService,
+        private httpCli: HttpClient) { }
 
     public handleError = (error: Response) => {
         return throwError(error);
     }
 
-    isStored(): boolean {
+    getToken(): string {
+        return this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    }
+
+    isTokenStored(): boolean {
         return this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY);
     }
 
-    login2(userName: string, password: string): Observable<TokenAuth> {
-        console.log('Login service called');
-        return this.httpCli.post<TokenAuth>(this.endpoint, null, {
-            headers: new HttpHeaders({
-                'Authorization': 'Basic ' + btoa(userName + ':' + password)
-            })
-        })
-            .pipe(catchError(this.handleError));
-    }
-
-    login(userName: string, password: string): Observable<User> {
+    login(username: string, password: string): Observable<User> {
         console.log('Login service called');
         return this.httpCli.post<User>(this.endpoint, null, {
             headers: new HttpHeaders({
-                'Authorization': 'Basic ' + btoa(userName + ':' + password)
+                'Authorization': 'Basic ' + btoa(username + ':' + password)
             })
         })
             .pipe(catchError(this.handleError));
     }
 
+    attemptAuth(username: string, password: string): Observable<any> {
+        const credentials = { username: username, password: password };
+        console.log('attempAuth ::');
+        return this.httpCli.post<any>(API_SERVER + '/token/generate-token', credentials);
+    }
+
     logout(): void {
-        this.localStorageService.removeItem(LOCAL_STORAGE_TOKEN_KEY);
+        this.localStorageService.signOut();
+        this.sessionStorageService.signOut();
         this.isAuth = false;
         this.isAuth = false;
     }
 
     hasPrivileges(): boolean {
-        if (this.isStored()) {
-            for (var i = 0; i < this.localStorageService.getRolesParsed().length; i++) {
-                let role = this.localStorageService.getRolesParsed()[i];
+        if (this.isTokenStored()) {
+            for (var i = 0; i < this.localStorageService.getTokenRoles().length; i++) {
+                let role = this.localStorageService.getTokenRoles()[i];
+                console.log('Role::: '+ role);
                 return role === ROLE_ADMIN ||
                     role === ROLE_MANAGER ||
                     role === ROLE_TEACHER ||
@@ -65,9 +71,9 @@ export class LoginService {
     }
 
     checkPrivileges(): void {
-        if (this.isStored()) {
-            console.log('checking privileges of: ' + this.localStorageService.getTokenParsed()
-                + ' roles: ' + this.localStorageService.getRolesParsed().toString());
+        if (this.isTokenStored()) {
+            console.log('checking privileges of: ' + this.localStorageService.getTokenUsername()
+                + ' roles: ' + this.localStorageService.getTokenRoles());
             console.log('is auth????: ' + this.hasPrivileges());
             this.isAuth = this.hasPrivileges();
         } else {
@@ -77,9 +83,9 @@ export class LoginService {
     }
 
     getPrivilege(): string {
-        if (this.isStored()) {
-            for (var i = 0; i < this.localStorageService.getRolesParsed().length; i++) {
-                let role = this.localStorageService.getRolesParsed()[i];
+        if (this.isTokenStored()) {
+            for (var i = 0; i < this.localStorageService.getTokenRoles().length; i++) {
+                let role = this.localStorageService.getTokenRoles()[i];
                 if (role === ROLE_ADMIN) {
                     return role.toString();
                 }
@@ -101,8 +107,8 @@ export class LoginService {
     }
 
     getRoles(): string[] {
-        if (this.isStored()) {
-            return this.roles = this.localStorageService.getRolesParsed();
+        if (this.isTokenStored()) {
+            return this.roles = this.localStorageService.getTokenRoles();
         } else {
             console.error('isStore: false');
             return this.roles = [];

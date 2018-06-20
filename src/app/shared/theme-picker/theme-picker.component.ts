@@ -2,7 +2,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Theme } from '../../models/theme';
 import { forEach } from '@angular/router/src/utils/collection';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { SessionStorageService } from '../../services/session-storage.service';
+import { SESSION_STORAGE_THEME_KEY } from '../../app.config';
 
 
 @Component({
@@ -62,7 +63,7 @@ export class ThemePickerComponent implements OnInit {
   private saveTheme: Theme;
   private installed: boolean;
 
-  constructor(public overlayContainer: OverlayContainer, private localstorage: LocalStorageService) { }
+  constructor(public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService) { }
 
   ngOnInit() {
     this.defaultTheme = new Theme('indigo-pink', false);
@@ -72,60 +73,42 @@ export class ThemePickerComponent implements OnInit {
   }
 
   private theme(): Theme {
-    if (localStorage.getItem('theme') !== null) {
-      const stringTheme = localStorage.getItem('theme');
-      const parsedTheme: any = JSON.parse(stringTheme);
-      return new Theme(parsedTheme.name, parsedTheme.isDark);
+    if (this.sessionStorage.isStored(SESSION_STORAGE_THEME_KEY)) {
+      return new Theme(this.sessionStorage.getTheme(), this.sessionStorage.isDarkTheme());
     }
   }
 
   get themeName(): string {
-    if (this.theme() != null) {
-      return this.theme().name;
-    } else {
-      return this.defaultTheme.name;
-    }
+    if (this.theme()) return this.theme().name;
+    return this.defaultTheme.name;
   }
 
   get isDark(): boolean {
-    if (this.theme() != null) {
-      return this.theme().isDark;
-    } else {
-      return this.defaultTheme.isDark;
-    }
+    if (this.theme()) return this.theme().isDark;
+    return this.defaultTheme.isDark;
   }
 
   selectTheme(): void {
-    if (this.isDark) {
-      this.themeArray = this.themesDark;
-    } else {
-      this.themeArray = this.themesLight;
-    }
+    (this.isDark) ? this.themeArray = this.themesDark : this.themeArray = this.themesLight;
   }
 
   installTheme(theme: Theme): void {
     this.overlayContainer.getContainerElement().classList.remove(this.themeName);
-    localStorage.setItem('theme', JSON.stringify(theme));
+    this.sessionStorage.setItem(SESSION_STORAGE_THEME_KEY, theme);
     this.overlayContainer.getContainerElement().classList.add(theme.name);
     this.selectTheme();
     this.installed = true;
-    this.localstorage.getIsDarkTheme();
+    this.sessionStorage.isDarkTheme();
   }
 
   mouseOverTheme(theme: Theme): void {
-    if (this.theme() != null) {
-      this.saveTheme = this.theme();
-    } else {
-      this.saveTheme = this.defaultTheme;
-    }
+    (this.theme()) ? this.saveTheme = this.theme() : this.saveTheme = this.defaultTheme;
     this.installTheme(theme);
     this.installed = false;
   }
 
   mouseOutTheme(): void {
-    if (!this.installed) {
-      this.installTheme(this.saveTheme);
-    }
+    if (!this.installed) this.installTheme(this.saveTheme);
   }
 
   installDarkTheme(): void {
@@ -146,7 +129,7 @@ export class ThemePickerComponent implements OnInit {
 
   removeTheme(): void {
     this.overlayContainer.getContainerElement().classList.remove(this.themeName);
-    localStorage.removeItem('theme');
+    this.sessionStorage.removeItem(SESSION_STORAGE_THEME_KEY);
     this.installed = false;
   }
 

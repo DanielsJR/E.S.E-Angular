@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { LOCAL_STORAGE_TOKEN_KEY, LOCAL_STORAGE_THEME_KEY, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN } from '../app.config';
 import { User } from '../models/user';
+import { default as decode } from 'jwt-decode';
+import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 
 
 @Injectable({
@@ -9,64 +9,46 @@ import { User } from '../models/user';
 })
 export class LocalStorageService {
 
-    private isThemeDarkSource = new Subject<boolean>();
-    isThemeDark$ = this.isThemeDarkSource.asObservable();
+    constructor() { }
 
-    private tokenParsed(): any {
-        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
-            const tokenFullString: string = this.getItem(LOCAL_STORAGE_TOKEN_KEY);
-            return JSON.parse(tokenFullString);
-        }
-    }
-
-    private themeParsed(): any {
-        if (this.isStored(LOCAL_STORAGE_THEME_KEY)) {
-            const themeFullString: string = this.getItem(LOCAL_STORAGE_THEME_KEY);
-            return JSON.parse(themeFullString);
-        }
-    }
-
-    setItem(key: string, value: any): void {
-        localStorage.setItem(key, JSON.stringify(value));
+    isStored(key: string): boolean {
+        return (this.getItem(key) !== null);
     }
 
     getItem(key: string): any {
         return localStorage.getItem(key);
     }
 
+    setItem(key: string, value: any): void {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+
     removeItem(key: string): void {
         localStorage.removeItem(key);
     }
 
-    isStored(key: string): boolean {
-        return (this.getItem(key) !== null);
+    signOut() {
+        localStorage.clear();
     }
 
-    getTokenParsed(): string {
-        return this.tokenParsed().token.value;
+    getFullToken(): string{
+        return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1); 
     }
 
-    getRolesParsed(): string[] {
-        return this.tokenParsed().roles;
-    }
-
-    getToken64(): string {
-        return btoa(this.getTokenParsed() + ':');
-    }
-
-    getTheme(): string {
-        return this.themeParsed().name;
-    }
-
-    getIsDarkTheme(): boolean {
-        if (this.isStored(LOCAL_STORAGE_THEME_KEY)) {
-            //  console.log('darkTheme: ' + this.themeParsed().isDark);
-            this.isThemeDarkSource.next(this.themeParsed().isDark);
-            return this.themeParsed().isDark;
-        } else {
-            return false;
+    getTokenRoles(): string[] {
+        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
+        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
+            return tokenPayload.scopes.replace(/ROLE_/g, '').split(",");
         }
     }
+
+    getTokenUsername(): string {
+        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
+        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
+            return tokenPayload.sub
+        };
+    }
+
 
 
 }
