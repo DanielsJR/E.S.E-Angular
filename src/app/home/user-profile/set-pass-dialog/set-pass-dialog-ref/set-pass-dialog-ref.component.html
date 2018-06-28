@@ -21,6 +21,9 @@
       <mat-error *ngIf="currentPass.hasError('required')">Este campo es
         <strong>requerido</strong>.
       </mat-error>
+      <mat-error *ngIf="currentPass.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -34,7 +37,11 @@
       <mat-error *ngIf="newPass1.hasError('required')">Este campo es
         <strong>requerido</strong>.
       </mat-error>
-      <mat-error *ngIf="newPass1.hasError('minlength')">minimo <strong>8</strong> caracteres.
+      <mat-error *ngIf="newPass1.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass1.hasError('minlength') && !newPass1.hasError('whitespace')">minimo
+        <strong>8</strong> caracteres.
       </mat-error>
       <mat-error *ngIf="newPass1.hasError('noMatch')">
         <strong>Las contraseñas no coinciden</strong>.
@@ -52,7 +59,11 @@
       <mat-error *ngIf="newPass2.hasError('required')">Este campo es
         <strong>requerido</strong>.
       </mat-error>
-      <mat-error *ngIf="newPass2.hasError('minlength')">minimo <strong>8</strong> caracteres.
+      <mat-error *ngIf="newPass2.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('minlength') && !newPass2.hasError('whitespace')">minimo
+        <strong>8</strong> caracteres.
       </mat-error>
       <mat-error *ngIf="newPass2.hasError('noMatch')">
         <strong>Las contraseñas no coinciden</strong>.

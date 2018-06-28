@@ -1,9 +1,13 @@
+.container{
+    width: 100%;
+    height: 100%;
+}
+
 mat-card {
-    position: relative;
-    top: 20px;
-    max-width: 700px;
-    max-height: 528px;
-    margin: auto;
+    max-width: 620px;
+    min-width: 300px;
+    top: 5px;
+    margin: 15px auto;
     padding: 0;
 }
 
@@ -11,20 +15,11 @@ mat-toolbar {
     padding: 8px 24px 0;
 }
 
-
 mat-form-field {
     font-size: 14px;
     width: 100%;
 }
 
-mat-table {
-    position: relative;
-    top: 0;
-    max-height: 400px;
-    margin: auto;
-    padding: 0;
-    overflow: auto;
-}
 
 .fila:hover {
     cursor: pointer;
@@ -44,28 +39,39 @@ mat-table {
     background: #292929;
 }
 
-.add {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: white;
-}
-
 .mat-list-avatar {
-    --cursor: pointer;
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
 }
 
 .fila:hover .mat-list-avatar {
-   opacity: 0.3;
+    opacity: 0.3;
 }
 
 .fila-dark:hover .mat-list-avatar {
     opacity: 0.3;
- }
+}
 
- .role-style {
+mat-list {
+    padding: 0;
+}
+
+.colum2 {
+    justify-content: flex-end !important;
+}
+
+mat-list-item {
+    height: 60px !important;
+}
+
+.role-style {
     color: darkgray;
+}
+
+.add {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
 }

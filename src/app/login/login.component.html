@@ -17,8 +17,6 @@
           <h1>Login</h1>
         </mat-toolbar>
 
-        <span *ngIf="isError && !loginForm.valid" class="unauthMessage">{{unauthMessage}}</span>
-
         <div class="login-content">
 
           <mat-form-field appearance="standard">
@@ -27,6 +25,9 @@
               <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
             </mat-label>
             <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
+            <mat-error *ngIf="username.hasError('whitespace')">No se permiten espacios en
+              <strong>blanco</strong>.</mat-error>
+            <mat-error *ngIf="password.hasError('bad-credencials')">{{unauthMessage}}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="standard">
@@ -35,6 +36,9 @@
               <i class="mdi mdi-lock-open material-icons app-input-icon">&nbsp;</i>Contraseña
             </mat-label>
             <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
+            <mat-error *ngIf="password.hasError('whitespace')">No se permiten espacios en
+              <strong>blanco</strong>.</mat-error>
+            <mat-error *ngIf="password.hasError('bad-credencials')">{{unauthMessage}}</mat-error>
           </mat-form-field>
 
           <mat-slide-toggle color="primary">

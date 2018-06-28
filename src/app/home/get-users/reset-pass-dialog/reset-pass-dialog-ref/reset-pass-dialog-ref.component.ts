@@ -49,7 +49,7 @@ export class ResetPassDialogRefComponent implements OnInit {
     const resetedPass = this.resetedPass();
 
     this.userBackendService
-      .resetUserPassword(this.user.id, resetedPass, this.uriRole)
+      .resetUserPassword(this.user.username, resetedPass, this.uriRole)
       .subscribe(response => {
         if (response) {
           this.dialogRef.close('reseted');

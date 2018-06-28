@@ -4,14 +4,10 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
-import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { error } from 'util';
 import { LocalStorageService } from '../services/local-storage.service';
-import { TokenAuth } from '../models/token-auth';
 import { UserLoggedService } from '../services/user-logged.service';
-import { SessionStorageService } from '../services/session-storage.service';
-
+import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 
 
 @Component({
@@ -24,12 +20,10 @@ export class LoginComponent implements OnInit {
   user: User;
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
-  isError = false;
-  isAuth = false;
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private localStorageService: LocalStorageService, private sessionStorageService : SessionStorageService, private router: Router) {
+    private localStorageService: LocalStorageService) {
     this.user = new User();
   }
 
@@ -41,63 +35,37 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      username: [this.user.username, Validators.required],
-      password: [this.user.password, Validators.required]
+      username: [this.user.username, [Validators.required, noWhitespaceValidator]],
+      password: [this.user.password, [Validators.required, noWhitespaceValidator]]
     });
   }
 
-
-  // getters
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
-
-
-  onSubmit2(): void {
-    this.user.username = this.username.value;
-    this.user.password = this.password.value;
-    this.loginService.login(this.user.username, this.user.password).subscribe(user => {
-      let tokenAuth = new TokenAuth(user.token, user.roles);
-      this.userLoggedService.userLogged(user);
-
-      console.log('setting local storage');
-      this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, tokenAuth);
-      const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
-      this.router.navigate(['/home/' + uriRol]);
-    }, error => {
-      console.error(error.message);
-      if (error instanceof HttpErrorResponse) {
-        if (error.status === 401) {
-          this.username.setValue('');
-          this.password.setValue('');
-          this.loginForm.reset();
-          this.isError = true;
-        }
-      }
-    }
-    );
-  }
 
   onSubmit(): void {
     this.user.username = this.username.value;
     this.user.password = this.password.value;
-    this.loginService.attemptAuth(this.user.username, this.user.password).subscribe(
+    this.loginService.login(this.user.username, this.user.password).subscribe(
       data => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-        const uriRol = this.loginService.getPrivilege().toLocaleLowerCase();
-        this.router.navigate(['/home/' + uriRol]);
+        this.userLoggedService.getUserFromBackEnd(this.user.username,true);
       }, error => {
         console.error(error.message);
         if (error instanceof HttpErrorResponse) {
-          if (error.status === 401) {
-            this.username.setValue('');
-            this.password.setValue('');
+          if (error.status === 400) {
             this.loginForm.reset();
-            this.isError = true;
+            this.badCredencialsError();
+            this.loginForm.markAsPristine();
           }
         }
       }
     );
   }
 
+  badCredencialsError() {
+    this.username.setErrors({ 'bad-credencials': true });
+    this.password.setErrors({ 'bad-credencials': true });
+  }
 
 }

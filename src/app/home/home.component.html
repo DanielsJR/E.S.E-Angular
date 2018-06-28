@@ -20,7 +20,7 @@
         </div>
     </mat-toolbar>
 
-    <mat-sidenav-container id="container2">
+    <mat-sidenav-container class="container2">
 
         <!-- sidenav menu -->
         <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav">
@@ -124,7 +124,7 @@
                     <mat-icon svgIcon="account-edit"></mat-icon>
                 </mat-toolbar>
 
-                <nx-user-profile *ngIf="user" [user]="user" [uriRole]="uriRole" [profileAction]="profileAction" [isSidenavProfileOpen]="isSidenavProfileOpen"
+                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction" [isSidenavProfileOpen]="isSidenavProfileOpen"
                     (title)="profileTitle=$event"></nx-user-profile>
 
 
@@ -189,7 +189,7 @@
         </mat-toolbar>
 
         <!-- primary content -->
-        <div class="content" (nxScroller)="isScrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+        <div class="contenido" (nxScroller)="isScrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
             <router-outlet></router-outlet>
         </div>
 

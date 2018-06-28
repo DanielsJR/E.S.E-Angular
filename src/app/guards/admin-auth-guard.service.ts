@@ -20,8 +20,8 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
         console.log('AdminAuthGuard#canActivate called');
-        //return this.checkLogin(url);
-        return true;
+        return this.checkLogin(url);
+        //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

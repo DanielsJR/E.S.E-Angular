@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -49,9 +50,9 @@ export class SetPassDialogRefComponent implements OnInit {
   buildForm() {
 
     this.setPassForm = this.formBuilder.group({
-      currentPass: ['', Validators.required],
-      newPass1: ['', [Validators.required,Validators.minLength(8)]],
-      newPass2: ['', [Validators.required,Validators.minLength(8)]],
+      currentPass: ['', [Validators.required, noWhitespaceValidator]],
+      newPass1: ['', [Validators.required, noWhitespaceValidator]],
+      newPass2: ['', [Validators.required, noWhitespaceValidator]],
     });
 
   }
@@ -62,7 +63,7 @@ export class SetPassDialogRefComponent implements OnInit {
 
   comparePass() {
 
-    if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required')) && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength')) ) {
+    if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required')) && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength'))) {
 
       if (this.newPass1.value !== this.newPass2.value) {
         console.log('no match');
@@ -87,7 +88,7 @@ export class SetPassDialogRefComponent implements OnInit {
     pass.push(this.newPass1.value);
 
     this.userBackendService
-      .setUserPassword(this.user.id, this.uriRole, pass)
+      .setUserPasswordSecured(this.user.username, pass)
       .subscribe(response => {
         if (response) {
           this.dialogRef.close('set');

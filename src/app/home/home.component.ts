@@ -28,26 +28,7 @@ export class HomeComponent implements OnInit {
   user: User;
   privilege = this.loginService.getPrivilege();
   roles = this.loginService.getRoles();
-
-  private _uriRole: string;
-
-  get uriRole(): string {
-
-    if (this.privilege === ROLE_ADMIN) {
-      return this._uriRole = URI_ADMINS;
-    } else if (this.privilege === ROLE_MANAGER) {
-      return this._uriRole = URI_MANAGERS;
-    } else if (this.privilege === ROLE_TEACHER) {
-      return this._uriRole = URI_TEACHERS;
-    } else if (this.privilege === ROLE_STUDENT) {
-      return this._uriRole = URI_STUDENTS;
-    } else {
-      console.error('error no role');
-      return this._uriRole = "";
-
-    }
-  }
-
+  uriRole = this.loginService.uriRole;
 
   @ViewChild(ThemePickerComponent)
   themePicker: ThemePickerComponent;
@@ -104,12 +85,8 @@ export class HomeComponent implements OnInit {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       setTimeout(() => this.openSnackBar(this.welcome, 'success'));
     } else {
-      console.log('user:null');
-
-      this.userBackendService.getUserByUserName(this.localStorageService.getTokenUsername(), this.uriRole).subscribe(user => {
-        this.user = user;
-      },
-        error => console.error('error getting the user ' + error));
+      console.log('user:null getting user from userLoggedService');
+      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(),false);
     }
 
     this.userLoggedService.userLogged$.subscribe(user => {

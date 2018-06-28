@@ -14,10 +14,6 @@ export class SetPassDialogComponent implements OnInit {
     @Input()
     user: User;
 
-    @Input()
-    uriRole: string;
-
-
     constructor(public dialog: MatDialog) { }
 
     ngOnInit() {
@@ -26,7 +22,7 @@ export class SetPassDialogComponent implements OnInit {
     openDialogSetPass(): void {
         let data = {
             user: this.user,
-            uriRole: this.uriRole,
+            uriRole: 'none',
             type: 'setPass'
         };
 

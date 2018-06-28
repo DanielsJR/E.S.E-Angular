@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME } from '../app.config';
+import { USERNAME_PATTERN } from '../shared/validators/patterns';
 
 
 @Injectable({
@@ -38,23 +39,23 @@ export class UserBackendService {
     }
 
     update(user: User, uriRole: string): Observable<User> {
-        const id = user.id;
-        const url = `${this.userURL}${uriRole}/${id}`;
+        const username = user.username;
+        const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user)
             .pipe(
-                tap(_ => console.log(`edited user id=${id}`))
+                tap(_ => console.log(`edited user username=${username}`))
                 // ,catchError(this.handleError<User>(`updateUser`))
             );
     }
 
-    delete(user: User | string, uriRole: string): Observable<{}> {
-        const id = typeof user === 'string' ? user : user.id;
-        const url = `${this.userURL}${uriRole}/${id}`;
+    delete(user: User | string, uriRole: string): Observable<boolean> {
+        const username = (typeof user === 'string') ? user : user.username;
+        const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<{}>(url)
+        return this.httpCli.delete<boolean>(url)
             .pipe(
-                tap(_ => console.log(`deleted user id=${id}`))
+                tap(_ => console.log(`deleted user id=${username}`))
                 // ,catchError(this.handleError<{}>(`deleteUser`))
             );
     }
@@ -69,8 +70,7 @@ export class UserBackendService {
             );
     }
 
-
-    getUserByUserName(name: string, uriRole: string): Observable<User> {
+    getUserByUsername(name: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
@@ -97,8 +97,8 @@ export class UserBackendService {
             );
     }
 
-    resetUserPassword(id: string, resetedPass: string, uriRole: string): Observable<boolean> {
-        const url = `${this.userURL}${uriRole}/${id}`;
+    resetUserPassword(username: string, resetedPass: string, uriRole: string): Observable<boolean> {
+        const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, resetedPass)
             .pipe(
@@ -108,8 +108,40 @@ export class UserBackendService {
 
     }
 
-    setUserPassword(id: string, uriRole: string, pass: string[]): Observable<boolean> {
-        const url = `${this.userURL}${uriRole}/${id}`;
+    setRoles(username: string, roles: string[], uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}/role/${username}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.patch<User>(url, roles)
+            .pipe(
+                tap(user => console.log(`fetched user username=${user.username} new roles=${user.roles}`))
+                // , catchError(this.handleError<User>(`setRoles id=${id}`))
+            );
+    }
+
+
+    getUserByUsernameSecured(name: string): Observable<User> {
+        const url = `${this.userURL}${URI_USERNAME}/${name}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<User>(url)
+            .pipe(
+                tap(_ => console.log(`fetched user username=${name}`))
+                // ,catchError(this.handleError<User>(`getUser name=${name}`))
+            );
+    }
+
+    updateSecured(user: User): Observable<User> {
+        const username = user.username;
+        const url = `${this.userURL}/${username}`;
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.put<User>(url, user)
+            .pipe(
+                tap(_ => console.log(`edited user username=${username}`))
+                // ,catchError(this.handleError<User>(`updateUser`))
+            );
+    }
+
+    setUserPasswordSecured(username: string, pass: string[]): Observable<boolean> {
+        const url = `${this.userURL}/pass/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, pass)
         .pipe(
@@ -118,18 +150,8 @@ export class UserBackendService {
         );
     }
 
-    setRoles(id: string, roles: string[], uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}/role/${id}`;
-        console.log(`resource called:  ${url}`);
-        return this.httpCli.patch<User>(url, roles)
-            .pipe(
-                tap(user => console.log(`fetched user id=${user.id} new roles=${user.roles}`))
-                // , catchError(this.handleError<User>(`setRoles id=${id}`))
-            );
-    }
 
-
-    /**
+    /** I'm not using it ;)
  * Handle Http operation that failed.
  * Let the app continue.
  * @param operation - name of the operation that failed

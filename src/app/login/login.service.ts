@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH } from '../app.config';
+import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { TokenAuth } from '../models/token-auth';
 import { LocalStorageService } from '../services/local-storage.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,43 +10,27 @@ import { SessionStorageService } from '../services/session-storage.service';
 
 @Injectable()
 export class LoginService {
-    private endpoint = API_SERVER + URI_TOKEN_AUTH + '/login';
+    private endpoint = API_SERVER + URI_TOKEN_AUTH;
     isAuth = false;
     roles: string[];
-    // store the URL so we can redirect after logging in (not in use)
+    // store the URL so we can redirect after logging in (TODO)
     redirectUrl: string;
 
-    
 
-    constructor(private localStorageService: LocalStorageService, private sessionStorageService: SessionStorageService,
+
+    constructor(private localStorageService: LocalStorageService,
+        private sessionStorageService: SessionStorageService,
         private httpCli: HttpClient) { }
 
-    public handleError = (error: Response) => {
-        return throwError(error);
-    }
-
-    getToken(): string {
-        return this.localStorageService.getItem(LOCAL_STORAGE_TOKEN_KEY);
-    }
-
-    isTokenStored(): boolean {
-        return this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY);
-    }
-
-    login(username: string, password: string): Observable<User> {
-        console.log('Login service called');
-        return this.httpCli.post<User>(this.endpoint, null, {
-            headers: new HttpHeaders({
-                'Authorization': 'Basic ' + btoa(username + ':' + password)
-            })
-        })
-            .pipe(catchError(this.handleError));
-    }
-
-    attemptAuth(username: string, password: string): Observable<any> {
+    login(username: string, password: string): Observable<any> {
         const credentials = { username: username, password: password };
-        console.log('attempAuth ::');
-        return this.httpCli.post<any>(API_SERVER + '/token/generate-token', credentials);
+        console.log('login::...');
+        return this.httpCli.post<any>(this.endpoint, credentials);
+            //.pipe(catchError(this.handleError));
+    }
+
+    handleError = (error: Response) => {
+        return throwError(error);
     }
 
     logout(): void {
@@ -57,11 +40,18 @@ export class LoginService {
         this.isAuth = false;
     }
 
+    getToken(): string {
+        return this.localStorageService.getFullToken();
+    }
+
+    isTokenStored(): boolean {
+        return this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY);
+    }
+
     hasPrivileges(): boolean {
         if (this.isTokenStored()) {
             for (var i = 0; i < this.localStorageService.getTokenRoles().length; i++) {
                 let role = this.localStorageService.getTokenRoles()[i];
-                console.log('Role::: '+ role);
                 return role === ROLE_ADMIN ||
                     role === ROLE_MANAGER ||
                     role === ROLE_TEACHER ||
@@ -110,11 +100,28 @@ export class LoginService {
         if (this.isTokenStored()) {
             return this.roles = this.localStorageService.getTokenRoles();
         } else {
-            console.error('isStore: false');
+            console.error('isTokenStored: false');
             return this.roles = [];
         }
     }
 
+    private _uriRole: string;
 
+    get uriRole(): string {
+  
+      if (this.getPrivilege() === ROLE_ADMIN) {
+        return this._uriRole = URI_ADMINS;
+      } else if (this.getPrivilege()=== ROLE_MANAGER) {
+        return this._uriRole = URI_MANAGERS;
+      } else if (this.getPrivilege() === ROLE_TEACHER) {
+        return this._uriRole = URI_TEACHERS;
+      } else if (this.getPrivilege() === ROLE_STUDENT) {
+        return this._uriRole = URI_STUDENTS;
+      } else {
+        console.error('error no role');
+        return this._uriRole = "";
+  
+      }
+    }
 
 }

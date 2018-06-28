@@ -33,7 +33,7 @@ export class AppAuthInterceptor implements HttpInterceptor {
                     }
                 }, (err: any) => {
                     if (err instanceof HttpErrorResponse) {
-                        console.error('token expired!');
+                        console.error('message: ' + err.message +'   status: ' + err.status);
                         if (err.status === 401) this.router.navigate(['/login']);
                     }
                 }));
@@ -45,7 +45,8 @@ export class AppAuthInterceptor implements HttpInterceptor {
                 }
             }, (err: any) => {
                 if (err instanceof HttpErrorResponse) {
-                    console.error('no token in local storage!');
+                    //no token in local storage!
+                    console.error('message: ' + err.message +'   status: ' + err.status);
                     if (err.status === 401) this.router.navigate(['/login']);
                 }
             }));

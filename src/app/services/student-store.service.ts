@@ -94,8 +94,8 @@ export class StudentStoreService {
 
     delete(user: User) {
         this.userBackendService
-            .delete(user.id, this.uriRole)
-            .subscribe(() => {
+            .delete(user, this.uriRole)
+            .subscribe(_ => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });

@@ -30,6 +30,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  pageSize = 5;
+  pageSizeOptions = [5, 10, 20];
 
   // mat dialog
   user: User;
@@ -158,7 +160,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     return 'no privilege';
   }
 
- 
+
 }
 
 

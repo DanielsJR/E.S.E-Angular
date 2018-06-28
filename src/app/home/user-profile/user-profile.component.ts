@@ -67,7 +67,7 @@ export class UserProfileComponent implements OnInit {
     fileInput: TdFileInputComponent;
 
 
-    constructor(private formBuilder: FormBuilder, private userService: UserBackendService,
+    constructor(private formBuilder: FormBuilder, private userBackendService: UserBackendService,
         private userLoggedService: UserLoggedService,
         public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
 
@@ -146,7 +146,7 @@ export class UserProfileComponent implements OnInit {
         this.editProfileForm.value.address = (this.address.value === "") ? null : this.address.value;
         //this.user = this.editProfileForm.value;
         let userEdit: User = this.editProfileForm.value;
-        this.userService.update(userEdit, this.uriRole).subscribe(user => {
+        this.userBackendService.updateSecured(userEdit).subscribe(user => {
             this.userLoggedService.userLogged(user);
             if (this.fileInput) this.fileInput.clear();
             this.editProfileForm.markAsPristine();

@@ -18,7 +18,7 @@ export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 export const API_SERVER = 'http://192.168.1.30:8080/api/v0';
 export const API_GENERIC_URI = '/api/v0';
 
-export const URI_TOKEN_AUTH = "/tokens";
+export const URI_TOKEN_AUTH = "/token/generate-token";
 
 export const URI_USERS = '/users';
 export const URI_ADMINS = '/admins';

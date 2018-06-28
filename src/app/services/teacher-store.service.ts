@@ -97,8 +97,8 @@ export class TeacherStoreService {
 
     delete(user: User) {
         this.userBackendService
-            .delete(user.id, this.uriRole)
-            .subscribe(() => {
+            .delete(user, this.uriRole)
+            .subscribe(_ => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
@@ -191,7 +191,7 @@ export class TeacherStoreService {
 
     setRoles(user: User) {
         this.userBackendService
-            .setRoles(user.id, user.roles, this.uriRole)
+            .setRoles(user.username, user.roles, this.uriRole)
             .subscribe(data => {
 
                 this.dataStore.users.forEach((u, i) => {
