@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
   user: User;
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
+  isLoading = false;
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
@@ -44,23 +46,27 @@ export class LoginComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   onSubmit(): void {
+    this.isLoading = true;
     this.user.username = this.username.value;
     this.user.password = this.password.value;
-    this.loginService.login(this.user.username, this.user.password).subscribe(
-      data => {
-        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-        this.userLoggedService.getUserFromBackEnd(this.user.username,true);
-      }, error => {
-        console.error(error.message);
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 400) {
-            this.loginForm.reset();
-            this.badCredencialsError();
-            this.loginForm.markAsPristine();
+    this.loginService
+      .login(this.user.username, this.user.password)
+      .subscribe(
+        data => {
+          this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
+          this.isLoading = this.userLoggedService.getUserFromBackEnd(this.user.username, true);
+        }, error => {
+          console.error(error.message);
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 400) {
+              this.loginForm.reset();
+              this.badCredencialsError();
+              this.loginForm.markAsPristine();
+            }
+            this.isLoading = false;
           }
         }
-      }
-    );
+      );
   }
 
   badCredencialsError() {

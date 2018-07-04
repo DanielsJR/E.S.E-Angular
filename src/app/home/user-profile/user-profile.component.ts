@@ -12,6 +12,7 @@ import { TdFileInputComponent } from '@covalent/core';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
 import { rutValidator } from '../../shared/validators/rut-validator';
 import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -66,6 +67,8 @@ export class UserProfileComponent implements OnInit {
     @ViewChild(TdFileInputComponent)
     fileInput: TdFileInputComponent;
 
+    isLoading = false;
+
 
     constructor(private formBuilder: FormBuilder, private userBackendService: UserBackendService,
         private userLoggedService: UserLoggedService,
@@ -104,19 +107,19 @@ export class UserProfileComponent implements OnInit {
         } else {
             reader.readAsDataURL(files);
             reader.onload = () => {
-                this.editProfileForm.get('avatar').setValue({
+                this.avatar.setValue({
                     name: files.name,
                     type: files.type,
                     data: reader.result.split(',')[1]
                 })
             };
         }
-        this.editProfileForm.get('avatar').markAsDirty();
+        this.avatar.markAsDirty();
     }
 
     resetAvatar() {
-        this.editProfileForm.get('avatar').setValue(this.user.avatar);
-        this.editProfileForm.get('avatar').markAsPristine();
+        this.avatar.setValue(this.user.avatar);
+        this.avatar.markAsPristine();
     }
 
     compareByViewValue(a1: any, a2: any) {
@@ -137,6 +140,8 @@ export class UserProfileComponent implements OnInit {
     get avatar() { return this.editProfileForm.get('avatar'); }
 
     save(): void {
+        this.isLoading = true;
+
         this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
         this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
@@ -146,16 +151,18 @@ export class UserProfileComponent implements OnInit {
         this.editProfileForm.value.address = (this.address.value === "") ? null : this.address.value;
         //this.user = this.editProfileForm.value;
         let userEdit: User = this.editProfileForm.value;
-        this.userBackendService.updateSecured(userEdit).subscribe(user => {
-            this.userLoggedService.userLogged(user);
-            if (this.fileInput) this.fileInput.clear();
-            this.editProfileForm.markAsPristine();
-            this.openSnackBar('Datos Actualizados', 'success');
-        },
-            error => {
-                this.openSnackBar(error, 'error');
-                console.error('error updating user ' + error)
-            });
+        this.userBackendService.updateSecured(userEdit)
+            .pipe(finalize(() => this.isLoading = false))
+            .subscribe(user => {
+                this.userLoggedService.userLogged(user);
+                if (this.fileInput) this.fileInput.clear();
+                this.editProfileForm.markAsPristine();
+                this.openSnackBar('Datos Actualizados', 'success');
+            },
+                error => {
+                    this.openSnackBar(error, 'error');
+                    console.error('error updating user ' + error)
+                });
 
     }
 

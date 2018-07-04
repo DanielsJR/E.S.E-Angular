@@ -7,6 +7,8 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 
+import { finalize } from 'rxjs/operators';
+
 @Component({
   selector: 'nx-set-pass-dialog-ref',
   templateUrl: './set-pass-dialog-ref.component.html',
@@ -19,6 +21,8 @@ export class SetPassDialogRefComponent implements OnInit {
   user: User;
   hideCurrentPass = true;
   hideNewPass = true;
+
+  isLoading = false;
 
   //passError = false;
 
@@ -82,6 +86,7 @@ export class SetPassDialogRefComponent implements OnInit {
   }
 
   setPassword(): void {
+    this.isLoading = true;
 
     let pass: string[] = [];
     pass.push(this.currentPass.value);
@@ -89,6 +94,7 @@ export class SetPassDialogRefComponent implements OnInit {
 
     this.userBackendService
       .setUserPasswordSecured(this.user.username, pass)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(response => {
         if (response) {
           this.dialogRef.close('set');

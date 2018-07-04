@@ -17,8 +17,8 @@
 
     <mat-card-actions>
       <button type="button" mat-button color="primary" tabindex="1" (click)="detail()">Detalles</button>
-      <button type="button" mat-button color="accent" tabindex="2" (click)="edit()">Editar</button>
-      <button type="button" mat-button color="warn" tabindex="3" (click)="delete()">Borrar</button>
+      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" type="button" mat-button color="accent" tabindex="2" (click)="edit()">Editar</button>
+      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" type="button" mat-button color="warn" tabindex="3" (click)="delete()">Borrar</button>
     </mat-card-actions>
 
   </mat-card>

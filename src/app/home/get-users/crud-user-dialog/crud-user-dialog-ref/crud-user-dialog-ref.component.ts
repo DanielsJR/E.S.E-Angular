@@ -26,7 +26,7 @@ import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patte
     styleUrls: ['./crud-user-dialog-ref.component.css']
 })
 
-export class CrudUserDialogRefComponent implements OnInit {
+export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     createForm: FormGroup;
     editForm: FormGroup;
@@ -40,12 +40,16 @@ export class CrudUserDialogRefComponent implements OnInit {
     files: File | FileList;
     hidePass = true;
     isAdmin = false;
+    userLoggedRoles = this.localStorageService.getTokenRoles();
+    oldImage: any;
 
     subscriptionCreateSuccess: Subscription;
     subscriptionUpdateSuccess: Subscription;
     subscriptionDeleteSuccess: Subscription;
     subscriptionSetRolesSuccess: Subscription;
+    subscriptionIsLoading: Subscription;
 
+    isLoading = false;
 
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
@@ -64,10 +68,11 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
+        this.setAvatarCreateDefault();
         this.isAdmin = this.checkForAdmin(this.localStorageService.getTokenRoles());
-        //JSON.stringify(this.user.id);
 
         if (this.uriRole === URI_MANAGERS) {
+            this.subscriptionIsLoading = this.managerStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
             this.subscriptionCreateSuccess = this.managerStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
@@ -89,6 +94,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
 
         } else if (this.uriRole === URI_TEACHERS) {
+            this.subscriptionIsLoading = this.teacherStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
             this.subscriptionCreateSuccess = this.teacherStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
@@ -110,6 +116,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
 
         } else if (this.uriRole === URI_STUDENTS) {
+            this.subscriptionIsLoading = this.studentStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
             this.subscriptionCreateSuccess = this.studentStoreService.createSuccess$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
@@ -133,8 +140,8 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.subscriptionUpdateSuccess.unsubscribe();
         this.subscriptionDeleteSuccess.unsubscribe();
         if (this.subscriptionSetRolesSuccess) this.subscriptionSetRolesSuccess.unsubscribe();
+        this.subscriptionIsLoading.unsubscribe();
     }
-
 
     convertDate(birthDay: any) {
         return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, 'DD/MM/YYYY') : null;
@@ -182,7 +189,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             lastName: [null, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             dni: [null, [noWhitespaceValidator, rutValidator]],//Validators.pattern(/^[0-9]+[-|‐]{1}[0-9kK]{1}$/)
             birthday: [],
-            gender: [],
+            gender: ['HOMBRE'],
             avatar: [],
             mobile: [null, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
             email: [null, [Validators.email, noWhitespaceValidator]],
@@ -211,7 +218,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     }
 
-    // getters create for template
+    // getters create
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
     get cBirthday() { return this.createForm.get('birthday'); }
@@ -220,6 +227,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     get cMobile() { return this.createForm.get('mobile'); }
     get cAddress() { return this.createForm.get('address'); }
     get cAvatar() { return this.createForm.get('avatar'); }
+    get cGender() { return this.createForm.get('gender'); }
 
     // getters edit
     get eUsername() { return this.editForm.get('username'); }
@@ -231,51 +239,137 @@ export class CrudUserDialogRefComponent implements OnInit {
     get eMobile() { return this.editForm.get('mobile'); }
     get eAddress() { return this.editForm.get('address'); }
     get eAvatar() { return this.editForm.get('avatar'); }
+    get eGender() { return this.editForm.get('gender'); }
 
-
-    selectEventCreate(files: FileList | File): void {
-        let reader = new FileReader();
-        if (files instanceof FileList) {
-
-        } else {
-            reader.readAsDataURL(files);
-            reader.onload = () => {
-                this.createForm.get('avatar').setValue({
-                    name: files.name,
-                    type: files.type,
-                    data: reader.result.split(',')[1]
-                })
+    setAvatarCreateDefault(): void {
+        if (!this.files) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `../assets/images/users/default-${this.cGender.value.toLowerCase()}-${this.privilege}.png`, true);
+            xhr.responseType = "blob";
+            xhr.onload = () => {
+                let reader = new FileReader();
+                let file = xhr.response;
+                file.name = `default-${this.cGender.value.toLowerCase()}-${this.privilege}.png`;
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    this.cAvatar.setValue({
+                        name: file.name,
+                        type: file.type,
+                        data: reader.result.split(',')[1]
+                    })
+                    //console.log('file.name: ' + file.name)
+                };
             };
+            xhr.send()
         }
-        this.createForm.get('avatar').markAsDirty();
-    };
-
-    resetCreateAvatar() {
-        this.createForm.get('avatar').setValue(this.user.avatar);
-        this.createForm.get('avatar').markAsPristine();
     }
 
-    selectEventEdit(files: FileList | File): void {
+    selectEventCreate(files: File): void {
         let reader = new FileReader();
-        if (files instanceof FileList) {
+        reader.readAsDataURL(files);
+        reader.onload = () => {
+            this.cAvatar.setValue({
+                name: files.name,
+                type: files.type,
+                data: reader.result.split(',')[1]
+            })
+        };
 
-        } else {
-            reader.readAsDataURL(files);
-            reader.onload = () => {
-                this.editForm.get('avatar').setValue({
-                    name: files.name,
-                    type: files.type,
-                    data: reader.result.split(',')[1]
-                })
+        this.cAvatar.markAsDirty();
+    }
+
+    resetCreateAvatar() {
+        this.setAvatarCreateDefault();
+        this.cAvatar.markAsPristine();
+    }
+
+    setAvatarEditDefault(): void {
+        let imageName: string = this.eAvatar.value.name;
+        console.log('imageName: ' + imageName)
+        if (!this.files && (imageName.startsWith('default-'))) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `../assets/images/users/default-${this.eGender.value.toLowerCase()}-${this.privilege}.png`, true);
+            xhr.responseType = "blob";
+            xhr.onload = () => {
+                let reader = new FileReader();
+                let file = xhr.response;
+                file.name = `default-${this.eGender.value.toLowerCase()}-${this.privilege}.png`;
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    this.eAvatar.setValue({
+                        name: file.name,
+                        type: file.type,
+                        data: reader.result.split(',')[1]
+                    })
+                    console.log('file.name: ' + file.name)
+                };
             };
+            xhr.send()
         }
+    }
 
-        this.editForm.get('avatar').markAsDirty();
-    };
+    setAvatarEditDefaultMenu(): void {
+        let imageName: string = this.eAvatar.value.name;
+        console.log('imageName: ' + imageName)
+        if (!imageName.startsWith('default-')) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `../assets/images/users/default-${this.eGender.value.toLowerCase()}-${this.privilege}.png`, true);
+            xhr.responseType = "blob";
+            xhr.onload = () => {
+                let reader = new FileReader();
+                let file = xhr.response;
+                file.name = `default-${this.eGender.value.toLowerCase()}-${this.privilege}.png`;
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    this.eAvatar.setValue({
+                        name: file.name,
+                        type: file.type,
+                        data: reader.result.split(',')[1]
+                    })
+                    console.log('file.name: ' + file.name)
+                };
+            };
+            xhr.send()
+            this.eAvatar.markAsDirty();
+        }
+    }
+
+    selectEventEdit(files: File): void {
+        let oldImage = {
+            name: this.eAvatar.value.name,
+            type: this.eAvatar.value.type,
+            data: this.eAvatar.value.data
+        };
+        this.oldImage = oldImage;
+
+        let reader = new FileReader();
+        reader.readAsDataURL(files);
+        reader.onload = () => {
+            this.eAvatar.setValue({
+                name: files.name,
+                type: files.type,
+                data: reader.result.split(',')[1]
+            })
+        };
+
+        this.eAvatar.markAsDirty();
+    }
+
+    restoreEditAvatar() {
+        this.eAvatar.setValue({
+            name: this.oldImage.name,
+            type: this.oldImage.type,
+            data: this.oldImage.data
+        })
+    }
 
     resetEditAvatar() {
-        this.editForm.get('avatar').setValue(this.user.avatar);
-        this.editForm.get('avatar').markAsPristine();
+        this.restoreEditAvatar();
+        this.eAvatar.markAsPristine();
+    }
+
+    checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
+        return userLoggedRoles.every(role => userDbRoles.includes(role));
     }
 
     private createAutoUsername(): string {
@@ -291,10 +385,6 @@ export class CrudUserDialogRefComponent implements OnInit {
     private createBirthday(): string {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
     }
-
-
-
-
 
 
     cancel(): void {
@@ -313,6 +403,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
         this.createForm.value.birthday = this.createBirthday();
+        //if (this.createForm.value.avatar === null) this.setAvatarCreateDefault();
         this.createForm.value.dni = (this.cDni.value === "") ? null : this.cDni.value;
         this.createForm.value.mobile = (this.cMobile.value === "") ? null : this.cMobile.value;
         this.createForm.value.email = (this.cEmail.value === "") ? null : this.cEmail.value;

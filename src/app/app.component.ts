@@ -5,7 +5,6 @@ import { Component, OnInit, HostListener } from '@angular/core';
 @Component({
   selector: 'nx-app',
   template: `
-  <ng-progress [spinner]= "false" [color]= "'red'"></ng-progress>
   <router-outlet></router-outlet>`,
   styles: []
 })

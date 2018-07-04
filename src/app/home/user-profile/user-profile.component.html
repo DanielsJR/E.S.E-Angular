@@ -1,4 +1,6 @@
 <div class="profileSideNav">
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
   <form [formGroup]="editProfileForm" (ngSubmit)="save()" [ngSwitch]="profileAction">
 
     <div *ngSwitchCase="'usuario'">

@@ -2,6 +2,9 @@
 
   <div class="grid-container">
 
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+
     <span class="theme-picker">
       <nx-theme-picker #theme></nx-theme-picker>
     </span>

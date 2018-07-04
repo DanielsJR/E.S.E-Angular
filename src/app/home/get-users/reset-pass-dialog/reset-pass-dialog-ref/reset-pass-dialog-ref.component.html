@@ -5,17 +5,18 @@
   <span>&nbsp;&nbsp;</span>
   <h1 mat-dialog-title>Restablecer Contraseña</h1>
 </mat-toolbar>
-<mat-divider></mat-divider>
 
-<br>
+<div *ngIf="!isLoading" style="height: 5px;"></div>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
 <mat-dialog-content>
-    <mat-form-field appearance="outline" class="centerField">
-      <input matInput [value]="this.resetedPass()" readonly>
-      <mat-label>
-        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Se restablecerá la contraseña de
-        <strong>{{user | shortName}}&nbsp;</strong>a:
-      </mat-label>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="centerField">
+    <input matInput [value]="this.resetedPass()" readonly>
+    <mat-label>
+      <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Se restablecerá la contraseña de
+      <strong>{{user | shortName}}&nbsp;</strong>a:
+    </mat-label>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-divider></mat-divider>

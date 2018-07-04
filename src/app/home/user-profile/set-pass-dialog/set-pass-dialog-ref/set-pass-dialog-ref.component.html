@@ -5,9 +5,10 @@
   <span>&nbsp;&nbsp;</span>
   <h1 mat-dialog-title>Cambiar Contraseña</h1>
 </mat-toolbar>
-<mat-divider></mat-divider>
 
-<br>
+<div *ngIf="!isLoading" style="height: 5px;"></div>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
 <form [formGroup]="setPassForm" (ngSubmit)="setPassword()">
   <mat-dialog-content>
 
@@ -82,5 +83,7 @@
       <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="setPassForm.invalid || setPassForm.pristine">Cambiar Contraseña</button>
     </mat-toolbar>
   </mat-dialog-actions>
+
+
 
 </form>

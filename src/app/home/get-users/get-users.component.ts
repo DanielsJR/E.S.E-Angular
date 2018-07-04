@@ -24,18 +24,19 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   privilege: string;
 
+
   // mat table
   users: User[];
   displayedColumns = ['username', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSize = 5;
+  pageSize = 20;
   pageSizeOptions = [5, 10, 20];
 
   // mat dialog
   user: User;
-  roles: string[];
+  userLoggedRoles = this.localStorage.getTokenRoles();
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
   @Input() uriRole;
@@ -43,7 +44,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService, private studentStoreService: StudentStoreService,
-    private localstorage: LocalStorageService, private sessionStorage: SessionStorageService,
+    private localStorage: LocalStorageService, private sessionStorage: SessionStorageService,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -52,7 +53,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     if (this.uriRole === URI_MANAGERS) {
       this.managerStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store empty...getting ' + this.uriRole);
           this.managerStoreService.getUsers();
         }
@@ -63,7 +64,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     } else if (this.uriRole === URI_TEACHERS) {
       this.teacherStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store empty...getting ' + this.uriRole);
           this.teacherStoreService.getUsers();
         }
@@ -74,7 +75,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     } else if (this.uriRole === URI_STUDENTS) {
       this.studentStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localstorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
           console.log('store empty...getting ' + this.uriRole);
           this.studentStoreService.getUsers();
         }
@@ -160,6 +161,9 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     return 'no privilege';
   }
 
+  checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
+    return userLoggedRoles.every(role => userDbRoles.includes(role));
+  }
 
 }
 

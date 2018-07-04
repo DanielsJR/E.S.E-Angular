@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -15,6 +16,7 @@ export class ResetPassDialogRefComponent implements OnInit {
 
   uriRole: any;
   user: User;
+  isLoading = false;
 
   constructor(public dialogRef: MatDialogRef<ResetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -46,10 +48,12 @@ export class ResetPassDialogRefComponent implements OnInit {
   }
 
   resetPassword(): void {
+    this.isLoading = true;
     const resetedPass = this.resetedPass();
 
     this.userBackendService
       .resetUserPassword(this.user.username, resetedPass, this.uriRole)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(response => {
         if (response) {
           this.dialogRef.close('reseted');

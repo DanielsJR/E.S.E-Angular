@@ -27,8 +27,6 @@
     "@angular/router": "6.0.0",
     "@angular/upgrade": "6.0.0",
     "@covalent/core": "2.0.0-beta.1",
-    "@ngx-progressbar/core": "^5.0.1",
-    "@ngx-progressbar/http": "^5.0.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.5.3",
     "font-awesome": "^4.7.0",

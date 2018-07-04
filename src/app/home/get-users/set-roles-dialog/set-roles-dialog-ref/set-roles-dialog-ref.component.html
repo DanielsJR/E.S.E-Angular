@@ -7,9 +7,10 @@
     <span>&nbsp;&nbsp;</span>
     <h1 mat-dialog-title>Asignar Privilégios</h1>
   </mat-toolbar>
-  <mat-divider></mat-divider>
 
-  <br>
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
   <mat-dialog-content>
 
     <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">

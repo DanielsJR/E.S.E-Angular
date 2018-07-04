@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material';
 
 
 import { ManagerStoreService } from './manger-store.service';
+import { finalize } from 'rxjs/operators';
 
 
 @Injectable({
@@ -34,8 +35,17 @@ export class TeacherStoreService {
     private deleteSuccessSubject = <Subject<User>>new Subject();
     public readonly deleteSuccess$ = this.deleteSuccessSubject.asObservable();
 
+    private isLoadingSubject = <Subject<boolean>>new Subject();
+    isLoading$ = this.isLoadingSubject.asObservable();
+
     private setRolesSubject = <Subject<User>>new Subject();
     setRoles$ = this.setRolesSubject.asObservable();
+
+    private isLoadingRolesSubject = <Subject<boolean>>new Subject();
+    isLoadingRoles$ = this.isLoadingRolesSubject.asObservable();
+
+    private isLoadingGetUsersSubject = <Subject<boolean>>new Subject();
+    isLoadingGetUsers$ = this.isLoadingGetUsersSubject.asObservable();
 
     uriRole: string = URI_TEACHERS;
     role: string = ROLE_TEACHER;
@@ -46,8 +56,10 @@ export class TeacherStoreService {
 
     getUsers() {
         console.log(`************GET-${this.uriRole}************`);
+        this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
+            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
@@ -64,8 +76,10 @@ export class TeacherStoreService {
     }
 
     create(user: User) {
+        this.isLoadingSubject.next(true);
         this.userBackendService
             .create(user, this.uriRole)
+            .pipe(finalize(() => this.isLoadingSubject.next(false)))
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
@@ -78,8 +92,10 @@ export class TeacherStoreService {
     }
 
     update(user: User) {
+        this.isLoadingSubject.next(true);
         this.userBackendService
             .update(user, this.uriRole)
+            .pipe(finalize(() => this.isLoadingSubject.next(false)))
             .subscribe(data => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === data.id) {
@@ -96,8 +112,10 @@ export class TeacherStoreService {
     }
 
     delete(user: User) {
+        this.isLoadingSubject.next(true);
         this.userBackendService
             .delete(user, this.uriRole)
+            .pipe(finalize(() => this.isLoadingSubject.next(false)))
             .subscribe(_ => {
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
@@ -190,8 +208,10 @@ export class TeacherStoreService {
 
 
     setRoles(user: User) {
+        this.isLoadingRolesSubject.next(true);
         this.userBackendService
             .setRoles(user.username, user.roles, this.uriRole)
+            .pipe(finalize(() => this.isLoadingRolesSubject.next(false)))
             .subscribe(data => {
 
                 this.dataStore.users.forEach((u, i) => {

@@ -13,7 +13,7 @@
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
+            <h3 matLine> {{user | shortName}} </h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>
@@ -30,9 +30,16 @@
                 <div class="tab-content">
 
                     <mat-form-field appearance="fill">
-                        <input matInput [(ngModel)]="user.username" readonly>
+                        <input matInput [(ngModel)]="user.firstName" readonly>
                         <mat-label>
-                            <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de usuario
+                            <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
+                        </mat-label>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <input matInput [(ngModel)]="user.lastName" readonly>
+                        <mat-label>
+                            <i class="mdi mdi-account-outline material-icons app-input-icon">&nbsp;</i>Apellidos
                         </mat-label>
                     </mat-form-field>
 
@@ -104,8 +111,10 @@
                 <mat-icon svgIcon="arrow-left"></mat-icon>
             </button>
             <span class="spacer-r"></span>
-            <button type="button" mat-raised-button color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
-            <button type="button" mat-raised-button color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
+            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" type="button" mat-raised-button color="accent"
+                tabindex="2" (click)="detailEdit()">Editar</button>
+            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" type="button" mat-raised-button color="warn"
+                tabindex="3" (click)="detailDelete()">Borrar</button>
         </mat-toolbar>
     </mat-dialog-actions>
 </div>
@@ -121,13 +130,14 @@
             <h1 mat-dialog-title>Agregar {{privilege}}</h1>
         </mat-toolbar>
 
-        <mat-divider></mat-divider>
+        <div *ngIf="!isLoading" style="height: 5px;"></div>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
         <mat-list class="listContainer">
             <mat-list-item>
-                <img matListAvatar src="assets/images/users/male-{{privilege}}.svg" alt="{{privilege}}" (click)="fileInput.inputElement.click()"
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)" alt="{{privilege}}" (click)="fileInput.inputElement.click()"
                     (keyup.enter)="fileInput.inputElement.click()">
-                <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
+                <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
                 <p matLine>
                     <span *ngIf="privilege" class="role-style">{{privilegeToSpanish(privilege)}}</span>
                 </p>
@@ -193,7 +203,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <mat-select formControlName="gender">
+                            <mat-select formControlName="gender" (selectionChange)="setAvatarCreateDefault()">
                                 <mat-option *ngFor="let gender of genders" [value]="gender.value">
                                     {{ gender.viewValue }}
                                 </mat-option>
@@ -310,13 +320,14 @@
             <h1 mat-dialog-title>Editar Usuario</h1>
         </mat-toolbar>
 
-        <mat-divider></mat-divider>
+        <div *ngIf="!isLoading" style="height: 5px;"></div>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
         <mat-list class="listContainer">
             <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
                     alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
-                <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
+                <h3 matLine> {{user | shortName}} </h3>
                 <p matLine>
                     <span class="role-style">{{user.roles | rolesToSpanish}}</span>
                 </p>
@@ -330,6 +341,10 @@
                         <mat-icon svgIcon="camera"></mat-icon>
                         <span> Cambiar Imagen </span>
                     </button>
+                    <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()" (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
+                        <mat-icon svgIcon="camera"></mat-icon>
+                        <span> Imagen por defecto </span>
+                    </button>
                 </mat-menu>
             </mat-list-item>
             <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
@@ -339,7 +354,7 @@
 
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
-                <mat-tab label="Datos de Usuario">
+                <mat-tab label="Información de Usuario">
                     <div class="tab-content">
 
                         <mat-form-field appearance="standard">
@@ -408,7 +423,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Datos Personales">
+                <mat-tab label="Información Personal">
                     <div class="tab-content">
 
                         <mat-form-field appearance="standard">
@@ -466,7 +481,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <mat-select formControlName="gender" [compareWith]="compareFn">
+                            <mat-select formControlName="gender" [compareWith]="compareFn" (selectionChange)="setAvatarEditDefault()">
                                 <mat-option *ngFor="let gender of genders" [value]="gender.viewValue">
                                     {{ gender.viewValue }}
                                 </mat-option>
@@ -480,7 +495,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Datos de Contacto">
+                <mat-tab label="Información de Contacto">
                     <div class="tab-content">
 
                         <mat-form-field appearance="standard">
@@ -565,13 +580,14 @@
         <h1 mat-dialog-title>Borrar Usuario</h1>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-list class="listContainer2">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{user.firstName}} {{user.lastName}} </h3>
+            <h3 matLine> {{user | shortName}}</h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>

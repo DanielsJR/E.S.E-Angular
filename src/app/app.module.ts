@@ -8,11 +8,8 @@ import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppAuthInterceptor } from './app-auth.interceptor';
-import { NgProgressModule } from '@ngx-progressbar/core';
-import { NgProgressHttpModule } from '@ngx-progressbar/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
-
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from '@angular/material-moment-adapter';
 
@@ -28,10 +25,6 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from 
     LoginModule,
     AppRoutingModule,
     HttpClientModule,
-
-    NgProgressModule.forRoot(),
-    NgProgressHttpModule,
-
     MatMomentDateModule,
 
   ],

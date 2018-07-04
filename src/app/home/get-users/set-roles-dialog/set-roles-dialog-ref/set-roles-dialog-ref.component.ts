@@ -18,15 +18,18 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
 
+
   uriRole: any;
   user: User;
   rolesList = PRIVILEGES;
   setRolesForm: FormGroup;
   subscriptionsetRoles: Subscription;
+  subscriptionIsLoading: Subscription;
 
   roles: string[] = [];
   rolesMapping: { [k: string]: string } = { '=0': '', '=1': 'Privilégio', 'other': 'Privilégios' };
 
+  isLoading: boolean = false;
 
 
   constructor(public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
@@ -42,6 +45,8 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
     if (this.user.roles.includes(ROLE_TEACHER)) this.roles.push(ROLE_TEACHER);
 
+    
+
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
@@ -50,6 +55,7 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     this.buildForm();
 
     if (this.uriRole === URI_MANAGERS) {
+      this.subscriptionIsLoading = this.managerStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
       this.subscriptionsetRoles = this.managerStoreService.setRoles$.subscribe(user => {
         this.teacherStoreService.updateUserFromStore(user);
         this.dialogRef.close('set');
@@ -57,10 +63,10 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
 
 
     } else if (this.uriRole === URI_TEACHERS) {
+      this.subscriptionIsLoading = this.teacherStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
       this.subscriptionsetRoles = this.teacherStoreService.setRoles$.subscribe(user => {
         this.managerStoreService.updateUserFromStore(user);
         this.dialogRef.close('set');
-
       });
 
     } else {
@@ -71,6 +77,7 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptionsetRoles.unsubscribe();
+    this.subscriptionIsLoading.unsubscribe();
   }
 
   buildForm() {

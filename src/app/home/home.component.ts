@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { LoginService } from '../login/login.service';
@@ -14,6 +14,12 @@ import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_TEACHERS, ROLE_STUDENT, URI_STUDENTS, LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 
 
+import { Subscription } from 'rxjs';
+import { ManagerStoreService } from '../services/manger-store.service';
+import { TeacherStoreService } from '../services/teacher-store.service';
+import { StudentStoreService } from '../services/student-store.service';
+
+
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -22,7 +28,7 @@ import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_T
     TdCollapseAnimation(),
   ],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy{
 
 
   user: User;
@@ -38,6 +44,9 @@ export class HomeComponent implements OnInit {
   isScrolled = false;
   triggerUsers = true;
   menuUser = true;
+
+  subscriptionIsLoading: Subscription;
+  isLoading: boolean = false;
 
   //profile
   profileAction = '';
@@ -58,8 +67,13 @@ export class HomeComponent implements OnInit {
   constructor(private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private userBackendService: UserBackendService,
     private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer) {
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
 
+    private managerStoreService: ManagerStoreService,
+    private teacherStoreService: TeacherStoreService,
+    private studentStoreService: StudentStoreService,
+  ) {
+    
   }
 
   ngAfterViewInit() {
@@ -76,23 +90,32 @@ export class HomeComponent implements OnInit {
       this._isSidenavProfileOpen.emit(this.isSidenavProfileOpen = isOpen);
     });
 
-
   }
 
+
   ngOnInit() {
+    this.subscriptionIsLoading = this.managerStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
+    this.subscriptionIsLoading = this.teacherStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
+    this.subscriptionIsLoading = this.studentStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
+
     this.user = this.userLoggedService.user;
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       setTimeout(() => this.openSnackBar(this.welcome, 'success'));
     } else {
       console.log('user:null getting user from userLoggedService');
-      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(),false);
+      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
     }
 
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     });
+
+  }
+
+  ngOnDestroy() {
+    this.subscriptionIsLoading.unsubscribe();
   }
 
   shortName(user: User): string {

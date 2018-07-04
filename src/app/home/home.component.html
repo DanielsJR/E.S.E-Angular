@@ -1,5 +1,6 @@
 <mat-sidenav-container [class]="themePicker.themeName">
-
+        <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
 
@@ -44,6 +45,7 @@
                     </button>
                 </div>
             </mat-toolbar>
+
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
 
@@ -149,9 +151,10 @@
                 <nx-user-settings [user]="user"></nx-user-settings>
             </mat-sidenav>
 
+
+
             <!-- sidenav menu -->
             <mat-nav-list class="menu">
-
                 <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
 
                 <mat-list-item (click)="triggerUsers = !triggerUsers">

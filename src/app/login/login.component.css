@@ -18,7 +18,7 @@ mat-card {
 form .login-content {
     position: absolute;
     padding: 0 45px;
-    top:100px;
+    top: 100px;
     bottom: 0;
     line-height: 4.5em;
     overflow: hidden;
@@ -26,7 +26,7 @@ form .login-content {
 
 .unauthMessage {
     position: relative;
-    top:20px;
+    top: 20px;
     color: red;
     margin: auto;
     text-align: center;
@@ -62,6 +62,13 @@ h1 {
 span {
     font-family: 'Fascinate', sans-serif;
     font-size: 15px;
+}
+
+.p-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
 }
 
 .theme-picker {

@@ -1,86 +1,4 @@
 <div class="container">
-  <mat-card class="mat-elevation-z8">
-
-    <mat-toolbar>
-
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
-        <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
-        </mat-placeholder>
-      </mat-form-field>
-
-      <span class="spacer-l"></span>
-
-      <mat-chip-list *ngIf="privilege">
-        <mat-chip color="primary" selected="true">
-          <mat-icon svgIcon="account-multiple"></mat-icon>
-          &nbsp; {{privilegeToSpanish(privilege)}}
-        </mat-chip>
-      </mat-chip-list>
-    </mat-toolbar>
-
-    <mat-table #table [dataSource]="dataSource" matSort>
-
-      <ng-container matColumnDef="username">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let user">
-
-          <mat-list style="flex-grow: 8">
-            <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-                alt="{{user?.username}}">
-              <h3 matLine> {{user | shortName}} </h3>
-              <p matLine>
-                <span class="role-style">{{user.roles | rolesToSpanish}}</span>
-              </p>
-            </mat-list-item>
-          </mat-list>
-
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let user" class="colum2">
-
-
-          <button mat-icon-button color="primary" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
-            <mat-icon svgIcon="eye"></mat-icon>
-          </button>
-
-          <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-          </button>
-
-          <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
-            <mat-icon svgIcon="delete"></mat-icon>
-          </button>
-
-          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole"></nx-crud-user-dialog>
-
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" (click)="openDialogCardUser(cardUserDialog.openDialogCardUser(),row)">
-        <nx-card-user-dialog #cardUserDialog [user]="row" [uriRole]="uriRole"></nx-card-user-dialog>
-      </mat-row>
-
-    </mat-table>
-
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-
-    <span class="add">
-      <button mat-fab (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{uriRole}}">
-        <mat-icon svgIcon="account-plus"></mat-icon>
-      </button>
-    </span>
-
-  </mat-card>
-
-
 
   <mat-card class="mat-elevation-z8">
 
@@ -132,11 +50,11 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
+          <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
             <mat-icon svgIcon="pencil"></mat-icon>
           </button>
 
-          <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
+          <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
@@ -166,86 +84,7 @@
 
 
 
-  <mat-card class="mat-elevation-z8">
 
-    <mat-toolbar>
-
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
-        <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
-        </mat-placeholder>
-      </mat-form-field>
-
-      <span class="spacer-l"></span>
-
-      <mat-chip-list *ngIf="privilege">
-        <mat-chip color="primary" selected="true">
-          <mat-icon svgIcon="account-multiple"></mat-icon>
-          &nbsp; {{privilegeToSpanish(privilege)}}
-        </mat-chip>
-      </mat-chip-list>
-    </mat-toolbar>
-
-    <mat-table #table [dataSource]="dataSource" matSort>
-
-      <ng-container matColumnDef="username">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let user">
-
-          <mat-list style="flex-grow: 8">
-            <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-                alt="{{user?.username}}">
-              <h3 matLine> {{user | shortName}} </h3>
-              <p matLine>
-                <span class="role-style">{{user.roles | rolesToSpanish}}</span>
-              </p>
-            </mat-list-item>
-          </mat-list>
-
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let user" class="colum2">
-
-
-          <button mat-icon-button color="primary" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
-            <mat-icon svgIcon="eye"></mat-icon>
-          </button>
-
-          <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-          </button>
-
-          <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
-            <mat-icon svgIcon="delete"></mat-icon>
-          </button>
-
-          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole"></nx-crud-user-dialog>
-
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" (click)="openDialogCardUser(cardUserDialog.openDialogCardUser(),row)">
-        <nx-card-user-dialog #cardUserDialog [user]="row" [uriRole]="uriRole"></nx-card-user-dialog>
-      </mat-row>
-
-    </mat-table>
-
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-
-    <span class="add">
-      <button mat-fab (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{uriRole}}">
-        <mat-icon svgIcon="account-plus"></mat-icon>
-      </button>
-    </span>
-
-  </mat-card>
 
 
 

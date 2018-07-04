@@ -6,6 +6,7 @@ import { LoginService } from '../login/login.service';
 import { LocalStorageService } from './local-storage.service';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
@@ -30,16 +31,21 @@ export class UserLoggedService {
         this.user = user;
     }
 
-    getUserFromBackEnd(username: string, redirect: boolean) {
+    getUserFromBackEnd(username: string, redirect: boolean): boolean {
+        let isLoading = true;
         this.userBackendService
             .getUserByUsernameSecured(username)
+            .pipe(finalize(() => isLoading = false))
             .subscribe(user => {
                 this.userLogged(user)
                 const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
                 if (redirect) this.router.navigate(['/home/' + endPoint]);
+               
             }, error => {
                 console.error(`could not load user, ${error.message}`);
+               
             });
+            return  isLoading;
     }
 
 }
