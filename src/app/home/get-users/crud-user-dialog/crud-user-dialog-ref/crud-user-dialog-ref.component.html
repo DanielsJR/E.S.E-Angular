@@ -329,7 +329,7 @@
                     alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
                 <h3 matLine> {{user | shortName}} </h3>
                 <p matLine>
-                    <span class="role-style">{{user.roles | rolesToSpanish}}</span>
+                    <span class="role-style">{{eRoles.value | rolesToSpanish}}</span>
                 </p>
 
                 <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">

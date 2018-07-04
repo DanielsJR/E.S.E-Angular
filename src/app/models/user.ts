@@ -1,3 +1,4 @@
+import { Avatar } from "./avatar";
 
 export class User {
     constructor(
@@ -9,7 +10,7 @@ export class User {
         public dni?: string,
         public birthday?: string,
         public gender?: string,
-        public avatar?: any,
+        public avatar?: Avatar,//any,
         public mobile?: number,
         public email?: string,
         public address?: string,

@@ -107,7 +107,7 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     // if (this.setRolesForm.value.slideToggleTeacher) rolesOrdained.push(ROLE_TEACHER);
 
     if (this.roles.length > 0) this.user.roles = rolesOrdained;
-
+    
     if (this.uriRole === URI_MANAGERS) {
       this.managerStoreService.setRoles(this.user);
 
