@@ -8,6 +8,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 
 import { finalize } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -95,15 +96,17 @@ export class SetPassDialogRefComponent implements OnInit {
     this.userBackendService
       .setUserPasswordSecured(this.user.username, pass)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(response => {
-        if (response) {
-          this.dialogRef.close('set');
-          setTimeout(() => this.openSnackBar('Contraseña cambiada', 'success'));
+      .subscribe(_ => {
+        this.openSnackBar('Contraseña cambiada', 'success');
+        this.dialogRef.close();
+      }, error => {
+        if (error instanceof HttpErrorResponse) {
+          this.openSnackBar(error.error.message, 'error');
+         // this.dialogRef.close();
         } else {
-          this.dialogRef.close('error');
-          setTimeout(() => this.openSnackBar('Error al cambiar contraseña', 'Error'));
-        };
-
+          this.openSnackBar('Error al cambiar contraseña', 'error');
+         // this.dialogRef.close();
+        }
       });
 
   }

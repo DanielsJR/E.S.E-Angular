@@ -13,7 +13,7 @@ export class SnackbarService {
     let config = new MatSnackBarConfig();
     config.data = data;
     config.panelClass = "snackBarService";
-    config.duration = 4000;
+    config.duration = (data.type ==='error') ? 6000:4000;
     
     return this.snackBar.openFromComponent(SnackbarsRefComponent, config);
   }

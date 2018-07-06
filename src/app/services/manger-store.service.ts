@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 import { URI_MANAGERS, ROLE_MANAGER } from '../app.config';
 import { UserBackendService } from './user-backend.service';
@@ -37,7 +37,7 @@ export class ManagerStoreService {
 
     private isLoadingSubject = <Subject<boolean>>new Subject();
     isLoading$ = this.isLoadingSubject.asObservable();
-    
+
 
     private setRolesSubject = <Subject<User>>new Subject();
     setRoles$ = this.setRolesSubject.asObservable();
@@ -72,8 +72,12 @@ export class ManagerStoreService {
                     this.usersSource.next(Object.assign({}, this.dataStore).users);
                 }
             }, error => {
-                console.error('error retrieving users, ' + error.message);
-                this.errorSubject.next('Error al obtener lista Administradores');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('error retrieving users, ' + error.message);
+                    this.errorSubject.next('Error al obtener lista Administradores');
+                }
             });
     }
 
@@ -88,8 +92,12 @@ export class ManagerStoreService {
                 this.successSubject.next('Administrador Creado');
                 this.createSuccessSubject.next(data);
             }, error => {
-                console.error('could not create User, ' + error.message);
-                this.errorSubject.next('Error al crear Administrador');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not create User, ' + error.message);
+                    this.errorSubject.next('Error al crear Administrador');
+                }
             });
 
     }
@@ -109,8 +117,12 @@ export class ManagerStoreService {
                 this.successSubject.next('Administrador Actualizado');
                 this.updateSuccessSubject.next(data);
             }, error => {
-                console.error('could not update user from store, ' + error.message);
-                this.errorSubject.next('Error al actualizar Administrador');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not update user from store, ' + error.message);
+                    this.errorSubject.next('Error al actualizar Administrador');
+                }
             });
     }
 
@@ -129,8 +141,12 @@ export class ManagerStoreService {
                 this.successSubject.next('Administrador Eliminado');
                 this.deleteSuccessSubject.next(user);
             }, error => {
-                console.error('could not delete user from store, ' + error.message);
-                this.errorSubject.next('Error al borrar Administrador');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not delete user from store, ' + error.message);
+                    this.errorSubject.next('Error al borrar Administrador');
+                }
             });
     }
 
@@ -154,10 +170,13 @@ export class ManagerStoreService {
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
                 // this.successSubject.next('success');
             }, error => {
-                console.error(`could not load user, ${error.message}`);
-                this.errorSubject.next('Error al obtener Administrador');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error(`could not load user, ${error.message}`);
+                    this.errorSubject.next('Error al obtener Administrador');
+                }
             });
-
     }
 
     getUsersByRole(role: string) {
@@ -168,8 +187,12 @@ export class ManagerStoreService {
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
                 //  this.successSubject.next('success');
             }, error => {
-                console.error('error retrieving users by role' + error.message);
-                this.errorSubject.next('Error al obtener Administradores');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('error retrieving users by role' + error.message);
+                    this.errorSubject.next('Error al obtener Administradores');
+                }
             });
     }
 
@@ -227,8 +250,12 @@ export class ManagerStoreService {
                 this.successSubject.next('Privilégios asignados');
                 this.setRolesSubject.next(data);
             }, error => {
-                console.error('could not set user role from store, ' + error.message);
-                this.errorSubject.next('Error al asignar privilégios');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not set user role from store, ' + error.message);
+                    this.errorSubject.next('Error al asignar privilégios');
+                }
             });
     }
 

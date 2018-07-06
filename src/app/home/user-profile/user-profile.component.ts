@@ -13,6 +13,7 @@ import { noWhitespaceValidator } from '../../shared/validators/no-white-space-va
 import { rutValidator } from '../../shared/validators/rut-validator';
 import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -158,11 +159,13 @@ export class UserProfileComponent implements OnInit {
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
                 this.openSnackBar('Datos Actualizados', 'success');
-            },
-                error => {
-                    this.openSnackBar(error, 'error');
-                    console.error('error updating user ' + error)
-                });
+            }, error => {
+                if (error instanceof HttpErrorResponse) {
+                    this.openSnackBar(error.error.message, 'error');
+                } else {
+                    this.openSnackBar('Error al actualizar usuario', 'error');
+                }
+            });
 
     }
 

@@ -9,6 +9,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 import { finalize } from 'rxjs/operators';
+import { SnackbarService } from '../services/snackbar.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private localStorageService: LocalStorageService) {
+    private localStorageService: LocalStorageService, private snackbarService: SnackbarService) {
     this.user = new User();
   }
 
@@ -62,16 +63,32 @@ export class LoginComponent implements OnInit {
               this.loginForm.reset();
               this.badCredencialsError();
               this.loginForm.markAsPristine();
+            } else if (error.status === 0) {
+              this.openSnackBar('Servidor caido', 'error');
+            } else {
+              this.openSnackBar(error.error.message, 'error');
             }
-            this.isLoading = false;
+
+          } else {
+            this.openSnackBar('Error al logearse, intente nevamente', 'error');
           }
-        }
-      );
+          this.isLoading = false;
+        });
   }
 
   badCredencialsError() {
     this.username.setErrors({ 'bad-credencials': true });
     this.password.setErrors({ 'bad-credencials': true });
+  }
+
+  openSnackBar(message: string, type: any): void {
+    let data = {
+      message: message,
+      uriRole: 'none',
+      type: type
+    };
+
+    let snackBarRef = this.snackbarService.openSnackBar(data);
   }
 
 }

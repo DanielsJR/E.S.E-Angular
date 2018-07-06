@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject ,  Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 import { URI_STUDENTS } from '../app.config';
 import { UserBackendService } from './user-backend.service';
@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class StudentStoreService {
 
     private usersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
@@ -59,13 +59,16 @@ export class StudentStoreService {
                 } else {
                     this.dataStore.users = data;
                     this.usersSource.next(Object.assign({}, this.dataStore).users);
-                  //  this.successSubject.next('retrieve users ok');
+                    //  this.successSubject.next('retrieve users ok');
                 }
             }, error => {
-                console.error('error retrieving users, ' + error.message);
-                this.errorSubject.next('Error al conseguir lista de Alumnos');
-            }
-            );
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('error retrieving users, ' + error.message);
+                    this.errorSubject.next('Error al conseguir lista de Alumnos');
+                }
+            });
     }
 
     create(user: User) {
@@ -79,10 +82,13 @@ export class StudentStoreService {
                 this.successSubject.next('Alumno Creado');
                 this.createSuccessSubject.next(data);
             }, error => {
-                console.error('could not create User, ' + error.message);
-                this.errorSubject.next('Error al crear Alumno');
-            }
-            );
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not create User, ' + error.message);
+                    this.errorSubject.next('Error al crear Alumno');
+                }
+            });
     }
 
     update(user: User) {
@@ -100,9 +106,13 @@ export class StudentStoreService {
                 this.successSubject.next('Alumno Actualizado');
                 this.updateSuccessSubject.next(data);
             }, error => {
-                console.error('could not update user from store, ' + error.message);
-                this.errorSubject.next('Error al actualizar Alumno');
-            })
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not update user from store, ' + error.message);
+                    this.errorSubject.next('Error al actualizar Alumno');
+                }
+            });
     }
 
     delete(user: User) {
@@ -118,10 +128,13 @@ export class StudentStoreService {
                 this.successSubject.next('Alumno Eliminado');
                 this.deleteSuccessSubject.next(user);
             }, error => {
-                console.error('could not delete user from store, ' + error.message);
-                this.errorSubject.next('Error al borrar Alumno');
-            }
-            );
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('could not delete user from store, ' + error.message);
+                    this.errorSubject.next('Error al borrar Alumno');
+                }
+            });
     }
 
 
@@ -142,10 +155,14 @@ export class StudentStoreService {
                 }
 
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-               // this.successSubject.next('success');
+                // this.successSubject.next('success');
             }, error => {
-                console.error(`could not load user, ${error.message}`);
-                this.errorSubject.next('could not load user');
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error(`could not load user, ${error.message}`);
+                    this.errorSubject.next('could not load user');
+                }
             });
 
     }
@@ -156,14 +173,16 @@ export class StudentStoreService {
             .subscribe(data => {
                 this.dataStore.users = data;
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-               // this.successSubject.next('success');
+                // this.successSubject.next('success');
             }, error => {
-                console.error('error retrieving users' + error.message);
-                this.errorSubject.next('error retrieving users');
-            }
-            );
+                if (error instanceof HttpErrorResponse) {
+                    this.errorSubject.next(error.error.message);
+                } else {
+                    console.error('error retrieving users' + error.message);
+                    this.errorSubject.next('error retrieving users');
+                }
+            });
     }
-
 
     deleteStore(): void {
         this.dataStore = { users: [] };
