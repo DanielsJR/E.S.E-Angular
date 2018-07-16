@@ -34,16 +34,16 @@ export class HomeAuthGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     checkLogin(url: string): boolean {
-        this.loginService.checkPrivileges();
-        if (this.loginService.isAuth) {
+        if (this.loginService.hasPrivileges()) {
+            console.log('checkLogin: true');
             return true;
+        } else {
+            console.log('checkLogin: false');
+            // Store the attempted URL for redirecting
+            this.loginService.redirectUrl = url;
+            this.router.navigate(['/login']);
+            return false;
         }
-        
-  
-        // Store the attempted URL for redirecting
-        this.loginService.redirectUrl = url;
-        this.router.navigate(['/login']);
-        return false;
     }
 
 

@@ -4,8 +4,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'nx-app',
-  template: `
-  <router-outlet></router-outlet>`,
+  template: `<router-outlet></router-outlet>`,
   styles: []
 })
 
@@ -13,7 +12,7 @@ export class AppComponent implements OnInit {
 
   // Diagnostic only: inspect router configuration
   constructor(router: Router) {
-   // console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
+    // console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
 
   ngOnInit() { }

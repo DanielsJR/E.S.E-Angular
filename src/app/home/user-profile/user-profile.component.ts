@@ -158,14 +158,17 @@ export class UserProfileComponent implements OnInit {
                 this.userLoggedService.userLogged(user);
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
-                this.openSnackBar('Datos Actualizados', 'success');
+                //this.openSnackBar('Datos Actualizados', 'success');
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.openSnackBar(error.error.message, 'error');
                 } else {
                     this.openSnackBar('Error al actualizar usuario', 'error');
                 }
-            });
+            }, () => {
+                this.openSnackBar('Datos Actualizados', 'success');
+            }
+            );
 
     }
 

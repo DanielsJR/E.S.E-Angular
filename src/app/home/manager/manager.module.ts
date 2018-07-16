@@ -6,6 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ManagerRoutingModule } from './manager.routing';
 import { GetUsersModule } from '../get-users/get-users.module';
 import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-teachers.component';
+import { ManagerComponent } from './manager.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-
   ],
 
   declarations: [
+    ManagerComponent,
     ManagerHomeComponent,
     ManagerGetTeachersComponent,
     ManagerGetStudentsComponent

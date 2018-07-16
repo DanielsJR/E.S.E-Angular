@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from '@angular/material-moment-adapter';
+import { Router } from '@angular/router';
 
 
 
@@ -23,7 +24,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from 
     SharedModule,
     WelcomeModule,
     LoginModule,
-    AppRoutingModule,
+    AppRoutingModule, // after the other modules with routes
     HttpClientModule,
     MatMomentDateModule,
 
@@ -32,7 +33,6 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from 
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-
 
   ],
 
@@ -46,7 +46,6 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from 
     { provide: MAT_DATE_LOCALE, useValue: 'es' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-
 
   ],
 
@@ -63,7 +62,8 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from 
 })
 
 export class AppModule {
-  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer,router: Router) {
     matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+    console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
 }

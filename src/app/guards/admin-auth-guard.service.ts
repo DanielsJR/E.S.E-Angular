@@ -10,12 +10,13 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
+import { ROLE_ADMIN } from '../app.config';
 
 
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService,  private router: Router) { }
+    constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const url: string = state.url;
@@ -35,15 +36,17 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
 
     checkLogin(url: string): boolean {
-       const roles = this.loginService.getRoles();
-        if (roles.includes('ADMIN')) {
+        const roles = this.loginService.getRoles();
+        if (roles.includes(ROLE_ADMIN)) {
+            console.log('checkLogin: true');
             return true;
+        } else {
+            console.log('checkLogin: false');
+            // Store the attempted URL for redirecting
+            this.loginService.redirectUrl = url;
+            this.router.navigate(['/login']);
+            return false;
         }
-        
-        // Store the attempted URL for redirecting
-        this.loginService.redirectUrl = url;
-        this.router.navigate(['/login']);
-        return false;
     }
 
 

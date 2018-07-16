@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 
 
 import { ManagerStoreService } from './manger-store.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, retry } from 'rxjs/operators';
 
 
 @Injectable({
@@ -26,14 +26,14 @@ export class TeacherStoreService {
     private successSubject = <Subject<any>>new Subject();
     public readonly successMessage$ = this.successSubject.asObservable();
 
-    private createSuccessSubject = <Subject<User>>new Subject();
-    public readonly createSuccess$ = this.createSuccessSubject.asObservable();
+    private userCreatedSubject = <Subject<User>>new Subject();
+    public readonly userCreated$ = this.userCreatedSubject.asObservable();
 
-    private updateSuccessSubject = <Subject<User>>new Subject();
-    public readonly updateSuccess$ = this.updateSuccessSubject.asObservable();
+    private userUpdatedSubject = <Subject<User>>new Subject();
+    public readonly userUpdated$ = this.userUpdatedSubject.asObservable();
 
-    private deleteSuccessSubject = <Subject<User>>new Subject();
-    public readonly deleteSuccess$ = this.deleteSuccessSubject.asObservable();
+    private userDeletedSubject = <Subject<User>>new Subject();
+    public readonly userDeleted$ = this.userDeletedSubject.asObservable();
 
     private isLoadingSubject = <Subject<boolean>>new Subject();
     isLoading$ = this.isLoadingSubject.asObservable();
@@ -59,7 +59,7 @@ export class TeacherStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(retry(3), finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
@@ -87,8 +87,7 @@ export class TeacherStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Docente Creado');
-                this.createSuccessSubject.next(data);
+                this.userCreatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -96,7 +95,8 @@ export class TeacherStoreService {
                     console.error('could not create User, ' + error.message);
                     this.errorSubject.next('Error al crear Docente');
                 }
-            });
+            }, () => this.successSubject.next('Docente Creado')
+            );
     }
 
     update(user: User) {
@@ -111,8 +111,7 @@ export class TeacherStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Docente Actualizado');
-                this.updateSuccessSubject.next(data);
+                this.userUpdatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -120,7 +119,8 @@ export class TeacherStoreService {
                     console.error('could not update user from store, ' + error.message);
                     this.errorSubject.next('Error al actualizar Docente');
                 }
-            });
+            }, () => this.successSubject.next('Docente Actualizado')
+            );
     }
 
     delete(user: User) {
@@ -133,8 +133,7 @@ export class TeacherStoreService {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Docente Eliminado');
-                this.deleteSuccessSubject.next(user);
+                this.userDeletedSubject.next(user);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -142,7 +141,8 @@ export class TeacherStoreService {
                     console.error('could not delete user from store, ' + error.message);
                     this.errorSubject.next('Error al borrar Docente');
                 }
-            });
+            }, () => this.successSubject.next('Docente Eliminado')
+            );
     }
 
 
@@ -244,7 +244,6 @@ export class TeacherStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Privilégios asignados');
                 this.setRolesSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
@@ -253,7 +252,7 @@ export class TeacherStoreService {
                     console.error('could not set user role from store, ' + error.message);
                     this.errorSubject.next('Error al asignar privilégios');
                 }
-            });
+            }, () => this.successSubject.next('Privilégios asignados'));
     }
 
 

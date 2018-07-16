@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-teachers.component';
 import { ManagerGetStudentsComponent } from './manager-get-students/manager-get-students.component';
 import { ManagerAuthGuard } from '../../guards/manager-auth-guard.service';
+import { ManagerComponent } from './manager.component';
 
 
 const adminRoutes: Routes = [
     {
         path: '',
+        component: ManagerComponent,
         canActivate: [ManagerAuthGuard],
         children: [
 

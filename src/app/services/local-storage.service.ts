@@ -31,8 +31,8 @@ export class LocalStorageService {
         localStorage.clear();
     }
 
-    getFullToken(): string{
-        return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1); 
+    getFullToken(): string {
+        return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1);
     }
 
     getTokenRoles(): string[] {
@@ -46,9 +46,26 @@ export class LocalStorageService {
         let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
         if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
             return tokenPayload.sub
-        };
+        }
     }
 
 
+    getExpireDate() {
+        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
+        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
+            return tokenPayload.exp
+        }
+
+    }
+
+    isTokenExpired() {
+        var current_time = Date.now().valueOf() / 1000;
+        if (this.getExpireDate() < current_time) {
+            console.error('token expired!!!');
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

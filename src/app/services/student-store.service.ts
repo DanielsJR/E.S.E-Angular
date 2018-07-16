@@ -5,7 +5,7 @@ import { User } from '../models/user';
 import { URI_STUDENTS } from '../app.config';
 import { UserBackendService } from './user-backend.service';
 import { MatSnackBar } from '@angular/material';
-import { finalize } from 'rxjs/operators';
+import { finalize, retry } from 'rxjs/operators';
 
 
 @Injectable({
@@ -23,14 +23,14 @@ export class StudentStoreService {
     private successSubject = <Subject<any>>new Subject();
     public readonly successMessage$ = this.successSubject.asObservable();
 
-    private createSuccessSubject = <Subject<User>>new Subject();
-    public readonly createSuccess$ = this.createSuccessSubject.asObservable();
+    private userCreatedSubject = <Subject<User>>new Subject();
+    public readonly userCreated$ = this.userCreatedSubject.asObservable();
 
-    private updateSuccessSubject = <Subject<User>>new Subject();
-    public readonly updateSuccess$ = this.updateSuccessSubject.asObservable();
+    private userUpdatedSubject = <Subject<User>>new Subject();
+    public readonly userUpdated$ = this.userUpdatedSubject.asObservable();
 
-    private deleteSuccessSubject = <Subject<User>>new Subject();
-    public readonly deleteSuccess$ = this.deleteSuccessSubject.asObservable();
+    private userDeletedSubject = <Subject<User>>new Subject();
+    public readonly userDeleted$ = this.userDeletedSubject.asObservable();
 
     private isLoadingSubject = <Subject<boolean>>new Subject();
     isLoading$ = this.isLoadingSubject.asObservable();
@@ -51,7 +51,7 @@ export class StudentStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(retry(3),finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
@@ -79,8 +79,7 @@ export class StudentStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Alumno Creado');
-                this.createSuccessSubject.next(data);
+                this.userCreatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -88,7 +87,7 @@ export class StudentStoreService {
                     console.error('could not create User, ' + error.message);
                     this.errorSubject.next('Error al crear Alumno');
                 }
-            });
+            }, () => this.successSubject.next('Alumno Creado'));
     }
 
     update(user: User) {
@@ -103,8 +102,7 @@ export class StudentStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Alumno Actualizado');
-                this.updateSuccessSubject.next(data);
+                this.userUpdatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -112,7 +110,7 @@ export class StudentStoreService {
                     console.error('could not update user from store, ' + error.message);
                     this.errorSubject.next('Error al actualizar Alumno');
                 }
-            });
+            }, () => this.successSubject.next('Alumno Actualizado'));
     }
 
     delete(user: User) {
@@ -125,8 +123,7 @@ export class StudentStoreService {
                     if (u.id === user.id) { this.dataStore.users.splice(i, 1); }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Alumno Eliminado');
-                this.deleteSuccessSubject.next(user);
+                this.userDeletedSubject.next(user);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -134,7 +131,7 @@ export class StudentStoreService {
                     console.error('could not delete user from store, ' + error.message);
                     this.errorSubject.next('Error al borrar Alumno');
                 }
-            });
+            }, () => this.successSubject.next('Alumno Eliminado'));
     }
 
 

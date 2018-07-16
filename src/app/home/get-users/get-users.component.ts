@@ -59,6 +59,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
         }
         this.dataSource.data = data;
       });
+
       this.managerStoreService.successMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
       this.managerStoreService.errorMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'error')));
 

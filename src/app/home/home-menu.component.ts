@@ -5,22 +5,22 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
   selector: 'nx-home-menu',
   template: `
 
-<mat-list-item *ngIf="privilege === 'ADMIN' " routerLink="/home/admin" routerLinkActive="active">
+<mat-list-item *ngIf="privilege === 'ADMIN' " routerLink="./admin">
   <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>
   
-<mat-list-item *ngIf ="privilege === 'MANAGER' " routerLink="/home/manager" routerLinkActive="active">
+<mat-list-item *ngIf ="privilege === 'MANAGER' " routerLink="./manager">
 <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>  
 
-<mat-list-item *ngIf="privilege === 'TEACHER' " routerLink="/home/teacher" routerLinkActive="active">
+<mat-list-item *ngIf="privilege === 'TEACHER' " routerLink="./teacher">
 <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>
 
-<mat-list-item *ngIf="privilege === 'STUDENT' " routerLink="/home/student" routerLinkActive="active">
+<mat-list-item *ngIf="privilege === 'STUDENT' " routerLink="./student">
 <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
   <h3 matLine>Home</h3>
 </mat-list-item>

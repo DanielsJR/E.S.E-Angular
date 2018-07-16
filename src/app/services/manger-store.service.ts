@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 
 
 import { TeacherStoreService } from './teacher-store.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, retry } from 'rxjs/operators';
 
 
 @Injectable({
@@ -26,14 +26,14 @@ export class ManagerStoreService {
     private successSubject = <Subject<any>>new Subject();
     public readonly successMessage$ = this.successSubject.asObservable();
 
-    private createSuccessSubject = <Subject<User>>new Subject();
-    public readonly createSuccess$ = this.createSuccessSubject.asObservable();
+    private userCreatedSubject = <Subject<User>>new Subject();
+    public readonly userCreated$ = this.userCreatedSubject.asObservable();
 
-    private updateSuccessSubject = <Subject<User>>new Subject();
-    public readonly updateSuccess$ = this.updateSuccessSubject.asObservable();
+    private userUpdatedSubject = <Subject<User>>new Subject();
+    public readonly userUpdated$ = this.userUpdatedSubject.asObservable();
 
-    private deleteSuccessSubject = <Subject<User>>new Subject();
-    public readonly deleteSuccess$ = this.deleteSuccessSubject.asObservable();
+    private userDeletedSubject = <Subject<User>>new Subject();
+    public readonly userDeleted$ = this.userDeletedSubject.asObservable();
 
     private isLoadingSubject = <Subject<boolean>>new Subject();
     isLoading$ = this.isLoadingSubject.asObservable();
@@ -62,7 +62,7 @@ export class ManagerStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(retry(3), finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
@@ -89,16 +89,17 @@ export class ManagerStoreService {
             .subscribe(data => {
                 this.dataStore.users.push(data);
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Administrador Creado');
-                this.createSuccessSubject.next(data);
+                this.userCreatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
+
                 } else {
                     console.error('could not create User, ' + error.message);
                     this.errorSubject.next('Error al crear Administrador');
                 }
-            });
+            }, () => this.successSubject.next('Administrador Creado')
+            );
 
     }
 
@@ -114,8 +115,7 @@ export class ManagerStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Administrador Actualizado');
-                this.updateSuccessSubject.next(data);
+                this.userUpdatedSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -123,7 +123,8 @@ export class ManagerStoreService {
                     console.error('could not update user from store, ' + error.message);
                     this.errorSubject.next('Error al actualizar Administrador');
                 }
-            });
+            }, () => this.successSubject.next('Administrador Actualizado')
+            );
     }
 
     delete(user: User) {
@@ -138,8 +139,7 @@ export class ManagerStoreService {
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Administrador Eliminado');
-                this.deleteSuccessSubject.next(user);
+                this.userDeletedSubject.next(user);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.errorSubject.next(error.error.message);
@@ -147,7 +147,8 @@ export class ManagerStoreService {
                     console.error('could not delete user from store, ' + error.message);
                     this.errorSubject.next('Error al borrar Administrador');
                 }
-            });
+            }, () => this.successSubject.next('Administrador Eliminado')
+            );
     }
 
 
@@ -240,14 +241,12 @@ export class ManagerStoreService {
             .setRoles(user.username, user.roles, this.uriRole)
             .pipe(finalize(() => this.isLoadingRolesSubject.next(false)))
             .subscribe(data => {
-
                 this.dataStore.users.forEach((u, i) => {
                     if (u.id === data.id) {
                         data.roles.includes(this.role) ? this.dataStore.users[i] = data : this.dataStore.users.splice(i, 1);
                     }
                 });
                 this.usersSource.next(Object.assign({}, this.dataStore).users);
-                this.successSubject.next('Privilégios asignados');
                 this.setRolesSubject.next(data);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
@@ -256,7 +255,8 @@ export class ManagerStoreService {
                     console.error('could not set user role from store, ' + error.message);
                     this.errorSubject.next('Error al asignar privilégios');
                 }
-            });
+            }, () => this.successSubject.next('Privilégios asignados')
+            );
     }
 
     deleteStore(): void {

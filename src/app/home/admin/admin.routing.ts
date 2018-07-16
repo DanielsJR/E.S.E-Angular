@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminAuthGuard } from '../../guards/admin-auth-guard.service';
 import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
+import { AdminComponent } from './admin.component';
 
 
 const adminRoutes: Routes = [
     {
         path: '',
+        component: AdminComponent,
         canActivate: [AdminAuthGuard],
         children: [
 
@@ -28,9 +30,11 @@ const adminRoutes: Routes = [
     imports: [
         RouterModule.forChild(adminRoutes)
     ],
+
     exports: [
         RouterModule
     ],
+
     providers: [
 
     ]

@@ -3,7 +3,7 @@ import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap} from 'rxjs/operators';
 import { User } from '../models/user';
 import { SessionStorageService } from '../services/session-storage.service';
 
@@ -25,8 +25,8 @@ export class LoginService {
     login(username: string, password: string): Observable<any> {
         const credentials = { username: username, password: password };
         console.log('login::...');
-        return this.httpCli.post<any>(this.endpoint, credentials);
-            //.pipe(catchError(this.handleError));
+        return this.httpCli.post<any>(this.endpoint, credentials)
+           // .pipe(tap(val => this.isAuth = true));
     }
 
     handleError = (error: Response) => {
@@ -36,7 +36,6 @@ export class LoginService {
     logout(): void {
         this.localStorageService.signOut();
         this.sessionStorageService.signOut();
-        this.isAuth = false;
         this.isAuth = false;
     }
 
@@ -49,7 +48,7 @@ export class LoginService {
     }
 
     hasPrivileges(): boolean {
-        if (this.isTokenStored()) {
+        if (this.isTokenStored() && !this.localStorageService.isTokenExpired()) {
             for (var i = 0; i < this.localStorageService.getTokenRoles().length; i++) {
                 let role = this.localStorageService.getTokenRoles()[i];
                 return role === ROLE_ADMIN ||
@@ -61,7 +60,7 @@ export class LoginService {
     }
 
     checkPrivileges(): void {
-        if (this.isTokenStored()) {
+        if (this.isTokenStored() && !this.localStorageService.isTokenExpired()) {
             console.log('checking privileges of: ' + this.localStorageService.getTokenUsername()
                 + ' roles: ' + this.localStorageService.getTokenRoles());
             console.log('is auth????: ' + this.hasPrivileges());
@@ -73,7 +72,7 @@ export class LoginService {
     }
 
     getPrivilege(): string {
-        if (this.isTokenStored()) {
+        if (this.isTokenStored() && !this.localStorageService.isTokenExpired()) {
             for (var i = 0; i < this.localStorageService.getTokenRoles().length; i++) {
                 let role = this.localStorageService.getTokenRoles()[i];
                 if (role === ROLE_ADMIN) {
@@ -97,7 +96,7 @@ export class LoginService {
     }
 
     getRoles(): string[] {
-        if (this.isTokenStored()) {
+        if (this.isTokenStored() && !this.localStorageService.isTokenExpired()) {
             return this.roles = this.localStorageService.getTokenRoles();
         } else {
             console.error('isTokenStored: false');

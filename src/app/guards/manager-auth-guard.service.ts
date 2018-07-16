@@ -11,6 +11,7 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
+import { ROLE_MANAGER } from '../app.config';
 
 
 @Injectable()
@@ -34,17 +35,18 @@ export class ManagerAuthGuard implements CanActivate, CanActivateChild, CanLoad 
     }
 
     checkLogin(url: string): boolean {
-
         const roles = this.loginService.getRoles();
-        if (roles.includes('MANAGER')) {
+        if (roles.includes(ROLE_MANAGER)) {
+            console.log('checkLogin: true');
             return true;
+        } else {
+            console.log('checkLogin: false');
+            // Store the attempted URL for redirecting
+            this.loginService.redirectUrl = url;
+            this.router.navigate(['/login']);
+            return false;
         }
-         
-         // Store the attempted URL for redirecting
-         this.loginService.redirectUrl = url;
-         this.router.navigate(['/login']);
-         return false;
-     }
+    }
 
 
 }

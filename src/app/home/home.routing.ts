@@ -25,9 +25,11 @@ const homeRoutes: Routes = [
     imports: [
         RouterModule.forChild(homeRoutes)
     ],
+
     exports: [
         RouterModule
     ],
+
     providers: [
 
     ]

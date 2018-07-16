@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { UserBackendService } from './user-backend.service';
 import { LoginService } from '../login/login.service';
 import { LocalStorageService } from './local-storage.service';
@@ -14,9 +14,9 @@ import { finalize } from 'rxjs/operators';
 export class UserLoggedService {
 
 
-    private userLoggedSource = new Subject<User>();
+    private userLoggedSource = new ReplaySubject<User>(1);// new Subject<User>();
     userLogged$ = this.userLoggedSource.asObservable();
-    user: User;
+    //user: User;
 
 
     constructor(private userBackendService: UserBackendService, private loginService: LoginService,
@@ -28,7 +28,7 @@ export class UserLoggedService {
     userLogged(user: User) {
         console.log('userLogged NEXT....');
         this.userLoggedSource.next(user);
-        this.user = user;
+        //this.user = user;
     }
 
     getUserFromBackEnd(username: string, redirect: boolean): boolean {
@@ -40,12 +40,11 @@ export class UserLoggedService {
                 this.userLogged(user)
                 const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
                 if (redirect) this.router.navigate(['/home/' + endPoint]);
-               
             }, error => {
                 console.error(`could not load user, ${error.message}`);
-               
-            });
-            return  isLoading;
+            }
+            );
+        return isLoading;
     }
 
 }

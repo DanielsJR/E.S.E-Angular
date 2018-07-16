@@ -46,9 +46,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     userHightPrivilege: string;
     oldAvatar: Avatar;
 
-    subscriptionCreateSuccess: Subscription;
-    subscriptionUpdateSuccess: Subscription;
-    subscriptionDeleteSuccess: Subscription;
+    subscriptionUserCreated: Subscription;
+    subscriptionUserUpdated: Subscription;
+    subscriptionUserDeleted: Subscription;
     subscriptionSetRolesSuccess: Subscription;
     subscriptionIsLoading: Subscription;
 
@@ -81,16 +81,16 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         if (this.uriRole === URI_MANAGERS) {
             this.subscriptionIsLoading = this.managerStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
 
-            this.subscriptionCreateSuccess = this.managerStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionUserCreated = this.managerStoreService.userCreated$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.subscriptionUpdateSuccess = this.managerStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUserUpdated = this.managerStoreService.userUpdated$.subscribe(user => {
                 this.teacherStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionDeleteSuccess = this.managerStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionUserDeleted = this.managerStoreService.userDeleted$.subscribe(user => {
                 this.teacherStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
             });
@@ -105,16 +105,16 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
         } else if (this.uriRole === URI_TEACHERS) {
             this.subscriptionIsLoading = this.teacherStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-            this.subscriptionCreateSuccess = this.teacherStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionUserCreated = this.teacherStoreService.userCreated$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.subscriptionUpdateSuccess = this.teacherStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUserUpdated = this.teacherStoreService.userUpdated$.subscribe(user => {
                 this.managerStoreService.updateUserFromStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionDeleteSuccess = this.teacherStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionUserDeleted = this.teacherStoreService.userDeleted$.subscribe(user => {
                 this.managerStoreService.deleteUserFromStore(user);
                 this.dialogRef.close('deleted');
             });
@@ -129,15 +129,15 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
         } else if (this.uriRole === URI_STUDENTS) {
             this.subscriptionIsLoading = this.studentStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-            this.subscriptionCreateSuccess = this.studentStoreService.createSuccess$.subscribe(_ => {
+            this.subscriptionUserCreated = this.studentStoreService.userCreated$.subscribe(_ => {
                 this.dialogRef.close('created');
             });
 
-            this.subscriptionUpdateSuccess = this.studentStoreService.updateSuccess$.subscribe(user => {
+            this.subscriptionUserUpdated = this.studentStoreService.userUpdated$.subscribe(user => {
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionDeleteSuccess = this.studentStoreService.deleteSuccess$.subscribe((user) => {
+            this.subscriptionUserDeleted = this.studentStoreService.userDeleted$.subscribe(user => {
                 this.dialogRef.close('deleted');
             });
 
@@ -148,9 +148,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscriptionCreateSuccess.unsubscribe();
-        this.subscriptionUpdateSuccess.unsubscribe();
-        this.subscriptionDeleteSuccess.unsubscribe();
+        this.subscriptionUserCreated.unsubscribe();
+        this.subscriptionUserUpdated.unsubscribe();
+        this.subscriptionUserDeleted.unsubscribe();
         if (this.subscriptionSetRolesSuccess) this.subscriptionSetRolesSuccess.unsubscribe();
         this.subscriptionIsLoading.unsubscribe();
     }

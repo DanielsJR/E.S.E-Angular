@@ -28,7 +28,7 @@ import { StudentStoreService } from '../services/student-store.service';
     TdCollapseAnimation(),
   ],
 })
-export class HomeComponent implements OnInit, OnDestroy{
+export class HomeComponent implements OnInit, OnDestroy {
 
 
   user: User;
@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy{
     private teacherStoreService: TeacherStoreService,
     private studentStoreService: StudentStoreService,
   ) {
-    
+
   }
 
   ngAfterViewInit() {
@@ -94,23 +94,22 @@ export class HomeComponent implements OnInit, OnDestroy{
 
 
   ngOnInit() {
-    this.subscriptionIsLoading = this.managerStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
-    this.subscriptionIsLoading = this.teacherStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
-    this.subscriptionIsLoading = this.studentStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() =>  this.isLoading = isLoadding));
-
-    this.user = this.userLoggedService.user;
-    if (this.user) {
-      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      setTimeout(() => this.openSnackBar(this.welcome, 'success'));
-    } else {
-      console.log('user:null getting user from userLoggedService');
-      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
-    }
+    this.subscriptionIsLoading = this.managerStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptionIsLoading = this.teacherStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptionIsLoading = this.studentStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     });
+
+    if (this.user) {
+      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
+      setTimeout(() => this.openSnackBar(this.welcome, 'success'));
+    } else {
+      console.log('user:null getting user from backend');
+      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
+    }
 
   }
 

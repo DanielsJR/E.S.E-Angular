@@ -10,6 +10,7 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
+import { ROLE_TEACHER } from '../app.config';
 
 
 @Injectable()
@@ -34,15 +35,17 @@ export class TeacherAuthGuard implements CanActivate, CanActivateChild, CanLoad 
 
     checkLogin(url: string): boolean {
         const roles = this.loginService.getRoles();
-        if (roles.includes('TEACHER')) {
+        if (roles.includes(ROLE_TEACHER)) {
+            console.log('checkLogin: true');
             return true;
+        } else {
+            console.log('checkLogin: false');
+            // Store the attempted URL for redirecting
+            this.loginService.redirectUrl = url;
+            this.router.navigate(['/login']);
+            return false;
         }
-         
-         // Store the attempted URL for redirecting
-         this.loginService.redirectUrl = url;
-         this.router.navigate(['/login']);
-         return false;
-     }
+    }
 
 
 }

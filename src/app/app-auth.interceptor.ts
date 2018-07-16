@@ -33,7 +33,7 @@ export class AppAuthInterceptor implements HttpInterceptor {
                     }
                 }, (err: any) => {
                     if (err instanceof HttpErrorResponse) {
-                        console.error('message: ' + err.message +'   status: ' + err.status);
+                        console.error('**from interceptor** message: ' + err.message +'   status: ' + err.status);
                         if (err.status === 401) this.router.navigate(['/login']);
                     }
                 }));
@@ -46,13 +46,13 @@ export class AppAuthInterceptor implements HttpInterceptor {
             }, (err: any) => {
                 if (err instanceof HttpErrorResponse) {
                     //no token in local storage!
-                    console.error('message: ' + err.message +'   status: ' + err.status);
+                    console.error('**from interceptor** message: ' + err.message +'   status: ' + err.status);
                     if (err.status === 401) this.router.navigate(['/login']);
                 }
             }));
         }
         // has authorization (login)
-        console.error('it already has authorization!');
+        console.error('**from interceptor** it already has authorization!');
         return next.handle(req);
     }
 
