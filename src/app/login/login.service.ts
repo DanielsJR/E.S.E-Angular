@@ -3,7 +3,7 @@ import { API_GENERIC_URI, LOCAL_STORAGE_TOKEN_KEY, API_SERVER, ROLE_ADMIN, ROLE_
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap} from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { SessionStorageService } from '../services/session-storage.service';
 
@@ -12,6 +12,7 @@ import { SessionStorageService } from '../services/session-storage.service';
 export class LoginService {
     private endpoint = API_SERVER + URI_TOKEN_AUTH;
     isAuth = false;
+    tokenUsername;
     roles: string[];
     // store the URL so we can redirect after logging in (TODO)
     redirectUrl: string;
@@ -26,7 +27,7 @@ export class LoginService {
         const credentials = { username: username, password: password };
         console.log('login::...');
         return this.httpCli.post<any>(this.endpoint, credentials)
-           // .pipe(tap(val => this.isAuth = true));
+        // .pipe(tap(val => this.isAuth = true));
     }
 
     handleError = (error: Response) => {
@@ -99,28 +100,37 @@ export class LoginService {
         if (this.isTokenStored() && !this.localStorageService.isTokenExpired()) {
             return this.roles = this.localStorageService.getTokenRoles();
         } else {
-            console.error('isTokenStored: false');
+            console.error('isTokenStored: false or isTokenExpired: true');
             return this.roles = [];
         }
+    }
+
+    getTokenUsername(): string {
+        if (this.isTokenStored()) {
+            return this.tokenUsername = this.localStorageService.getTokenUsername();
+        } else {
+            console.error('isTokenStored: false');
+        }
+
     }
 
     private _uriRole: string;
 
     get uriRole(): string {
-  
-      if (this.getPrivilege() === ROLE_ADMIN) {
-        return this._uriRole = URI_ADMINS;
-      } else if (this.getPrivilege()=== ROLE_MANAGER) {
-        return this._uriRole = URI_MANAGERS;
-      } else if (this.getPrivilege() === ROLE_TEACHER) {
-        return this._uriRole = URI_TEACHERS;
-      } else if (this.getPrivilege() === ROLE_STUDENT) {
-        return this._uriRole = URI_STUDENTS;
-      } else {
-        console.error('error no role');
-        return this._uriRole = "";
-  
-      }
+
+        if (this.getPrivilege() === ROLE_ADMIN) {
+            return this._uriRole = URI_ADMINS;
+        } else if (this.getPrivilege() === ROLE_MANAGER) {
+            return this._uriRole = URI_MANAGERS;
+        } else if (this.getPrivilege() === ROLE_TEACHER) {
+            return this._uriRole = URI_TEACHERS;
+        } else if (this.getPrivilege() === ROLE_STUDENT) {
+            return this._uriRole = URI_STUDENTS;
+        } else {
+            console.error('error no role');
+            return this._uriRole = "";
+
+        }
     }
 
 }

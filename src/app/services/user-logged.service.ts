@@ -13,17 +13,12 @@ import { finalize } from 'rxjs/operators';
 })
 export class UserLoggedService {
 
-
     private userLoggedSource = new ReplaySubject<User>(1);// new Subject<User>();
     userLogged$ = this.userLoggedSource.asObservable();
     //user: User;
 
-
     constructor(private userBackendService: UserBackendService, private loginService: LoginService,
-        private router: Router) {
-
-    }
-
+        private router: Router) { }
 
     userLogged(user: User) {
         console.log('userLogged NEXT....');
@@ -31,7 +26,7 @@ export class UserLoggedService {
         //this.user = user;
     }
 
-    getUserFromBackEnd(username: string, redirect: boolean): boolean {
+    getUserFromBackEnd(username: string, redirectHome: boolean): boolean {
         let isLoading = true;
         this.userBackendService
             .getUserByUsernameSecured(username)
@@ -39,10 +34,11 @@ export class UserLoggedService {
             .subscribe(user => {
                 this.userLogged(user)
                 const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
-                if (redirect) this.router.navigate(['/home/' + endPoint]);
+                if (redirectHome) this.router.navigate(['/home/' + endPoint]);
+                if (this.loginService.redirectUrl && (this.loginService.tokenUsername===username)) this.router.navigate([this.loginService.redirectUrl]);
             }, error => {
-                console.error(`could not load user, ${error.message}`);
-            }
+                    console.error(`could not load user, ${error.message}`);
+                }
             );
         return isLoading;
     }

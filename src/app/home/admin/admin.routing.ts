@@ -1,26 +1,33 @@
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { AdminAuthGuard } from '../../guards/admin-auth-guard.service';
 import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
 import { AdminComponent } from './admin.component';
+import { AdminGuard } from '../../guards/admin-guard.service';
 
 
 const adminRoutes: Routes = [
     {
         path: '',
         component: AdminComponent,
-        canActivate: [AdminAuthGuard],
+        canActivate: [AdminGuard],
         children: [
-
-            {
-                path: 'managers-list',
-                component: AdminGetManagersComponent,
-            },
-
             {
                 path: '',
-                component: AdminHomeComponent
+                canActivateChild: [AdminGuard],
+                children: [
+
+                    {
+                        path: 'managers-list',
+                        component: AdminGetManagersComponent,
+                    },
+
+                    {
+                        path: '',
+                        component: AdminHomeComponent
+                    }
+
+                ]
             }
         ]
     }

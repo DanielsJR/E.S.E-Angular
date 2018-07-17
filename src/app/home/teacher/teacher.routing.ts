@@ -3,68 +3,76 @@ import { SubjectDetailComponent } from './subject-list/subject-detail/subject-de
 import { SubjectListComponent } from './subject-list/subject-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { TeacherAuthGuard } from '../../guards/teacher-auth-guard.service';
+import { TeacherGuard } from '../../guards/teacher-guard.service';
 
 
 const teacherRoutes: Routes = [
     {
         path: '',
-        canActivate: [TeacherAuthGuard],
+        canActivate: [TeacherGuard],
         children: [
+
             {
-                path: 'subject',
+                path: '',
+                canActivateChild: [TeacherGuard],
                 children: [
                     {
-                        path: ':id',
-                        component: SubjectDetailComponent,
+                        path: 'subject',
                         children: [
                             {
-                                path: 'class',
+                                path: ':id',
+                                component: SubjectDetailComponent,
                                 children: [
                                     {
-                                        path: ':id',
-                                        component: SubjectDetailComponent,
+                                        path: 'class',
+                                        children: [
+                                            {
+                                                path: ':id',
+                                                component: SubjectDetailComponent,
+                                            }
+                                        ],
                                     }
                                 ],
                             }
                         ],
+
+
+                    },
+
+                    {
+                        path: 'test',
+
+                        children: [
+                            {
+                                path: 'make-test',
+                                component: SubjectDetailComponent,
+                            },
+
+                            {
+                                path: 'take-test',
+                                component: SubjectDetailComponent,
+                            },
+
+                            {
+                                path: 'edit-test',
+                                component: SubjectDetailComponent,
+                            },
+
+                            {
+                                path: 'historical',
+                                component: SubjectDetailComponent,
+                            }
+                        ],
+                    },
+
+                    {
+                        path: '',
+                        component: TeacherHomeComponent
                     }
-                ],
-
-
-            },
-
-            {
-                path: 'test',
-
-                children: [
-                    {
-                        path: 'make-test',
-                        component: SubjectDetailComponent,
-                    },
-
-                    {
-                        path: 'take-test',
-                        component: SubjectDetailComponent,
-                    },
-
-                    {
-                        path: 'edit-test',
-                        component: SubjectDetailComponent,
-                    },
-
-                    {
-                        path: 'historical',
-                        component: SubjectDetailComponent,
-                    }
-                ],
-            },
-
-            {
-                path: '',
-                component: TeacherHomeComponent
+                ]
             }
         ]
+
     }
 ];
 
