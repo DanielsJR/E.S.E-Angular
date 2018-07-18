@@ -16,7 +16,6 @@ import { CrudUserDialogRefComponent } from './crud-user-dialog/crud-user-dialog-
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 
 
-
 @NgModule({
   imports: [
     SharedModule,
@@ -41,6 +40,7 @@ import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.com
   providers: [
 
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
+    
 
   ],
 

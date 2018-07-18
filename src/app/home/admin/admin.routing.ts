@@ -20,6 +20,7 @@ const adminRoutes: Routes = [
                     {
                         path: 'managers-list',
                         component: AdminGetManagersComponent,
+                        ///resolve: { users: AdminGetManagersResolver }
                     },
 
                     {
@@ -43,7 +44,7 @@ const adminRoutes: Routes = [
     ],
 
     providers: [
-
+        // AdminGetManagersResolver
     ]
 })
 export class AdminRoutingModule { }

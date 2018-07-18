@@ -35,10 +35,10 @@ export class UserLoggedService {
                 this.userLogged(user)
                 const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
                 if (redirectHome) this.router.navigate(['/home/' + endPoint]);
-                if (this.loginService.redirectUrl && (this.loginService.tokenUsername===username)) this.router.navigate([this.loginService.redirectUrl]);
+                if (this.loginService.redirectUrl && (this.loginService.tokenUsername === username)) this.router.navigate([this.loginService.redirectUrl]);
             }, error => {
-                    console.error(`could not load user, ${error.message}`);
-                }
+                console.error(`could not load user, ${error.message}`);
+            }
             );
         return isLoading;
     }

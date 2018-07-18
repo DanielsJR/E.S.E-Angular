@@ -66,8 +66,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         this.user = data.user;
         this.uriRole = data.uriRole;
         this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
-        // if (this.data.type === 'edit') this.userHightPrivilege = data.user.roles[0].toLowerCase();
-        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type + ' this.userHightPrivilege: ' + this.userHightPrivilege);
+        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
     }
 
     ngOnInit(): void {

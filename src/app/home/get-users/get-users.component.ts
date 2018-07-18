@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatButton, MatDialogRef } from '@angular/material';
-import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_TOKEN_KEY, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ManagerStoreService } from '../../services/manger-store.service';
@@ -12,6 +12,7 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 import { SessionStorageService } from '../../services/session-storage.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -42,6 +43,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   @Input() uriRole;
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
+  private route: ActivatedRoute;
+
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService, private studentStoreService: StudentStoreService,
     private localStorage: LocalStorageService, private sessionStorage: SessionStorageService,
@@ -53,7 +56,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     if (this.uriRole === URI_MANAGERS) {
       this.managerStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isTokenStored()) {
           console.log('store empty...getting ' + this.uriRole);
           this.managerStoreService.getUsers();
         }
@@ -65,7 +68,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     } else if (this.uriRole === URI_TEACHERS) {
       this.teacherStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isTokenStored()) {
           console.log('store empty...getting ' + this.uriRole);
           this.teacherStoreService.getUsers();
         }
@@ -76,7 +79,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
     } else if (this.uriRole === URI_STUDENTS) {
       this.studentStoreService.users$.subscribe(data => {
-        if (data != null && data.length === 0 && this.localStorage.isStored(LOCAL_STORAGE_TOKEN_KEY)) {
+        if (data != null && data.length === 0 && this.localStorage.isTokenStored()) {
           console.log('store empty...getting ' + this.uriRole);
           this.studentStoreService.getUsers();
         }

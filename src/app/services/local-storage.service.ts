@@ -31,41 +31,41 @@ export class LocalStorageService {
         localStorage.clear();
     }
 
-    getFullToken(): string {
-        return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1);
+
+    //**********--TOKEN--**************
+    isTokenStored(): boolean {
+        return (this.isStored(LOCAL_STORAGE_TOKEN_KEY));
     }
 
-    getTokenRoles(): string[] {
-        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
-        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
-            return tokenPayload.scopes.replace(/ROLE_/g, '').split(",");
-        }
+    getFullToken(): string {
+        if (this.isTokenStored()) return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1);
+        console.error('getFullToken() no token stored');
+    }
+
+    getExpireDate() {
+        if(this.isTokenStored()) return decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).exp;
+        console.error('getExpireDate() no token stored');
+    }
+
+    isTokenExpired(): boolean {
+        if (this.isTokenStored()) return (this.getExpireDate() < (Date.now().valueOf() / 1000));
+        console.error('isTokenExpired() no token stored');
+        return true;
     }
 
     getTokenUsername(): string {
-        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
-        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
-            return tokenPayload.sub
-        }
+        if (this.isTokenStored()) return decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).sub;
+        console.error('getTokenUsername() no token stored');
+    }
+
+    getTokenRoles(): string[] {
+        let tokenPayload = (this.isTokenStored()) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
+        if (tokenPayload != null && !this.isTokenExpired()) return tokenPayload.scopes.replace(/ROLE_/g, '').split(",");
+        console.error('getTokenRoles() tokenPayload: null or token expired');
+        return [];
     }
 
 
-    getExpireDate() {
-        let tokenPayload = (this.isStored(LOCAL_STORAGE_TOKEN_KEY)) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
-        if (this.isStored(LOCAL_STORAGE_TOKEN_KEY) && tokenPayload != null) {
-            return tokenPayload.exp
-        }
 
-    }
-
-    isTokenExpired() {
-        var current_time = Date.now().valueOf() / 1000;
-        if (this.getExpireDate() < current_time) {
-            console.error('token expired!!!');
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }
