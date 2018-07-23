@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
             console.error('checkLogin: false');
             this.loginService.getTokenUsername();
             this.loginService.redirectUrl = url;
-            console.log('AuthGuard#attempted url: ' + url + ' tokenUsername: '+ this.loginService.tokenUsername);
+            console.log('AuthGuard#attempted url: ' + url + ' tokenUsername: ' + this.loginService.tokenUsername);
             this.router.navigate(['/login']);
             return false;
         }

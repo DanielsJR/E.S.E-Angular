@@ -27,7 +27,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
 
   // mat table
-  users: User[];
+  //users: User[];
   displayedColumns = ['username', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;

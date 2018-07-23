@@ -1,5 +1,6 @@
 
-import { Component, OnInit,} from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
+
 
 @Component({
   template: `
@@ -8,12 +9,12 @@ import { Component, OnInit,} from '@angular/core';
   styles: ['']
 })
 
-export class AdminGetManagersComponent implements OnInit{
+export class AdminGetManagersComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
-    
+  ngOnInit() {}
+
 }
 
 

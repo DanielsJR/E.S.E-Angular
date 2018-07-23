@@ -1,11 +1,13 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './error-pages/page-not-found.component';
+import { AuthGuard } from './guards/auth-guard.service';
+import { SelectivePreload } from './services/selective-preload.service';
 
 const routes: Routes = [
 
     { path: 'about', loadChildren: './about/about.module#AboutModule' },
-    { path: 'home', loadChildren: './home/home.module#HomeModule' },
+    { path: 'home', loadChildren: './home/home.module#HomeModule', data: { preload: true }},
     { path: '', redirectTo: '/welcome', pathMatch: 'full' },
     { path: '**', component: PageNotFoundComponent } // wildcard route the last
 
@@ -17,7 +19,7 @@ const routes: Routes = [
             routes,
             {
                 // enableTracing: true,
-                // preloadingStrategy: PreloadAllModules
+                 preloadingStrategy: SelectivePreload
             }
         )
 
@@ -32,7 +34,7 @@ const routes: Routes = [
     ],
 
     providers: [
-        // If you have guard services, the Routing Module adds module providers. (There are none in this example.)
+        SelectivePreload
     ]
 })
 

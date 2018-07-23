@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'nx-users-menu',
@@ -34,9 +35,16 @@ export class UsersMenuComponent implements OnInit {
   @Input()
   roles: string[];
 
+   navigationExtras: NavigationExtras = {
+    queryParamsHandling: 'preserve',
+    preserveFragment: true
+  };
+
   constructor() { }
 
   ngOnInit() {
   }
+
+
 
 }
