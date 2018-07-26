@@ -83,7 +83,7 @@ export class UserProfileComponent implements OnInit {
 
         this.editProfileForm = this.formBuilder.group({
             id: [this.user.id],
-            username: [this.user.username, [Validators.required, noWhitespaceValidator]],
+            username: [{ value: this.user.username, disabled: true }],
             //password: [],
             firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
@@ -142,7 +142,7 @@ export class UserProfileComponent implements OnInit {
 
     save(): void {
         this.isLoading = true;
-
+        this.editProfileForm.value.username = this.username.value;
         this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
         this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;

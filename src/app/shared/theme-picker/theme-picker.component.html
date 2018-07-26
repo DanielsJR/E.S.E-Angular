@@ -22,7 +22,7 @@
 <mat-menu class="docs-theme-picker-menu" #themeMenu="matMenu" x-position="before" [overlapTrigger]="false">
     <mat-grid-list cols="2">
         <mat-grid-tile *ngFor="let theme of themeArray">
-            <div mat-menu-item (click)="installTheme(theme)" (mouseover)="mouseOverTheme(theme)" (mouseout)="mouseOutTheme()">
+            <div mat-menu-item (click)="installTheme(theme); saveThemeOnServer(user?.id,theme)" (mouseover)="mouseOverTheme(theme)" (mouseout)="mouseOutTheme()">
                 <div class="docs-theme-picker-swatch">
                     <mat-icon svgIcon="checkbox-marked-circle" class="docs-theme-chosen-icon" *ngIf="themeName === theme.name"></mat-icon>
                     <div class="docs-theme-picker-primary" [style.background]="theme.color"></div>

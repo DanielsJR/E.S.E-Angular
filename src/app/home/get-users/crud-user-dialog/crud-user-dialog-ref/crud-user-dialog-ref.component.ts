@@ -212,7 +212,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
         this.editForm = this.formBuilder.group({
             id: [this.user.id],
-            username: [this.user.username, [Validators.required, noWhitespaceValidator]],
+            username: [{ value: this.user.username, disabled: true }],
             //password: [],
             firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
@@ -323,7 +323,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
                 };
             };
             xhr.send()
-            
+
         }
     }
 
@@ -447,6 +447,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     save(): void {
+        this.editForm.value.username = this.eUsername.value;
         this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;

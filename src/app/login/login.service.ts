@@ -43,7 +43,8 @@ export class LoginService {
     }
 
     getTokenUsername(): string {
-        return this.tokenUsername = this.localStorageService.getTokenUsername();
+        this.tokenUsername = this.localStorageService.getTokenUsername();
+        return this.tokenUsername;
     }
 
     hasPrivileges(): boolean {

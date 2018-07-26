@@ -100,16 +100,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
+      this.themePicker.getThemeFromServer(user.id);
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     });
 
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       setTimeout(() => this.openSnackBar(this.welcome, 'success'));
+      
     } else {
       console.log('user:null getting user from backend');
       this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
     }
+
+    
 
   }
 
@@ -126,7 +130,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   logout(): void {
     location.reload();//cache clean
     this.loginService.logout();
-    //this.themePicker.removeTheme();
     this.router.navigate(['/']);
   }
 

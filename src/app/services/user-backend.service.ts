@@ -33,7 +33,7 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<User>(url, user)
             .pipe(
-                tap(_ => console.log(`created user name=${user.firstName}`))
+                tap(resp => console.log(`created user name=${resp.firstName}`))
                 // ,catchError(this.handleError<User>(`createUser`))
             );
     }
@@ -44,7 +44,7 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user)
             .pipe(
-                tap(_ => console.log(`edited user username=${username}`))
+                tap(resp => console.log(`edited user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`updateUser`))
             );
     }
@@ -75,24 +75,17 @@ export class UserBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(
-                tap(_ => console.log(`fetched user username=${name}`))
+                tap(resp => console.log(`fetched user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`getUser name=${name}`))
             );
     }
-
-    /*  TODO
-    getUserByRole(role: string, uriRole: string): Observable<User> {
-          const url = `${this.userURL}${uriRole}/${role}`;
-          console.log(`resource called:  ${url}`);
-          return this.httpCli.get<User>(url);
-      }*/
 
     getUsersByRole(role: string, uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.get<User[]>(url)
             .pipe(
-                tap(_ => console.log(`fetched user role=${role}`))
+                tap(_ => console.log(`fetched users by role=${role}`))
                 // ,catchError(this.handleError(`getUsersByRole`, []))
             );
     }
@@ -118,13 +111,12 @@ export class UserBackendService {
             );
     }
 
-
     getUserByUsernameSecured(name: string): Observable<User> {
         const url = `${this.userURL}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(
-                tap(_ => console.log(`fetched user username=${name}`))
+                tap(resp => console.log(`fetched user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`getUser name=${name}`))
             );
     }
@@ -135,7 +127,7 @@ export class UserBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user)
             .pipe(
-                tap(_ => console.log(`edited user username=${username}`))
+                tap(resp => console.log(`edited user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`updateUser`))
             );
     }

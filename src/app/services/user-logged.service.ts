@@ -3,9 +3,7 @@ import { User } from '../models/user';
 import { ReplaySubject } from 'rxjs';
 import { UserBackendService } from './user-backend.service';
 import { LoginService } from '../login/login.service';
-import { LocalStorageService } from './local-storage.service';
-import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
 @Injectable({

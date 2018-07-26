@@ -7,19 +7,12 @@
 
       <mat-form-field appearance="standard">
         <mat-label>
-          <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
+            <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
         </mat-label>
-        <input matInput formControlName="username" required>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-        <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es
-          <strong>requerido</strong>.
-        </mat-error>
-        <mat-error *ngIf="username.hasError('whitespace')">No se permiten espacios en
-          <strong>blanco</strong>.
-        </mat-error>
-      </mat-form-field>
+        <input matInput formControlName="username">
+    </mat-form-field>
 
-      <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+      <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
         (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>

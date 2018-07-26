@@ -5,7 +5,6 @@ import {
     CanActivate,
     CanActivateChild,
     CanLoad,
-    NavigationExtras,
     Route,
     Router,
     RouterStateSnapshot,

@@ -26,6 +26,7 @@
 
     <mat-dialog-content>
         <mat-tab-group dynamicHeight="true">
+
             <mat-tab label="Información Personal">
                 <div class="tab-content">
 
@@ -100,6 +101,20 @@
 
                 </div>
             </mat-tab>
+
+            <mat-tab label="Información de Usuario">
+                <div class="tab-content">
+
+                    <mat-form-field appearance="fill">
+                        <input matInput [(ngModel)]="user.username" readonly>
+                        <mat-label>
+                            <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de usuario
+                        </mat-label>
+                    </mat-form-field>
+
+                </div>
+            </mat-tab>
+
         </mat-tab-group>
     </mat-dialog-content>
 
@@ -135,8 +150,8 @@
 
         <mat-list class="listContainer">
             <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)" alt="{{privilege}}" (click)="fileInput.inputElement.click()"
-                    (keyup.enter)="fileInput.inputElement.click()">
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)"
+                    alt="{{privilege}}" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
                 <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
                 <p matLine>
                     <span *ngIf="privilege" class="role-style">{{privilegeToSpanish(privilege)}}</span>
@@ -354,74 +369,7 @@
 
         <mat-dialog-content>
             <mat-tab-group dynamicHeight="true">
-                <mat-tab label="Información de Usuario">
-                    <div class="tab-content">
 
-                        <mat-form-field appearance="standard">
-                            <mat-label>
-                                <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
-                            </mat-label>
-                            <input matInput formControlName="username" required>
-                            <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
-                            <mat-error *ngIf="eUsername.hasError('required')">Nombre de Usuario es
-                                <strong>requerido</strong>.
-                            </mat-error>
-                            <mat-error *ngIf="eUsername.hasError('whitespace')">No se permiten espacios en
-                                <strong>blanco</strong>.
-                            </mat-error>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
-                            (keyup.delete)="fileInput.clear(); resetEditAvatar()" (keyup.backspace)="fileInput.clear(); resetEditAvatar()"
-                            flex>
-
-                            <mat-label>
-                                <i class="mdi mdi-camera material-icons app-input-icon">&nbsp;</i>Foto de Perfil
-                            </mat-label>
-                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
-
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetEditAvatar(); $event.stopPropagation()"
-                                (keyup.enter)="fileInput.clear(); resetEditAvatar()">
-                                <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
-                            </button>
-
-                            <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
-                                (select)="selectEventEdit($event)">
-                                <mat-icon svgIcon="folder-upload"></mat-icon>
-                                <span class="text-upper">Buscar...</span>
-                            </td-file-input>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline" floatLabel="always">
-                            <mat-label>
-                                <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña de Usuario
-                            </mat-label>
-                            <input matInput readonly>
-                            <mat-hint>
-                                <strong>Esto cambiará la contraseña del usuario</strong>
-                            </mat-hint>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="resetPass.openDialogResetPass()">
-                                <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
-                            </button>
-                            <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline" floatLabel="always" *ngIf="isAdmin && (privilege!='student')">
-                            <mat-label>
-                                <i class="mdi mdi-security-account material-icons app-input-icon">&nbsp;</i>Privilegios de Usuario
-                            </mat-label>
-                            <input matInput readonly>
-                            <mat-hint>
-                                <strong>Esto cambiará los privilegios del usuario</strong>
-                            </mat-hint>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="setRoles.openDialogSetRoles()">
-                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
-                            </button>
-                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
-                        </mat-form-field>
-
-                    </div>
-                </mat-tab>
 
                 <mat-tab label="Información Personal">
                     <div class="tab-content">
@@ -554,8 +502,70 @@
 
                     </div>
                 </mat-tab>
+
+
+                <mat-tab label="Información de Usuario">
+                    <div class="tab-content">
+
+                        <mat-form-field appearance="standard">
+                            <mat-label>
+                                <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
+                            </mat-label>
+                            <input matInput formControlName="username">
+                        </mat-form-field>
+
+                        <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()"
+                            (keyup.enter)="fileInput.inputElement.click()" (keyup.delete)="fileInput.clear(); resetEditAvatar()"
+                            (keyup.backspace)="fileInput.clear(); resetEditAvatar()" flex>
+
+                            <mat-label>
+                                <i class="mdi mdi-camera material-icons app-input-icon">&nbsp;</i>Foto de Perfil
+                            </mat-label>
+                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
+
+                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetEditAvatar(); $event.stopPropagation()"
+                                (keyup.enter)="fileInput.clear(); resetEditAvatar()">
+                                <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
+                            </button>
+
+                            <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
+                                (select)="selectEventEdit($event)">
+                                <mat-icon svgIcon="folder-upload"></mat-icon>
+                                <span class="text-upper">Buscar...</span>
+                            </td-file-input>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="standard" floatLabel="always">
+                            <mat-label>
+                                <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña de Usuario
+                            </mat-label>
+                            <input matInput readonly>
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="resetPass.openDialogResetPass()">
+                                <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
+                            </button>
+                            <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="standard" floatLabel="always" *ngIf="isAdmin && (privilege!='student')">
+                            <mat-label>
+                                <i class="mdi mdi-security-account material-icons app-input-icon">&nbsp;</i>Privilegios de Usuario
+                            </mat-label>
+                            <input matInput readonly>
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="setRoles.openDialogSetRoles()">
+                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
+                            </button>
+                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
+                        </mat-form-field>
+
+                    </div>
+                    
+                    
+                </mat-tab>
+
+
             </mat-tab-group>
         </mat-dialog-content>
+
 
         <mat-divider></mat-divider>
 
@@ -569,6 +579,7 @@
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
+
 </div>
 
 <div *ngIf="data.type === 'delete'">
