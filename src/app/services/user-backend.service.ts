@@ -1,5 +1,5 @@
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, retry } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
@@ -22,7 +22,7 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}`;
         console.log(`resource called: ${url}`)
         return this.httpCli.get<User[]>(url)
-            .pipe(
+            .pipe(retry(3),
                 tap(users => console.log(`N° Users: ${users.length}`))
                 // ,catchError(this.handleError('getUsers', []))
             );
@@ -64,7 +64,7 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
-            .pipe(
+            .pipe(retry(3),
                 tap(_ => console.log(`fetched user id=${id}`))
                 // ,catchError(this.handleError<User>(`getUser id=${id}`))
             );
@@ -74,7 +74,7 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
-            .pipe(
+            .pipe(retry(3),
                 tap(resp => console.log(`fetched user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`getUser name=${name}`))
             );
@@ -84,7 +84,7 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.get<User[]>(url)
-            .pipe(
+            .pipe(retry(3),
                 tap(_ => console.log(`fetched users by role=${role}`))
                 // ,catchError(this.handleError(`getUsersByRole`, []))
             );
@@ -115,7 +115,7 @@ export class UserBackendService {
         const url = `${this.userURL}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
-            .pipe(
+            .pipe(retry(3),
                 tap(resp => console.log(`fetched user username=${resp.username}`))
                 // ,catchError(this.handleError<User>(`getUser name=${name}`))
             );

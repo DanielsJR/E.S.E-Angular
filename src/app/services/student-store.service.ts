@@ -4,8 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 import { URI_STUDENTS } from '../app.config';
 import { UserBackendService } from './user-backend.service';
-import { MatSnackBar } from '@angular/material';
-import { finalize, retry } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 
 @Injectable({
@@ -51,7 +50,7 @@ export class StudentStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(retry(3),finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;

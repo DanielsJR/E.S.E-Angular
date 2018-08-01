@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 
 
 import { ManagerStoreService } from './manger-store.service';
-import { finalize, retry } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 
 @Injectable({
@@ -59,7 +59,7 @@ export class TeacherStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(retry(3), finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;

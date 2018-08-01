@@ -62,7 +62,7 @@ export class ManagerStoreService {
         this.isLoadingGetUsersSubject.next(true);
         this.userBackendService
             .getUsers(this.uriRole)
-            .pipe(retry(3), finalize(() => this.isLoadingGetUsersSubject.next(false)))
+            .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
             .subscribe(data => {
                 if (data.length === 0) {
                     data = null;
