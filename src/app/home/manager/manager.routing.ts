@@ -5,6 +5,7 @@ import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-
 import { ManagerGetStudentsComponent } from './manager-get-students/manager-get-students.component';
 import { ManagerComponent } from './manager.component';
 import { ManagerGuard } from '../../guards/manager-guard.service';
+import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 
 
 const adminRoutes: Routes = [
@@ -31,7 +32,7 @@ const adminRoutes: Routes = [
 
                     {
                         path: 'courses',
-                        component: ManagerHomeComponent
+                        component: ManagerCoursesComponent
                     },
 
                     {

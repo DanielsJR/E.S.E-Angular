@@ -3,7 +3,7 @@ import { catchError, tap, retry } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME } from '../app.config';
+import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
 import { USERNAME_PATTERN } from '../shared/validators/patterns';
 
 
@@ -91,7 +91,7 @@ export class UserBackendService {
     }
 
     resetUserPassword(username: string, resetedPass: string, uriRole: string): Observable<boolean> {
-        const url = `${this.userURL}${uriRole}/${username}`;
+        const url = `${this.userURL}${uriRole}${URI_PASS}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, resetedPass)
             .pipe(
@@ -102,7 +102,7 @@ export class UserBackendService {
     }
 
     setRoles(username: string, roles: string[], uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}/role/${username}`;
+        const url = `${this.userURL}${uriRole}${URI_ROLE}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<User>(url, roles)
             .pipe(
@@ -112,7 +112,7 @@ export class UserBackendService {
     }
 
     getUserByUsernameSecured(name: string): Observable<User> {
-        const url = `${this.userURL}${URI_USERNAME}/${name}`;
+        const url = `${this.userURL}/${name}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url)
             .pipe(retry(3),
@@ -133,7 +133,7 @@ export class UserBackendService {
     }
 
     setUserPasswordSecured(username: string, pass: string[]): Observable<boolean> {
-        const url = `${this.userURL}/pass/${username}`;
+        const url = `${this.userURL}${URI_PASS}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, pass)
         .pipe(

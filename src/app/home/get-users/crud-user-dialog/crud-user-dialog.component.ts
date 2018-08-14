@@ -13,12 +13,11 @@ import { CrudUserDialogRefComponent } from './crud-user-dialog-ref/crud-user-dia
 })
 export class CrudUserDialogComponent implements OnInit {
 
-    @Input()
-    user: User;
+    @Input() user: User;
 
-    @Input()
-    uriRole: string;
+    @Input() uriRole: string;
 
+    @Input() areaRole;
 
     constructor(public dialog: MatDialog) { }
 
@@ -30,7 +29,8 @@ export class CrudUserDialogComponent implements OnInit {
         let data = {
             user: (user) ? user : this.user,
             uriRole: this.uriRole,
-            type: 'detail'
+            type: 'detail',
+            areaRole: this.areaRole
         };
         let config = new MatDialogConfig();
         config.data = data;
@@ -53,7 +53,8 @@ export class CrudUserDialogComponent implements OnInit {
         let data = {
             user: (user) ? user : this.user,
             uriRole: this.uriRole,
-            type: 'edit'
+            type: 'edit',
+            areaRole: this.areaRole
         };
         let config = new MatDialogConfig();
         config.data = data;
@@ -78,7 +79,8 @@ export class CrudUserDialogComponent implements OnInit {
         let data = {
             user: (user) ? user : this.user,
             uriRole: this.uriRole,
-            type: 'delete'
+            type: 'delete',
+            areaRole: this.areaRole
         };
 
         let config = new MatDialogConfig();
@@ -103,7 +105,8 @@ export class CrudUserDialogComponent implements OnInit {
         let data = {
             user: new User(),
             uriRole: this.uriRole,
-            type: 'create'
+            type: 'create',
+            areaRole: this.areaRole
         };
 
         let config = new MatDialogConfig();

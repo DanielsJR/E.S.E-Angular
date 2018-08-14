@@ -12,14 +12,15 @@ import { LocalStorageService } from '../../../../services/local-storage.service'
 export class CardUserDialogRefComponent implements OnInit {
 
   user: User;
-  userLoggedRoles = this.localStorage.getTokenRoles();
+  userLoggedRoles : String[] = [];// this.localStorage.getTokenRoles();
 
   constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
     private localStorage: LocalStorageService,
   ) {
     this.user = data.user;
-    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    this.userLoggedRoles.push(data.areaRole);
+    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole);
   }
 
   ngOnInit() {

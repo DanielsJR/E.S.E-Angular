@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatButton, MatDialogRef } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
@@ -23,8 +22,9 @@ import { ActivatedRoute } from '@angular/router';
 
 export class GetUsersComponent implements OnInit, AfterViewInit {
 
-  privilege: string;
-
+  usersRole: string;
+  userLoggedRoles: String[] = [];//=this.localStorage.getTokenRoles();
+  @Input() areaRole;
 
   // mat table
   //users: User[];
@@ -37,7 +37,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   // mat dialog
   user: User;
-  userLoggedRoles = this.localStorage.getTokenRoles();
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
   @Input() uriRole;
@@ -48,10 +47,14 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   constructor(private managerStoreService: ManagerStoreService,
     private teacherStoreService: TeacherStoreService, private studentStoreService: StudentStoreService,
     private localStorage: LocalStorageService, private sessionStorage: SessionStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer) {
+
+     }
 
   ngOnInit() {
-    this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
+    this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
+    this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
+    console.log("AreaRole: " + this.areaRole);
     this.dataSource = new MatTableDataSource();
 
     if (this.uriRole === URI_MANAGERS) {
@@ -146,8 +149,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     //snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
   }
 
-  privilegeToSpanish(privilege: string): string {
-    let role = privilege.toUpperCase();
+  usersRoleToSpanish(usersRole: string): string {
+    let role = usersRole.toUpperCase();
 
     if (role === ROLE_ADMIN) {
       return role = ROLE_ADMIN_SPANISH;
@@ -161,8 +164,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     else if (role === ROLE_STUDENT) {
       return role = ROLE_STUDENT_SPANISH + 's';
     }
-    console.error('no privilege');
-    return 'no privilege';
+    console.error('no usersRole');
+    return 'no usersRole';
   }
 
   checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {

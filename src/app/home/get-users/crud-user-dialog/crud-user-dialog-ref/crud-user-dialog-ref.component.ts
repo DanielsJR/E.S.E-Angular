@@ -1,5 +1,5 @@
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Component, Inject, OnInit, Input, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
 import { ManagerStoreService } from '../../../../services/manger-store.service';
@@ -20,6 +20,8 @@ import { noWhitespaceValidator } from '../../../../shared/validators/no-white-sp
 import { rutValidator } from '../../../../shared/validators/rut-validator';
 import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
 import { Avatar } from '../../../../models/avatar';
+import { UserBackendService } from '../../../../services/user-backend.service';
+import { finalize } from '../../../../../../node_modules/rxjs/operators';
 
 
 @Component({
@@ -33,16 +35,14 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     editForm: FormGroup;
     user: User;
     uriRole: string;
-    privilege: string;
+    usersRole: string;
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
     communes = COMMUNNES;
     genders = GENDERS;
     rolesList = PRIVILEGES;
     files: File | FileList;
-    hidePass = true;
     isAdmin = false;
-    userLoggedRoles = this.localStorageService.getTokenRoles();
-
+    userLoggedRoles: String[] = [];//=this.localStorage.getTokenRoles();
     userHightPrivilege: string;
     oldAvatar: Avatar;
 
@@ -60,13 +60,15 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         private managerStoreService: ManagerStoreService,
         private teacherStoreService: TeacherStoreService,
         private studentStoreService: StudentStoreService,
+        private userBackendService: UserBackendService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
         private localStorageService: LocalStorageService) {
 
         this.user = data.user;
         this.uriRole = data.uriRole;
-        this.privilege = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
-        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+        this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
+        this.userLoggedRoles.push(data.areaRole);
+        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole);
     }
 
     ngOnInit(): void {
@@ -163,8 +165,8 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         return a1 && a2 && a1 === a2;
     }
 
-    privilegeToSpanish(privilege: string): string {
-        let role = privilege.toUpperCase();
+    usersRoleToSpanish(usersRole: string): string {
+        let role = usersRole.toUpperCase();
 
         if (role === ROLE_ADMIN) {
             return role = ROLE_ADMIN_SPANISH;
@@ -261,12 +263,12 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     setAvatarCreateDefault(): void {
         if (!this.files) {
             let xhr = new XMLHttpRequest();
-            xhr.open("GET", `../assets/images/users/default-${this.cGender.value.toLowerCase()}-${this.privilege}.png`, true);
+            xhr.open("GET", `../assets/images/users/default-${this.cGender.value.toLowerCase()}-${this.usersRole}.png`, true);
             xhr.responseType = "blob";
             xhr.onload = () => {
                 let reader = new FileReader();
                 let file = xhr.response;
-                file.name = `default-${this.cGender.value.toLowerCase()}-${this.privilege}.png`;
+                file.name = `default-${this.cGender.value.toLowerCase()}-${this.usersRole}.png`;
                 reader.readAsDataURL(file);
                 reader.onload = () => {
                     this.cAvatar.setValue({
@@ -395,7 +397,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     private createAutoUsername(): string {
         const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName;
         const n2 = this.createForm.value.lastName.substr(0, this.createForm.value.lastName.indexOf(' ')) || this.createForm.value.lastName;
-        return n1 + '_' + n2;
+       return  n1 + '_' + n2;
     }
 
     private createAutoPassword(): string {

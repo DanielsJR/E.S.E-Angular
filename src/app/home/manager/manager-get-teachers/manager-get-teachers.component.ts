@@ -2,7 +2,7 @@ import { Component, OnInit,} from '@angular/core';
 
 @Component({
   template: `
-  <nx-get-users [uriRole] ="'/teachers'"></nx-get-users>
+  <nx-get-users [uriRole] ="'/teachers'" [areaRole] ="'MANAGER'"></nx-get-users>
   `,
   styles: ['']
 })

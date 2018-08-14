@@ -7,6 +7,8 @@ import { ManagerRoutingModule } from './manager.routing';
 import { GetUsersModule } from '../get-users/get-users.module';
 import { ManagerGetTeachersComponent } from './manager-get-teachers/manager-get-teachers.component';
 import { ManagerComponent } from './manager.component';
+import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
+
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { ManagerComponent } from './manager.component';
     ManagerComponent,
     ManagerHomeComponent,
     ManagerGetTeachersComponent,
-    ManagerGetStudentsComponent
+    ManagerGetStudentsComponent,
+    ManagerCoursesComponent,
+
   ],
 
   providers: [

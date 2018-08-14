@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { NavigationExtras } from '@angular/router';
 
 @Component({

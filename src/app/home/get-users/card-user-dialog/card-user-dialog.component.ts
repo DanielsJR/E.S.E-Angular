@@ -12,11 +12,11 @@ import { CardUserDialogRefComponent } from './card-user-dialog-ref/card-user-dia
 })
 export class CardUserDialogComponent implements OnInit {
 
-    @Input()
-    user: User;
+    @Input() user: User;
 
-    @Input()
-    uriRole: string;
+    @Input() uriRole: string;
+
+    @Input() areaRole;
 
 
     constructor(public dialog: MatDialog) { }
@@ -29,7 +29,8 @@ export class CardUserDialogComponent implements OnInit {
         let data = {
             user: this.user,
             uriRole: this.uriRole,
-            type: 'cardUser'
+            type: 'cardUser',
+            areaRole: this.areaRole
         };
         let config = new MatDialogConfig();
         config.data = data;

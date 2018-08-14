@@ -29,6 +29,8 @@ export const URI_STUDENTS = '/students';
 export const URI_TOKEN = '/token';
 export const URI_ID = '/id';
 export const URI_USERNAME = '/username';
+export const URI_PASS = '/pass';
+export const URI_ROLE = '/role';
 
 
 export const URI_MANAGER = '/manager';

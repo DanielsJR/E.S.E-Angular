@@ -4,7 +4,7 @@
         <span class="spacer-r"></span>
         <mat-icon svgIcon="account-card-details"></mat-icon>
         <span>&nbsp;&nbsp;</span>
-        <h1 mat-dialog-title>Detalles de Usuario</h1>
+        <h1 mat-dialog-title>Detalles de {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
 
     <mat-divider></mat-divider>
@@ -142,7 +142,7 @@
             <span class="spacer-r"></span>
             <mat-icon svgIcon="account-plus"></mat-icon>
             <span>&nbsp;&nbsp;</span>
-            <h1 mat-dialog-title>Agregar {{privilege}}</h1>
+            <h1 mat-dialog-title>Agregar {{usersRoleToSpanish(usersRole)}}</h1>
         </mat-toolbar>
 
         <div *ngIf="!isLoading" style="height: 5px;"></div>
@@ -154,7 +154,7 @@
                     alt="{{privilege}}" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
                 <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
                 <p matLine>
-                    <span *ngIf="privilege" class="role-style">{{privilegeToSpanish(privilege)}}</span>
+                    <span *ngIf="usersRole" class="role-style">{{usersRoleToSpanish(usersRole)}}</span>
                 </p>
             </mat-list-item>
         </mat-list>
@@ -332,7 +332,7 @@
             <span class="spacer-r"></span>
             <mat-icon svgIcon="account-edit"></mat-icon>
             <span>&nbsp;&nbsp;</span>
-            <h1 mat-dialog-title>Editar Usuario</h1>
+            <h1 mat-dialog-title>Editar {{usersRoleToSpanish(usersRole)}}</h1>
         </mat-toolbar>
 
         <div *ngIf="!isLoading" style="height: 5px;"></div>
@@ -588,7 +588,7 @@
         <span class="spacer-r"></span>
         <mat-icon svgIcon="account-remove"></mat-icon>
         <span>&nbsp;&nbsp;</span>
-        <h1 mat-dialog-title>Borrar Usuario</h1>
+        <h1 mat-dialog-title>Borrar {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
 
     <div *ngIf="!isLoading" style="height: 5px;"></div>
