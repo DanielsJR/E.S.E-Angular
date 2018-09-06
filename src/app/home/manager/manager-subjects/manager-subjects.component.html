@@ -16,25 +16,20 @@
       <mat-chip-list >
         <mat-chip color="primary" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
-          &nbsp; Cursos
+          &nbsp; Asignaturas
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Curso </mat-header-cell>
-        <mat-cell *matCellDef="let course">
+      <ng-container matColumnDef="subjectName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Asignatura </mat-header-cell>
+        <mat-cell *matCellDef="let user">
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ course?.chiefTeacher?.avatar.type+';base64,' + course?.chiefTeacher?.avatar.data)"
-                alt="{{course?.chiefTeacher?.username}}">
-              <h3 matLine> {{course?.name}} </h3>
-              <p matLine>
-                <span class="role-style">{{course?.chiefTeacher | shortName}}, Profesor Jefe</span>
-              </p>
+
             </mat-list-item>
           </mat-list>
 
@@ -43,7 +38,7 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let course" class="colum2">
+        <mat-cell *matCellDef="let subject" class="colum2">
 
 
           <button mat-icon-button color="primary" (click)=" $event.stopPropagation()">
@@ -64,8 +59,8 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['./',row.name]">
-    
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" >
+        
       </mat-row>
 
     </mat-table>
@@ -74,7 +69,7 @@
     </mat-paginator>
 
     <span class="add">
-      <button mat-fab matTooltip="Agregar Curso">
+      <button mat-fab matTooltip="Agregar Asignatura">
         <mat-icon svgIcon="account-plus"></mat-icon>
       </button>
     </span>

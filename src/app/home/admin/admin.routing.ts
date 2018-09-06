@@ -18,7 +18,7 @@ const adminRoutes: Routes = [
                 children: [
 
                     {
-                        path: 'managers-list',
+                        path: 'managers',
                         component: AdminGetManagersComponent,
                         ///resolve: { users: AdminGetManagersResolver }
                     },

@@ -14,6 +14,7 @@ import { rutValidator } from '../../shared/validators/rut-validator';
 import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserStoreService } from '../../services/user-store.service';
 
 
 @Component({
@@ -71,12 +72,16 @@ export class UserProfileComponent implements OnInit {
     isLoading = false;
 
 
-    constructor(private formBuilder: FormBuilder, private userBackendService: UserBackendService,
+    constructor(
+        private formBuilder: FormBuilder, private userBackendService: UserBackendService,
         private userLoggedService: UserLoggedService,
-        public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
+        public sanitizer: DomSanitizer, private snackbarService: SnackbarService,
+        private userStoreService: UserStoreService
+    ) { }
 
     ngOnInit() {
         this.buildForm();
+
     }
 
     buildForm() {
@@ -111,7 +116,7 @@ export class UserProfileComponent implements OnInit {
                 this.avatar.setValue({
                     name: files.name,
                     type: files.type,
-                    data: reader.result.split(',')[1]
+                    data: (reader.result as string).split(',')[1]
                 })
             };
         }
@@ -158,6 +163,8 @@ export class UserProfileComponent implements OnInit {
                 this.userLoggedService.userLogged(user);
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
+                this.userStoreService.updateManagerInStore(user);
+                this.userStoreService.updateTeacherInStore(user);
                 //this.openSnackBar('Datos Actualizados', 'success');
             }, error => {
                 if (error instanceof HttpErrorResponse) {

@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { User } from '../../models/user';
 import { ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER, ROLE_MANAGER_SPANISH, ROLE_TEACHER, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH } from '../../app.config';
 /*
  * Example:

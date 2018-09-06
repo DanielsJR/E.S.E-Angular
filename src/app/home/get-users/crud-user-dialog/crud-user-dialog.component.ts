@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../../../models/user';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CrudUserDialogRefComponent } from './crud-user-dialog-ref/crud-user-dialog-ref.component';
-
-
 
 
 @Component({

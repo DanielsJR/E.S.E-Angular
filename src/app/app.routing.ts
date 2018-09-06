@@ -1,13 +1,12 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './error-pages/page-not-found.component';
-import { AuthGuard } from './guards/auth-guard.service';
 import { SelectivePreload } from './services/selective-preload.service';
 
 const routes: Routes = [
 
     { path: 'about', loadChildren: './about/about.module#AboutModule' },
-    { path: 'home', loadChildren: './home/home.module#HomeModule', data: { preload: true }},
+    { path: 'home', loadChildren: './home/home.module#HomeModule', data: { preload: true } },
     { path: '', redirectTo: '/welcome', pathMatch: 'full' },
     { path: '**', component: PageNotFoundComponent } // wildcard route the last
 
@@ -19,7 +18,7 @@ const routes: Routes = [
             routes,
             {
                 // enableTracing: true,
-                 preloadingStrategy: SelectivePreload
+                preloadingStrategy: SelectivePreload
             }
         )
 

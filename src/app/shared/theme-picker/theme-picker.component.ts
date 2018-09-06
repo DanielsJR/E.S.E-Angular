@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { forEach } from '@angular/router/src/utils/collection';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { SESSION_STORAGE_THEME_KEY } from '../../app.config';
@@ -30,8 +29,10 @@ export class ThemePickerComponent implements OnInit {
   private saveTheme: Theme;
   private installed: boolean;
 
-  constructor(public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService,
-    private loginService: LoginService, private themeService: ThemeService, private userLoggedService: UserLoggedService) {
+  constructor(
+    public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService,
+    private loginService: LoginService, private themeService: ThemeService, private userLoggedService: UserLoggedService
+  ) {
 
     this.defaultTheme = this.themesLight[4];//new Theme( 'indigo-pink', false, '#3F51B5' );
   }

@@ -1,0 +1,48 @@
+
+
+mat-dialog-content {
+    margin: 0;
+    padding: 0;
+    max-height: 100%;
+}
+
+.imgLogo {
+    height: 40px;
+}
+
+mat-card > img {
+    margin-bottom: 0 !important;
+}
+
+mat-card-actions {
+    padding: 15px 0 5px 0 !important;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+mat-card-actions button {
+    margin: 0;
+}
+
+
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  .example-option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  [dir='rtl'] .example-option-img {
+    margin-right: 0;
+    margin-left: 8px;
+  }

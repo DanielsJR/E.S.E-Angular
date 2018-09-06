@@ -14,6 +14,8 @@ import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-
 import { CardUserDialogComponent } from './card-user-dialog/card-user-dialog.component';
 import { CrudUserDialogRefComponent } from './crud-user-dialog/crud-user-dialog-ref/crud-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
+import { SearchUserDialogRefComponent } from './search-user-dialog/search-user-dialog-ref/search-user-dialog-ref.component';
+import { SearchUserDialogComponent } from './search-user-dialog/search-user-dialog.component';
 
 
 @NgModule({
@@ -21,27 +23,33 @@ import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.com
     SharedModule,
     CovalentFileModule,
     ImageZoomUserDialogModule,
-
+    
   ],
 
   declarations: [
     GetUsersComponent,
-    CrudUserDialogRefComponent,
+
     CrudUserDialogComponent,
-    ResetPassDialogRefComponent,
-    SetRolesDialogRefComponent,
-    SetRolesDialogComponent,
+    CrudUserDialogRefComponent,
+    
     ResetPassDialogComponent,
-    CardUserDialogRefComponent,
+    ResetPassDialogRefComponent,
+    
+    SetRolesDialogComponent,
+    SetRolesDialogRefComponent,
+    
     CardUserDialogComponent,
+    CardUserDialogRefComponent,
+
+    SearchUserDialogComponent,
+    SearchUserDialogRefComponent,
     
   ],
 
   providers: [
 
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
-    
-
+  
   ],
 
   entryComponents: [
@@ -49,11 +57,13 @@ import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.com
     ResetPassDialogRefComponent,
     SetRolesDialogRefComponent,
     CardUserDialogRefComponent,
-
+    SearchUserDialogRefComponent,
   ],
 
   exports: [
-    GetUsersComponent
+    GetUsersComponent,
+    SearchUserDialogComponent,
+
   ]
 
 })

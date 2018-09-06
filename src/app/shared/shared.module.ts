@@ -5,11 +5,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollerDirective } from './directives/scroll.directive';
 import { LogoModule } from './logo/logo.module';
-import { ThemePickerComponent } from './theme-picker/theme-picker.component';
 import { ThemePickerModule } from './theme-picker/theme-picker.module';
-import { SnackbarsRefComponent } from './snackbars-ref/snackbars-ref.component';
 import { SnackbarRefModule } from './snackbars-ref/snackbars-ref.module';
-import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { ShortNamePipe } from './pipes/short-name.pipe';
 import { RolesToSpanishPipe } from './pipes/roles-to-spanish.pipe';
 

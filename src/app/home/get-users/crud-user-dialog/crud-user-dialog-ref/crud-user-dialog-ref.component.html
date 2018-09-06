@@ -12,7 +12,7 @@
     <mat-list class="listContainer">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-                alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+                alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
             <h3 matLine> {{user | shortName}} </h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
@@ -151,7 +151,7 @@
         <mat-list class="listContainer">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)"
-                    alt="{{privilege}}" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
+                    alt="{{usersRole}}" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
                 <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
                 <p matLine>
                     <span *ngIf="usersRole" class="role-style">{{usersRoleToSpanish(usersRole)}}</span>
@@ -341,7 +341,7 @@
         <mat-list class="listContainer">
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
-                    alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
+                    alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
                 <h3 matLine> {{user | shortName}} </h3>
                 <p matLine>
                     <span class="role-style">{{eRoles.value | rolesToSpanish}}</span>
@@ -546,7 +546,7 @@
                             <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
-                        <mat-form-field appearance="standard" floatLabel="always" *ngIf="isAdmin && (privilege!='student')">
+                        <mat-form-field appearance="standard" floatLabel="always" *ngIf="isAdmin && (usersRole!='student')">
                             <mat-label>
                                 <i class="mdi mdi-security-account material-icons app-input-icon">&nbsp;</i>Privilegios de Usuario
                             </mat-label>
@@ -597,7 +597,7 @@
     <mat-list class="listContainer2">
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-                alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+                alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
             <h3 matLine> {{user | shortName}}</h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>

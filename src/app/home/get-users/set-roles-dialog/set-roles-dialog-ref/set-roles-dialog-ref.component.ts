@@ -1,14 +1,12 @@
-import { Component, OnInit, Inject, OnDestroy, RootRenderer } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSlideToggleChange } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER } from '../../../../app.config';
 import { User } from '../../../../models/user';
-import { ManagerStoreService } from '../../../../services/manger-store.service';
-import { TeacherStoreService } from '../../../../services/teacher-store.service';
-import { StudentStoreService } from '../../../../services/student-store.service';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { UserStoreService } from '../../../../services/user-store.service';
 
 
 @Component({
@@ -32,20 +30,19 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
 
 
-  constructor(public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private managerStoreService: ManagerStoreService, private teacherStoreService: TeacherStoreService,
-    private studentStoreService: StudentStoreService, private formBuilder: FormBuilder,
-    public sanitizer: DomSanitizer) {
+    private userStoreService: UserStoreService,
+    private formBuilder: FormBuilder,
+    public sanitizer: DomSanitizer
+  ) {
 
     this.user = data.user;
     this.uriRole = data.uriRole;
 
-    //this.roles = this.user.roles;
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
     if (this.user.roles.includes(ROLE_TEACHER)) this.roles.push(ROLE_TEACHER);
-
-    
 
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
@@ -54,18 +51,19 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
 
     this.buildForm();
 
+    this.subscriptionIsLoading = this.userStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
+
+
     if (this.uriRole === URI_MANAGERS) {
-      this.subscriptionIsLoading = this.managerStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
-      this.subscriptionsetRoles = this.managerStoreService.setRoles$.subscribe(user => {
-        this.teacherStoreService.updateUserFromStore(user);
+      this.subscriptionsetRoles = this.userStoreService.setRoles$.subscribe(user => {
+        this.userStoreService.updateTeacherInStore(user);
         this.dialogRef.close('set');
       });
 
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.subscriptionIsLoading = this.teacherStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
-      this.subscriptionsetRoles = this.teacherStoreService.setRoles$.subscribe(user => {
-        this.managerStoreService.updateUserFromStore(user);
+        this.subscriptionsetRoles = this.userStoreService.setRoles$.subscribe(user => {
+        this.userStoreService.updateManagerInStore(user);
         this.dialogRef.close('set');
       });
 
@@ -107,12 +105,12 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     // if (this.setRolesForm.value.slideToggleTeacher) rolesOrdained.push(ROLE_TEACHER);
 
     if (this.roles.length > 0) this.user.roles = rolesOrdained;
-    
+
     if (this.uriRole === URI_MANAGERS) {
-      this.managerStoreService.setRoles(this.user);
+      this.userStoreService.setManagerRoles(this.user);
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.teacherStoreService.setRoles(this.user);
+      this.userStoreService.setTeacherRoles(this.user);
 
     } else {
       console.error('NO uriRole');

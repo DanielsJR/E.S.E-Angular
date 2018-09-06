@@ -1,10 +1,9 @@
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, tap, retry } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { tap, retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { API_SERVER, URI_USERS, URI_MANAGERS, URI_TOKEN, URI_ID, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
-import { USERNAME_PATTERN } from '../shared/validators/patterns';
+import { API_SERVER, URI_USERS, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
 
 
 @Injectable({

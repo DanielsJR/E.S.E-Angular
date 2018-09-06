@@ -33,11 +33,11 @@ export const URI_PASS = '/pass';
 export const URI_ROLE = '/role';
 
 
-export const URI_MANAGER = '/manager';
+export const URI_MANAGER = '/managers';
 
-export const URI_TEACHER = '/teacher';
+export const URI_TEACHER = '/teachers';
 
-export const URI_STUDENT = '/student';
+export const URI_STUDENT = '/students';
 
 export const URI_COURSES = '/courses';
 

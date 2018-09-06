@@ -1,16 +1,13 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from './login.service';
 import { User } from '../models/user';
-import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
-import { finalize } from 'rxjs/operators';
 import { SnackbarService } from '../services/snackbar.service';
-
 
 
 @Component({
@@ -27,7 +24,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private localStorageService: LocalStorageService, private snackbarService: SnackbarService) {
+    private localStorageService: LocalStorageService, private snackbarService: SnackbarService
+  ) {
     this.user = new User();
   }
 
@@ -35,7 +33,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     console.log('************LOGIN***************');
     this.buildForm();
-
   }
 
   buildForm(): void {

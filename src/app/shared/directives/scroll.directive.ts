@@ -1,4 +1,4 @@
-import { Directive, HostListener, Inject, Output, ElementRef, EventEmitter } from '@angular/core';
+import { Directive, HostListener, Output, ElementRef, EventEmitter } from '@angular/core';
 
 @Directive({
     selector: '[nxScroller]'

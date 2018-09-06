@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { API_GENERIC_URI, API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
+import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { User } from '../models/user';
+import { Observable } from 'rxjs';
 import { SessionStorageService } from '../services/session-storage.service';
 
 
@@ -17,10 +15,11 @@ export class LoginService {
     tokenUsername;
 
 
-
-    constructor(private localStorageService: LocalStorageService,
+    constructor(
+        private localStorageService: LocalStorageService,
         private sessionStorageService: SessionStorageService,
-        private httpCli: HttpClient) { }
+        private httpCli: HttpClient
+    ) { }
 
     login(username: string, password: string): Observable<any> {
         const credentials = { username: username, password: password };

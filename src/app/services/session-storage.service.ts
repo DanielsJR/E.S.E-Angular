@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SESSION_STORAGE_TOKEN_KEY, SESSION_STORAGE_THEME_KEY } from '../app.config';
+import { SESSION_STORAGE_THEME_KEY } from '../app.config';
 import { Subject } from 'rxjs';
 
 

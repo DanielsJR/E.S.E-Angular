@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
 import { default as decode } from 'jwt-decode';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
 

@@ -2,9 +2,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
-import { ManagerStoreService } from '../../../../services/manger-store.service';
-import { TeacherStoreService } from '../../../../services/teacher-store.service';
-import { StudentStoreService } from '../../../../services/student-store.service';
 import {
     URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
     ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH
@@ -20,8 +17,7 @@ import { noWhitespaceValidator } from '../../../../shared/validators/no-white-sp
 import { rutValidator } from '../../../../shared/validators/rut-validator';
 import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
 import { Avatar } from '../../../../models/avatar';
-import { UserBackendService } from '../../../../services/user-backend.service';
-import { finalize } from '../../../../../../node_modules/rxjs/operators';
+import { UserStoreService } from '../../../../services/user-store.service';
 
 
 @Component({
@@ -57,13 +53,10 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private managerStoreService: ManagerStoreService,
-        private teacherStoreService: TeacherStoreService,
-        private studentStoreService: StudentStoreService,
-        private userBackendService: UserBackendService,
+        private userStoreService: UserStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private localStorageService: LocalStorageService) {
-
+        private localStorageService: LocalStorageService
+    ) {
         this.user = data.user;
         this.uriRole = data.uriRole;
         this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
@@ -73,30 +66,25 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.buildForm();
-        if (this.data.type === 'create') {
-            this.setAvatarCreateDefault();
-        }
+        if (this.data.type === 'create') this.setAvatarCreateDefault();
 
         this.isAdmin = this.checkForAdmin(this.localStorageService.getTokenRoles());
 
+        this.subscriptionIsLoading = this.userStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
+        this.subscriptionUserCreated = this.userStoreService.userCreated$.subscribe(_ => this.dialogRef.close('created'));
+
         if (this.uriRole === URI_MANAGERS) {
-            this.subscriptionIsLoading = this.managerStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-
-            this.subscriptionUserCreated = this.managerStoreService.userCreated$.subscribe(_ => {
-                this.dialogRef.close('created');
-            });
-
-            this.subscriptionUserUpdated = this.managerStoreService.userUpdated$.subscribe(user => {
-                this.teacherStoreService.updateUserFromStore(user);
+            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(user => {
+                this.userStoreService.updateTeacherInStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionUserDeleted = this.managerStoreService.userDeleted$.subscribe(user => {
-                this.teacherStoreService.deleteUserFromStore(user);
+            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(user => {
+                this.userStoreService.deleteTeacherInStore(user);
                 this.dialogRef.close('deleted');
             });
 
-            this.subscriptionSetRolesSuccess = this.managerStoreService.setRoles$.subscribe(user => {
+            this.subscriptionSetRolesSuccess = this.userStoreService.setRoles$.subscribe(user => {
                 this.user = user;
                 this.eRoles.setValue(user.roles);
                 this.setAvatarEditDefault();
@@ -105,22 +93,18 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.subscriptionIsLoading = this.teacherStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-            this.subscriptionUserCreated = this.teacherStoreService.userCreated$.subscribe(_ => {
-                this.dialogRef.close('created');
-            });
 
-            this.subscriptionUserUpdated = this.teacherStoreService.userUpdated$.subscribe(user => {
-                this.managerStoreService.updateUserFromStore(user);
+            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(user => {
+                this.userStoreService.updateManagerInStore(user);
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionUserDeleted = this.teacherStoreService.userDeleted$.subscribe(user => {
-                this.managerStoreService.deleteUserFromStore(user);
+            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(user => {
+                this.userStoreService.deleteManagerInStore(user);
                 this.dialogRef.close('deleted');
             });
 
-            this.subscriptionSetRolesSuccess = this.teacherStoreService.setRoles$.subscribe(user => {
+            this.subscriptionSetRolesSuccess = this.userStoreService.setRoles$.subscribe(user => {
                 this.user = user;
                 this.eRoles.setValue(user.roles);
                 this.setAvatarEditDefault();
@@ -129,16 +113,12 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.subscriptionIsLoading = this.studentStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-            this.subscriptionUserCreated = this.studentStoreService.userCreated$.subscribe(_ => {
-                this.dialogRef.close('created');
-            });
-
-            this.subscriptionUserUpdated = this.studentStoreService.userUpdated$.subscribe(user => {
+ 
+            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(_ => {
                 this.dialogRef.close('edited');
             });
 
-            this.subscriptionUserDeleted = this.studentStoreService.userDeleted$.subscribe(user => {
+            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(_ => {
                 this.dialogRef.close('deleted');
             });
 
@@ -274,7 +254,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
                     this.cAvatar.setValue({
                         name: file.name,
                         type: file.type,
-                        data: reader.result.split(',')[1]
+                        data: (reader.result as string).split(',')[1]
                     })
                     //console.log('file.name: ' + file.name)
                 };
@@ -290,7 +270,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             this.cAvatar.setValue({
                 name: files.name,
                 type: files.type,
-                data: reader.result.split(',')[1]
+                data: (reader.result as string).split(',')[1]
             })
         };
 
@@ -319,9 +299,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
                     this.eAvatar.setValue({
                         name: file.name,
                         type: file.type,
-                        data: reader.result.split(',')[1]
+                        data: (reader.result as string).split(',')[1]
                     })
-                    console.log('file.name: ' + file.name)
+                    console.log('setAvatarEditDefault: ' + file.name)
                 };
             };
             xhr.send()
@@ -346,9 +326,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
                     this.eAvatar.setValue({
                         name: file.name,
                         type: file.type,
-                        data: reader.result.split(',')[1]
+                        data: (reader.result as string).split(',')[1]
                     })
-                    console.log('file.name: ' + file.name)
+                    console.log('setAvatarEditDefaultMenu: ' + file.name)
                 };
             };
             xhr.send()
@@ -370,7 +350,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             this.eAvatar.setValue({
                 name: files.name,
                 type: files.type,
-                data: reader.result.split(',')[1]
+                data: (reader.result as string).split(',')[1]
             })
         };
 
@@ -397,7 +377,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     private createAutoUsername(): string {
         const n1 = this.createForm.value.firstName.substr(0, this.createForm.value.firstName.indexOf(' ')) || this.createForm.value.firstName;
         const n2 = this.createForm.value.lastName.substr(0, this.createForm.value.lastName.indexOf(' ')) || this.createForm.value.lastName;
-       return  n1 + '_' + n2;
+        return n1 + '_' + n2;
     }
 
     private createAutoPassword(): string {
@@ -434,13 +414,13 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         let userCreate: User = this.createForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.create(userCreate);
+            this.userStoreService.createManager(userCreate);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.create(userCreate);
+            this.userStoreService.createTeacher(userCreate);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.create(userCreate);
+            this.userStoreService.createStudent(userCreate);
 
         } else {
             console.error('NO uriRole');
@@ -461,13 +441,13 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         let userEdit: User = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.update(userEdit);
+            this.userStoreService.updateManager(userEdit);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.update(userEdit);
+            this.userStoreService.updateTeacher(userEdit);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.update(userEdit);
+            this.userStoreService.updateStudent(userEdit);
 
         } else {
             console.error('NO uriRole');
@@ -477,13 +457,13 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     delete(): void {
         if (this.uriRole === URI_MANAGERS) {
-            this.managerStoreService.delete(this.user);
+            this.userStoreService.deleteManager(this.user);
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.teacherStoreService.delete(this.user);
+            this.userStoreService.deleteTeacher(this.user);
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.studentStoreService.delete(this.user);
+            this.userStoreService.deleteStudent(this.user);
 
         } else {
             console.error('NO uriRole');

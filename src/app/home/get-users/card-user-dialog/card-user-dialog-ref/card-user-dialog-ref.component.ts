@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
-import { LocalStorageService } from '../../../../services/local-storage.service';
 
 @Component({
   selector: 'nx-card-user-dialog-ref',
@@ -12,11 +11,10 @@ import { LocalStorageService } from '../../../../services/local-storage.service'
 export class CardUserDialogRefComponent implements OnInit {
 
   user: User;
-  userLoggedRoles : String[] = [];// this.localStorage.getTokenRoles();
+  userLoggedRoles: String[] = [];// this.localStorage.getTokenRoles();
 
   constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
-    private localStorage: LocalStorageService,
   ) {
     this.user = data.user;
     this.userLoggedRoles.push(data.areaRole);

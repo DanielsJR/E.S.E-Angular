@@ -3,21 +3,14 @@ import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { LoginService } from '../login/login.service';
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
-import { UserBackendService } from '../services/user-backend.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { ROLE_ADMIN, URI_ADMINS, ROLE_MANAGER, URI_MANAGERS, ROLE_TEACHER, URI_TEACHERS, ROLE_STUDENT, URI_STUDENTS, LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
-
-
 import { Subscription } from 'rxjs';
-import { ManagerStoreService } from '../services/manger-store.service';
-import { TeacherStoreService } from '../services/teacher-store.service';
-import { StudentStoreService } from '../services/student-store.service';
+import { UserStoreService } from '../services/user-store.service';
 
 
 @Component({
@@ -65,14 +58,29 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   constructor(private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private router: Router, private userBackendService: UserBackendService,
-    private localStorageService: LocalStorageService,
+    private router: Router, private localStorageService: LocalStorageService,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
 
-    private managerStoreService: ManagerStoreService,
-    private teacherStoreService: TeacherStoreService,
-    private studentStoreService: StudentStoreService,
-  ) {
+    private userStoreService: UserStoreService,
+  ) { }
+
+  ngOnInit() {
+    this.userLoggedService.userLogged$.subscribe(user => {
+      this.user = user;
+      if (this.user) this.themePicker.getThemeFromServer(user.id);
+      if (this.isSidenavProfileOpen) this.sidenavProfile.close();
+    });
+
+    if (this.user) {
+      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
+      setTimeout(() => this.openSnackBar(this.welcome, 'success'));
+
+    } else {
+      console.log('user:null getting user from backend');
+      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
+    }
+
+    this.subscriptionIsLoading = this.userStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
   }
 
@@ -92,30 +100,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-
-  ngOnInit() {
-    this.subscriptionIsLoading = this.managerStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-    this.subscriptionIsLoading = this.teacherStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-    this.subscriptionIsLoading = this.studentStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-
-    this.userLoggedService.userLogged$.subscribe(user => {
-      this.user = user;
-      this.themePicker.getThemeFromServer(user.id);
-      if (this.isSidenavProfileOpen) this.sidenavProfile.close();
-    });
-
-    if (this.user) {
-      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      setTimeout(() => this.openSnackBar(this.welcome, 'success'));
-      
-    } else {
-      console.log('user:null getting user from backend');
-      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
-    }
-
-    
-
-  }
 
   ngOnDestroy() {
     this.subscriptionIsLoading.unsubscribe();

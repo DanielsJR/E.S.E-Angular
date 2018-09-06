@@ -8,12 +8,8 @@
       <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
     </mat-card-header>
 
-
-
     <img mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
       alt="user">
-
-    
 
     <mat-card-actions>
       <button type="button" mat-button color="primary" tabindex="1" (click)="detail()">Detalles</button>

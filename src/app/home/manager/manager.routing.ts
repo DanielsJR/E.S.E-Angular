@@ -6,6 +6,8 @@ import { ManagerGetStudentsComponent } from './manager-get-students/manager-get-
 import { ManagerComponent } from './manager.component';
 import { ManagerGuard } from '../../guards/manager-guard.service';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
+import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
+import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 
 
 const adminRoutes: Routes = [
@@ -20,24 +22,29 @@ const adminRoutes: Routes = [
                 children: [
 
                     {
-                        path: 'teachers-list',
+                        path: 'teachers',
                         component: ManagerGetTeachersComponent,
                     },
 
                     {
-                        path: 'students-list',
+                        path: 'students',
                         component: ManagerGetStudentsComponent,
                     },
 
 
                     {
                         path: 'courses',
-                        component: ManagerCoursesComponent
+                        component: ManagerCoursesComponent,
                     },
 
                     {
-                        path: 'assign-subject',
-                        component: ManagerHomeComponent
+                        path: 'courses/:name',
+                        component: ManagerCoursesDetailComponent,
+                    },
+
+                    {
+                        path: 'subjects',
+                        component: ManagerSubjectsComponent
                     },
 
                     {
