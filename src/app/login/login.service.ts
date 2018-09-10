@@ -46,6 +46,26 @@ export class LoginService {
         return this.tokenUsername;
     }
 
+    isAdmin(): boolean {
+        if (this.getRoles().includes(ROLE_ADMIN)) return true
+        return false;
+    }
+
+    isManager(): boolean {
+        if (this.getRoles().includes(ROLE_MANAGER)) return true
+        return false;
+    }
+
+    isTeacher(): boolean {
+        if (this.getRoles().includes(ROLE_TEACHER)) return true
+        return false;
+    }
+    
+    isStudent(): boolean {
+        if (this.getRoles().includes(ROLE_STUDENT)) return true
+        return false;
+    }
+
     hasPrivileges(): boolean {
         for (var i = 0; i < this.getRoles().length; i++) {
             let role = this.getRoles()[i];

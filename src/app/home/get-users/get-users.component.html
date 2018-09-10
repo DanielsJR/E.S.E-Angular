@@ -1,7 +1,7 @@
 <div class="container">
 
   <mat-card class="mat-elevation-z8">
-
+   
     <mat-toolbar>
 
       <mat-form-field>
@@ -20,7 +20,8 @@
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
-
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="username">

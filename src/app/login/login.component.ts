@@ -8,6 +8,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 import { SnackbarService } from '../services/snackbar.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
@@ -54,7 +55,9 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-          this.isLoading = this.userLoggedService.getUserFromBackEnd(this.user.username, true);
+          this.userLoggedService.getUserFromBackEnd(this.user.username, true)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe();
         }, error => {
           console.error(error.message);
           if (error instanceof HttpErrorResponse) {
@@ -63,13 +66,13 @@ export class LoginComponent implements OnInit {
               this.badCredencialsError();
               this.loginForm.markAsPristine();
             } else if (error.status === 0) {
-              this.openSnackBar('Servidor caido', 'error');
+              this.snackbarService.openSnackBar('Servidor caido', 'error');
             } else {
-              this.openSnackBar(error.error.message, 'error');
+              this.snackbarService.openSnackBar(error.error.message, 'error');
             }
 
           } else {
-            this.openSnackBar('Error al logearse, intente nevamente', 'error');
+            this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', 'error');
           }
           this.isLoading = false;
         });
@@ -80,14 +83,5 @@ export class LoginComponent implements OnInit {
     this.password.setErrors({ 'bad-credencials': true });
   }
 
-  openSnackBar(message: string, type: any): void {
-    let data = {
-      message: message,
-      uriRole: 'none',
-      type: type
-    };
-
-    let snackBarRef = this.snackbarService.openSnackBar(data);
-  }
 
 }

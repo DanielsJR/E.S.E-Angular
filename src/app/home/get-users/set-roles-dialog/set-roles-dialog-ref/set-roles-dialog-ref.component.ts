@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER } from '../../../../app.config';
@@ -6,7 +6,8 @@ import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { UserStoreService } from '../../../../services/user-store.service';
+import { UserStore2Service } from '../../../../services/user-store2.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
@@ -14,8 +15,7 @@ import { UserStoreService } from '../../../../services/user-store.service';
   templateUrl: './set-roles-dialog-ref.component.html',
   styleUrls: ['./set-roles-dialog-ref.component.css']
 })
-export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
-
+export class SetRolesDialogRefComponent implements OnInit {
 
   uriRole: any;
   user: User;
@@ -33,7 +33,7 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userStoreService: UserStoreService,
+    private userStoreService2: UserStore2Service,
     private formBuilder: FormBuilder,
     public sanitizer: DomSanitizer
   ) {
@@ -47,35 +47,8 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
-  ngOnInit(): void {
-
+  ngOnInit() {
     this.buildForm();
-
-    this.subscriptionIsLoading = this.userStoreService.isLoadingRoles$.subscribe(isLoadding => this.isLoading = isLoadding);
-
-
-    if (this.uriRole === URI_MANAGERS) {
-      this.subscriptionsetRoles = this.userStoreService.setRoles$.subscribe(user => {
-        this.userStoreService.updateTeacherInStore(user);
-        this.dialogRef.close('set');
-      });
-
-
-    } else if (this.uriRole === URI_TEACHERS) {
-        this.subscriptionsetRoles = this.userStoreService.setRoles$.subscribe(user => {
-        this.userStoreService.updateManagerInStore(user);
-        this.dialogRef.close('set');
-      });
-
-    } else {
-      console.error('NO uriRole');
-    }
-
-  }
-
-  ngOnDestroy() {
-    this.subscriptionsetRoles.unsubscribe();
-    this.subscriptionIsLoading.unsubscribe();
   }
 
   buildForm() {
@@ -107,10 +80,30 @@ export class SetRolesDialogRefComponent implements OnInit, OnDestroy {
     if (this.roles.length > 0) this.user.roles = rolesOrdained;
 
     if (this.uriRole === URI_MANAGERS) {
-      this.userStoreService.setManagerRoles(this.user);
+      this.isLoading = true;
+      this.userStoreService2.setManagerRoles(this.user)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe(user => {
+          this.user = user;
+          this.userStoreService2.updateInTeacherDataStore(user);
+          this.dialogRef.close('set');
+        }, err => {
+          console.log("Error creating manager: " + err);
+          this.dialogRef.close('error');
+        });
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.userStoreService.setTeacherRoles(this.user);
+      this.isLoading = true;
+      this.userStoreService2.setTeacherRoles(this.user)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe(user => {
+          this.user = user;
+          this.userStoreService2.updateInManagerDataStore(user);
+          this.dialogRef.close('set');
+        }, err => {
+          console.log("Error creating manager: " + err);
+          this.dialogRef.close('error');
+        });
 
     } else {
       console.error('NO uriRole');

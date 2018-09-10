@@ -7,14 +7,29 @@ import { SnackbarsRefComponent } from '../shared/snackbars-ref/snackbars-ref.com
 })
 export class SnackbarService {
 
+
   constructor(public snackBar: MatSnackBar) { }
 
-  openSnackBar(data: any): MatSnackBarRef<SnackbarsRefComponent> {
+  openSnackBar(message: string, type: any): MatSnackBarRef<SnackbarsRefComponent> {
+    let config = new MatSnackBarConfig();
+    config.data = {
+      message: message,
+      type: type
+    }
+    config.panelClass = "snackBarService";
+    config.duration = (type === 'error') ? 6000 : 4000;
+
+    return this.snackBar.openFromComponent(SnackbarsRefComponent, config);
+  }
+
+  openSnackBarData(data: any): MatSnackBarRef<SnackbarsRefComponent> {
     let config = new MatSnackBarConfig();
     config.data = data;
     config.panelClass = "snackBarService";
-    config.duration = (data.type ==='error') ? 6000:4000;
-    
+    config.duration = (data.type === 'error') ? 6000 : 4000;
+
     return this.snackBar.openFromComponent(SnackbarsRefComponent, config);
   }
+
 }
+

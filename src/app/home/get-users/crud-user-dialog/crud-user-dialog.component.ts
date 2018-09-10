@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CrudUserDialogRefComponent } from './crud-user-dialog-ref/crud-user-dialog-ref.component';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCESS } from '../../../app.config';
 
 
 @Component({
@@ -17,11 +19,9 @@ export class CrudUserDialogComponent implements OnInit {
 
     @Input() areaRole;
 
-    constructor(public dialog: MatDialog) { }
+    constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
 
-    ngOnInit() {
-    }
-
+    ngOnInit() { }
 
     openDialogDetail(user: User): void {
         let data = {
@@ -37,12 +37,12 @@ export class CrudUserDialogComponent implements OnInit {
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'edit') {
+            if (result === RESULT_CANCELED) {
+                console.log(RESULT_CANCELED);
+            } else if (result === RESULT_EDIT) {
                 this.openDialogEdit(user);
-            } else if (result === 'delete') {
-                this.openDialogDelete(user);//user
+            } else if (result === RESULT_DELETE) {
+                this.openDialogDelete(user);
             }
         });
     }
@@ -62,14 +62,15 @@ export class CrudUserDialogComponent implements OnInit {
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'error') {
-                console.error('ERROR!!!, could not edit');
-            } else if (result === 'edited') {
-                console.log('edited!');
+            if (result === RESULT_CANCELED) {
+                console.log(RESULT_CANCELED);
+            } else if (result === RESULT_ERROR) {
+                this.snackbarService.openSnackBar("Error al Actualizar Usuario", 'error');
+                console.error(RESULT_ERROR);
+            } else if (result === RESULT_SUCCESS) {
+                this.snackbarService.openSnackBar("Usuario Actualizado", 'success');
+                console.log(RESULT_SUCCESS);
             }
-
         });
     }
 
@@ -89,12 +90,14 @@ export class CrudUserDialogComponent implements OnInit {
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'error') {
-                console.error('ERROR!!!, could not delete');
-            } else if (result === 'deleted') {
-                console.log('deleted!');
+            if (result === RESULT_CANCELED) {
+                console.log(RESULT_CANCELED);
+            } else if (result === RESULT_ERROR) {
+                this.snackbarService.openSnackBar("Error al Eliminar Usuario", 'error');
+                console.error(RESULT_ERROR);
+            } else if (result === RESULT_SUCCESS) {
+                this.snackbarService.openSnackBar("Usuario Eliminado", 'success');
+                console.log(RESULT_SUCCESS);
             }
         });
     }
@@ -115,12 +118,14 @@ export class CrudUserDialogComponent implements OnInit {
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'error') {
-                console.error('ERROR!!!, could not create');
-            } else if (result === 'created') {
-                console.log('created!');
+            if (result === RESULT_CANCELED) {
+                console.log(RESULT_CANCELED);
+            } else if (result === RESULT_ERROR) {
+                this.snackbarService.openSnackBar("Error al Crear Usuario", 'error');
+                console.error(RESULT_ERROR);
+            } else if (result === RESULT_SUCCESS) {
+                this.snackbarService.openSnackBar("Usuario Creado", 'success');
+                console.log(RESULT_SUCCESS);
             }
         });
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 import { URI_MANAGERS, ROLE_MANAGER, URI_TEACHERS, URI_STUDENTS, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
@@ -170,8 +170,7 @@ export class UserStoreService {
 
     setManagerRoles(user: User) {
         this.isLoadingRolesSubject.next(true);
-        this.userBackendService
-            .setRoles(user.username, user.roles, this.managerUriRole)
+        this.userBackendService.setRoles(user.username, user.roles, this.managerUriRole)
             .pipe(finalize(() => this.isLoadingRolesSubject.next(false)))
             .subscribe(data => {
                 this.managersDataStore.managers.forEach((u, i) => {
@@ -190,6 +189,7 @@ export class UserStoreService {
                 }
             }, () => this.successSubject.next('Privilégios asignados')
             );
+       
     }
 
     updateManagerInStore(user: User) {
@@ -219,7 +219,6 @@ export class UserStoreService {
     }
 
     deleteManagerInStore(user: User) {
-
         this.managersDataStore.managers.forEach((u, i) => {
             if (u.id === user.id) {
                 this.managersDataStore.managers.splice(i, 1);

@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { tap, retry } from 'rxjs/operators';
+import { tap, retry, share } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
@@ -20,146 +20,107 @@ export class UserBackendService {
     getUsers(uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}`;
         console.log(`resource called: ${url}`)
-        return this.httpCli.get<User[]>(url)
-            .pipe(retry(3),
-                tap(users => console.log(`N° Users: ${users.length}`))
-                // ,catchError(this.handleError('getUsers', []))
-            );
+        return this.httpCli.get<User[]>(url).pipe(
+            retry(3),
+            tap(users => console.log(`N° Users: ${users.length}`))
+        );
     }
 
     create(user: User, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.post<User>(url, user)
-            .pipe(
-                tap(resp => console.log(`created user name=${resp.firstName}`))
-                // ,catchError(this.handleError<User>(`createUser`))
-            );
+        return this.httpCli.post<User>(url, user).pipe(
+            tap(resp => console.log(`created user name=${resp.firstName}`))
+        );
     }
 
     update(user: User, uriRole: string): Observable<User> {
         const username = user.username;
         const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.put<User>(url, user)
-            .pipe(
-                tap(resp => console.log(`edited user username=${resp.username}`))
-                // ,catchError(this.handleError<User>(`updateUser`))
-            );
+        return this.httpCli.put<User>(url, user).pipe(
+            tap(resp => console.log(`edited user username=${resp.username}`))
+        );
     }
 
     delete(user: User | string, uriRole: string): Observable<boolean> {
         const username = (typeof user === 'string') ? user : user.username;
         const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<boolean>(url)
-            .pipe(
-                tap(_ => console.log(`deleted user id=${username}`))
-                // ,catchError(this.handleError<{}>(`deleteUser`))
-            );
+        return this.httpCli.delete<boolean>(url).pipe(
+            tap(_ => console.log(`deleted user id=${username}`))
+        );
     }
 
     getUserById(id: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}/${id}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli.get<User>(url)
-            .pipe(retry(3),
-                tap(_ => console.log(`fetched user id=${id}`))
-                // ,catchError(this.handleError<User>(`getUser id=${id}`))
-            );
+        return this.httpCli.get<User>(url).pipe(
+            retry(3),
+            tap(_ => console.log(`fetched user id=${id}`))
+        );
     }
 
     getUserByUsername(name: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli.get<User>(url)
-            .pipe(retry(3),
-                tap(resp => console.log(`fetched user username=${resp.username}`))
-                // ,catchError(this.handleError<User>(`getUser name=${name}`))
-            );
+        return this.httpCli.get<User>(url).pipe(
+            retry(3),
+            tap(resp => console.log(`fetched user username=${resp.username}`))
+        );
     }
 
     getUsersByRole(role: string, uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}/${role}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.get<User[]>(url)
-            .pipe(retry(3),
-                tap(_ => console.log(`fetched users by role=${role}`))
-                // ,catchError(this.handleError(`getUsersByRole`, []))
-            );
+        return this.httpCli.get<User[]>(url).pipe(
+            retry(3),
+            tap(_ => console.log(`fetched users by role=${role}`))
+        );
     }
 
     resetUserPassword(username: string, resetedPass: string, uriRole: string): Observable<boolean> {
         const url = `${this.userURL}${uriRole}${URI_PASS}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.patch<boolean>(url, resetedPass)
-            .pipe(
-                tap(result => console.log(`pass reseted: ${result}`))
-                // ,catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
-            );
+        return this.httpCli.patch<boolean>(url, resetedPass).pipe(
+            tap(result => console.log(`pass reseted: ${result}`))
+        );
 
     }
 
     setRoles(username: string, roles: string[], uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_ROLE}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.patch<User>(url, roles)
-            .pipe(
-                tap(user => console.log(`fetched user username=${user.username} new roles=${user.roles}`))
-                // , catchError(this.handleError<User>(`setRoles id=${id}`))
-            );
+        return this.httpCli.patch<User>(url, roles).pipe(
+            tap(user => console.log(`fetched user username=${user.username} new roles=${user.roles}`))
+        );
     }
 
     getUserByUsernameSecured(name: string): Observable<User> {
         const url = `${this.userURL}/${name}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli.get<User>(url)
-            .pipe(retry(3),
-                tap(resp => console.log(`fetched user username=${resp.username}`))
-                // ,catchError(this.handleError<User>(`getUser name=${name}`))
-            );
+        return this.httpCli.get<User>(url).pipe(
+            retry(3),
+            tap(resp => console.log(`fetched user username=${resp.username}`))
+        );
     }
 
     updateSecured(user: User): Observable<User> {
         const username = user.username;
         const url = `${this.userURL}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.put<User>(url, user)
-            .pipe(
-                tap(resp => console.log(`edited user username=${resp.username}`))
-                // ,catchError(this.handleError<User>(`updateUser`))
-            );
+        return this.httpCli.put<User>(url, user).pipe(
+            tap(resp => console.log(`edited user username=${resp.username}`))
+        );
     }
 
     setUserPasswordSecured(username: string, pass: string[]): Observable<boolean> {
         const url = `${this.userURL}${URI_PASS}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.patch<boolean>(url, pass)
-        .pipe(
+        return this.httpCli.patch<boolean>(url, pass).pipe(
             tap(result => console.log(`pass set: ${result}`))
-            // ,catchError(this.handleError<boolean>(`resetUserPassword id=${id}`))
         );
     }
 
-
-    /** I'm not using it ;)
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.error(`${operation} failed: ${error.message}`);
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
 
 }

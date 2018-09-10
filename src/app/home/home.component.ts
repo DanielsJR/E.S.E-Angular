@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
 import { UserStoreService } from '../services/user-store.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
@@ -22,7 +23,6 @@ import { UserStoreService } from '../services/user-store.service';
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
 
   user: User;
   privilege = this.loginService.getPrivilege();
@@ -73,11 +73,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      setTimeout(() => this.openSnackBar(this.welcome, 'success'));
+      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, 'success'));
 
     } else {
       console.log('user:null getting user from backend');
-      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false);
+      this.isLoading = true;
+      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe();
     }
 
     this.subscriptionIsLoading = this.userStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
@@ -117,15 +120,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  openSnackBar(message: string, type: any): void {
-    let data = {
-      message: message,
-      uriRole: 'none',
-      type: type
-    };
-
-    let snackBarRef = this.snackbarService.openSnackBar(data);
-  }
 
 
 }

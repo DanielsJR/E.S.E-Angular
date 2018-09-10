@@ -2,12 +2,14 @@ import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/cor
 import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatDialogRef } from '@angular/material';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH } from '../../app.config';
 import { User } from '../../models/user';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SnackbarService } from '../../services/snackbar.service';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { UserStoreService } from '../../services/user-store.service';
+import { UserStore2Service } from '../../services/user-store2.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'nx-get-users',
@@ -36,12 +38,14 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   @Input() uriRole;
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
+  isLoading: boolean = false;
 
   constructor(
     private userStoreService: UserStoreService,
+    private userStoreService2: UserStore2Service,
     private sessionStorage: SessionStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer
-  ) { }
+    public sanitizer: DomSanitizer,
+  ) { this.userStoreService2.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)); }
 
   ngOnInit() {
     this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
@@ -49,17 +53,18 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     console.log("AreaRole: " + this.areaRole);
     this.dataSource = new MatTableDataSource<User>();
 
-    this.userStoreService.successMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'success')));
-    this.userStoreService.errorMessage$.subscribe(message => setTimeout(() => this.openSnackBar(message, 'error')));
 
     if (this.uriRole === URI_MANAGERS) {
-      this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
+      //this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
+      this.userStoreService2.managers$.subscribe(data => this.dataSource.data = data);
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
+      //this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
+      this.userStoreService2.teachers$.subscribe(data => this.dataSource.data = data);
 
     } else if (this.uriRole === URI_STUDENTS) {
-      this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
+      //this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
+      this.userStoreService2.students$.subscribe(data => this.dataSource.data = data);
 
     } else {
       console.error('NO uriRole');
@@ -70,7 +75,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       this.isDark = isDark;
       this.setRowClass();
     });
-
     this.setRowClass();
 
   }
@@ -107,18 +111,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openSnackBar(message: string, type: any): void {
-    let data = {
-      message: message,
-      uriRole: this.uriRole,
-      type: type
-    };
-
-    let snackBarRef = this.snackbarService.openSnackBar(data);
-    //snackBarRef.afterOpened().subscribe(() => console.log('The snack-bar afterOpened!!!!'));
-    //snackBarRef.afterDismissed().subscribe(() => console.log('The snack-bar was dismissed!!!'));
-    //snackBarRef.onAction().subscribe(() => console.log('The snack-bar action was triggered!!!!'));
-  }
 
   usersRoleToSpanish(usersRole: string): string {
     let role = usersRole.toUpperCase();
@@ -144,7 +136,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   }
 
 }
-
 
 
 export class MatPaginatorIntlSpa extends MatPaginatorIntl {

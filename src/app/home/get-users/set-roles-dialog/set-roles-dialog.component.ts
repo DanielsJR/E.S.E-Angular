@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dialog-ref.component';
-
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -12,17 +12,15 @@ import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dia
 })
 export class SetRolesDialogComponent implements OnInit {
 
-    @Input()
-    user: User;
+    @Input() user: User;
 
-    @Input()
-    uriRole: string;
+    @Input() uriRole: string;
 
-    constructor(public dialog: MatDialog) { }
+    @Output() userEditedRoles = new EventEmitter<User>();
 
-    ngOnInit() {
-    }
+    constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
 
+    ngOnInit() { }
 
     openDialogSetRoles(): void {
         let data = {
@@ -41,8 +39,11 @@ export class SetRolesDialogComponent implements OnInit {
             if (result === 'canceled') {
                 console.log('canceled!');
             } else if (result === 'set') {
+                this.userEditedRoles.emit(dialogRef.componentInstance.user);
+                this.snackbarService.openSnackBar("Role(s) Actualizados", 'success');
                 console.log('set!');
             } else if (result === 'error') {
+                this.snackbarService.openSnackBar("Error al Actualizar Role(s)", 'error');
                 console.log('error!');
 
             }

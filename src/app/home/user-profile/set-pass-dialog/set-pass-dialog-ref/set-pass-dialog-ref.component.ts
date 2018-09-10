@@ -25,7 +25,6 @@ export class SetPassDialogRefComponent implements OnInit {
 
   isLoading = false;
 
-  //passError = false;
 
   constructor(public dialogRef: MatDialogRef<SetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -42,15 +41,6 @@ export class SetPassDialogRefComponent implements OnInit {
     this.buildForm();
   }
 
-  openSnackBar(message: string, type: any): void {
-    let data = {
-      message: message,
-      uriRole: this.uriRole,
-      type: type
-    };
-
-    let snackBarRef = this.snackbarService.openSnackBar(data);
-  }
 
   buildForm() {
 
@@ -97,15 +87,15 @@ export class SetPassDialogRefComponent implements OnInit {
       .setUserPasswordSecured(this.user.username, pass)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => {
-        this.openSnackBar('Contraseña cambiada', 'success');
+        this.snackbarService.openSnackBar('Contraseña cambiada', 'success');
         this.dialogRef.close();
       }, error => {
         if (error instanceof HttpErrorResponse) {
-          this.openSnackBar(error.error.message, 'error');
-         // this.dialogRef.close();
+          this.snackbarService.openSnackBar(error.error.message, 'error');
+          // this.dialogRef.close();
         } else {
-          this.openSnackBar('Error al cambiar contraseña', 'error');
-         // this.dialogRef.close();
+          this.snackbarService.openSnackBar('Error al cambiar contraseña', 'error');
+          // this.dialogRef.close();
         }
       });
 

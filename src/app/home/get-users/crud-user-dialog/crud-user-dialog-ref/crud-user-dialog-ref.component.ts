@@ -1,23 +1,24 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
 import {
     URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
-    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH
+    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE
 } from '../../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../../models/communes';
 import { GENDERS } from '../../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../../models/privileges';
-import { LocalStorageService } from '../../../../services/local-storage.service';
 import { Subscription } from 'rxjs';
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 import { rutValidator } from '../../../../shared/validators/rut-validator';
 import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
 import { Avatar } from '../../../../models/avatar';
-import { UserStoreService } from '../../../../services/user-store.service';
+import { UserStore2Service } from '../../../../services/user-store2.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { LoginService } from '../../../../login/login.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { UserStoreService } from '../../../../services/user-store.service';
     styleUrls: ['./crud-user-dialog-ref.component.css']
 })
 
-export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
+export class CrudUserDialogRefComponent implements OnInit {
+    [x: string]: any;
 
     createForm: FormGroup;
     editForm: FormGroup;
@@ -38,24 +40,19 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     rolesList = PRIVILEGES;
     files: File | FileList;
     isAdmin = false;
-    userLoggedRoles: String[] = [];//=this.localStorage.getTokenRoles();
+    userLoggedRoles: String[] = [];
     userHightPrivilege: string;
     oldAvatar: Avatar;
 
-    subscriptionUserCreated: Subscription;
-    subscriptionUserUpdated: Subscription;
-    subscriptionUserDeleted: Subscription;
     subscriptionSetRolesSuccess: Subscription;
-    subscriptionIsLoading: Subscription;
 
     isLoading = false;
 
-
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreService: UserStoreService,
+        private userStoreService2: UserStore2Service,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
-        private localStorageService: LocalStorageService
+        private loginService: LoginService
     ) {
         this.user = data.user;
         this.uriRole = data.uriRole;
@@ -68,72 +65,8 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         this.buildForm();
         if (this.data.type === 'create') this.setAvatarCreateDefault();
 
-        this.isAdmin = this.checkForAdmin(this.localStorageService.getTokenRoles());
+        this.isAdmin = this.loginService.isAdmin();
 
-        this.subscriptionIsLoading = this.userStoreService.isLoading$.subscribe(isLoadding => this.isLoading = isLoadding);
-        this.subscriptionUserCreated = this.userStoreService.userCreated$.subscribe(_ => this.dialogRef.close('created'));
-
-        if (this.uriRole === URI_MANAGERS) {
-            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(user => {
-                this.userStoreService.updateTeacherInStore(user);
-                this.dialogRef.close('edited');
-            });
-
-            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(user => {
-                this.userStoreService.deleteTeacherInStore(user);
-                this.dialogRef.close('deleted');
-            });
-
-            this.subscriptionSetRolesSuccess = this.userStoreService.setRoles$.subscribe(user => {
-                this.user = user;
-                this.eRoles.setValue(user.roles);
-                this.setAvatarEditDefault();
-                if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
-            });
-
-
-        } else if (this.uriRole === URI_TEACHERS) {
-
-            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(user => {
-                this.userStoreService.updateManagerInStore(user);
-                this.dialogRef.close('edited');
-            });
-
-            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(user => {
-                this.userStoreService.deleteManagerInStore(user);
-                this.dialogRef.close('deleted');
-            });
-
-            this.subscriptionSetRolesSuccess = this.userStoreService.setRoles$.subscribe(user => {
-                this.user = user;
-                this.eRoles.setValue(user.roles);
-                this.setAvatarEditDefault();
-                if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
-            });
-
-
-        } else if (this.uriRole === URI_STUDENTS) {
- 
-            this.subscriptionUserUpdated = this.userStoreService.userUpdated$.subscribe(_ => {
-                this.dialogRef.close('edited');
-            });
-
-            this.subscriptionUserDeleted = this.userStoreService.userDeleted$.subscribe(_ => {
-                this.dialogRef.close('deleted');
-            });
-
-        } else {
-            console.error('NO uriRole');
-        }
-
-    }
-
-    ngOnDestroy() {
-        this.subscriptionUserCreated.unsubscribe();
-        this.subscriptionUserUpdated.unsubscribe();
-        this.subscriptionUserDeleted.unsubscribe();
-        if (this.subscriptionSetRolesSuccess) this.subscriptionSetRolesSuccess.unsubscribe();
-        this.subscriptionIsLoading.unsubscribe();
     }
 
     convertDate(birthDay: any) {
@@ -165,14 +98,6 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
 
-    checkForAdmin(roles: string[]): boolean {
-        for (let role of roles) {
-            if (role === ROLE_ADMIN) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     buildForm() {
 
@@ -388,17 +313,31 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
     }
 
+    afterEditRoles(user: User) {
+        console.log('afterEditRoles called!!');
+        this.user = user;
+        this.eRoles.setValue(user.roles);
+        this.setAvatarEditDefault();
+        if (this.uriRole === URI_MANAGERS) {
+            if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
+        } else if (this.uriRole === URI_TEACHERS) {
+            if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
+        } else {
+            console.error('NO uriRole');
+        }
+    }
+
 
     cancel(): void {
-        this.dialogRef.close('canceled');
+        this.dialogRef.close(RESULT_CANCELED);
     }
 
     detailEdit(): void {
-        this.dialogRef.close('edit');
+        this.dialogRef.close(RESULT_EDIT);
     }
 
     detailDelete(): void {
-        this.dialogRef.close('delete');
+        this.dialogRef.close(RESULT_DELETE);
     }
 
     create(): void {
@@ -414,13 +353,41 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         let userCreate: User = this.createForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            this.userStoreService.createManager(userCreate);
+            //this.userStoreService.createManager(userCreate);
+            this.isLoading = true;
+            this.userStoreService2.createManager(userCreate)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error creating manager: " + err);
+                });
+
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.userStoreService.createTeacher(userCreate);
+            //this.userStoreService.createTeacher(userCreate);
+            this.isLoading = true;
+            this.userStoreService2.createTeacher(userCreate)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error creating teacher: " + err);
+                });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.userStoreService.createStudent(userCreate);
+            //this.userStoreService.createStudent(userCreate);
+            this.isLoading = true;
+            this.userStoreService2.createStudent(userCreate)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error creating student: " + err);
+                });
 
         } else {
             console.error('NO uriRole');
@@ -441,13 +408,42 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         let userEdit: User = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            this.userStoreService.updateManager(userEdit);
+            //this.userStoreService.updateManager(userEdit);
+            this.isLoading = true;
+            this.userStoreService2.updateManager(userEdit)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(user => {
+                    this.userStoreService2.updateInTeacherDataStore(user);
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error editing manager: " + err);
+                });
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.userStoreService.updateTeacher(userEdit);
+            //this.userStoreService.updateTeacher(userEdit);
+            this.isLoading = true;
+            this.userStoreService2.updateTeacher(userEdit)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(user => {
+                    this.userStoreService2.updateInManagerDataStore(user);
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error editing teacher: " + err);
+                });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.userStoreService.updateStudent(userEdit);
+            //this.userStoreService.updateStudent(userEdit);
+            this.isLoading = true;
+            this.userStoreService2.updateStudent(userEdit)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    console.log("Error editing student: " + err);
+                    this.dialogRef.close(RESULT_ERROR);
+                });
 
         } else {
             console.error('NO uriRole');
@@ -457,19 +453,50 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     delete(): void {
         if (this.uriRole === URI_MANAGERS) {
-            this.userStoreService.deleteManager(this.user);
+            // this.userStoreService.deleteManager(this.user);
+            this.isLoading = true;
+            this.userStoreService2.deleteManager(this.user)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.userStoreService2.deleteInTeacherDataStore(this.user);
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error deleting manager: " + err);
+                });
 
         } else if (this.uriRole === URI_TEACHERS) {
-            this.userStoreService.deleteTeacher(this.user);
+            //this.userStoreService.deleteTeacher(this.user);
+            this.isLoading = true;
+            this.userStoreService2.deleteTeacher(this.user)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.userStoreService2.deleteInManagerDataStore(this.user);
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error deleting teacher: " + err);
+                });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            this.userStoreService.deleteStudent(this.user);
+            //this.userStoreService.deleteStudent(this.user);
+            this.isLoading = true;
+            this.userStoreService2.deleteStudent(this.user)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe(_ => {
+                    this.dialogRef.close(RESULT_SUCCESS);
+                }, err => {
+                    this.dialogRef.close(RESULT_ERROR);
+                    console.log("Error deleting student: " + err);
+                });
 
         } else {
             console.error('NO uriRole');
         }
 
     }
+
+
 
 }
 

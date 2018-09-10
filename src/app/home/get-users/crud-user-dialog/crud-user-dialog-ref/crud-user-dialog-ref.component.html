@@ -554,14 +554,13 @@
                             <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="setRoles.openDialogSetRoles()">
                                 <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
                             </button>
-                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
+                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole" (userEditedRoles)="afterEditRoles($event)"></nx-set-roles-dialog>
                         </mat-form-field>
 
                     </div>
                     
                     
                 </mat-tab>
-
 
             </mat-tab-group>
         </mat-dialog-content>
