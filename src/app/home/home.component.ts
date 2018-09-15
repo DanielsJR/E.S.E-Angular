@@ -10,7 +10,6 @@ import { SnackbarService } from '../services/snackbar.service';
 import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
-import { UserStoreService } from '../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 
 
@@ -57,11 +56,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("btnSettingsBack") private btnSettingsBack: MatButton;
 
 
-  constructor(private loginService: LoginService, private userLoggedService: UserLoggedService,
+  constructor(
+    private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private localStorageService: LocalStorageService,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
-
-    private userStoreService: UserStoreService,
   ) { }
 
   ngOnInit() {
@@ -83,7 +81,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .subscribe();
     }
 
-    this.subscriptionIsLoading = this.userStoreService.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
   }
 

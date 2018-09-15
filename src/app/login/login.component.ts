@@ -11,6 +11,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 
 
+
 @Component({
   selector: 'nx-login',
   templateUrl: './login.component.html',
@@ -24,8 +25,9 @@ export class LoginComponent implements OnInit {
   isLoading = false;
 
   constructor(
-    private formBuilder: FormBuilder, private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private localStorageService: LocalStorageService, private snackbarService: SnackbarService
+    private formBuilder: FormBuilder, private loginService: LoginService,
+    private userLoggedService: UserLoggedService, private localStorageService: LocalStorageService,
+    private snackbarService: SnackbarService
   ) {
     this.user = new User();
   }
@@ -50,32 +52,30 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.user.username = this.username.value;
     this.user.password = this.password.value;
-    this.loginService
-      .login(this.user.username, this.user.password)
-      .subscribe(
-        data => {
-          this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-          this.userLoggedService.getUserFromBackEnd(this.user.username, true)
+    this.loginService.login(this.user.username, this.user.password)
+      .subscribe(data => {
+        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
+        this.userLoggedService.getUserFromBackEnd(this.user.username, true)
           .pipe(finalize(() => this.isLoading = false))
           .subscribe();
-        }, error => {
-          console.error(error.message);
-          if (error instanceof HttpErrorResponse) {
-            if (error.status === 400) {
-              this.loginForm.reset();
-              this.badCredencialsError();
-              this.loginForm.markAsPristine();
-            } else if (error.status === 0) {
-              this.snackbarService.openSnackBar('Servidor caido', 'error');
-            } else {
-              this.snackbarService.openSnackBar(error.error.message, 'error');
-            }
-
+      }, error => {
+        console.error(error.message);
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 400) {
+            this.loginForm.reset();
+            this.badCredencialsError();
+            this.loginForm.markAsPristine();
+          } else if (error.status === 0) {
+            this.snackbarService.openSnackBar('Servidor caido', 'error');
           } else {
-            this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', 'error');
+            this.snackbarService.openSnackBar(error.error.message, 'error');
           }
-          this.isLoading = false;
-        });
+
+        } else {
+          this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', 'error');
+        }
+        this.isLoading = false;
+      });
   }
 
   badCredencialsError() {

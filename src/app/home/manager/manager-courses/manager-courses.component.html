@@ -5,7 +5,7 @@
     <mat-toolbar>
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput>
         <mat-placeholder>
           <i class="mdi mdi-magnify material-icons"></i>Buscar
         </mat-placeholder>
@@ -70,8 +70,7 @@
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
+
 
     <span class="add">
       <button mat-fab matTooltip="Agregar Curso">

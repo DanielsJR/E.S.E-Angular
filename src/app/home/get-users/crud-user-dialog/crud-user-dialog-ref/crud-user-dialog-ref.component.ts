@@ -16,7 +16,7 @@ import { noWhitespaceValidator } from '../../../../shared/validators/no-white-sp
 import { rutValidator } from '../../../../shared/validators/rut-validator';
 import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
 import { Avatar } from '../../../../models/avatar';
-import { UserStore2Service } from '../../../../services/user-store2.service';
+import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { LoginService } from '../../../../login/login.service';
 
@@ -50,7 +50,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreService2: UserStore2Service,
+        private userStoreService: UserStoreService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
         private loginService: LoginService
     ) {
@@ -353,9 +353,8 @@ export class CrudUserDialogRefComponent implements OnInit {
         let userCreate: User = this.createForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            //this.userStoreService.createManager(userCreate);
-            this.isLoading = true;
-            this.userStoreService2.createManager(userCreate)
+                this.isLoading = true;
+            this.userStoreService.createManager(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
@@ -366,9 +365,8 @@ export class CrudUserDialogRefComponent implements OnInit {
 
 
         } else if (this.uriRole === URI_TEACHERS) {
-            //this.userStoreService.createTeacher(userCreate);
-            this.isLoading = true;
-            this.userStoreService2.createTeacher(userCreate)
+                 this.isLoading = true;
+            this.userStoreService.createTeacher(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
@@ -378,9 +376,8 @@ export class CrudUserDialogRefComponent implements OnInit {
                 });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            //this.userStoreService.createStudent(userCreate);
-            this.isLoading = true;
-            this.userStoreService2.createStudent(userCreate)
+                  this.isLoading = true;
+            this.userStoreService.createStudent(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
@@ -408,12 +405,11 @@ export class CrudUserDialogRefComponent implements OnInit {
         let userEdit: User = this.editForm.value;
 
         if (this.uriRole === URI_MANAGERS) {
-            //this.userStoreService.updateManager(userEdit);
             this.isLoading = true;
-            this.userStoreService2.updateManager(userEdit)
+            this.userStoreService.updateManager(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(user => {
-                    this.userStoreService2.updateInTeacherDataStore(user);
+                    this.userStoreService.updateInTeacherDataStore(user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -421,12 +417,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 });
 
         } else if (this.uriRole === URI_TEACHERS) {
-            //this.userStoreService.updateTeacher(userEdit);
             this.isLoading = true;
-            this.userStoreService2.updateTeacher(userEdit)
+            this.userStoreService.updateTeacher(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(user => {
-                    this.userStoreService2.updateInManagerDataStore(user);
+                    this.userStoreService.updateInManagerDataStore(user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -434,9 +429,8 @@ export class CrudUserDialogRefComponent implements OnInit {
                 });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            //this.userStoreService.updateStudent(userEdit);
-            this.isLoading = true;
-            this.userStoreService2.updateStudent(userEdit)
+              this.isLoading = true;
+            this.userStoreService.updateStudent(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
@@ -453,12 +447,11 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     delete(): void {
         if (this.uriRole === URI_MANAGERS) {
-            // this.userStoreService.deleteManager(this.user);
-            this.isLoading = true;
-            this.userStoreService2.deleteManager(this.user)
+                 this.isLoading = true;
+            this.userStoreService.deleteManager(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.userStoreService2.deleteInTeacherDataStore(this.user);
+                    this.userStoreService.deleteInTeacherDataStore(this.user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -466,12 +459,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 });
 
         } else if (this.uriRole === URI_TEACHERS) {
-            //this.userStoreService.deleteTeacher(this.user);
-            this.isLoading = true;
-            this.userStoreService2.deleteTeacher(this.user)
+                this.isLoading = true;
+            this.userStoreService.deleteTeacher(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.userStoreService2.deleteInManagerDataStore(this.user);
+                    this.userStoreService.deleteInManagerDataStore(this.user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -479,9 +471,8 @@ export class CrudUserDialogRefComponent implements OnInit {
                 });
 
         } else if (this.uriRole === URI_STUDENTS) {
-            //this.userStoreService.deleteStudent(this.user);
-            this.isLoading = true;
-            this.userStoreService2.deleteStudent(this.user)
+                this.isLoading = true;
+            this.userStoreService.deleteStudent(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);

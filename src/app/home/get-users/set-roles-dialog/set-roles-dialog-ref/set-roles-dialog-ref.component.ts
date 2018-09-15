@@ -6,7 +6,7 @@ import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { UserStore2Service } from '../../../../services/user-store2.service';
+import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 
 
@@ -33,7 +33,7 @@ export class SetRolesDialogRefComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userStoreService2: UserStore2Service,
+    private userStoreService: UserStoreService,
     private formBuilder: FormBuilder,
     public sanitizer: DomSanitizer
   ) {
@@ -81,11 +81,11 @@ export class SetRolesDialogRefComponent implements OnInit {
 
     if (this.uriRole === URI_MANAGERS) {
       this.isLoading = true;
-      this.userStoreService2.setManagerRoles(this.user)
+      this.userStoreService.setManagerRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.userStoreService2.updateInTeacherDataStore(user);
+          this.userStoreService.updateInTeacherDataStore(user);
           this.dialogRef.close('set');
         }, err => {
           console.log("Error creating manager: " + err);
@@ -94,11 +94,11 @@ export class SetRolesDialogRefComponent implements OnInit {
 
     } else if (this.uriRole === URI_TEACHERS) {
       this.isLoading = true;
-      this.userStoreService2.setTeacherRoles(this.user)
+      this.userStoreService.setTeacherRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.userStoreService2.updateInManagerDataStore(user);
+          this.userStoreService.updateInManagerDataStore(user);
           this.dialogRef.close('set');
         }, err => {
           console.log("Error creating manager: " + err);

@@ -11,7 +11,7 @@ import { User } from '../../../../models/user';
 export class CardUserDialogRefComponent implements OnInit {
 
   user: User;
-  userLoggedRoles: String[] = [];// this.localStorage.getTokenRoles();
+  userLoggedRoles: string[] = [];// this.localStorage.getTokenRoles();
 
   constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,

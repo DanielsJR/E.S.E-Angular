@@ -7,7 +7,6 @@ import { map } from 'rxjs/internal/operators/map';
 import { startWith } from 'rxjs/internal/operators/startWith';
 import { FormControl } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
-import { UserStore2Service } from '../../../../services/user-store2.service';
 
 @Component({
   selector: 'nx-search-user-dialog-ref',
@@ -22,10 +21,10 @@ export class SearchUserDialogRefComponent implements OnInit {
   user$: Observable<User>;
   stateCtrl = new FormControl();
 
-  constructor(public dialogRef: MatDialogRef<SearchUserDialogRefComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<SearchUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
-    private userStoreService: UserStoreService,
-    private userStoreService2: UserStore2Service
+    private userStoreService: UserStoreService
   ) {
     //this.user = data.user;
     console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);
@@ -39,7 +38,7 @@ export class SearchUserDialogRefComponent implements OnInit {
 
   ngOnInit() {
     //this.userStoreService.students$.subscribe(data => this.users = data);
-    this.userStoreService2.students$.subscribe(data => this.users = data);
+    this.userStoreService.students$.subscribe(data => this.users = data);
   }
 
   cancel(): void {
@@ -49,7 +48,7 @@ export class SearchUserDialogRefComponent implements OnInit {
     this.dialogRef.close('accept');
   }
   setUser(name) {
-    this.user$ = this.userStoreService2.students$.pipe(
+    this.user$ = this.userStoreService.students$.pipe(
       map(users => users.find(u => u.firstName === name))
     );
   }

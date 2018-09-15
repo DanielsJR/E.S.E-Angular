@@ -15,7 +15,6 @@ import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStoreService } from '../../services/user-store.service';
-import { UserStore2Service } from '../../services/user-store2.service';
 
 
 @Component({
@@ -75,10 +74,8 @@ export class UserProfileComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder, private userBackendService: UserBackendService,
-        private userLoggedService: UserLoggedService,
-        public sanitizer: DomSanitizer, private snackbarService: SnackbarService,
-        private userStoreService: UserStoreService,
-        private userStoreService2: UserStore2Service
+        private userLoggedService: UserLoggedService, public sanitizer: DomSanitizer,
+        private snackbarService: SnackbarService, private userStoreService: UserStoreService
     ) { }
 
     ngOnInit() {
@@ -167,10 +164,10 @@ export class UserProfileComponent implements OnInit {
                 this.editProfileForm.markAsPristine();
                 //this.userStoreService.updateManagerInStore(user);
                 //this.userStoreService.updateTeacherInStore(user);
-                this.userStoreService2.updateInManagerDataStore(user);
-                this.userStoreService2.updateInTeacherDataStore(user);
+                this.userStoreService.updateInManagerDataStore(user);
+                this.userStoreService.updateInTeacherDataStore(user);
 
-             
+
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.snackbarService.openSnackBar(error.error.message, 'error');

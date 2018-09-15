@@ -6,10 +6,9 @@ import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { UserStoreService } from '../../services/user-store.service';
-import { UserStore2Service } from '../../services/user-store2.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { finalize } from 'rxjs/internal/operators/finalize';
-import { Observable } from 'rxjs';
+
+
 
 @Component({
   selector: 'nx-get-users',
@@ -41,11 +40,11 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
 
   constructor(
-    private userStoreService: UserStoreService,
-    private userStoreService2: UserStore2Service,
-    private sessionStorage: SessionStorageService,
+    private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
     public sanitizer: DomSanitizer,
-  ) { this.userStoreService2.isLoadingGetUsers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)); }
+  ) {
+
+  }
 
   ngOnInit() {
     this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
@@ -55,17 +54,16 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
 
     if (this.uriRole === URI_MANAGERS) {
-      //this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
-      this.userStoreService2.managers$.subscribe(data => this.dataSource.data = data);
+      this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+      this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
 
     } else if (this.uriRole === URI_TEACHERS) {
-      //this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
-      this.userStoreService2.teachers$.subscribe(data => this.dataSource.data = data);
-
+      this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+      this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
+    
     } else if (this.uriRole === URI_STUDENTS) {
-      //this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
-      this.userStoreService2.students$.subscribe(data => this.dataSource.data = data);
-
+      this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+      this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
     } else {
       console.error('NO uriRole');
     }

@@ -1,498 +1,307 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { User } from '../models/user';
-import { URI_MANAGERS, ROLE_MANAGER, URI_TEACHERS, URI_STUDENTS, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
-import { UserBackendService } from './user-backend.service';
-import { finalize } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { User } from "../models/user";
+import { URI_MANAGERS, ROLE_MANAGER, URI_TEACHERS, ROLE_TEACHER, URI_STUDENTS, ROLE_STUDENT } from "../app.config";
+import { UserBackendService } from "./user-backend.service";
+import { Observable } from "rxjs/internal/Observable";
+import { tap } from "rxjs/internal/operators/tap";
+import { finalize } from "rxjs/internal/operators/finalize";
 
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserStoreService {
+    private dataStore: { managers: User[], teachers: User[], students: User[] };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly managers$ = this.managersSource.asObservable();
-    private managersDataStore: { managers: User[] };
+    private managerUriRole: string = URI_MANAGERS;
+    private managerRole: string = ROLE_MANAGER;
+    private isLoadingGetManagersSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetManagers$ = this.isLoadingGetManagersSubject.asObservable();
 
     private teachersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly teachers$ = this.teachersSource.asObservable();
-    private teachersDataStore: { teachers: User[] };
+    private teacherUriRole: string = URI_TEACHERS;
+    private teacherRole: string = ROLE_TEACHER;
+    private isLoadingGetTeachersSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetTeachers$ = this.isLoadingGetTeachersSubject.asObservable();
 
     private studentsSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly students$ = this.studentsSource.asObservable();
-    private studentsDataStore: { students: User[] };
-
-
-    private errorSubject = <Subject<any>>new Subject();
-    public readonly errorMessage$ = this.errorSubject.asObservable();
-
-    private successSubject = <Subject<any>>new Subject();
-    public readonly successMessage$ = this.successSubject.asObservable();
-
-    private userCreatedSubject = <Subject<User>>new Subject();
-    public readonly userCreated$ = this.userCreatedSubject.asObservable();
-
-    private userUpdatedSubject = <Subject<User>>new Subject();
-    public readonly userUpdated$ = this.userUpdatedSubject.asObservable();
-
-    private userDeletedSubject = <Subject<User>>new Subject();
-    public readonly userDeleted$ = this.userDeletedSubject.asObservable();
-
-    private setRolesSubject = <Subject<User>>new Subject();
-    setRoles$ = this.setRolesSubject.asObservable();
-
-
-    private isLoadingSubject = <Subject<boolean>>new Subject();
-    isLoading$ = this.isLoadingSubject.asObservable();
-
-    private isLoadingGetUsersSubject = <Subject<boolean>>new Subject();
-    isLoadingGetUsers$ = this.isLoadingGetUsersSubject.asObservable();
-
-    private isLoadingRolesSubject = <Subject<boolean>>new Subject();
-    isLoadingRoles$ = this.isLoadingRolesSubject.asObservable();
-
-
-    managerUriRole: string = URI_MANAGERS;
-    teacherUriRole: string = URI_TEACHERS;
-    studentUriRole: string = URI_STUDENTS;
-
-    managerRole: string = ROLE_MANAGER;
-    teacherRole: string = ROLE_TEACHER;
-    studentRole: string = ROLE_STUDENT;
+    private studentUriRole: string = URI_STUDENTS;
+    private studentRole: string = ROLE_STUDENT;
+    private isLoadingGetStudentsSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetStudents$ = this.isLoadingGetStudentsSubject.asObservable();
+    
 
     constructor(private userBackendService: UserBackendService) {
-        this.managersDataStore = { managers: [] };
-        this.teachersDataStore = { teachers: [] };
-        this.studentsDataStore = { students: [] };
+        this.dataStore = { managers: [], teachers: [], students: [] }
     }
+
 
     /******************************MANAGERS***************************************************** */
-    getManagers() {
-        if (this.managersDataStore.managers.length) {
-            console.log(`********GET-${this.managerRole}-CACHE********`);
-            this.managersSource.next(this.managersDataStore.managers);
+    loadInitialDataManagers() {
+        if (this.managersSource.getValue().length) {
+            console.log(`********INITIAL-DATA-${this.managerUriRole}-FROM-CACHE********`);
+            this.managersSource.next(this.dataStore.managers);
+
         } else {
-            console.log(`********GET-${this.managerRole}-BACKEND********`);
-            this.isLoadingGetUsersSubject.next(true);
-            this.userBackendService
-                .getUsers(this.managerUriRole)
-                .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
-                .subscribe(data => {
-                    if (data.length === 0) {
-                        data = null;
-                        this.successSubject.next('Lista Administradores vacia');
-                    } else {
-                        this.managersDataStore.managers = data;
-                        this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                    }
-                }, error => {
-                    if (error instanceof HttpErrorResponse) {
-                        this.errorSubject.next(error.error.message);
-                    } else {
-                        console.error('error retrieving users, ' + error.message);
-                        this.errorSubject.next('Error al obtener lista Administradores');
-                    }
-                });
+            console.log(`********INITIAL-DATA-${this.managerUriRole}-FROM-BACKEND********`);
+            this.isLoadingGetManagersSubject.next(true);
+            this.userBackendService.getUsers(this.managerUriRole).pipe(
+                finalize(() => this.isLoadingGetManagersSubject.next(false)))
+                .subscribe(users => {
+                    this.dataStore.managers = users;
+                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
+                }, err => console.log("Error retrieving Manager")
+                );
         }
-    }
-
-    createManager(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .create(user, this.managerUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.managersDataStore.managers.push(data);
-                this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                this.userCreatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-
-                } else {
-                    console.error('could not create User, ' + error.message);
-                    this.errorSubject.next('Error al crear Administrador');
-                }
-            }, () => this.successSubject.next('Administrador Creado')
-            );
 
     }
 
-    updateManager(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .update(user, this.managerUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.managersDataStore.managers.forEach((u, i) => {
-                    if (u.id === data.id) {
-                        this.managersDataStore.managers[i] = data;
-                    }
-                });
-                this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                this.userUpdatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not update user from store, ' + error.message);
-                    this.errorSubject.next('Error al actualizar Administrador');
-                }
-            }, () => this.successSubject.next('Administrador Actualizado')
-            );
+    createManager(newUser: User): Observable<User> {
+        return this.userBackendService.create(newUser, this.managerUriRole).pipe(
+            tap(data => {
+                this.dataStore.managers.push(data);
+                this.managersSource.next(Object.assign({}, this.dataStore).managers);
+            }, err => console.log("Error creating Manager")
+            ));
     }
 
-    deleteManager(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .delete(user, this.managerUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(_ => {
-                this.managersDataStore.managers.forEach((u, i) => {
-                    if (u.id === user.id) {
-                        this.managersDataStore.managers.splice(i, 1);
-                    }
-                });
-                this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                this.userDeletedSubject.next(user);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not delete user from store, ' + error.message);
-                    this.errorSubject.next('Error al borrar Administrador');
+    updateManager(user: User): Observable<User> {
+        return this.userBackendService.update(user, this.managerUriRole).pipe(
+            tap(data => {
+                let index = this.dataStore.managers.findIndex((u: User) => u.id === data.id);
+                if (index != -1) {
+                    this.dataStore.managers[index] = data;
+                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
                 }
-            }, () => this.successSubject.next('Administrador Eliminado')
-            );
+            }, err => console.log("Error updating Manager")
+            ));
     }
 
-    setManagerRoles(user: User) {
-        this.isLoadingRolesSubject.next(true);
-        this.userBackendService.setRoles(user.username, user.roles, this.managerUriRole)
-            .pipe(finalize(() => this.isLoadingRolesSubject.next(false)))
-            .subscribe(data => {
-                this.managersDataStore.managers.forEach((u, i) => {
-                    if (u.id === data.id) {
-                        data.roles.includes(this.managerRole) ? this.managersDataStore.managers[i] = data : this.managersDataStore.managers.splice(i, 1);
-                    }
-                });
-                this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                this.setRolesSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not set user role from store, ' + error.message);
-                    this.errorSubject.next('Error al asignar privilégios');
+    deleteManager(user: User): Observable<boolean> {
+        return this.userBackendService.delete(user, this.managerUriRole).pipe(
+            tap(_ => {
+                let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
+                if (index != -1) {
+                    this.dataStore.managers.splice(index, 1);
+                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
                 }
-            }, () => this.successSubject.next('Privilégios asignados')
-            );
-       
+            }, err => console.log("Error deleting Manager")
+            ));
     }
 
-    updateManagerInStore(user: User) {
-        if (this.managersDataStore.managers.length) {
-            let notFound = true;
-            this.managersDataStore.managers.forEach((u, i) => {
-                if (u.id === user.id) {
-                    notFound = false;
-                    if (user.roles.includes(this.managerRole)) {
-                        this.managersDataStore.managers[i] = user;
-                        console.log('actualizado en la manager-store');
-                        this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                    } else {
-                        this.managersDataStore.managers.splice(i, 1);
-                        console.log('eliminado de la manager-store');
-                        this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-                    }
+    setManagerRoles(user: User): Observable<User> {
+        return this.userBackendService.setRoles(user.username, user.roles, this.managerUriRole).pipe(
+            tap(data => {
+                let index = this.dataStore.managers.findIndex((u: User) => u.id === data.id);
+                if (index != -1) {
+                    data.roles.includes(this.managerRole) ? this.dataStore.managers[index] = data : this.dataStore.managers.splice(index, 1);
+                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
                 }
-            });
-            if (notFound && user.roles.includes(this.managerRole)) {
-                this.managersDataStore.managers.push(user);
-                console.log('agregado a la manager-store');
-                this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
-            }
+            }, err => console.log("Error setting Roles Manager")
+            ));
+    }
 
+    updateInManagerDataStore(user: User): void {
+        let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
+
+        if ((index != -1) && user.roles.includes(this.managerRole)) {
+            this.dataStore.managers[index] = user;
+            this.managersSource.next(Object.assign({}, this.dataStore).managers);
+            console.log('actualizado en la manager-store');
+
+        } else if ((index != -1)) {
+            this.dataStore.managers.splice(index, 1);
+            this.managersSource.next(Object.assign({}, this.dataStore).managers);
+            console.log('eliminado de la manager-store');
+
+        } else if ((index = -1) && user.roles.includes(this.managerRole)) {
+            this.dataStore.managers.push(user);
+            this.managersSource.next(Object.assign({}, this.dataStore).managers);
+            console.log('agregado a la manager-store');
+
+        } else {
+            console.log("nothing to do");
         }
-    }
-
-    deleteManagerInStore(user: User) {
-        this.managersDataStore.managers.forEach((u, i) => {
-            if (u.id === user.id) {
-                this.managersDataStore.managers.splice(i, 1);
-                console.log('eliminado en la manager-store');
-            }
-        });
-
 
     }
 
-    clearManagerStore(): void {
-        this.managersDataStore = { managers: [] };
-        this.managersSource.next(Object.assign({}, this.managersDataStore).managers);
+    deleteInManagerDataStore(user: User): void {
+        let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
+
+        if ((index != -1)) {
+            this.dataStore.managers.splice(index, 1);
+            this.managersSource.next(Object.assign({}, this.dataStore).managers);
+            console.log('eliminado de la manager-store');
+
+        } else {
+            console.log("nothing to delete");
+        }
+
     }
+
+
 
 
     /******************************TEACHERS***************************************************** */
-    getTeachers() {
-        if (this.teachersDataStore.teachers.length) {
-            console.log(`********GET-${this.teacherRole}-CACHE********`);
-            this.teachersSource.next(this.teachersDataStore.teachers);
+    loadInitialDataTeachers() {
+        if (this.teachersSource.getValue().length) {
+            console.log(`********INITIAL-DATA-${this.teacherUriRole}-FROM-CACHE********`);
+            this.teachersSource.next(this.dataStore.teachers);
         } else {
-            console.log(`********GET-${this.teacherRole}-BACKEND********`);
-            this.isLoadingGetUsersSubject.next(true);
-            this.userBackendService
-                .getUsers(this.teacherUriRole)
-                .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
-                .subscribe(data => {
-                    if (data.length === 0) {
-                        data = null;
-                        this.successSubject.next('Lista de Docentes vacia');
-                    } else {
-                        this.teachersDataStore.teachers = data;
-                        this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                        // this.successSubject.next('retrieve users ok');
-                    }
-                }, error => {
-                    if (error instanceof HttpErrorResponse) {
-                        this.errorSubject.next(error.error.message);
-                    } else {
-                        console.error('error retrieving users, ' + error.message);
-                        this.errorSubject.next('Error al obtener lista de Docentes');
-                    }
-                });
+            console.log(`********INITIAL-DATA-${this.teacherUriRole}-FROM-BACKEND********`);
+            this.isLoadingGetTeachersSubject.next(true);
+            this.userBackendService.getUsers(this.teacherUriRole)
+                .pipe(finalize(() => this.isLoadingGetTeachersSubject.next(false)))
+                .subscribe(users => {
+                    this.dataStore.teachers = users;
+                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+                }, err => console.log("Error retrieving teacher")
+                );
         }
+
     }
 
-    createTeacher(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .create(user, this.teacherUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.teachersDataStore.teachers.push(data);
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                this.userCreatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not create User, ' + error.message);
-                    this.errorSubject.next('Error al crear Docente');
-                }
-            }, () => this.successSubject.next('Docente Creado')
-            );
+    createTeacher(newUser: User): Observable<User> {
+        return this.userBackendService.create(newUser, this.teacherUriRole).pipe(
+            tap(data => {
+                this.dataStore.teachers.push(data);
+                this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            }, err => console.log("Error creating teacher")
+            ));
     }
 
-    updateTeacher(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .update(user, this.teacherUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.teachersDataStore.teachers.forEach((u, i) => {
-                    if (u.id === data.id) {
-                        this.teachersDataStore.teachers[i] = data;
-                    }
-                });
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                this.userUpdatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not update user from store, ' + error.message);
-                    this.errorSubject.next('Error al actualizar Docente');
+    updateTeacher(user: User): Observable<User> {
+        return this.userBackendService.update(user, this.teacherUriRole).pipe(
+            tap(data => {
+                let index = this.dataStore.teachers.findIndex((u: User) => u.id === data.id);
+                if (index != -1) {
+                    this.dataStore.teachers[index] = data;
+                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                 }
-            }, () => this.successSubject.next('Docente Actualizado')
-            );
+            }, err => console.log("Error updating teacher")
+            ));
     }
 
-    deleteTeacher(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .delete(user, this.teacherUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(_ => {
-                this.teachersDataStore.teachers.forEach((u, i) => {
-                    if (u.id === user.id) { this.teachersDataStore.teachers.splice(i, 1); }
-                });
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                this.userDeletedSubject.next(user);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not delete user from store, ' + error.message);
-                    this.errorSubject.next('Error al borrar Docente');
+    deleteTeacher(user: User): Observable<boolean> {
+        return this.userBackendService.delete(user, this.teacherUriRole).pipe(
+            tap(_ => {
+                let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
+                if (index != -1) {
+                    this.dataStore.teachers.splice(index, 1);
+                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                 }
-            }, () => this.successSubject.next('Docente Eliminado')
-            );
+            }, err => console.log("Error deleting teacher")
+            ));
     }
 
-    setTeacherRoles(user: User) {
-        this.isLoadingRolesSubject.next(true);
-        this.userBackendService
-            .setRoles(user.username, user.roles, this.teacherUriRole)
-            .pipe(finalize(() => this.isLoadingRolesSubject.next(false)))
-            .subscribe(data => {
-
-                this.teachersDataStore.teachers.forEach((u, i) => {
-                    if (u.id === data.id) {
-                        data.roles.includes(this.teacherRole) ? this.teachersDataStore.teachers[i] = data : this.teachersDataStore.teachers.splice(i, 1);
-                    }
-                });
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                this.setRolesSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not set user role from store, ' + error.message);
-                    this.errorSubject.next('Error al asignar privilégios');
+    setTeacherRoles(user: User): Observable<User> {
+        return this.userBackendService.setRoles(user.username, user.roles, this.teacherUriRole).pipe(
+            tap(data => {
+                let index = this.dataStore.teachers.findIndex((u: User) => u.id === data.id);
+                if (index != -1) {
+                    data.roles.includes(this.teacherRole) ? this.dataStore.teachers[index] = data : this.dataStore.teachers.splice(index, 1);
+                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                 }
-            }, () => this.successSubject.next('Privilégios asignados'));
+            }, err => console.log("Error setting Roles teacher")
+            ));
     }
 
-    updateTeacherInStore(user: User) {
-        if (this.teachersDataStore.teachers.length) {
-            let notFound = true;
-            this.teachersDataStore.teachers.forEach((u, i) => {
-                if (u.id === user.id) {
-                    notFound = false;
-                    if (user.roles.includes(this.teacherRole)) {
-                        this.teachersDataStore.teachers[i] = user;
-                        console.log('actualizado en la teacher-store');
-                        this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                    } else {
-                        this.teachersDataStore.teachers.splice(i, 1);
-                        console.log('eliminado de la teacher-store');
-                        this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-                    }
-                }
-            });
-            if (notFound && user.roles.includes(this.teacherRole)) {
-                this.teachersDataStore.teachers.push(user);
-                console.log('agregado a la teacher-store');
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-            }
+    updateInTeacherDataStore(user: User): void {
+        let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
+
+        if ((index != -1) && user.roles.includes(this.teacherRole)) {
+            this.dataStore.teachers[index] = user;
+            this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            console.log('actualizado en la teacher-store');
+
+        } else if ((index != -1)) {
+            this.dataStore.teachers.splice(index, 1);
+            this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            console.log('eliminado de la teacher-store');
+
+        } else if ((index = -1) && user.roles.includes(this.teacherRole)) {
+            this.dataStore.teachers.push(user);
+            this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            console.log('agregado a la teacher-store');
+
+        } else {
+            console.log("nothing to do");
         }
+
     }
 
-    deleteTeacherInStore(user: User) {
-        this.teachersDataStore.teachers.forEach((u, i) => {
-            if (u.id === user.id) {
-                this.teachersDataStore.teachers.splice(i, 1);
-                console.log('eliminado en la teacher-store');
-                this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-            }
-        });
+    deleteInTeacherDataStore(user: User): void {
+        let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
+
+        if ((index != -1)) {
+            this.dataStore.teachers.splice(index, 1);
+            this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            console.log('eliminado de la teacher-store');
+
+        } else {
+            console.log("nothing to delete");
+        }
+
     }
 
-    clearTeacherStore(): void {
-        this.teachersDataStore = { teachers: [] };
-        this.teachersSource.next(Object.assign({}, this.teachersDataStore).teachers);
-    }
 
 
     /******************************STUDENTS***************************************************** */
-    getStudents() {
-        if (this.studentsDataStore.students.length) {
-            console.log(`********GET-${this.studentRole}-CACHE********`);
-            this.studentsSource.next(this.studentsDataStore.students);
+    loadInitialDataStudents() {
+        if (this.studentsSource.getValue().length) {
+            console.log(`********INITIAL-DATA-${this.studentUriRole}-FROM-CACHE********`);
+            this.studentsSource.next(this.dataStore.students);
         } else {
-            console.log(`********GET-${this.studentRole}-BACKEND********`);
-            this.isLoadingGetUsersSubject.next(true);
-            this.userBackendService
-                .getUsers(this.studentUriRole)
-                .pipe(finalize(() => this.isLoadingGetUsersSubject.next(false)))
-                .subscribe(data => {
-                    if (data.length === 0) {
-                        data = null;
-                        this.successSubject.next('Lista de Alumnos vacia');
-                    } else {
-                        this.studentsDataStore.students = data;
-                        this.studentsSource.next(Object.assign({}, this.studentsDataStore).students);
-                        //  this.successSubject.next('retrieve users ok');
-                    }
-                }, error => {
-                    if (error instanceof HttpErrorResponse) {
-                        this.errorSubject.next(error.error.message);
-                    } else {
-                        console.error('error retrieving users, ' + error.message);
-                        this.errorSubject.next('Error al conseguir lista de Alumnos');
-                    }
-                });
+            console.log(`********INITIAL-DATA-${this.studentUriRole}-FROM-BACKEND********`);
+            this.isLoadingGetStudentsSubject.next(true);
+            this.userBackendService.getUsers(this.studentUriRole)
+                .pipe(finalize(() => this.isLoadingGetStudentsSubject.next(false)))
+                .subscribe(users => {
+                    this.dataStore.students = users;
+                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
+                }, err => console.log("Error retrieving student")
+                );
         }
+
     }
 
-    createStudent(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .create(user, this.studentUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.studentsDataStore.students.push(data);
-                this.studentsSource.next(Object.assign({}, this.studentsDataStore).students);
-                this.userCreatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not create User, ' + error.message);
-                    this.errorSubject.next('Error al crear Alumno');
+    createStudent(newUser: User): Observable<User> {
+        return this.userBackendService.create(newUser, this.studentUriRole).pipe(
+            tap(data => {
+                this.dataStore.students.push(data);
+                this.studentsSource.next(Object.assign({}, this.dataStore).students);
+            }, err => console.log("Error creating student")
+            ));
+    }
+
+    updateStudent(user: User): Observable<User> {
+        return this.userBackendService.update(user, this.studentUriRole).pipe(
+            tap(data => {
+                let index = this.dataStore.students.findIndex((u: User) => u.id === data.id);
+                if (index != -1) {
+                    this.dataStore.students[index] = data;
+                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
                 }
-            }, () => this.successSubject.next('Alumno Creado'));
+            }, err => console.log("Error updating student")
+            ));
     }
 
-    updateStudent(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .update(user, this.studentUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(data => {
-                this.studentsDataStore.students.forEach((u, i) => {
-                    if (u.id === data.id) {
-                        this.studentsDataStore.students[i] = data;
-                    }
-                });
-                this.studentsSource.next(Object.assign({}, this.studentsDataStore).students);
-                this.userUpdatedSubject.next(data);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not update user from store, ' + error.message);
-                    this.errorSubject.next('Error al actualizar Alumno');
+    deleteStudent(user: User): Observable<boolean> {
+        return this.userBackendService.delete(user, this.studentUriRole).pipe(
+            tap(_ => {
+                let index = this.dataStore.students.findIndex((u: User) => u.id === user.id);
+                if (index != -1) {
+                    this.dataStore.students.splice(index, 1);
+                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
                 }
-            }, () => this.successSubject.next('Alumno Actualizado'));
+            }, err => console.log("Error deleting student")
+            ));
     }
 
-    deleteStudent(user: User) {
-        this.isLoadingSubject.next(true);
-        this.userBackendService
-            .delete(user, this.studentUriRole)
-            .pipe(finalize(() => this.isLoadingSubject.next(false)))
-            .subscribe(_ => {
-                this.studentsDataStore.students.forEach((u, i) => {
-                    if (u.id === user.id) { this.studentsDataStore.students.splice(i, 1); }
-                });
-                this.studentsSource.next(Object.assign({}, this.studentsDataStore).students);
-                this.userDeletedSubject.next(user);
-            }, error => {
-                if (error instanceof HttpErrorResponse) {
-                    this.errorSubject.next(error.error.message);
-                } else {
-                    console.error('could not delete user from store, ' + error.message);
-                    this.errorSubject.next('Error al borrar Alumno');
-                }
-            }, () => this.successSubject.next('Alumno Eliminado'));
-    }
 
-    clearStudentStore(): void {
-        this.studentsDataStore = { students: [] };
-        this.studentsSource.next(Object.assign({}, this.studentsDataStore).students);
-    }
 }
