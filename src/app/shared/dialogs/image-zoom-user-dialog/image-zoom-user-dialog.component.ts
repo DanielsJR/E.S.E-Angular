@@ -10,24 +10,19 @@ import { ImageZoomUserDialogRefComponent } from './image-zoom-user-dialog-ref/im
     template: ``,
     styles: []
 })
+
 export class ImageZoomUserDialogComponent implements OnInit {
 
     @Input()
     user: User;
 
-    @Input()
-    uriRole: string;
-
-
     constructor(public dialog: MatDialog) { }
 
-    ngOnInit() {
-    }
+    ngOnInit() { }
 
     openDialogImage(): void {
         let data = {
             user: this.user,
-            uriRole: this.uriRole,
             type: 'imageZoom'
         };
 
@@ -39,12 +34,8 @@ export class ImageZoomUserDialogComponent implements OnInit {
         config.minWidth = '300px';
         config.minHeight = '300px';
 
-        let dialogRef = this.dialog.open(ImageZoomUserDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            }
-        });
+        this.dialog.open(ImageZoomUserDialogRefComponent, config);
+
     }
 
 }

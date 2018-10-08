@@ -2,19 +2,19 @@
   <mat-card class="card">
 
     <mat-card-header>
-      <mat-card-title *ngIf="user$ | async">{{(user$ | async) | shortName}}</mat-card-title>
-      <mat-card-subtitle *ngIf="user$ | async">{{(user$ | async)?.roles | rolesToSpanish}}</mat-card-subtitle>
+      <mat-card-title *ngIf="user">{{user | shortName}}</mat-card-title>
+      <mat-card-subtitle *ngIf="user">{{user?.roles | rolesToSpanish}}</mat-card-subtitle>
       <span class="spacer-r"></span>
       <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
     </mat-card-header>
 
-    <form class="example-form">
+    <form img *ngIf="!data.user" class="example-form">
       <mat-form-field class="example-full-width">
         <input matInput aria-label="User" [matAutocomplete]="auto" [formControl]="stateCtrl">
         <mat-placeholder>
           <i class="mdi mdi-magnify material-icons"></i>Buscar
         </mat-placeholder>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="setUser($event.option.value)">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedUser($event.option.value)">
           <mat-option *ngFor="let u of filteredUsers$ | async" [value]="u.firstName">
             <img class="example-option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
             <span>{{u | shortName}}</span> |
@@ -24,12 +24,12 @@
       </mat-form-field>
     </form>
 
-    <img *ngIf="user$ | async" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+(user$ | async)?.avatar.type+';base64,' + (user$ | async)?.avatar.data)"
+    <img *ngIf="user" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
       alt="user" class="imageCard">
 
     <mat-card-actions>
-      <button type="button" mat-button color="accent" tabindex="1" (click)="cancel()">Volver</button>
-      <button type="button" mat-button color="primary" tabindex="2" (click)="accept()">Aceptar</button>
+      <button type="button" mat-stroked-button color="accent" tabindex="1" (click)="cancel()" cdkFocusRegionstart>Cancelar</button>
+      <button type="button" mat-stroked-button color="primary" tabindex="2" (click)="accept()">{{successButton}}</button>
 
     </mat-card-actions>
 

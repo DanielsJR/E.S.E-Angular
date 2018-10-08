@@ -1,11 +1,9 @@
-.container{
+.container {
     width: 100%;
     height: 100%;
-
     margin: 0;
     padding: 0;
 }
-
 
 mat-card {
     max-width: 620px;
@@ -19,11 +17,14 @@ mat-toolbar {
     padding: 8px 24px 0;
 }
 
+mat-toolbar-row {
+    padding: 0;
+}
+
 mat-form-field {
     font-size: 14px;
     width: 100%;
 }
-
 
 .fila:hover {
     cursor: pointer;
@@ -61,21 +62,30 @@ mat-list {
     padding: 0;
 }
 
-.colum2 {
+.add {
     justify-content: flex-end !important;
+    padding-right: 40px !important;
+}
+
+.crud {
+    justify-content: flex-end !important;
+    padding-right: 40px !important;
 }
 
 mat-list-item {
     height: 60px !important;
+    
+}
+
+
+mat-list-item h3 {
+    line-height: 17px !important;
+}
+
+mat-list-item p {
+    line-height: 20px !important;
 }
 
 .role-style {
     color: darkgray;
-}
-
-.add {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: white;
 }

@@ -61,8 +61,14 @@ mat-list {
     padding: 0;
 }
 
-.colum2 {
+.add {
     justify-content: flex-end !important;
+    padding-right: 40px !important;
+}
+
+.crud {
+    justify-content: flex-end !important;
+    padding-right: 40px !important;
 }
 
 mat-list-item {
@@ -73,10 +79,4 @@ mat-list-item {
     color: darkgray;
 }
 
-.add {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: white;
-}
 

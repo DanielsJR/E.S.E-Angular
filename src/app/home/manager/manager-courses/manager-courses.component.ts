@@ -24,12 +24,15 @@ export class ManagerCoursesComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
   isDark = this.sessionStorage.isDarkTheme();
+  isLoading: boolean = false;
 
   constructor(private sessionStorage: SessionStorageService, private courseStoreService: CourseStoreService,
     public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+   // this.courseStoreService.loadAllCourses(2018);
     this.dataSource = new MatTableDataSource();
+    this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.dataSource = this.courseStoreService.courses$;
     //this.courseStoreService.getCourses(2018);
  

@@ -1,4 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
+import { UserStoreService } from '../../../services/user-store.service';
 
 
 @Component({
@@ -10,9 +11,11 @@ import { Component, OnInit, } from '@angular/core';
 
 export class AdminGetManagersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userStoreService: UserStoreService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+   // this.userStoreService.loadAllManagers();
+  }
 
 }
 

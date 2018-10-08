@@ -28,8 +28,6 @@ import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses
     ManagerCoursesComponent,
     ManagerSubjectsComponent,
     ManagerCoursesDetailComponent,
-
-
   ],
 
   providers: [

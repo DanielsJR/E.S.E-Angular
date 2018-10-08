@@ -1,4 +1,5 @@
-import { Component, OnInit,} from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
+import { UserStoreService } from '../../../services/user-store.service';
 
 @Component({
   template: `
@@ -9,8 +10,10 @@ import { Component, OnInit,} from '@angular/core';
 
 export class ManagerGetStudentsComponent implements OnInit {
 
- constructor() { }
+  constructor(private userStoreService: UserStoreService) { }
 
-ngOnInit() { }
-  
+  ngOnInit() {
+    //this.userStoreService.loadAllStudents();
+  }
+
 }

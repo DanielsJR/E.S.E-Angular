@@ -2,16 +2,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
+import { RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE } from '../../../../app.config';
 
 @Component({
-  selector: 'nx-card-user-dialog-ref',
   templateUrl: './card-user-dialog-ref.component.html',
   styleUrls: ['./card-user-dialog-ref.component.css']
 })
 export class CardUserDialogRefComponent implements OnInit {
 
   user: User;
-  userLoggedRoles: string[] = [];// this.localStorage.getTokenRoles();
+  userLoggedRoles: string[] = [];
 
   constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
@@ -25,18 +25,18 @@ export class CardUserDialogRefComponent implements OnInit {
   }
 
   cancel(): void {
-    this.dialogRef.close('canceled');
+    this.dialogRef.close(RESULT_CANCELED);
   }
   detail(): void {
-    this.dialogRef.close('detail');
+    this.dialogRef.close(RESULT_DETAIL);
   }
 
   edit(): void {
-    this.dialogRef.close('edit');
+    this.dialogRef.close(RESULT_EDIT);
   }
 
   delete(): void {
-    this.dialogRef.close('delete');
+    this.dialogRef.close(RESULT_DELETE);
   }
 
   checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {

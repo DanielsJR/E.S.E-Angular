@@ -9,6 +9,7 @@ import { noWhitespaceValidator } from '../../../../shared/validators/no-white-sp
 
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RESULT_ERROR, RESULT_SUCCESS, RESULT_CANCELED } from '../../../../app.config';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -29,8 +30,8 @@ export class SetPassDialogRefComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<SetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
-    private userBackendService: UserBackendService,
-    private snackbarService: SnackbarService) {
+    private userBackendService: UserBackendService, private snackbarService: SnackbarService
+  ) {
 
     this.user = data.user;
     this.uriRole = this.data.uriRole;
@@ -40,7 +41,6 @@ export class SetPassDialogRefComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
   }
-
 
   buildForm() {
 
@@ -83,25 +83,24 @@ export class SetPassDialogRefComponent implements OnInit {
     pass.push(this.currentPass.value);
     pass.push(this.newPass1.value);
 
-    this.userBackendService
-      .setUserPasswordSecured(this.user.username, pass)
+    this.userBackendService.setUserPasswordSecured(this.user.username, pass)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => {
-        this.snackbarService.openSnackBar('Contraseña cambiada', 'success');
+        this.snackbarService.openSnackBar('Contraseña cambiada', RESULT_SUCCESS);
         this.dialogRef.close();
       }, error => {
         if (error instanceof HttpErrorResponse) {
-          this.snackbarService.openSnackBar(error.error.message, 'error');
-          // this.dialogRef.close();
+          this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
+          this.dialogRef.close();
         } else {
-          this.snackbarService.openSnackBar('Error al cambiar contraseña', 'error');
-          // this.dialogRef.close();
+          this.snackbarService.openSnackBar('Error al cambiar contraseña', RESULT_ERROR);
+          this.dialogRef.close();
         }
       });
 
   }
 
   cancel(): void {
-    this.dialogRef.close('canceled');
+    this.dialogRef.close();
   }
 }

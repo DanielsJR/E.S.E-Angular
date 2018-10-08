@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER } from '../../../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,6 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
-  selector: 'nx-set-roles-dialog-ref',
   templateUrl: './set-roles-dialog-ref.component.html',
   styleUrls: ['./set-roles-dialog-ref.component.css']
 })
@@ -33,8 +32,7 @@ export class SetRolesDialogRefComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userStoreService: UserStoreService,
-    private formBuilder: FormBuilder,
+    private userStoreService: UserStoreService, private formBuilder: FormBuilder,
     public sanitizer: DomSanitizer
   ) {
 
@@ -53,8 +51,8 @@ export class SetRolesDialogRefComponent implements OnInit {
 
   buildForm() {
     this.setRolesForm = this.formBuilder.group({
-      slideToggleManager: [(this.user.roles.includes(ROLE_MANAGER)) ? true : false],
-      slideToggleTeacher: [(this.user.roles.includes(ROLE_TEACHER)) ? true : false],
+      slideToggleManager: [(this.roles.includes(ROLE_MANAGER)) ? true : false],
+      slideToggleTeacher: [(this.roles.includes(ROLE_TEACHER)) ? true : false],
     });
   }
 
@@ -85,11 +83,11 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.userStoreService.updateInTeacherDataStore(user);
-          this.dialogRef.close('set');
+          //this.userStoreService.updateInTeacherDataStore(user);
+          this.dialogRef.close(RESULT_SUCCESS);
         }, err => {
-          console.log("Error creating manager: " + err);
-          this.dialogRef.close('error');
+          console.error("Error creating manager: " + err);
+          this.dialogRef.close(RESULT_ERROR);
         });
 
     } else if (this.uriRole === URI_TEACHERS) {
@@ -98,11 +96,11 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.userStoreService.updateInManagerDataStore(user);
-          this.dialogRef.close('set');
+          //this.userStoreService.updateInManagerDataStore(user);
+          this.dialogRef.close(RESULT_SUCCESS);
         }, err => {
-          console.log("Error creating manager: " + err);
-          this.dialogRef.close('error');
+          console.error("Error creating manager: " + err);
+          this.dialogRef.close(RESULT_ERROR);
         });
 
     } else {
@@ -111,7 +109,7 @@ export class SetRolesDialogRefComponent implements OnInit {
   }
 
   cancel(): void {
-    this.dialogRef.close('canceled');
+    this.dialogRef.close(RESULT_CANCELED);
   }
 
 

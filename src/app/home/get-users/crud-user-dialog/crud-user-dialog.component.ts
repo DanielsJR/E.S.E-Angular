@@ -14,9 +14,7 @@ import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCE
 export class CrudUserDialogComponent implements OnInit {
 
     @Input() user: User;
-
     @Input() uriRole: string;
-
     @Input() areaRole;
 
     constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
@@ -65,10 +63,10 @@ export class CrudUserDialogComponent implements OnInit {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Actualizar Usuario", 'error');
+                this.snackbarService.openSnackBar("Error al Actualizar Usuario", RESULT_ERROR);
                 console.error(RESULT_ERROR);
             } else if (result === RESULT_SUCCESS) {
-                this.snackbarService.openSnackBar("Usuario Actualizado", 'success');
+                this.snackbarService.openSnackBar("Usuario Actualizado", RESULT_SUCCESS);
                 console.log(RESULT_SUCCESS);
             }
         });
@@ -93,10 +91,10 @@ export class CrudUserDialogComponent implements OnInit {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Eliminar Usuario", 'error');
+                this.snackbarService.openSnackBar("Error al Eliminar Usuario", RESULT_ERROR);
                 console.error(RESULT_ERROR);
             } else if (result === RESULT_SUCCESS) {
-                this.snackbarService.openSnackBar("Usuario Eliminado", 'success');
+                this.snackbarService.openSnackBar("Usuario Eliminado", RESULT_SUCCESS);
                 console.log(RESULT_SUCCESS);
             }
         });
@@ -121,10 +119,10 @@ export class CrudUserDialogComponent implements OnInit {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Crear Usuario", 'error');
+                this.snackbarService.openSnackBar("Error al Crear Usuario", RESULT_ERROR);
                 console.error(RESULT_ERROR);
             } else if (result === RESULT_SUCCESS) {
-                this.snackbarService.openSnackBar("Usuario Creado", 'success');
+                this.snackbarService.openSnackBar("Usuario Creado", RESULT_SUCCESS);
                 console.log(RESULT_SUCCESS);
             }
         });

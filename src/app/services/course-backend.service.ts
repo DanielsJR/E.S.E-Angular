@@ -28,8 +28,8 @@ export class CourseBackendService {
             );
     }
 
-    create(course: Course, year: number): Observable<Course> {
-        const url = `${this.courseURL}/${year}`;
+    create(course: Course): Observable<Course> {
+        const url = `${this.courseURL}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Course>(url, course)
             .pipe(
@@ -38,9 +38,9 @@ export class CourseBackendService {
             );
     }
 
-    update(course: Course, uriRole: string): Observable<Course> {
-        const courseName = course.name;
-        const url = `${this.courseURL}${uriRole}/${courseName}`;
+    update(course: Course): Observable<Course> {
+        const courseId = course.id;
+        const url = `${this.courseURL}/${courseId}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Course>(url, course)
             .pipe(
@@ -49,9 +49,9 @@ export class CourseBackendService {
             );
     }
 
-    delete(course: Course | string, uriRole: string): Observable<boolean> {
+    delete(course: Course | string): Observable<boolean> {
         const courseName = (typeof course === 'string') ? course : course.name;
-        const url = `${this.courseURL}${uriRole}/${courseName}`;
+        const url = `${this.courseURL}/${courseName}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<boolean>(url)
             .pipe(

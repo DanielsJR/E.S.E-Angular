@@ -11,15 +11,18 @@
         </mat-placeholder>
       </mat-form-field>
 
-      <span class="spacer-l"></span>
+      <span class="spacer-r"></span>
 
-      <mat-chip-list >
+      <mat-chip-list>
         <mat-chip color="primary" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
           &nbsp; Cursos
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
+
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -42,41 +45,26 @@
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let course" class="colum2">
-
-
-          <button mat-icon-button color="primary" (click)=" $event.stopPropagation()">
-            <mat-icon svgIcon="eye"></mat-icon>
+        <mat-header-cell *matHeaderCellDef class="add">
+          <button mat-mini-fab matTooltip="Agregar Curso">
+            <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
+        </mat-header-cell>
 
-          <button mat-icon-button color="accent" (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-          </button>
+        <mat-cell *matCellDef="let course" class="crud">
 
-          <button mat-icon-button color="warn" (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="delete"></mat-icon>
-          </button>
-
-          
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['./',row.name]">
-    
+
       </mat-row>
 
     </mat-table>
 
-
-
-    <span class="add">
-      <button mat-fab matTooltip="Agregar Curso">
-        <mat-icon svgIcon="account-plus"></mat-icon>
-      </button>
-    </span>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
 
   </mat-card>
 

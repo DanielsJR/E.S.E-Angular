@@ -36,16 +36,8 @@ export class ResetPassDialogComponent implements OnInit {
         config.width = '500px';
         config.height = 'auto';
 
-        let dialogRef = this.dialog.open(ResetPassDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'reseted') {
-                console.log('reseted!');
-            } else if (result === 'error') {
-                console.log('error!');
-            }
-        });
+        this.dialog.open(ResetPassDialogRefComponent, config);
+
     }
 
 }

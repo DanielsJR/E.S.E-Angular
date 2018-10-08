@@ -11,6 +11,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer } from '@angular/platform-browser';
+import { User } from '../../../../models/user';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { SnackbarService } from '../../../../services/snackbar.service';
+import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_ACCEPT } from '../../../../app.config';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { CrudUserDialogRefComponent } from '../../../../shared/dialogs/crud-user-dialog-ref/crud-user-dialog-ref.component';
+
 
 @Component({
   selector: 'nx-manager-courses-detail',
@@ -19,44 +26,50 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ManagerCoursesDetailComponent implements OnInit {
 
-  course$: Observable<Course>;
   courseName = "";
+  course: Course;
 
   // mat table
   displayedColumns = ['student', 'crud'];
   dataSource;
+  chiefTeacher: User;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 20;
   pageSizeOptions = [5, 10, 20];
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
+  isLoading: boolean = false;
 
   constructor(
-    private route: ActivatedRoute, private router: Router,
-    private courseStoreService: CourseStoreService,
-    private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer
-  ) { }
-
-  ngOnInit() {
+    private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
+    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
+    private snackbarService: SnackbarService, public dialog: MatDialog
+  ) {
+    this.route.paramMap
+      .pipe(switchMap((params: ParamMap) => of(params.get('name'))))
+      .subscribe(d => this.courseName = d)
+    console.log("Curso nombre: " + this.courseName);
     this.dataSource = new MatTableDataSource();
 
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => of(params.get('name')))
-    ).subscribe(d => this.courseName = d)
-    console.log("Curso nombre: " + this.courseName);
+    this.courseStoreService.courses$
+      .subscribe(courses => {
+        this.course = courses.find(c => c.name === this.courseName)
+        if (this.course) {
+          this.chiefTeacher = this.course.chiefTeacher;
+          this.dataSource.data = this.course.students;
+        }
+      });
 
-    this.course$ = this.courseStoreService.courses$.pipe(
-      map(courses => courses.find(c => c.name === this.courseName))
-    );
+   // this.courseStoreService.loadOneCourse(this.courseName, 2018);
 
-    this.dataSource = this.courseStoreService.courses$.pipe(
-      map(courses => courses.find(c => c.name === this.courseName).students)
-    );
+    /*     
+        this.dataSource = this.courseStoreService.courses$
+          .pipe(map(courses => courses.find(c => c.name === this.courseName).students)); */
+  }
 
-    //this.courseStoreService.getCourses(2018);
-
+  ngOnInit() {
+    this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
@@ -65,8 +78,6 @@ export class ManagerCoursesDetailComponent implements OnInit {
     this.setRowClass();
 
   }
-
-
 
   setRowClass() {
     this.rowClasses = {
@@ -91,4 +102,49 @@ export class ManagerCoursesDetailComponent implements OnInit {
   }
 
 
+  addStudent(user: User) {
+    let listStudents: User[] = this.course.students.slice();
+    listStudents.push(user);
+    let courseEdit: Course = Object.assign({}, this.course);
+    courseEdit.students = listStudents;
+    this.isLoading = true;
+    this.courseStoreService.update(courseEdit)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ => this.snackbarService.openSnackBar('Alumno Agregado', RESULT_SUCCESS)
+        , err => {
+          this.snackbarService.openSnackBar('Error al agregar Alumno', RESULT_ERROR);
+          console.error("Error editing Course: " + err);
+        });
+  }
+
+  changeTeacher(teacher: User) {
+    let courseEdit: Course = Object.assign({}, this.course);
+    courseEdit.chiefTeacher = teacher;
+    this.isLoading = true;
+    this.courseStoreService.update(courseEdit)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ => this.snackbarService.openSnackBar('Profesor Cambiado', RESULT_SUCCESS)
+        , err => {
+          this.snackbarService.openSnackBar('Error al cambiar profesor', RESULT_ERROR);
+          console.error("Error editing Course: " + err);
+        });
+  }
+
+
+
+  deleteStudent(user: User) {
+    console.log('nombre: ' + user.firstName);
+    let listStudents: User[] = this.course.students.slice();
+    listStudents = listStudents.filter(s => s.id !== (user.id));
+    let courseEdit: Course = Object.assign({}, this.course);
+    courseEdit.students = listStudents;
+    this.isLoading = true;
+    this.courseStoreService.update(courseEdit)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ => this.snackbarService.openSnackBar('Alumno Eliminado', RESULT_SUCCESS)
+        , err => {
+          this.snackbarService.openSnackBar('Error al eliminar Alumno', RESULT_ERROR);
+          console.error("Error editing Course: " + err);
+        });
+  }
 }

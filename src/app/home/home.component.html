@@ -85,7 +85,7 @@
                         <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                             alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
                     </mat-list-item>
-                    <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
+                    <nx-image-zoom-user #imageZoom [user]="user"></nx-image-zoom-user>
                 </mat-list>
 
                 <mat-nav-list class="menuProfile">

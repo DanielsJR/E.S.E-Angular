@@ -63,6 +63,7 @@ import { SearchUserDialogComponent } from './search-user-dialog/search-user-dial
   exports: [
     GetUsersComponent,
     SearchUserDialogComponent,
+    CrudUserDialogComponent
 
   ]
 

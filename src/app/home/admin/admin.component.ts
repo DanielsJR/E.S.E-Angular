@@ -12,17 +12,18 @@ export class AdminComponent implements OnInit, OnDestroy {
     constructor(
         private courseStoreService: CourseStoreService,
         private userStoreService: UserStoreService,
-        private loginService: LoginService
+
     ) { }
 
     ngOnInit(): void {
-        this.userStoreService.loadInitialDataManagers();
-        this.userStoreService.loadInitialDataTeachers();
+        this.userStoreService.loadAllManagers();
+        this.userStoreService.loadAllTeachers();
 
 
 
-        //this.userStoreService.loadInitialDataStudents();
-        //this.courseStoreService.getCourses(2018);
+        //for develop
+        //this.userStoreService.loadAllStudents();
+        //this.courseStoreService.loadAllCourses(2018);
     }
 
     ngOnDestroy() {

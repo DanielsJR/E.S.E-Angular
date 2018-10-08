@@ -5,10 +5,10 @@ import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { finalize } from 'rxjs/operators';
+import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED } from '../../../../app.config';
 
 
 @Component({
-  selector: 'nx-reset-pass-dialog-ref',
   templateUrl: './reset-pass-dialog-ref.component.html',
   styleUrls: ['./reset-pass-dialog-ref.component.css']
 })
@@ -41,22 +41,21 @@ export class ResetPassDialogRefComponent implements OnInit {
     this.isLoading = true;
     const resetedPass = this.resetedPass();
 
-    this.userBackendService
-      .resetUserPassword(this.user.username, resetedPass, this.uriRole)
+    this.userBackendService.resetUserPassword(this.user.username, resetedPass, this.uriRole)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(response => {
         if (response) {
-          this.dialogRef.close('reseted');
-          setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', 'success'));
+          this.dialogRef.close();
+          setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCESS));
         } else {
-          this.dialogRef.close('error');
-          setTimeout(() => this.snackbarService.openSnackBar('Error al restablecer contraseña', 'Error'));
+          this.dialogRef.close();
+          setTimeout(() => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR));
         };
 
       });
   }
 
   cancel(): void {
-    this.dialogRef.close('canceled');
+    this.dialogRef.close();
   }
 }

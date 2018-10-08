@@ -17,7 +17,7 @@
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>
-            <nx-image-zoom-user #imageZoom [user]="user"></nx-image-zoom-user>
+            <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
         </mat-list-item>
 
     </mat-list>
@@ -344,7 +344,7 @@
                     alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
                 <h3 matLine> {{user | shortName}} </h3>
                 <p matLine>
-                    <span class="role-style">{{user.roles | rolesToSpanish}}</span>
+                    <span class="role-style">{{eRoles.value | rolesToSpanish}}</span>
                 </p>
 
                 <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
@@ -362,7 +362,7 @@
                     </button>
                 </mat-menu>
             </mat-list-item>
-            <nx-image-zoom-user #imageZoom [user]="user"></nx-image-zoom-user>
+            <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
         </mat-list>
 
         <mat-divider></mat-divider>
@@ -551,10 +551,10 @@
                                 <i class="mdi mdi-security-account material-icons app-input-icon">&nbsp;</i>Privilegios de Usuario
                             </mat-label>
                             <input matInput readonly>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="editRolesSubs(setRoles.openDialogSetRoles())">
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="setRoles.openDialogSetRoles()">
                                 <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
                             </button>
-                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
+                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole" (userEditedRoles)="afterEditRoles($event)"></nx-set-roles-dialog>
                         </mat-form-field>
 
                     </div>
@@ -602,7 +602,7 @@
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>
         </mat-list-item>
-        <nx-image-zoom-user #imageZoom [user]="user"></nx-image-zoom-user>
+        <nx-image-zoom-user #imageZoom [user]="user" [uriRole]="uriRole"></nx-image-zoom-user>
     </mat-list>
 
     <mat-divider></mat-divider>

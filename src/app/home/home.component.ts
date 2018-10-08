@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { RESULT_SUCCESS } from '../app.config';
 
 
 @Component({
@@ -71,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, 'success'));
+      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCESS));
 
     } else {
       console.log('user:null getting user from backend');
@@ -102,7 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.subscriptionIsLoading.unsubscribe();
+    //this.subscriptionIsLoading.unsubscribe();
   }
 
   shortName(user: User): string {

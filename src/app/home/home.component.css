@@ -109,6 +109,14 @@ mat-sidenav-container .container2 {
     opacity: 0.3;
 }
 
+mat-list-item h3 {
+    line-height: 17px !important;
+}
+
+mat-list-item p {
+    line-height: 20px !important;
+}
+
 /* primary content */
 
 .contenido {

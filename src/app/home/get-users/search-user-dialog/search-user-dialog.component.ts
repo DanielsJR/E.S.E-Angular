@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { SearchUserDialogRefComponent } from './search-user-dialog-ref/search-user-dialog-ref.component';
+import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ERROR } from '../../../app.config';
 
 
 @Component({
@@ -10,8 +11,11 @@ import { SearchUserDialogRefComponent } from './search-user-dialog-ref/search-us
     styles: []
 })
 export class SearchUserDialogComponent implements OnInit {
-    @Input()
-    uriRole: string;
+
+    @Output() userSelected = new EventEmitter<User>();
+
+    @Input() user: User;
+    @Input() userRole: string;
 
     constructor(public dialog: MatDialog) { }
 
@@ -20,8 +24,8 @@ export class SearchUserDialogComponent implements OnInit {
 
     openDialogSearchUser(): void {
         let data = {
-            //user: this.user,
-            uriRole: this.uriRole,
+            user: (this.user) ? this.user : null,
+            userRole: this.userRole,
             type: 'searchUser'
         };
         let config = new MatDialogConfig();
@@ -32,12 +36,13 @@ export class SearchUserDialogComponent implements OnInit {
 
         let dialogRef = this.dialog.open(SearchUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'set') {
-                console.log('set!');
-            } else if (result === 'error') {
-                console.log('error!');
+            if (result === RESULT_CANCELED) {
+                console.log(RESULT_CANCELED);
+            } else if (result === RESULT_ACCEPT) {
+                this.userSelected.emit(dialogRef.componentInstance.user);
+                console.log(RESULT_ACCEPT);
+            } else if (result === RESULT_ERROR) {
+                console.log(RESULT_ERROR);
 
             }
         });

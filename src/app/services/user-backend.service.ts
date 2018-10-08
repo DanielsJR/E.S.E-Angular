@@ -115,7 +115,7 @@ export class UserBackendService {
     }
 
     setUserPasswordSecured(username: string, pass: string[]): Observable<boolean> {
-        const url = `${this.userURL}${URI_PASS}/${username}`;
+        const url = `${this.userURL}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, pass).pipe(
             tap(result => console.log(`pass set: ${result}`))

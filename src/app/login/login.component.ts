@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from './login.service';
 import { User } from '../models/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR } from '../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { UserLoggedService } from '../services/user-logged.service';
@@ -66,13 +66,13 @@ export class LoginComponent implements OnInit {
             this.badCredencialsError();
             this.loginForm.markAsPristine();
           } else if (error.status === 0) {
-            this.snackbarService.openSnackBar('Servidor caido', 'error');
+            this.snackbarService.openSnackBar('Servidor caido', RESULT_ERROR);
           } else {
-            this.snackbarService.openSnackBar(error.error.message, 'error');
+            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
           }
 
         } else {
-          this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', 'error');
+          this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', RESULT_ERROR);
         }
         this.isLoading = false;
       });

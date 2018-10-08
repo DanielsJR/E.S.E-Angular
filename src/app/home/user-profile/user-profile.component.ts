@@ -15,6 +15,7 @@ import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStoreService } from '../../services/user-store.service';
+import { RESULT_ERROR, RESULT_SUCCESS } from '../../app.config';
 
 
 @Component({
@@ -71,7 +72,6 @@ export class UserProfileComponent implements OnInit {
 
     isLoading = false;
 
-
     constructor(
         private formBuilder: FormBuilder, private userBackendService: UserBackendService,
         private userLoggedService: UserLoggedService, public sanitizer: DomSanitizer,
@@ -80,7 +80,6 @@ export class UserProfileComponent implements OnInit {
 
     ngOnInit() {
         this.buildForm();
-
     }
 
     buildForm() {
@@ -162,20 +161,16 @@ export class UserProfileComponent implements OnInit {
                 this.userLoggedService.userLogged(user);
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
-                //this.userStoreService.updateManagerInStore(user);
-                //this.userStoreService.updateTeacherInStore(user);
                 this.userStoreService.updateInManagerDataStore(user);
                 this.userStoreService.updateInTeacherDataStore(user);
-
-
             }, error => {
                 if (error instanceof HttpErrorResponse) {
-                    this.snackbarService.openSnackBar(error.error.message, 'error');
+                    this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
                 } else {
-                    this.snackbarService.openSnackBar('Error al actualizar usuario', 'error');
+                    this.snackbarService.openSnackBar('Error al actualizar usuario', RESULT_ERROR);
                 }
             }, () => {
-                this.snackbarService.openSnackBar('Datos Actualizados', 'success');
+                this.snackbarService.openSnackBar('Datos Actualizados', RESULT_SUCCESS);
             }
             );
 

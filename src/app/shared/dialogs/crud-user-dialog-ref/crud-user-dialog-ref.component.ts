@@ -1,26 +1,21 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { User } from '../../../../models/user';
-import {
-    URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
-    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE
-} from '../../../../app.config';
 import * as moment from 'moment';
-import { COMMUNNES } from '../../../../models/communes';
-import { GENDERS } from '../../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
-import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
-import { rutValidator } from '../../../../shared/validators/rut-validator';
-import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
-import { Avatar } from '../../../../models/avatar';
-import { UserStoreService } from '../../../../services/user-store.service';
-import { finalize } from 'rxjs/internal/operators/finalize';
-import { LoginService } from '../../../../login/login.service';
-import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { RESULT_ACCEPT, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, URI_MANAGERS, ROLE_ADMIN, ROLE_ADMIN_SPANISH, ROLE_MANAGER, ROLE_MANAGER_SPANISH, ROLE_TEACHER, ROLE_TEACHER_SPANISH, ROLE_STUDENT, ROLE_STUDENT_SPANISH, URI_TEACHERS } from '../../../app.config';
+import { User } from '../../../models/user';
+import { COMMUNNES } from '../../../models/communes';
+import { GENDERS } from '../../../models/genders';
+import { PRIVILEGES } from '../../../models/privileges';
+import { Avatar } from '../../../models/avatar';
+import { UserStoreService } from '../../../services/user-store.service';
+import { LoginService } from '../../../login/login.service';
+import { NAME_PATTERN, PHONE_PATTERN } from '../../validators/patterns';
+import { noWhitespaceValidator } from '../../validators/no-white-space-validator';
+import { rutValidator } from '../../validators/rut-validator';
+
 
 
 @Component({
@@ -52,9 +47,8 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreService: UserStoreService, private loginService: LoginService,
-        private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
-        
+        private formBuilder: FormBuilder, public sanitizer: DomSanitizer,
+        private loginService: LoginService
     ) {
         this.user = data.user;
         this.uriRole = data.uriRole;
@@ -66,9 +60,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     ngOnInit(): void {
         this.buildForm();
         if (this.data.type === 'create') this.setAvatarCreateDefault();
-
         this.isAdmin = this.loginService.isAdmin();
-
     }
 
     convertDate(birthDay: any) {
@@ -315,32 +307,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
     }
 
-    editRolesSubs(dialogRef: MatDialogRef<SetRolesDialogRefComponent>) {
-        console.log('editRolesSubs called!!');
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === RESULT_CANCELED) {
-                console.log(RESULT_CANCELED);
-            } else if (result === RESULT_SUCCESS) {
-                this.user = dialogRef.componentInstance.user;
-                //this.eRoles.setValue(this.user.roles);
-                this.setAvatarEditDefault();
-                if (this.uriRole === URI_MANAGERS) {
-                    if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
-                } else if (this.uriRole === URI_TEACHERS) {
-                    if (!this.user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
-                } else {
-                    console.error('NO uriRole');
-                }
-                this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
-            } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Actualizar Roles", RESULT_ERROR);
-            }
-        });
-
-
-    }
-
-    afterEditRoles22(user: User) {
+    afterEditRoles(user: User) {
         console.log('afterEditRoles called!!');
         this.user = user;
         this.eRoles.setValue(user.roles);
@@ -378,44 +345,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm.value.address = (this.cAddress.value === "") ? null : this.cAddress.value;
 
         let userCreate: User = this.createForm.value;
-
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.createManager(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error creating manager: " + err);
-                });
-
-
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.createTeacher(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error creating teacher: " + err);
-                });
-
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.createStudent(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error creating student: " + err);
-                });
-
-        } else {
-            console.error('NO uriRole');
-        }
+        this.dialogRef.close(RESULT_ACCEPT);
 
     }
 
@@ -428,90 +358,14 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.editForm.value.mobile = (this.eMobile.value === "") ? null : this.eMobile.value;
         this.editForm.value.email = (this.eEmail.value === "") ? null : this.eEmail.value;
         this.editForm.value.address = (this.eAddress.value === "") ? null : this.eAddress.value;
-
+        // this.user = this.editForm.value;
         let userEdit: User = this.editForm.value;
-
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.updateManager(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(user => {
-                    //this.userStoreService.updateInTeacherDataStore(user);
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error editing manager: " + err);
-                });
-
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.updateTeacher(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(user => {
-                    //this.userStoreService.updateInManagerDataStore(user);
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error editing teacher: " + err);
-                });
-
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.updateStudent(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    console.error("Error editing student: " + err);
-                    this.dialogRef.close(RESULT_ERROR);
-                });
-
-        } else {
-            console.error('NO uriRole');
-        }
+        this.dialogRef.close(RESULT_ACCEPT);
 
     }
 
     delete(): void {
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.deleteManager(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    //this.userStoreService.deleteInTeacherDataStore(this.user);
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error deleting manager: " + err);
-                });
-
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.deleteTeacher(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    //this.userStoreService.deleteInManagerDataStore(this.user);
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error deleting teacher: " + err);
-                });
-
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.deleteStudent(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
-                }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
-                    console.error("Error deleting student: " + err);
-                });
-
-        } else {
-            console.error('NO uriRole');
-        }
-
+        this.dialogRef.close(RESULT_ACCEPT);
     }
 
 

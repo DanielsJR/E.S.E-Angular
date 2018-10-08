@@ -1,11 +1,9 @@
-.container{
+.container {
     width: 100%;
     height: 100%;
-
     margin: 0;
     padding: 0;
 }
-
 
 mat-card {
     max-width: 620px;
@@ -23,7 +21,6 @@ mat-form-field {
     font-size: 14px;
     width: 100%;
 }
-
 
 .fila:hover {
     cursor: pointer;
@@ -61,7 +58,11 @@ mat-list {
     padding: 0;
 }
 
-.colum2 {
+.add {
+    justify-content: flex-end !important;
+}
+
+.crud {
     justify-content: flex-end !important;
 }
 
@@ -71,11 +72,4 @@ mat-list-item {
 
 .role-style {
     color: darkgray;
-}
-
-.add {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    color: white;
 }

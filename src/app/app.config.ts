@@ -49,12 +49,14 @@ export const ROLE_TEACHER_SPANISH  = 'Docente';
 export const ROLE_STUDENT_SPANISH  = 'Estudiante';
 
 
-//*******************SNACKBAR*************************/
+//*******************SNACKBAR---DIALOG_REF*************************/
 export const RESULT_SUCCESS = "success";
 export const RESULT_CANCELED = "canceled";
 export const RESULT_ERROR = "error";
 export const RESULT_EDIT = "edit";
+export const RESULT_DETAIL= "detail";
 export const RESULT_DELETE = "delete";
+export const RESULT_ACCEPT = "accept";
 
 
 

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dialog-ref.component';
-import { SnackbarService } from '../../../services/snackbar.service';
+
 
 
 @Component({
@@ -13,16 +13,16 @@ import { SnackbarService } from '../../../services/snackbar.service';
 export class SetRolesDialogComponent implements OnInit {
 
     @Input() user: User;
-
     @Input() uriRole: string;
 
-    @Output() userEditedRoles = new EventEmitter<User>();
+    //@Output() userEditedRoles = new EventEmitter<User>();
+    // plantilla(userEditedRoles)="afterEditRoles($event)"
 
-    constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
+    constructor(public dialog: MatDialog) { }
 
     ngOnInit() { }
 
-    openDialogSetRoles(): void {
+    openDialogSetRoles(): MatDialogRef<SetRolesDialogRefComponent> {
         let data = {
             user: this.user,
             uriRole: this.uriRole,
@@ -34,20 +34,8 @@ export class SetRolesDialogComponent implements OnInit {
         config.width = '500px';
         config.height = 'auto';
 
-        let dialogRef = this.dialog.open(SetRolesDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === 'canceled') {
-                console.log('canceled!');
-            } else if (result === 'set') {
-                this.userEditedRoles.emit(dialogRef.componentInstance.user);
-                this.snackbarService.openSnackBar("Role(s) Actualizados", 'success');
-                console.log('set!');
-            } else if (result === 'error') {
-                this.snackbarService.openSnackBar("Error al Actualizar Role(s)", 'error');
-                console.log('error!');
+        return this.dialog.open(SetRolesDialogRefComponent, config);
 
-            }
-        });
     }
 
 

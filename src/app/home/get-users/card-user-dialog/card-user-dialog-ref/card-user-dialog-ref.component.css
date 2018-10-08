@@ -8,7 +8,7 @@ mat-dialog-content {
     height: 40px;
 }
 
-mat-card > img {
+mat-card>img {
     margin-bottom: 0 !important;
 }
 
@@ -21,4 +21,8 @@ mat-card-actions {
 
 mat-card-actions button {
     margin: 0;
+}
+
+mat-card-title {
+    margin-bottom: 10px;
 }
