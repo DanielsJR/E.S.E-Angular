@@ -5,6 +5,12 @@
     <mat-toolbar>
 
       <mat-toolbar-row>
+        <mat-form-field>
+          <input matInput>
+          <mat-placeholder>
+            <i class="mdi mdi-magnify material-icons"></i>Buscar
+          </mat-placeholder>
+        </mat-form-field>
         <span class="spacer-r"></span>
         <mat-chip-list>
           <mat-chip color="primary" selected="true">
@@ -33,10 +39,12 @@
           </mat-list-item>
         </mat-list>
         <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="'MANAGER'"></nx-crud-user-dialog>
-        <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="changeTeacher($event)"> </nx-search-user-dialog>
+        <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="changeTeacher($event)">
+        </nx-search-user-dialog>
       </mat-toolbar-row>
 
     </mat-toolbar>
+    <mat-divider></mat-divider>
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
@@ -65,7 +73,8 @@
           <button mat-mini-fab matTooltip="Agregar Estudiante" (click)="addStudentDialog.openDialogSearchUser()">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
-          <nx-search-user-dialog #addStudentDialog [userRole]="'STUDENT'" (userSelected)="addStudent($event)"> </nx-search-user-dialog>
+          <nx-search-user-dialog #addStudentDialog [userRole]="'STUDENT'" (userSelected)="addStudent($event)">
+          </nx-search-user-dialog>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let student" class="crud">
@@ -94,7 +103,10 @@
     </mat-table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-
+  
+    <mat-toolbar>
+      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart>Volver</button>
+    </mat-toolbar>
   </mat-card>
 
 </div>

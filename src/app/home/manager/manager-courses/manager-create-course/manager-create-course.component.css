@@ -17,13 +17,17 @@ mat-toolbar {
     padding: 8px 24px 0;
 }
 
+.top{
+    padding: 24px 24px 0 !important;
+}
+
 mat-toolbar-row {
     padding: 0;
 }
 
 mat-form-field {
     font-size: 14px;
-    width: 100%;
+    --width: 40%;
 }
 
 .fila:hover {

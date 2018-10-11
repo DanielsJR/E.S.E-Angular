@@ -4,8 +4,6 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Observable } from 'rxjs/internal/Observable';
 import { CourseStoreService } from '../../../../services/course-store.service';
-import { map } from 'rxjs/internal/operators/map';
-import { of } from 'rxjs/internal/observable/of';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../../services/session-storage.service';
@@ -16,7 +14,7 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_ACCEPT } from '../../../../app.config';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { CrudUserDialogRefComponent } from '../../../../shared/dialogs/crud-user-dialog-ref/crud-user-dialog-ref.component';
+import { tap } from 'rxjs/internal/operators/tap';
 
 
 @Component({
@@ -26,7 +24,7 @@ import { CrudUserDialogRefComponent } from '../../../../shared/dialogs/crud-user
 })
 export class ManagerCoursesDetailComponent implements OnInit {
 
-  courseName = "";
+  courseName: string;
   course: Course;
 
   // mat table
@@ -46,29 +44,22 @@ export class ManagerCoursesDetailComponent implements OnInit {
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private snackbarService: SnackbarService, public dialog: MatDialog
   ) {
-    this.route.paramMap
-      .pipe(switchMap((params: ParamMap) => of(params.get('name'))))
-      .subscribe(d => this.courseName = d)
-    console.log("Curso nombre: " + this.courseName);
+
     this.dataSource = new MatTableDataSource();
 
-    this.courseStoreService.courses$
-      .subscribe(courses => {
-        this.course = courses.find(c => c.name === this.courseName)
-        if (this.course) {
-          this.chiefTeacher = this.course.chiefTeacher;
-          this.dataSource.data = this.course.students;
-        }
-      });
-
-   // this.courseStoreService.loadOneCourse(this.courseName, 2018);
-
-    /*     
-        this.dataSource = this.courseStoreService.courses$
-          .pipe(map(courses => courses.find(c => c.name === this.courseName).students)); */
   }
 
   ngOnInit() {
+
+    // paramMap re-uses the component
+    this.route.paramMap
+      .pipe(switchMap(params => this.getCurso(params.get('name'))))
+      .subscribe();
+
+    // snapshot doesn't re-uses the component
+    /*   this.getCurso(this.route.snapshot.paramMap.get('name'))
+       .subscribe();*/
+
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
@@ -77,6 +68,19 @@ export class ManagerCoursesDetailComponent implements OnInit {
 
     this.setRowClass();
 
+  }
+
+  getCurso(name): Observable<Course[]> {
+    return this.courseStoreService.courses$
+      .pipe(
+        tap(courses => {
+          this.course = courses.find(c => c.name === name)
+          if (this.course) {
+            this.chiefTeacher = this.course.chiefTeacher;
+            this.dataSource.data = this.course.students;
+          }
+        })
+      );
   }
 
   setRowClass() {
@@ -93,12 +97,8 @@ export class ManagerCoursesDetailComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  gotoCourses(course: Course) {
-    let courseName = course ? course.name : null;
-    // Pass along the hero id if available
-    // so that the HeroList component can select that hero.
-    // Include a junk 'foo' property for fun.
-    this.router.navigate(['home/manager/courses', { name: courseName, foo: 'foo' }]);
+  gotoCourses() {
+    this.router.navigate(['../../'], { relativeTo: this.route });
   }
 
 

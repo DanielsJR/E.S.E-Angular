@@ -12,6 +12,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     constructor(
         private courseStoreService: CourseStoreService,
         private userStoreService: UserStoreService,
+        private loginService: LoginService
 
     ) { }
 
@@ -19,11 +20,11 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.userStoreService.loadAllManagers();
         this.userStoreService.loadAllTeachers();
 
+        if (this.loginService.isManager()) {
+            this.userStoreService.loadAllStudents();
+            this.courseStoreService.loadAllCourses(2018);
+        }
 
-
-        //for develop
-        //this.userStoreService.loadAllStudents();
-        //this.courseStoreService.loadAllCourses(2018);
     }
 
     ngOnDestroy() {

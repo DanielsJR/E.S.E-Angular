@@ -30,11 +30,9 @@ export class ManagerCoursesComponent implements OnInit {
     public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-   // this.courseStoreService.loadAllCourses(2018);
     this.dataSource = new MatTableDataSource();
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.dataSource = this.courseStoreService.courses$;
-    //this.courseStoreService.getCourses(2018);
  
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;

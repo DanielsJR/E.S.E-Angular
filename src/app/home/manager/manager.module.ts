@@ -9,6 +9,8 @@ import { ManagerComponent } from './manager.component';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
+import { ManagerCreateCourseComponent } from './manager-courses/manager-create-course/manager-create-course.component';
+
 
 
 
@@ -28,6 +30,7 @@ import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses
     ManagerCoursesComponent,
     ManagerSubjectsComponent,
     ManagerCoursesDetailComponent,
+    ManagerCreateCourseComponent,
   ],
 
   providers: [

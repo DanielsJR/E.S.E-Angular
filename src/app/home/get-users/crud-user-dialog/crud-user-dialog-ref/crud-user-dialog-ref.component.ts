@@ -340,20 +340,6 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     }
 
-    afterEditRoles22(user: User) {
-        console.log('afterEditRoles called!!');
-        this.user = user;
-        this.eRoles.setValue(user.roles);
-        this.setAvatarEditDefault();
-        if (this.uriRole === URI_MANAGERS) {
-            if (!user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
-        } else if (this.uriRole === URI_TEACHERS) {
-            if (!user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
-        } else {
-            console.error('NO uriRole');
-        }
-    }
-
 
     cancel(): void {
         this.dialogRef.close(RESULT_CANCELED);

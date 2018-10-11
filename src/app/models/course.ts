@@ -6,7 +6,7 @@ export class Course {
         public name?: string,
         public chiefTeacher?: User,
         public students?: User[],
-        public period?: string,
+        public year?: string,
 
     ) { }
 }
