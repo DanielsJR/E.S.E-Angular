@@ -2,7 +2,7 @@
 
   <mat-card class="mat-elevation-z8">
 
-    <mat-toolbar>
+    <mat-toolbar color="primary" >
 
       <mat-form-field>
         <input matInput>
@@ -14,7 +14,7 @@
       <span class="spacer-r"></span>
 
       <mat-chip-list>
-        <mat-chip color="primary" selected="true">
+        <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
           &nbsp; Cursos
         </mat-chip>
@@ -54,12 +54,24 @@
 
         <mat-cell *matCellDef="let course" class="crud">
 
+            <button mat-icon-button color="primary" (click)="$event.stopPropagation()" [routerLink]="['./detail',course.name]">
+                <mat-icon svgIcon="eye"></mat-icon>
+              </button>
+
+
+          <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+
+          <nx-simple-dialog #deleteDialog [obj]="course" message="Desea eliminar este curso?" [title]="course.name"
+          [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
+          [avatar]="course.chiefTeacher.avatar" (objSelected)="deleteCourse($event)"></nx-simple-dialog>
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['./detail',row.name]">
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
 
       </mat-row>
 

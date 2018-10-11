@@ -105,7 +105,7 @@ export class CourseStoreService {
         return this.courseBackendService.delete(course)
             .pipe(
                 tap(_ => {
-                    let index = this.dataStore.courses.findIndex((c: Course) => c.id === ((typeof course === 'string') ? course : course.name));
+                    let index = this.dataStore.courses.findIndex((c: Course) => c.id === ((typeof course === 'string') ? course : course.id));
                     if (index != -1) {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);

@@ -9,6 +9,7 @@ import { ThemePickerModule } from './theme-picker/theme-picker.module';
 import { SnackbarRefModule } from './snackbars-ref/snackbars-ref.module';
 import { ShortNamePipe } from './pipes/short-name.pipe';
 import { RolesToSpanishPipe } from './pipes/roles-to-spanish.pipe';
+import { SimpleDialogModule } from './dialogs/simple-dialog/simple-dialog.module';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { RolesToSpanishPipe } from './pipes/roles-to-spanish.pipe';
     SnackbarRefModule,
     ShortNamePipe,
     RolesToSpanishPipe,
+    SimpleDialogModule,
 
   ]
 })

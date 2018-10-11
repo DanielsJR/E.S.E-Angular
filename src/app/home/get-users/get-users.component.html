@@ -2,7 +2,7 @@
 
   <mat-card class="mat-elevation-z8">
 
-    <mat-toolbar>
+    <mat-toolbar color="primary">
 
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)">
@@ -14,7 +14,7 @@
       <span class="spacer-r"></span>
 
       <mat-chip-list *ngIf="usersRole">
-        <mat-chip color="primary" selected="true">
+        <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
           &nbsp; {{usersRole}}
         </mat-chip>

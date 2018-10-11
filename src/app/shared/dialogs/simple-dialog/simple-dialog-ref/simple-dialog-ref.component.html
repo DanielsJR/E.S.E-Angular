@@ -1,0 +1,23 @@
+<mat-dialog-content class="dialogContent">
+    <mat-card class="card">
+  
+      <mat-card-header>
+        <mat-card-title *ngIf="obj">{{title}}</mat-card-title>
+        <mat-card-subtitle *ngIf="obj">{{subtitle}}</mat-card-subtitle>
+        <span class="spacer-r"></span>
+        <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
+      </mat-card-header>
+      <p class="message">{{message}}</p>
+
+  
+      <img *ngIf="avatar" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type +';base64,' + avatar?.data)"
+         class="imageCard">
+  
+      <mat-card-actions>
+        <button type="button" mat-stroked-button color="accent" tabindex="1" (click)="cancel()" cdkFocusRegionstart>Cancelar</button>
+        <button type="button" mat-stroked-button color="primary" tabindex="2" (click)="accept()">{{successButton}}</button>
+  
+      </mat-card-actions>
+  
+    </mat-card>
+  </mat-dialog-content>

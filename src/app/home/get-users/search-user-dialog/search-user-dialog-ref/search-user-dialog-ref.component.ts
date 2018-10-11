@@ -10,7 +10,6 @@ import { UserStoreService } from '../../../../services/user-store.service';
 import { RESULT_CANCELED, RESULT_ACCEPT, ROLE_TEACHER, ROLE_STUDENT, ROLE_MANAGER } from '../../../../app.config';
 
 @Component({
-  selector: 'nx-search-user-dialog-ref',
   templateUrl: './search-user-dialog-ref.component.html',
   styleUrls: ['./search-user-dialog-ref.component.css']
 })

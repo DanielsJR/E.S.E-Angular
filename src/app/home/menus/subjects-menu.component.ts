@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 
 <mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]="['./manager/subjects']">
-  <mat-icon matListIcon svgIcon="book-variant"></mat-icon>
+  <mat-icon matListIcon svgIcon="school"></mat-icon>
     <h3 matLine>Asignaturas</h3>
 </mat-list-item>
   

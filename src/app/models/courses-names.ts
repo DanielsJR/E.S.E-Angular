@@ -17,7 +17,7 @@ export  const COURSES_NAMES_GROUPS =  [
     },
     {
       name: 'Tercero',
-      disabled: true,
+      //disabled: true,
       course: [
         {value: 'TERCERO_A', viewValue: '3-A'},
         {value: 'TERCERO_B', viewValue: '3-B'},

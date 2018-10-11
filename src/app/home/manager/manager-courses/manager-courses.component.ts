@@ -5,6 +5,10 @@ import { DomSanitizer } from '../../../../../node_modules/@angular/platform-brow
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { MatTableDataSource } from '../../../../../node_modules/@angular/material/table';
 import { CourseStoreService } from '../../../services/course-store.service';
+import { Course } from '../../../models/course';
+import { finalize } from 'rxjs/operators';
+import { RESULT_SUCCESS, RESULT_ERROR } from '../../../app.config';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -27,13 +31,13 @@ export class ManagerCoursesComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(private sessionStorage: SessionStorageService, private courseStoreService: CourseStoreService,
-    public sanitizer: DomSanitizer) { }
+    public sanitizer: DomSanitizer,private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.dataSource = this.courseStoreService.courses$;
- 
+
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
@@ -47,6 +51,18 @@ export class ManagerCoursesComponent implements OnInit {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
+  }
+
+  deleteCourse(course: Course) {
+    this.isLoading = true;
+    this.courseStoreService.delete(course)
+    .pipe(finalize(() => this.isLoading = false))
+    .subscribe(_ => this.snackbarService.openSnackBar('Curso Eliminado', RESULT_SUCCESS)
+    , err => {
+      this.snackbarService.openSnackBar('Error al eliminar Curso', RESULT_ERROR);
+      console.error("Error deleting Course: " + err);
+    });
+
   }
 
 }

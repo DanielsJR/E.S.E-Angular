@@ -1,6 +1,6 @@
 <mat-sidenav-container [class]="themePicker.themeName">
-        <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-        <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
     <!-- toolbar -->
     <mat-toolbar color="primary" class="toolbar1">
 
@@ -9,6 +9,9 @@
         </button>
 
         <img id="imgHome" alt="E.S.E" src="assets/images/logos/ese-logo.png">
+
+        <span class="spacer-r"></span>
+        <nx-logo [jelloState]=isScrolled></nx-logo>
 
         <span class="spacer-r"></span>
         <nx-full-screen></nx-full-screen>
@@ -191,8 +194,7 @@
 
         <!-- toolbar2 -->
         <mat-toolbar class="toolbar2">
-            <span class="spacer-c"></span>
-            <nx-logo [jelloState]=isScrolled></nx-logo>
+
         </mat-toolbar>
 
         <!-- primary content -->

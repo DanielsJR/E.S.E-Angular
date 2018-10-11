@@ -50,7 +50,7 @@ export class CourseBackendService {
     }
 
     delete(course: Course | string): Observable<boolean> {
-        const courseName = (typeof course === 'string') ? course : course.name;
+        const courseName = (typeof course === 'string') ? course : course.id;
         const url = `${this.courseURL}/${courseName}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<boolean>(url)
