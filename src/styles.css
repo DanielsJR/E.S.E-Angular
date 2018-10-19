@@ -6,12 +6,13 @@
 @import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
 html,
 body,
+.myWrapper,
 mat-sidenav-container{
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    --overflow: hidden;
 }
 
 /*mat-toolbar */
@@ -72,7 +73,7 @@ a.mat-menu-item>mat-icon {
 
 
 
-/*scrollbar */
+/*scrollbar 
 ::-webkit-scrollbar {
     width: 8px;
 }

@@ -3,10 +3,7 @@
 
     <mat-card class="mat-elevation-z8">
 
-      <mat-toolbar class="top" color="primary">
-
-
-
+      <mat-toolbar class="toolbar1" color="primary">
         <mat-form-field>
           <mat-select formControlName="name">
             <mat-option>-- None --</mat-option>
@@ -43,7 +40,11 @@
           </mat-chip>
         </mat-chip-list>
       </mat-toolbar>
-      <mat-toolbar>
+
+      <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+      <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+      <mat-toolbar class="toolbar2">
 
         <mat-list style="flex-grow: 8">
           <mat-list-item>
@@ -73,8 +74,6 @@
 
       </mat-toolbar>
       <mat-divider></mat-divider>
-      <div *ngIf="!isLoading" style="height: 5px;"></div>
-      <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
       <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -130,16 +129,13 @@
 
       </mat-table>
 
-      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
-
-      </mat-paginator>
-
-      <mat-toolbar>
+      <div class="wrapperPaginator">
         <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoCourses()"
-          cdkFocusRegionstart>Cancelar</button>
-        <span class="spacer-r"></span>
+          cdkFocusRegionstart class="btnBack">Cancelar</button>
         <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine">Crear</button>
-      </mat-toolbar>
+        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
+        </mat-paginator>
+      </div>
     </mat-card>
 
   </form>

@@ -1,7 +1,8 @@
-<mat-sidenav-container [class]="themePicker.themeName">
+<div [ngClass]="themePicker.themeName" class="mat-app-background myWrapper">
     <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
-    <!-- toolbar -->
+
+    <!-- toolbar 1 -->
     <mat-toolbar color="primary" class="toolbar1">
 
         <button type="button" mat-icon-button (click)="sidenavMenu.toggle(); menuUser = !menuUser">
@@ -23,8 +24,8 @@
             </button>
         </div>
     </mat-toolbar>
+    <mat-sidenav-container class="container2" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
-    <mat-sidenav-container class="container2">
 
         <!-- sidenav menu -->
         <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav">
@@ -192,16 +193,15 @@
         </mat-sidenav>
 
 
-        <!-- toolbar2 -->
-        <mat-toolbar class="toolbar2">
-
-        </mat-toolbar>
-
         <!-- primary content -->
-        <div class="contenido" (nxScroller)="isScrolled=$event" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
-            <router-outlet></router-outlet>
-        </div>
+        <mat-sidenav-content>
+            <!-- toolbar2 -->
+            <mat-toolbar class="toolbar2"></mat-toolbar>
+            <div class="contenido" (nxScroller)="isScrolled=$event">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
 
     </mat-sidenav-container>
 
-</mat-sidenav-container>
+</div>

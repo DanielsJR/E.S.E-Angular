@@ -2,7 +2,7 @@
 
   <mat-card class="mat-elevation-z8">
 
-    <mat-toolbar color="primary" >
+    <mat-toolbar color="primary">
 
       <mat-form-field>
         <input matInput>
@@ -47,16 +47,16 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
-          <button mat-mini-fab matTooltip="Agregar Curso" [routerLink]="['./create']">
+          <button mat-mini-fab matTooltip="Agregar Curso" [routerLink]="['./create']" style="margin-bottom:5px">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let course" class="crud">
 
-            <button mat-icon-button color="primary" (click)="$event.stopPropagation()" [routerLink]="['./detail',course.name]">
-                <mat-icon svgIcon="eye"></mat-icon>
-              </button>
+          <button mat-icon-button color="primary" (click)="$event.stopPropagation()" [routerLink]="['./detail',course.name]">
+            <mat-icon svgIcon="eye"></mat-icon>
+          </button>
 
 
           <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
@@ -64,8 +64,8 @@
           </button>
 
           <nx-simple-dialog #deleteDialog [obj]="course" message="Desea eliminar este curso?" [title]="course.name"
-          [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
-          [avatar]="course.chiefTeacher.avatar" (objSelected)="deleteCourse($event)"></nx-simple-dialog>
+            [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' " [avatar]="course.chiefTeacher.avatar"
+            (objSelected)="deleteCourse($event)"></nx-simple-dialog>
 
         </mat-cell>
       </ng-container>

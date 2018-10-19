@@ -1,56 +1,52 @@
 <div class="container">
 
   <mat-card class="mat-elevation-z8">
-
+     
     <mat-toolbar color="primary">
+      <mat-form-field>
+        <input matInput>
+        <mat-placeholder>
+          <i class="mdi mdi-magnify material-icons"></i>Buscar
+        </mat-placeholder>
+      </mat-form-field>
+      <span class="spacer-r"></span>
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">
+          <mat-icon svgIcon="account-multiple"></mat-icon>
+          &nbsp; {{course?.name}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-toolbar>
+ 
+    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+    
+    <mat-toolbar class="toolbar2">
+      <mat-list style="flex-grow: 8">
+        <mat-list-item>
+          <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
+            alt="{{t?.username}}">
+          <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
+          <p matLine>
+            <span class="role-style">Profesor Jefe</span>
+          </p>
+          <span class="spacer-r"></span>
+          <button mat-icon-button color="primary" (click)="crudUserDialogT.openDialogDetail()">
+            <mat-icon svgIcon="eye"></mat-icon>
+          </button>
+          <button mat-icon-button color="accent" matTooltip="Cambiar Profesor" (click)="changeTeacherDialog.openDialogSearchUser()">
+            <mat-icon svgIcon="account-edit"></mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="'MANAGER'"></nx-crud-user-dialog>
+      <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="changeTeacher($event)">
+      </nx-search-user-dialog>
 
-      
-        <mat-form-field>
-          <input matInput>
-          <mat-placeholder>
-            <i class="mdi mdi-magnify material-icons"></i>Buscar
-          </mat-placeholder>
-        </mat-form-field>
-        <span class="spacer-r"></span>
-        <mat-chip-list>
-          <mat-chip color="accent" selected="true">
-            <mat-icon svgIcon="account-multiple"></mat-icon>
-            &nbsp; {{course?.name}}
-          </mat-chip>
-        </mat-chip-list>
-      
-      </mat-toolbar>
-
-        <mat-toolbar>
-
-       
-      
-        <mat-list style="flex-grow: 8">
-          <mat-list-item>
-            <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
-              alt="{{t?.username}}">
-            <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
-            <p matLine>
-              <span class="role-style">Profesor Jefe</span>
-            </p>
-            <span class="spacer-r"></span>
-            <button mat-icon-button color="primary" (click)="crudUserDialogT.openDialogDetail()">
-              <mat-icon svgIcon="eye"></mat-icon>
-            </button>
-            <button mat-icon-button color="accent" matTooltip="Cambiar Profesor" (click)="changeTeacherDialog.openDialogSearchUser()">
-              <mat-icon svgIcon="account-edit"></mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
-        <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="'MANAGER'"></nx-crud-user-dialog>
-        <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="changeTeacher($event)">
-        </nx-search-user-dialog>
-      
 
     </mat-toolbar>
     <mat-divider></mat-divider>
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+    
 
     <mat-table #table [dataSource]="dataSource" matSort *ngIf="course?.students">
 
@@ -105,12 +101,12 @@
       </mat-row>
 
     </mat-table>
-
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-  
-    <mat-toolbar>
-      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart>Volver</button>
-    </mat-toolbar>
+    <div class="wrapperPaginator">
+      <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart class="btnBack">
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+    </div>
   </mat-card>
 
 </div>

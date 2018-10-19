@@ -3,24 +3,16 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
 }
 
 mat-card {
     min-width: 400px;
     max-width: 650px;
     width: 620px;
-    top: 20px;
-    margin:0;
+    margin: 20px auto 64px;
     padding: 0;
-    z-index: 3
 }
 
-mat-toolbar {
-    padding: 8px 24px 0;
-}
 
 mat-toolbar-row {
     padding: 0;
@@ -29,6 +21,12 @@ mat-toolbar-row {
 mat-form-field {
     font-size: 14px;
     width: 50%;
+    padding-top: 10px;
+}
+
+ .toolbar2{
+    padding-bottom: 5px !important;
+    height: 59px !important;
 }
 
 .fila:hover {
@@ -79,9 +77,7 @@ mat-list {
 
 mat-list-item {
     height: 60px !important;
-    
 }
-
 
 mat-list-item h3 {
     line-height: 17px !important;
@@ -93,4 +89,16 @@ mat-list-item p {
 
 .role-style {
     color: darkgray;
+}
+
+.wrapperPaginator{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btnBack{
+    margin-left:30px
 }

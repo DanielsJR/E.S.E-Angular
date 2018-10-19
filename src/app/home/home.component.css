@@ -1,5 +1,12 @@
+.p-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
 .toolbar1 {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100% !important;
@@ -13,6 +20,7 @@ mat-sidenav-container .container2 {
     bottom: 0;
     left: 0;
     right: 0;
+    --overflow: hidden;
 }
 
 #imgHome {
@@ -22,6 +30,7 @@ mat-sidenav-container .container2 {
 }
 
 .sidenav {
+    --top: 64px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
     width: 350px;
 }
@@ -30,6 +39,7 @@ mat-sidenav-container .container2 {
     position: fixed !important;
     top: 64px;
     left: 0;
+    width: 350px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
 
@@ -71,8 +81,6 @@ mat-sidenav-container .container2 {
     position: fixed !important;
     top: 128px;
     width: 350px;
-    --position: sticky;
-    --top: 0;
 }
 
 .listAvatarContainer .mat-list-item {
@@ -109,31 +117,33 @@ mat-list-item p {
     line-height: 20px !important;
 }
 
-.toolbar2 {
-    position: absolute;
-    top: 64px;
-    left: 0;
-    width: 100% !important;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
-    z-index: 2;
-}
-
 /* primary content */
 
-.contenido {
-    position: absolute;
+mat-sidenav-content {
+    position: fixed;
+    top: 64px;
     bottom: 0;
     left: 0;
     right: 0;
-    top: 64px;
     padding: 0;
     margin: 0;
-    overflow: auto;
+    overflow: hidden;
 }
 
-.p-bar {
+.toolbar2 {
     position: fixed;
-    top: 0;
     left: 0;
-    z-index: 3;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
+}
+
+.contenido {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
 }
