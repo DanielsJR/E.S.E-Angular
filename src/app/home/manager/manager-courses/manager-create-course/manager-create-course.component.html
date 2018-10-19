@@ -130,12 +130,17 @@
       </mat-table>
 
       <div class="wrapperPaginator">
-        <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoCourses()"
-          cdkFocusRegionstart class="btnBack">Cancelar</button>
-        <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine">Crear</button>
-        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions">
-        </mat-paginator>
+        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart
+          class="btnBack">
+          <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
+        </button>
+        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+        <button type="submit" mat-stroked-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine" class="btnSave">
+          <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
+        </button>
+        
       </div>
+
     </mat-card>
 
   </form>

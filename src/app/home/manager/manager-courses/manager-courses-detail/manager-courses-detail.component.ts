@@ -26,11 +26,15 @@ export class ManagerCoursesDetailComponent implements OnInit {
 
   courseName: string;
   course: Course;
+  chiefTeacher: User;
+  listStudents: User[] = [];
+
+  btnDisabled = true;
 
   // mat table
   displayedColumns = ['student', 'crud'];
   dataSource;
-  chiefTeacher: User;
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 20;
@@ -46,6 +50,7 @@ export class ManagerCoursesDetailComponent implements OnInit {
   ) {
 
     this.dataSource = new MatTableDataSource();
+
 
   }
 
@@ -78,6 +83,7 @@ export class ManagerCoursesDetailComponent implements OnInit {
           if (this.course) {
             this.chiefTeacher = this.course.chiefTeacher;
             this.dataSource.data = this.course.students;
+            this.listStudents = this.dataSource.data;
           }
         })
       );
@@ -102,49 +108,39 @@ export class ManagerCoursesDetailComponent implements OnInit {
   }
 
 
-  addStudent(user: User) {
-    let listStudents: User[] = this.course.students.slice();
-    listStudents.push(user);
-    let courseEdit: Course = Object.assign({}, this.course);
-    courseEdit.students = listStudents;
-    this.isLoading = true;
-    this.courseStoreService.update(courseEdit)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.snackbarService.openSnackBar('Alumno Agregado', RESULT_SUCCESS)
-        , err => {
-          this.snackbarService.openSnackBar('Error al agregar Alumno', RESULT_ERROR);
-          console.error("Error editing Course: " + err);
-        });
+  addStudent(student: User) {
+    this.listStudents.push(student);
+    this.dataSource.data = this.listStudents;
+    this.btnDisabled = false;
   }
 
   changeTeacher(teacher: User) {
-    let courseEdit: Course = Object.assign({}, this.course);
-    courseEdit.chiefTeacher = teacher;
-    this.isLoading = true;
-    this.courseStoreService.update(courseEdit)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.snackbarService.openSnackBar('Profesor Cambiado', RESULT_SUCCESS)
-        , err => {
-          this.snackbarService.openSnackBar('Error al cambiar profesor', RESULT_ERROR);
-          console.error("Error editing Course: " + err);
-        });
+    this.chiefTeacher = teacher;
+    this.btnDisabled = false;
   }
-
-
 
   deleteStudent(user: User) {
     console.log('nombre: ' + user.firstName);
-    let listStudents: User[] = this.course.students.slice();
-    listStudents = listStudents.filter(s => s.id !== (user.id));
+    this.listStudents = this.listStudents.filter(s => s.id !== (user.id));
+    this.dataSource.data = this.listStudents;
+    this.btnDisabled = false;
+  }
+
+  saveCourse() {
     let courseEdit: Course = Object.assign({}, this.course);
-    courseEdit.students = listStudents;
+
+    courseEdit.chiefTeacher = this.chiefTeacher;
+    courseEdit.students = this.listStudents;
+
     this.isLoading = true;
     this.courseStoreService.update(courseEdit)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.snackbarService.openSnackBar('Alumno Eliminado', RESULT_SUCCESS)
+      .pipe(finalize(() => { this.isLoading = false; this.btnDisabled = true; }))
+      .subscribe(_ => this.snackbarService.openSnackBar('Curso Actualizado', RESULT_SUCCESS)
         , err => {
-          this.snackbarService.openSnackBar('Error al eliminar Alumno', RESULT_ERROR);
+          this.snackbarService.openSnackBar('Error al Actualizar Curso', RESULT_ERROR);
           console.error("Error editing Course: " + err);
         });
+
   }
+
 }

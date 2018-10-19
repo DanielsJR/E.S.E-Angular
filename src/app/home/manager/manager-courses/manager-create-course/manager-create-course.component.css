@@ -102,6 +102,10 @@ mat-list-item p {
     align-items: center;
 }
 
-.btnBack {
-    margin-left: 15px
+.btnBack{
+    margin-left:30px
+}
+
+.btnSave{
+    margin-right:30px
 }
