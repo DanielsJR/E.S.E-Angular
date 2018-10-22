@@ -4,7 +4,8 @@ import { ReplaySubject, BehaviorSubject, Observable } from 'rxjs';
 import { UserBackendService } from './user-backend.service';
 import { LoginService } from '../login/login.service';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
+import { IsLoadingService } from './isLoadingService.service';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +16,7 @@ export class UserLoggedService {
     userLogged$ = this.userLoggedSource.asObservable();
 
     constructor(private userBackendService: UserBackendService, private loginService: LoginService,
-        private router: Router) { }
+        private isLoadingService: IsLoadingService, private router: Router) { }
 
     userLogged(user: User) {
         console.log('userLogged NEXT....');
@@ -23,9 +24,10 @@ export class UserLoggedService {
     }
 
     getUserFromBackEnd(username: string, redirectHome: boolean): Observable<User> {
+        this.isLoadingService.isLoadingTrue();
         return this.userBackendService
             .getUserByUsernameSecured(username)
-            .pipe(
+            .pipe(finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(user => {
                     this.userLogged(user);
                     const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();

@@ -20,11 +20,11 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   userRole: string;
   usersRole: string;
-  userLoggedRoles: String[] = [];//=this.localStorage.getTokenRoles();
+  userLoggedRoles: String[] = [];
   @Input() areaRole;
 
   // mat table
-  displayedColumns = ['username', 'crud'];
+  displayedColumns = ['firstName', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -39,12 +39,9 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   @Input() uriRole;
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
-  constructor(
-    private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
+  constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
     public sanitizer: DomSanitizer,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
     //this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
@@ -64,7 +61,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
-    
+
     } else if (this.uriRole === URI_STUDENTS) {
       this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
       this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
@@ -83,16 +80,16 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 
   }
 
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
   setRowClass() {
     this.rowClasses = {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   applyFilter(filterValue: string) {
@@ -115,7 +112,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
     return userLoggedRoles.every(role => userDbRoles.includes(role));
   }
@@ -123,19 +119,6 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
 }
 
 
-export class MatPaginatorIntlSpa extends MatPaginatorIntl {
-  itemsPerPageLabel = 'Items por pagina:';
-  nextPageLabel = 'Página Siguiente';
-  previousPageLabel = 'Página Anterior';
 
-  /** A label for the range of items within the current page and the length of the whole list. */
-  getRangeLabel = (page: number, pageSize: number, length: number) => {
-    if (length == 0 || pageSize == 0) {
-      return `0 de ${length}`;
-    } length = Math.max(length, 0); const startIndex = page * pageSize;
-    const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-    return `${startIndex + 1} - ${endIndex} de ${length}`;
-  }
-}
 
 

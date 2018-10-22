@@ -4,7 +4,7 @@
 
     <mat-toolbar color="primary">
       <mat-form-field>
-        <input matInput>
+        <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
           <i class="mdi mdi-magnify material-icons"></i>Buscar
         </mat-placeholder>
@@ -50,7 +50,7 @@
 
     <mat-table #table [dataSource]="dataSource" matSort *ngIf="course?.students">
 
-      <ng-container matColumnDef="student">
+      <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
         <mat-cell *matCellDef="let student">
 

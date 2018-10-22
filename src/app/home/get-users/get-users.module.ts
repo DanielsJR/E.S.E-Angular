@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { GetUsersComponent, MatPaginatorIntlSpa } from './get-users.component';
-import { MatPaginatorIntl } from '@angular/material';
-
+import { GetUsersComponent} from './get-users.component';
 import { CovalentFileModule } from '@covalent/core';
-
 import { ImageZoomUserDialogModule } from '../../shared/dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
@@ -46,11 +43,6 @@ import { SearchUserDialogComponent } from './search-user-dialog/search-user-dial
     
   ],
 
-  providers: [
-
-    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
-  
-  ],
 
   entryComponents: [
     CrudUserDialogRefComponent,

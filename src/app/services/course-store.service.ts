@@ -6,6 +6,7 @@ import { finalize } from "../../../node_modules/rxjs/internal/operators/finalize
 import { CourseBackendService } from "./course-backend.service";
 import { tap } from "rxjs/internal/operators/tap";
 import { User } from "../models/user";
+import { IsLoadingService } from "./isLoadingService.service";
 
 
 
@@ -22,7 +23,7 @@ export class CourseStoreService {
     isLoadingGetCourses$ = this.isLoadingGetCoursesSubject.asObservable();
 
 
-    constructor(private courseBackendService: CourseBackendService, private httpCli: HttpClient) {
+    constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService) {
         this.dataStore = { courses: [] };
     }
 
@@ -87,8 +88,10 @@ export class CourseStoreService {
 
 
     update(course: Course): Observable<Course> {
+        this.isLoadingService.isLoadingTrue();
         return this.courseBackendService.update(course)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     let index = this.dataStore.courses.findIndex(c => c.id === data.id);
                     if (index != -1) {
@@ -169,7 +172,7 @@ export class CourseStoreService {
             let list = curso.students.slice();
             list.forEach((item, index) => {
                 if (item.id === student.id) {
-                    curso.students.splice(index,1);
+                    curso.students.splice(index, 1);
                 }
             });
 

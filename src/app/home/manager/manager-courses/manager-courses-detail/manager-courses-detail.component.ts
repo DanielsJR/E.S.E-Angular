@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Course } from '../../../../models/course';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
@@ -12,8 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_ACCEPT } from '../../../../app.config';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
+import { MatDialog } from '@angular/material';
 import { tap } from 'rxjs/internal/operators/tap';
 
 
@@ -22,7 +22,7 @@ import { tap } from 'rxjs/internal/operators/tap';
   templateUrl: './manager-courses-detail.component.html',
   styleUrls: ['./manager-courses-detail.component.css']
 })
-export class ManagerCoursesDetailComponent implements OnInit {
+export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
 
   courseName: string;
   course: Course;
@@ -32,7 +32,7 @@ export class ManagerCoursesDetailComponent implements OnInit {
   btnDisabled = true;
 
   // mat table
-  displayedColumns = ['student', 'crud'];
+  displayedColumns = ['firstName', 'crud'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -65,7 +65,9 @@ export class ManagerCoursesDetailComponent implements OnInit {
     /*   this.getCurso(this.route.snapshot.paramMap.get('name'))
        .subscribe();*/
 
+
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
@@ -73,6 +75,17 @@ export class ManagerCoursesDetailComponent implements OnInit {
 
     this.setRowClass();
 
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
   getCurso(name): Observable<Course[]> {
@@ -94,13 +107,6 @@ export class ManagerCoursesDetailComponent implements OnInit {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
-  }
-
-
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
   }
 
   gotoCourses() {
@@ -132,9 +138,9 @@ export class ManagerCoursesDetailComponent implements OnInit {
     courseEdit.chiefTeacher = this.chiefTeacher;
     courseEdit.students = this.listStudents;
 
-    this.isLoading = true;
+
     this.courseStoreService.update(courseEdit)
-      .pipe(finalize(() => { this.isLoading = false; this.btnDisabled = true; }))
+      .pipe(finalize(() => this.btnDisabled = true))
       .subscribe(_ => this.snackbarService.openSnackBar('Curso Actualizado', RESULT_SUCCESS)
         , err => {
           this.snackbarService.openSnackBar('Error al Actualizar Curso', RESULT_ERROR);

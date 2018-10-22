@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
@@ -21,7 +21,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './manager-create-course.component.html',
   styleUrls: ['./manager-create-course.component.css']
 })
-export class ManagerCreateCourseComponent implements OnInit {
+export class ManagerCreateCourseComponent implements OnInit, AfterViewInit {
 
   course: Course;
   coursesNamesGroups = COURSES_NAMES_GROUPS;
@@ -57,17 +57,16 @@ export class ManagerCreateCourseComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
   setRowClass() {
     this.rowClasses = {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
-  }
-
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
   }
 
   buildForm() {

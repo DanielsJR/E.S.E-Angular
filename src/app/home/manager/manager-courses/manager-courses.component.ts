@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort } from '../../../../../node_modules/@angular/material/sort';
 import { MatPaginator } from '../../../../../node_modules/@angular/material/paginator';
 import { DomSanitizer } from '../../../../../node_modules/@angular/platform-browser';
@@ -16,7 +16,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
   templateUrl: './manager-courses.component.html',
   styleUrls: ['./manager-courses.component.css']
 })
-export class ManagerCoursesComponent implements OnInit {
+export class ManagerCoursesComponent implements OnInit, AfterViewInit {
 
   // mat table
 
@@ -34,9 +34,9 @@ export class ManagerCoursesComponent implements OnInit {
     public sanitizer: DomSanitizer,private snackbarService: SnackbarService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource();
+    this.dataSource = new MatTableDataSource<Course>();
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-    this.dataSource = this.courseStoreService.courses$;
+    this.courseStoreService.courses$.subscribe(data => this.dataSource.data = data);
 
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
@@ -44,6 +44,17 @@ export class ManagerCoursesComponent implements OnInit {
     });
 
     this.setRowClass();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
   setRowClass() {

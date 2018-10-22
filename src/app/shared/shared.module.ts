@@ -10,6 +10,8 @@ import { SnackbarRefModule } from './snackbars-ref/snackbars-ref.module';
 import { ShortNamePipe } from './pipes/short-name.pipe';
 import { RolesToSpanishPipe } from './pipes/roles-to-spanish.pipe';
 import { SimpleDialogModule } from './dialogs/simple-dialog/simple-dialog.module';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatPaginatorIntlSpa } from './paginatorCustom/mat-paginator-intl-spa';
 
 
 @NgModule({
@@ -22,6 +24,13 @@ import { SimpleDialogModule } from './dialogs/simple-dialog/simple-dialog.module
     ShortNamePipe,
     RolesToSpanishPipe,
   ],
+
+  providers: [
+
+    { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
+  
+  ],
+
 
   exports: [
     CommonModule,

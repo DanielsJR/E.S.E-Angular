@@ -12,6 +12,7 @@ import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { RESULT_SUCCESS } from '../app.config';
+import { IsLoadingService } from '../services/isLoadingService.service';
 
 
 @Component({
@@ -60,10 +61,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer, private isLoadingService: IsLoadingService
   ) { }
 
   ngOnInit() {
+    this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.user) this.themePicker.getThemeFromServer(user.id);
@@ -76,9 +78,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     } else {
       console.log('user:null getting user from backend');
-      this.isLoading = true;
+     // this.isLoading = true;
       this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
-        .pipe(finalize(() => this.isLoading = false))
+       // .pipe(finalize(() => this.isLoading = false))
         .subscribe();
     }
 
