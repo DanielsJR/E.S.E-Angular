@@ -35,7 +35,7 @@ export class ManagerCreateCourseComponent implements OnInit, AfterViewInit {
   listStudents: User[] = [];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSize = 20;
+  pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};

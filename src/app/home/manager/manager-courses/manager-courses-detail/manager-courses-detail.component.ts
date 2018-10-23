@@ -37,7 +37,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSize = 20;
+  pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
@@ -48,21 +48,20 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private snackbarService: SnackbarService, public dialog: MatDialog
   ) {
-
-    this.dataSource = new MatTableDataSource();
-
-
+    this.dataSource = new MatTableDataSource<Course>();
   }
 
   ngOnInit() {
 
+    console.log("ONINITT!!!!!");
+    
     // paramMap re-uses the component
-    this.route.paramMap
+   this.route.paramMap
       .pipe(switchMap(params => this.getCurso(params.get('name'))))
-      .subscribe();
+      .subscribe(); 
 
     // snapshot doesn't re-uses the component
-    /*   this.getCurso(this.route.snapshot.paramMap.get('name'))
+       /* this.getCurso(this.route.snapshot.paramMap.get('name'))
        .subscribe();*/
 
 
@@ -88,6 +87,13 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
+  setRowClass() {
+    this.rowClasses = {
+      'fila': !this.isDark,
+      'fila-dark': this.isDark
+    };
+  }
+
   getCurso(name): Observable<Course[]> {
     return this.courseStoreService.courses$
       .pipe(
@@ -96,17 +102,10 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
           if (this.course) {
             this.chiefTeacher = this.course.chiefTeacher;
             this.dataSource.data = this.course.students;
-            this.listStudents = this.dataSource.data;
+            this.listStudents = this.dataSource.data;//this.course.students;
           }
         })
       );
-  }
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
   }
 
   gotoCourses() {
@@ -115,7 +114,15 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
 
 
   addStudent(student: User) {
-    this.listStudents.push(student);
+    let list =  this.listStudents.slice();
+    list.push(student);
+    this.listStudents = list;
+    this.dataSource.data =  this.listStudents;
+    this.btnDisabled = false;
+  }
+
+  deleteStudent(user: User) {
+    this.listStudents = this.listStudents.filter(s => s.id !== (user.id));
     this.dataSource.data = this.listStudents;
     this.btnDisabled = false;
   }
@@ -125,19 +132,10 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
     this.btnDisabled = false;
   }
 
-  deleteStudent(user: User) {
-    console.log('nombre: ' + user.firstName);
-    this.listStudents = this.listStudents.filter(s => s.id !== (user.id));
-    this.dataSource.data = this.listStudents;
-    this.btnDisabled = false;
-  }
-
   saveCourse() {
     let courseEdit: Course = Object.assign({}, this.course);
-
     courseEdit.chiefTeacher = this.chiefTeacher;
     courseEdit.students = this.listStudents;
-
 
     this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
