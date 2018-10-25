@@ -37,16 +37,10 @@ import { Router } from '@angular/router';
   ],
 
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AppAuthInterceptor,
-      multi: true,
-    },
-
+    { provide: HTTP_INTERCEPTORS, useClass: AppAuthInterceptor, multi: true, },
     { provide: MAT_DATE_LOCALE, useValue: 'es' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-
   ],
 
 
@@ -62,7 +56,7 @@ import { Router } from '@angular/router';
 })
 
 export class AppModule {
-  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer,router: Router) {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer, router: Router) {
     matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
     //console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }

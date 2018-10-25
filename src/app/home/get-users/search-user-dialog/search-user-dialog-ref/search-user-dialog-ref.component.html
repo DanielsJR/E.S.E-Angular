@@ -14,11 +14,11 @@
         <mat-placeholder>
           <i class="mdi mdi-magnify material-icons"></i>Buscar
         </mat-placeholder>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedUser($event.option.value)">
-          <mat-option *ngFor="let u of filteredUsers$ | async" [value]="u.firstName">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectedUser($event.option.value)">
+          <mat-option *ngFor="let u of filteredUsers$ | async" [value]="u">
             <img class="example-option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
-            <span>{{u | shortName}}</span> |
-            <small>{{u.roles[0] | lowercase}}</small>
+            <span>{{u | shortNameLastname}}</span> 
+           <!-- | <small>{{u.roles[0] | lowercase}}</small>-->
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

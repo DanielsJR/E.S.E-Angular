@@ -1,125 +1,125 @@
-import { Injectable } from "../../../node_modules/@angular/core";
-import { BehaviorSubject, Subject, Observable } from "../../../node_modules/rxjs";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Course } from "../models/course";
-import { HttpClient, HttpErrorResponse } from "../../../node_modules/@angular/common/http";
-import { finalize } from "../../../node_modules/rxjs/internal/operators/finalize";
-import { CourseBackendService } from "./course-backend.service";
+import { finalize } from "rxjs/internal/operators/finalize";
 import { tap } from "rxjs/internal/operators/tap";
-import { User } from "../models/user";
 import { IsLoadingService } from "./isLoadingService.service";
+import { Subject } from "../models/subject";
+import { SubjectBackendService } from "./subject-backend.service";
 
 
 
 @Injectable({
     providedIn: 'root',
 })
-export class CourseStoreService {
+export class SubjectStoreService {
 
 
-    private coursesSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
-    public readonly courses$ = this.coursesSource.asObservable();
-    private dataStore: { courses: Course[] };
+    private subjectsSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
+    public readonly subjects$ = this.subjectsSource.asObservable();
+    private dataStore: { subjects: Subject[] };
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetCourses$ = this.isLoadingGet.asObservable();
+    isLoadingGetSubjects$ = this.isLoadingGet.asObservable();
 
 
-    constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService) {
-        this.dataStore = { courses: [] };
+    constructor(private subjectBackendService: SubjectBackendService, private isLoadingService: IsLoadingService) {
+        this.dataStore = { subjects: [] };
     }
 
-    loadAllCourses(year: number) {
-        if (this.coursesSource.getValue().length) {
-            console.log(`********GET-Courses-FROM-CACHE********`);
-            this.coursesSource.next(this.dataStore.courses);
+    loadAllSubjects() {
+        if (this.subjectsSource.getValue().length) {
+            console.log(`********GET-Subjects-FROM-CACHE********`);
+            this.subjectsSource.next(this.dataStore.subjects);
         } else {
-            console.log(`********GET-Courses-FROM-BACKEND********`);
+            console.log(`********GET-Subjects-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
-            this.courseBackendService.getCourses(year)
+            this.subjectBackendService.getSubjects()
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
                     if (data.length) {
-                        this.dataStore.courses = data;
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                        this.dataStore.subjects = data;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                     } else {
                         data = null;
-                        console.error('Lista de Cursos vacia');
+                        console.error('Lista de subject vacia');
                     }
-                }, error => console.error('error retrieving cursos, ' + error.message)
+                }, error => console.error('error retrieving subjects, ' + error.message)
                 );
         }
 
     }
 
-    loadOneCourse(name: string, year: number) {
+    loadOneSubject(name: string) {
         console.log(`********loadOneCourse()-FROM-BACKEND********`);
-        if (!this.coursesSource.getValue().length) this.isLoadingGet.next(true);
-        this.courseBackendService.getCourseByName(name, year)
+        if (!this.subjectsSource.getValue().length) this.isLoadingGet.next(true);
+        this.subjectBackendService.getSubjectByName(name)
             .pipe(finalize(() => this.isLoadingGet.next(false)))
             .subscribe(data => {
                 let notFound = true;
 
-                this.dataStore.courses.forEach((item, index) => {
+                this.dataStore.subjects.forEach((item, index) => {
                     if (item.id === data.id) {
-                        this.dataStore.courses[index] = data;
+                        this.dataStore.subjects[index] = data;
                         notFound = false;
                     }
                 });
 
                 if (notFound) {
-                    this.dataStore.courses.push(data);
+                    this.dataStore.subjects.push(data);
                 }
 
-                this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            }, error => console.log('Could not load course.'));
+                this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+            }, error => console.log('Could not load subject.'));
     }
 
-
-    create(course: Course): Observable<Course> {
-        return this.courseBackendService.create(course)
+    create(subject: Subject): Observable<Subject> {
+        return this.subjectBackendService.create(subject)
             .pipe(
                 tap(data => {
-                    this.dataStore.courses.push(data);
-                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                }, error => console.error('could not create User, ' + error.message)
+                    this.dataStore.subjects.push(data);
+                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                }, error => console.error('could not create subject, ' + error.message)
                 ));
     }
 
-
-
-
-    update(course: Course): Observable<Course> {
+    update(subject: Subject): Observable<Subject> {
         this.isLoadingService.isLoadingTrue();
-        return this.courseBackendService.update(course)
+        return this.subjectBackendService.update(subject)
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
-                    let index = this.dataStore.courses.findIndex(c => c.id === data.id);
+                    let index = this.dataStore.subjects.findIndex(c => c.id === data.id);
                     if (index != -1) {
-                        this.dataStore.courses[index] = data;
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                        this.dataStore.subjects[index] = data;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                     } else {
-                        console.error("not found in dataStore.courses");
+                        console.error("not found in dataStore.subjects");
                     }
-                }, err => console.error("Error updating Manager" + err.message)
+                }, err => console.error("Error updating subject" + err.message)
                 ));
     }
 
-    delete(course: Course | string): Observable<boolean> {
-        return this.courseBackendService.delete(course)
+    delete(subject: Subject | string): Observable<boolean> {
+        return this.subjectBackendService.delete(subject)
             .pipe(
                 tap(_ => {
-                    let index = this.dataStore.courses.findIndex((c: Course) => c.id === ((typeof course === 'string') ? course : course.id));
+                    let index = this.dataStore.subjects.findIndex((c: Course) => c.id === ((typeof subject === 'string') ? subject : subject.id));
                     if (index != -1) {
-                        this.dataStore.courses.splice(index, 1);
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                        this.dataStore.subjects.splice(index, 1);
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                     } else {
-                        console.error("not found in dataStore.courses");
+                        console.error("not found in dataStore.subjects");
                     }
-                }, err => console.error("Error deleting Manager" + err.message)
+                }, err => console.error("Error deleting subject" + err.message)
                 ));
     }
 
-    //************CHIEF_TEACHER*/
+}
+
+
+/* 
+
+    //************CHIEF_TEACHER**
     updateChiefTeacher(teacher: User) {
         let curso = this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id);
         if (curso) {
@@ -135,7 +135,7 @@ export class CourseStoreService {
     }
 
 
-    //************STUDENTS*/
+    //************STUDENTS**
     private isStudentInACourse(student: User, students: User[]): boolean {
         let found = false;
         students.forEach((s) => {
@@ -187,3 +187,5 @@ export class CourseStoreService {
 
     }
 }
+
+*/

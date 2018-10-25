@@ -9,9 +9,8 @@ import { ManagerComponent } from './manager.component';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
-import { ManagerCreateCourseComponent } from './manager-courses/manager-create-course/manager-create-course.component';
-
-
+import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
+import { ManagerSubjectsCrudDialogRefComponent } from './manager-subjects/manager-subjects-crud-dialog-ref/manager-subjects-crud-dialog-ref.component';
 
 
 
@@ -30,11 +29,16 @@ import { ManagerCreateCourseComponent } from './manager-courses/manager-create-c
     ManagerCoursesComponent,
     ManagerSubjectsComponent,
     ManagerCoursesDetailComponent,
-    ManagerCreateCourseComponent,
+    ManagerCoursesCreateComponent,
+    ManagerSubjectsCrudDialogRefComponent,
   ],
 
   providers: [
 
+  ],
+
+  entryComponents: [
+    ManagerSubjectsCrudDialogRefComponent,
   ],
 
 })

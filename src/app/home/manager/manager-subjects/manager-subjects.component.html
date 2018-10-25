@@ -2,10 +2,10 @@
 
   <mat-card class="mat-elevation-z8">
 
-    <mat-toolbar>
+    <mat-toolbar color="primary">
 
       <mat-form-field>
-        <input matInput >
+        <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
           <i class="mdi mdi-magnify material-icons"></i>Buscar
         </mat-placeholder>
@@ -13,23 +13,33 @@
 
       <span class="spacer-r"></span>
 
-      <mat-chip-list >
-        <mat-chip color="primary" selected="true">
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
           &nbsp; Asignaturas
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
 
+    <mat-divider></mat-divider>
+
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
     <mat-table #table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="subjectName">
+      <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Asignatura </mat-header-cell>
-        <mat-cell *matCellDef="let user">
+        <mat-cell *matCellDef="let subject">
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-
+              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
+              alt="{{subject?.teacher?.username}}">
+              <h3 matLine>{{subject?.name}} </h3>
+              <p matLine>
+                <span class="role-style">{{subject?.course?.name}} - {{subject?.teacher | shortName}}</span>
+              </p>
             </mat-list-item>
           </mat-list>
 
@@ -37,42 +47,35 @@
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let subject" class="colum2">
+        <mat-header-cell *matHeaderCellDef class="add">
+          <button mat-mini-fab matTooltip="Agregar Asignatura" style="margin-bottom:5px" (click)="openDialogCreate()">
+            <mat-icon svgIcon="account-plus"></mat-icon>
+          </button>
+        </mat-header-cell>
 
+        <mat-cell *matCellDef="let subject" class="crud">
 
-          <button mat-icon-button color="primary" (click)=" $event.stopPropagation()">
+          <button mat-icon-button color="primary" (click)="$event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button mat-icon-button color="accent" (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-          </button>
-
-          <button mat-icon-button color="warn" (click)="$event.stopPropagation()">
+          <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
-
-          
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" >
-        
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
+
       </mat-row>
 
     </mat-table>
 
-
-
-    <span class="add">
-      <button mat-fab matTooltip="Agregar Asignatura">
-        <mat-icon svgIcon="account-plus"></mat-icon>
-      </button>
-    </span>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
 
   </mat-card>
+
 
 </div>

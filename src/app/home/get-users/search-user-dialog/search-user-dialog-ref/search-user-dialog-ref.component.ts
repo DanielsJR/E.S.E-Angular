@@ -8,6 +8,7 @@ import { startWith } from 'rxjs/internal/operators/startWith';
 import { FormControl } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { RESULT_CANCELED, RESULT_ACCEPT, ROLE_TEACHER, ROLE_STUDENT, ROLE_MANAGER } from '../../../../app.config';
+import { shortNameSecondName } from '../../../../shared/functions/shortName';
 
 @Component({
   templateUrl: './search-user-dialog-ref.component.html',
@@ -35,7 +36,8 @@ export class SearchUserDialogRefComponent implements OnInit {
     this.filteredUsers$ = this.stateCtrl.valueChanges
       .pipe(
         startWith(''),
-        map(username => username ? this._filterUsers(username) : this.users.slice()),
+        map(value => typeof value === 'string' ? value : value.firstName),
+        map(value => value ? this._filterUsers(value) : this.users.slice()),
       );
 
     if (data.userRole === ROLE_MANAGER) {
@@ -60,28 +62,21 @@ export class SearchUserDialogRefComponent implements OnInit {
     this.dialogRef.close(RESULT_ACCEPT);
   }
 
-  selectedUser(name) {
-    if (this.data.userRole === ROLE_MANAGER) {
-      this.userStoreService.managers$
-        .subscribe(users => this.user = users.find(u => u.firstName === name));
-    } else if (this.data.userRole === ROLE_TEACHER) {
-      this.userStoreService.teachers$
-        .subscribe(users => this.user = users.find(u => u.firstName === name));
-    } else if (this.data.userRole === ROLE_STUDENT) {
-      this.userStoreService.students$
-        .subscribe(users => this.user = users.find(u => u.firstName === name));
-    } else {
-      console.error('no user role!!');
-    }
-
+  selectedUser(value: User) {
+    this.user = value;
   }
 
   private _filterUsers(value: string): User[] {
     const filterValue = value.toLowerCase();
-
-    return this.users.filter(user => user.firstName.toLowerCase().indexOf(filterValue) === 0);
+    return this.users.filter(user => 
+      (user.firstName.toLowerCase() +' '+  user.lastName.toLowerCase()).indexOf(filterValue) === 0 || 
+      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
+      || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0);
   }
 
+  displayUser(user?: User): string | undefined {
+    return user ? user.firstName + ' ' + user.lastName : undefined;
+  }
 
 
 }

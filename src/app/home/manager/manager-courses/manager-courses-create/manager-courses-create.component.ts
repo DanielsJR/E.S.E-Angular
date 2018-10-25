@@ -17,11 +17,10 @@ import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'nx-manager-create-course',
-  templateUrl: './manager-create-course.component.html',
-  styleUrls: ['./manager-create-course.component.css']
+  templateUrl: './manager-courses-create.component.html',
+  styleUrls: ['./manager-courses-create.component.css']
 })
-export class ManagerCreateCourseComponent implements OnInit, AfterViewInit {
+export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
 
   course: Course;
   coursesNamesGroups = COURSES_NAMES_GROUPS;

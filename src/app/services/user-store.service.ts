@@ -45,11 +45,11 @@ export class UserStoreService {
     /******************************MANAGERS***************************************************** */
     loadAllManagers() {
         if (this.managersSource.getValue().length) {
-            console.log(`********INITIAL-DATA-${this.managerUriRole}-FROM-CACHE********`);
+            console.log(`********GET-Managers-FROM-CACHE********`);
             this.managersSource.next(this.dataStore.managers);
 
         } else {
-            console.log(`********INITIAL-DATA-${this.managerUriRole}-FROM-BACKEND********`);
+            console.log(`********GET-Managers-FROM-BACKEND********`);
             this.isLoadingGetManagersSubject.next(true);
             this.userBackendService.getUsers(this.managerUriRole).pipe(
                 finalize(() => this.isLoadingGetManagersSubject.next(false)))
@@ -187,10 +187,10 @@ export class UserStoreService {
     /******************************TEACHERS***************************************************** */
     loadAllTeachers() {
         if (this.teachersSource.getValue().length) {
-            console.log(`********INITIAL-DATA-${this.teacherUriRole}-FROM-CACHE********`);
+            console.log(`********GET-Teachers-FROM-CACHE********`);
             this.teachersSource.next(this.dataStore.teachers);
         } else {
-            console.log(`********INITIAL-DATA-${this.teacherUriRole}-FROM-BACKEND********`);
+            console.log(`********GET-Teachers-FROM-BACKEND********`);
             this.isLoadingGetTeachersSubject.next(true);
             this.userBackendService.getUsers(this.teacherUriRole)
                 .pipe(finalize(() => this.isLoadingGetTeachersSubject.next(false)))
@@ -322,10 +322,10 @@ export class UserStoreService {
     /******************************STUDENTS***************************************************** */
     loadAllStudents() {
         if (this.studentsSource.getValue().length) {
-            console.log(`********INITIAL-DATA-${this.studentUriRole}-FROM-CACHE********`);
+            console.log(`********GET-Students-FROM-CACHE********`);
             this.studentsSource.next(this.dataStore.students);
         } else {
-            console.log(`********INITIAL-DATA-${this.studentUriRole}-FROM-BACKEND********`);
+            console.log(`********GET-Students-FROM-BACKEND********`);
             this.isLoadingGetStudentsSubject.next(true);
             this.userBackendService.getUsers(this.studentUriRole)
                 .pipe(finalize(() => this.isLoadingGetStudentsSubject.next(false)))

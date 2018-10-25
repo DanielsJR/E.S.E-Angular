@@ -33,7 +33,7 @@
             <mat-list-item>
               <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{user?.username}}">
-              <h3 matLine> {{user | shortName}} </h3>
+              <h3 matLine> {{user | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
               </p>

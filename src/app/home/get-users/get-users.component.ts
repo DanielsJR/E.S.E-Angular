@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator, MatPaginatorIntl, MatDialogRef } from '@angular/material';
-import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL } from '../../app.config';
+import { MatTableDataSource, MatSort, MatPaginator, MatDialogRef } from '@angular/material';
+import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL } from '../../app.config';
 import { User } from '../../models/user';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { shortNameSecondName } from '../../shared/functions/shortName';
 
 
 
@@ -44,10 +45,13 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    //this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
     this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
     console.log("AreaRole: " + this.areaRole);
     this.dataSource = new MatTableDataSource<User>();
+    this.dataSource.filterPredicate = (user: User, filterValue: string) =>
+      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
+      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
+      || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
 
     if (this.uriRole === URI_MANAGERS) {

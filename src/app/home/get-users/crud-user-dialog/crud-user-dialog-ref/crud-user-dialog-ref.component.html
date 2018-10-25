@@ -13,7 +13,7 @@
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{user | shortName}} </h3>
+            <h3 matLine> {{user | shortNameLastname}} </h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>
@@ -342,7 +342,7 @@
             <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
                     alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
-                <h3 matLine> {{user | shortName}} </h3>
+                <h3 matLine> {{user | shortNameLastname}} </h3>
                 <p matLine>
                     <span class="role-style">{{user.roles | rolesToSpanish}}</span>
                 </p>
@@ -597,7 +597,7 @@
         <mat-list-item>
             <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{user | shortName}}</h3>
+            <h3 matLine> {{user | shortNameLastname}}</h3>
             <p matLine>
                 <span class="role-style">{{user.roles | rolesToSpanish}}</span>
             </p>
