@@ -97,9 +97,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
     this.course.students = this.listStudents;
     this.course.chiefTeacher = (this.chiefTeacher) ? this.chiefTeacher : null;
 
-    this.isLoading = true;
     this.courseStoreService.create(this.course)
-      .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => {
         this.snackbarService.openSnackBar('Curso agregado', RESULT_SUCCESS);
         this.gotoCourses();

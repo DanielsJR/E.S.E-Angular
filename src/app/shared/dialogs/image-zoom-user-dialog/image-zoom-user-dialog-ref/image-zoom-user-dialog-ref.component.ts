@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { DomSanitizer } from '@angular/platform-browser';
-import { User } from '../../../../models/user';
+import { Avatar } from '../../../../models/avatar';
 
 @Component({
   templateUrl: './image-zoom-user-dialog-ref.component.html',
@@ -10,21 +10,20 @@ import { User } from '../../../../models/user';
 })
 export class ImageZoomUserDialogRefComponent implements OnInit {
 
-  user: User;
+  avatar: Avatar;
 
   constructor(public dialogRef: MatDialogRef<ImageZoomUserDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
   ) {
-    this.user = data.user;
-    console.log('Dialog*** UserName: ' + data.user.firstName +  ' type: ' + data.type);
-   }
+    this.avatar = data.avatar;
+  }
 
   ngOnInit() {
   }
 
   cancel(): void {
     this.dialogRef.close();
-}
+  }
 
 
 }

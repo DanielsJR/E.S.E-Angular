@@ -7,7 +7,7 @@
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
+          <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
 
@@ -63,9 +63,15 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteDialog [obj]="course" message="Desea eliminar este curso?" [title]="course.name"
-            [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' " [avatar]="course.chiefTeacher.avatar"
-            (objSelected)="deleteCourse($event)"></nx-simple-dialog>
+          <nx-simple-dialog #deleteDialog
+            [obj]="course" 
+            [title]="course.name"
+            [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
+            [message]="'Eliminar este curso?'" 
+            [avatar]="course.chiefTeacher.avatar"
+            [type]="'delete-card'"
+            (objSelected)="deleteCourse($event)">
+          </nx-simple-dialog>
 
         </mat-cell>
       </ng-container>
@@ -77,7 +83,7 @@
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 
   </mat-card>
 

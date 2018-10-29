@@ -9,8 +9,9 @@ mat-card {
     min-width: 400px;
     max-width: 650px;
     width: 620px;
-    margin: 20px auto 64px;
+    margin: 0 auto 64px;
     padding: 0;
+    top: 20px;
 }
 
 .toolbar1 {

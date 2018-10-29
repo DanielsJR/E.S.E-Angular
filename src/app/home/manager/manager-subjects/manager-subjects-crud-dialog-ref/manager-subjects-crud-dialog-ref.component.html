@@ -20,7 +20,8 @@
         alt="Profesor">
       <h3 matLine>{{subjectName?.viewValue}}</h3>
       <p matLine>
-        <span *ngIf="teacher" class="role-style">{{course?.name}}, {{teacher | shortNameLastname}}</span>
+        <span class="role-style">{{course?.name}}</span>
+        <span *ngIf="teacher" class="role-style">, {{teacher | shortNameLastname}}</span>
       </p>
     </mat-list-item>
   </mat-list>
@@ -37,7 +38,7 @@
           <mat-form-field appearance="standard">
             <input matInput [matAutocomplete]="autoSubjectName" formControlName="name">
             <mat-label>
-              <i class="mdi mdi-magnify material-icons"></i>&nbsp;Nombre
+              <i class="mdi mdi-magnify"></i>&nbsp;Asignatura
             </mat-label>
             <mat-autocomplete #autoSubjectName="matAutocomplete" [displayWith]="displaySubject" (optionSelected)="selectedSubjectName($event.option.value)">
               <mat-option *ngFor="let sn of filteredSubjectNames$ | async" [value]="sn">
@@ -46,7 +47,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <div>
-            <button mat-button matStepperNext>Siguiente</button>
+            <button type="button" mat-stroked-button color="accent" matStepperNext>Siguiente</button>
           </div>
         </form>
       </mat-step>
@@ -57,7 +58,7 @@
           <mat-form-field appearance="standard">
             <input matInput [matAutocomplete]="autoCourse" formControlName="course">
             <mat-label>
-              <i class="mdi mdi-magnify material-icons"></i>&nbsp;Curso
+              <i class="mdi mdi-magnify"></i>&nbsp;Curso
             </mat-label>
             <mat-autocomplete #autoCourse="matAutocomplete" [displayWith]="displayCourse" (optionSelected)="selectedCourse($event.option.value)">
               <mat-option *ngFor="let c of filteredCourses$ | async" [value]="c">
@@ -67,8 +68,8 @@
             </mat-autocomplete>
           </mat-form-field>
           <div>
-            <button mat-button matStepperPrevious>Atras</button>
-            <button mat-button matStepperNext>Siguiente</button>
+            <button type="button" mat-stroked-button color="primary" matStepperPrevious style="margin-right:30px">Atras</button>
+            <button type="button" mat-stroked-button color="accent" matStepperNext>Siguiente</button>
           </div>
         </form>
       </mat-step>
@@ -79,7 +80,7 @@
           <mat-form-field appearance="standard">
             <input matInput [matAutocomplete]="autoUser" formControlName="teacher">
             <mat-label>
-              <i class="mdi mdi-magnify material-icons"></i>&nbsp;Profesor
+              <i class="mdi mdi-magnify"></i>&nbsp;Profesor
             </mat-label>
             <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayTeacher" (optionSelected)="selectedUser($event.option.value)">
               <mat-option *ngFor="let u of filteredTeachers$ | async" [value]="u">
@@ -89,8 +90,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <div>
-            <button mat-button matStepperPrevious>Atras</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
+            <button type="button" mat-stroked-button color="primary" matStepperPrevious>Atras</button>
           </div>
         </form>
       </mat-step>
@@ -108,7 +108,8 @@
         <mat-icon svgIcon="arrow-left"></mat-icon>
       </button>
       <span class="spacer-r"></span>
-      <button type="submit" mat-raised-button color="accent" tabindex="2">Agregar</button>
+      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(subjectGroup.invalid || subjectGroup.pristine)
+      || (courseGroup.invalid || courseGroup.pristine) || (teacherGroup.invalid || teacherGroup.pristine)" (click)="create()">Agregar</button>
     </mat-toolbar>
   </mat-dialog-actions>
 

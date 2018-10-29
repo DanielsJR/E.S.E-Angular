@@ -16,6 +16,7 @@ export class SearchUserDialogComponent implements OnInit {
 
     @Input() user: User;
     @Input() userRole: string;
+    @Input() actionButton: string;
 
     constructor(public dialog: MatDialog) { }
 
@@ -25,6 +26,7 @@ export class SearchUserDialogComponent implements OnInit {
     openDialogSearchUser(): void {
         let data = {
             user: (this.user) ? this.user : null,
+            actionButton: this.actionButton,
             userRole: this.userRole,
             type: 'searchUser'
         };

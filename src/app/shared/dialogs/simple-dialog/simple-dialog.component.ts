@@ -16,11 +16,15 @@ export class SimpleDialogComponent {
 
     @Output() objSelected = new EventEmitter<any>();
     @Input() obj: any;
+    @Input() icon: string;
+    @Input() dialogTitle: string;
     @Input() title: string;
     @Input() subtitle: string;
     @Input() avatar: Avatar;
     @Input() message: string;
-    
+    @Input() actionButton: string;
+    @Input() type: string;
+
 
     constructor(public dialog: MatDialog) { }
 
@@ -29,16 +33,19 @@ export class SimpleDialogComponent {
     openSimpleDialog(): void {
         let data = {
             obj: (this.obj) ? this.obj : null,
+            icon:this.icon,
+            dialogTitle: this.dialogTitle,
             title: this.title,
             subtitle: this.subtitle,
             message: this.message,
             avatar: (this.avatar) ? this.avatar : null,
-            type: 'simple-dialog'
+            actionButton: this.actionButton,
+            type: this.type
         };
         let config = new MatDialogConfig();
         config.data = data;
         config.panelClass = 'dialogService';
-        config.width = '320px';
+        config.width = this.type === 'delete-classic' ? '500px' : '320px';
         config.height = 'auto';
 
         let dialogRef = this.dialog.open(SimpleDialogRefComponent, config);

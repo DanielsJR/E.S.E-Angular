@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { User } from '../../../models/user';
 import { ImageZoomUserDialogRefComponent } from './image-zoom-user-dialog-ref/image-zoom-user-dialog-ref.component';
+import { Avatar } from '../../../models/avatar';
 
 
 
@@ -14,7 +15,7 @@ import { ImageZoomUserDialogRefComponent } from './image-zoom-user-dialog-ref/im
 export class ImageZoomUserDialogComponent implements OnInit {
 
     @Input()
-    user: User;
+    avatar: Avatar;
 
     constructor(public dialog: MatDialog) { }
 
@@ -22,7 +23,7 @@ export class ImageZoomUserDialogComponent implements OnInit {
 
     openDialogImage(): void {
         let data = {
-            user: this.user,
+            avatar: this.avatar,
             type: 'imageZoom'
         };
 

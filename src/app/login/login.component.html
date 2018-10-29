@@ -25,7 +25,7 @@
           <mat-form-field appearance="standard">
             <input matInput type="text" formControlName="username">
             <mat-label>
-              <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
+              <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
             </mat-label>
             <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
             <mat-error *ngIf="username.hasError('whitespace')">No se permiten espacios en
@@ -36,7 +36,7 @@
           <mat-form-field appearance="standard">
             <input matInput type="password" formControlName="password">
             <mat-label>
-              <i class="mdi mdi-lock-open material-icons app-input-icon">&nbsp;</i>Contraseña
+              <i class="mdi mdi-lock-open app-input-icon">&nbsp;</i>Contraseña
             </mat-label>
             <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
             <mat-error *ngIf="password.hasError('whitespace')">No se permiten espacios en

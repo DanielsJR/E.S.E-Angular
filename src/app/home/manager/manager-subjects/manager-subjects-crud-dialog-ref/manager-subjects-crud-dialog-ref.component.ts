@@ -37,7 +37,7 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
 
   subject: Subject;
 
-  //createForm: FormGroup;
+  createForm: FormGroup;
   isLoading: boolean = false;
 
   avatar: Avatar;
@@ -201,5 +201,6 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
 
       );
   }
+
 
 }

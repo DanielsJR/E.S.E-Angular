@@ -5,10 +5,12 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { startWith } from 'rxjs/internal/operators/startWith';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { RESULT_CANCELED, RESULT_ACCEPT, ROLE_TEACHER, ROLE_STUDENT, ROLE_MANAGER } from '../../../../app.config';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
+import { tap } from 'rxjs/internal/operators/tap';
+
 
 @Component({
   templateUrl: './search-user-dialog-ref.component.html',
@@ -19,7 +21,7 @@ export class SearchUserDialogRefComponent implements OnInit {
   filteredUsers$: Observable<User[]>;
   users: User[];
   user: User;
-  successButton;
+  actionButton;
 
   //user$: Observable<User>;
   stateCtrl = new FormControl();
@@ -32,12 +34,15 @@ export class SearchUserDialogRefComponent implements OnInit {
     //this.user = data.user;
     console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);
     if (data.user !== null) this.user = this.data.user;
-    this.successButton = (!data.user) ? 'Agregar' : 'Eliminar';
+    this.stateCtrl.setValidators(Validators.required);
+    this.stateCtrl.statusChanges.subscribe(status => { if (status === "INVALID") this.user = null });
+    this.actionButton = (data.actionButton) ? data.actionButton : 'Aceptar';
     this.filteredUsers$ = this.stateCtrl.valueChanges
       .pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value.firstName),
         map(value => value ? this._filterUsers(value) : this.users.slice()),
+
       );
 
     if (data.userRole === ROLE_MANAGER) {
@@ -68,8 +73,8 @@ export class SearchUserDialogRefComponent implements OnInit {
 
   private _filterUsers(value: string): User[] {
     const filterValue = value.toLowerCase();
-    return this.users.filter(user => 
-      (user.firstName.toLowerCase() +' '+  user.lastName.toLowerCase()).indexOf(filterValue) === 0 || 
+    return this.users.filter(user =>
+      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0);
   }

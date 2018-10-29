@@ -75,8 +75,10 @@ export class CourseStoreService {
 
 
     create(course: Course): Observable<Course> {
+        this.isLoadingService.isLoadingTrue();
         return this.courseBackendService.create(course)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     this.dataStore.courses.push(data);
                     this.coursesSource.next(Object.assign({}, this.dataStore).courses);

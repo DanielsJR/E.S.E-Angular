@@ -7,7 +7,6 @@ mat-dialog-content {
 
 .tab-content {
     padding: 16px 0;
-    --overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -18,6 +17,7 @@ mat-dialog-content {
 mat-dialog-content mat-form-field {
     width: 45%;
     margin: 0 10px;
+    font-size: 14px !important;
 }
 
 mat-dialog-actions {
@@ -55,7 +55,11 @@ mat-dialog-actions {
 .listContainer2 {
     display: flex;
     justify-content: center;
-    padding-top: 0;
+}
+
+.listContainer2 mat-list {
+    padding-top: 0 !important;
+    margin-bottom: 5px !important;
 }
 
 .listContainer2 .mat-list-item {
@@ -97,7 +101,7 @@ mat-dialog-actions {
 }
 
 .iconRemove:hover {
-    fill: red;
+    fill: #F44336;
 }
 
 .centerField {

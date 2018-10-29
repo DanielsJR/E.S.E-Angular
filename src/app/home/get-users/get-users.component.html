@@ -6,7 +6,7 @@
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
+          <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
 
@@ -78,7 +78,7 @@
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 
   </mat-card>
 

@@ -38,6 +38,8 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit {
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.courseStoreService.courses$.subscribe(data => this.dataSource.data = data);
 
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
     this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();

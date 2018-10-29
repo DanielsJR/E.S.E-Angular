@@ -6,7 +6,7 @@
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
-          <i class="mdi mdi-magnify material-icons"></i>Buscar
+          <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
       <span class="spacer-r"></span>
@@ -48,7 +48,7 @@
     <mat-divider></mat-divider>
 
 
-    <mat-table #table [dataSource]="dataSource" matSort *ngIf="course?.students">
+    <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
@@ -83,14 +83,23 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button mat-icon-button color="warn" (click)="deleteStudentDialog.openDialogSearchUser();$event.stopPropagation()">
+          <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
             <mat-icon svgIcon="account-minus"></mat-icon>
           </button>
 
-          <nx-search-user-dialog #deleteStudentDialog [userRole]="'STUDENT'" [user]="student" (userSelected)="deleteStudent($event)">
-          </nx-search-user-dialog>
+         <!--<nx-search-user-dialog #deleteStudentDialog [userRole]="'STUDENT'" [user]="student" (userSelected)="deleteStudent($event)"> 
+          </nx-search-user-dialog>-->
 
           <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="'manager'"></nx-crud-user-dialog>
+          <nx-simple-dialog #deleteDialog
+          [obj]="student" 
+          [title]="student | shortNameLastname"
+          [subtitle]="student.roles | rolesToSpanish"
+          [message]="'Eliminar este Alumno?'" 
+          [avatar]="student?.avatar"
+          [type]="'delete-card'"
+          (objSelected)="deleteStudent($event)">
+          </nx-simple-dialog>
 
         </mat-cell>
       </ng-container>
@@ -101,17 +110,22 @@
       </mat-row>
 
     </mat-table>
-    <div class="wrapperPaginator">
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 
-      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart class="btnBack">
+    <mat-divider></mat-divider>
+    <mat-toolbar>
+      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart
+        class="btnBack">
         <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
       </button>
-      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-      <button type="submit" mat-flat-button color="accent" tabindex="2" (click)="saveCourse()" class="btnSave"[disabled]="btnDisabled">
-         <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
+      <span class="spacer-r"></span>
+      <button type="submit" mat-flat-button color="accent" tabindex="2" (click)="saveCourse()" class="btnSave"
+        [disabled]="btnDisabled">
+        <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
       </button>
 
-    </div>
+    </mat-toolbar>
+
   </mat-card>
 
 </div>

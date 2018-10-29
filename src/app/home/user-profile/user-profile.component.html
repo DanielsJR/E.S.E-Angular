@@ -7,7 +7,7 @@
 
       <mat-form-field appearance="standard">
         <mat-label>
-            <i class="mdi mdi-account-circle material-icons app-input-icon">&nbsp;</i>Nombre de Usuario
+            <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
         </mat-label>
         <input matInput formControlName="username">
     </mat-form-field>
@@ -16,7 +16,7 @@
         (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>
-          <i class="mdi mdi-camera material-icons app-input-icon">&nbsp;</i>Foto de Perfil
+          <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Foto de Perfil
         </mat-label>
         <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
 
@@ -33,7 +33,7 @@
 
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>
-          <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña de Usuario
+          <i class="mdi mdi-lock app-input-icon">&nbsp;</i>Contraseña de Usuario
         </mat-label>
         <input matInput readonly>
         <mat-hint>
@@ -53,9 +53,9 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="firstName" required>
         <mat-label>
-          <i class="mdi mdi-account material-icons app-input-icon">&nbsp;</i>Nombres
+          <i class="mdi mdi-account app-input-icon">&nbsp;</i>Nombres
         </mat-label>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-error *ngIf="firstName.hasError('required')">Nombres son
           <strong>requeridos</strong>.
         </mat-error>
@@ -66,10 +66,10 @@
 
       <mat-form-field appearance="standard">
         <mat-label>
-          <i class="mdi mdi-account-outline material-icons app-input-icon">&nbsp;</i>Apellidos
+          <i class="mdi mdi-account-outline app-input-icon">&nbsp;</i>Apellidos
         </mat-label>
         <input matInput formControlName="lastName" required>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-error *ngIf="lastName.hasError('required')">Apellidos son
           <strong>requeridos</strong>.
         </mat-error>
@@ -81,9 +81,9 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="dni" placeholder="11111111-1">
         <mat-label>
-          <i class="mdi mdi-barcode material-icons app-input-icon">&nbsp;</i>RUT
+          <i class="mdi mdi-barcode app-input-icon">&nbsp;</i>RUT
         </mat-label>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-error *ngIf="dni.hasError('whitespace')">No se permiten espacios en
           <strong>blanco</strong>.
         </mat-error>
@@ -95,7 +95,7 @@
       <mat-form-field appearance="standard">
         <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="1/11/1990">
         <mat-label>
-          <i class="mdi mdi-cake-variant material-icons app-input-icon">&nbsp;</i>Fecha de Nacimiento
+          <i class="mdi mdi-cake-variant app-input-icon">&nbsp;</i>Fecha de Nacimiento
         </mat-label>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -112,7 +112,7 @@
           </mat-option>
         </mat-select>
         <mat-label>
-          <i class="mdi mdi-gender-male-female material-icons app-input-icon">&nbsp;</i>Genero
+          <i class="mdi mdi-gender-male-female app-input-icon">&nbsp;</i>Genero
         </mat-label>
       </mat-form-field>
 
@@ -124,9 +124,9 @@
       <mat-form-field appearance="standard">
         <input matInput [type]="tel" formControlName="mobile" maxlength="9" placeholder="911222333" placeholder="911222333">
         <mat-label>
-          <i class="mdi mdi-phone material-icons app-input-icon">&nbsp;</i>Teléfono
+          <i class="mdi mdi-phone app-input-icon">&nbsp;</i>Teléfono
         </mat-label>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-hint align="end">{{mobile.value?.length || 0}}/9</mat-hint>
         <mat-error *ngIf="mobile.hasError('whitespace')">No se permiten espacios en
           <strong>blanco</strong>.
@@ -142,9 +142,9 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="email" placeholder="usuario@email.com">
         <mat-label>
-          <i class="mdi mdi-email material-icons app-input-icon">&nbsp;</i>Email
+          <i class="mdi mdi-email app-input-icon">&nbsp;</i>Email
         </mat-label>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-error *ngIf="email.hasError('whitespace')">No se permiten espacios en
           <strong>blanco</strong>.
         </mat-error>
@@ -156,9 +156,9 @@
       <mat-form-field appearance="standard">
         <input matInput formControlName="address" placeholder="Mi Calle 334">
         <mat-label>
-          <i class="mdi mdi-account-location material-icons app-input-icon">&nbsp;</i>Dirección
+          <i class="mdi mdi-account-location app-input-icon">&nbsp;</i>Dirección
         </mat-label>
-        <i class="mdi mdi-pencil material-icons app-input-icon" matSuffix></i>
+        <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
         <mat-error *ngIf="address.hasError('whitespace')">No se permiten espacios en
           <strong>blanco</strong>.
         </mat-error>
@@ -171,7 +171,7 @@
           </mat-option>
         </mat-select>
         <mat-label>
-          <i class="mdi mdi-map-marker material-icons app-input-icon">&nbsp;</i>Comuna
+          <i class="mdi mdi-map-marker app-input-icon">&nbsp;</i>Comuna
         </mat-label>
       </mat-form-field>
 

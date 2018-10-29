@@ -12,24 +12,31 @@ export class SimpleDialogRefComponent implements OnInit {
 
 
   obj: any;
-  successButton;
+  actionButton ='Aceptar';
+  dialogTitle;
   title;
   subtitle;
   message;
   avatar: Avatar;
+  icon;
+  type;
 
   constructor(
     public dialogRef: MatDialogRef<SimpleDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
   ) {
     this.obj = this.data.obj;
+    this.icon = this.data.icon;
+    this.dialogTitle = this.data.dialogTitle;
     this.title = this.data.title;
     this.subtitle = this.data.subtitle;
     this.message = this.data.message;
     this.avatar = this.data.avatar;
+    this.actionButton = this.data.actionButton ? this.data.actionButton : this.actionButton;
+    this.type = this.data.type;
     console.log('Dialog*** type: ' + data.type);
     //if (data.user !== null) this.user = this.data.user;
-    this.successButton = (!data.obj) ? 'Agregar' : 'Eliminar';
+    
   }
 
   ngOnInit() {

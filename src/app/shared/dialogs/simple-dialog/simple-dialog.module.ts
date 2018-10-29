@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MaterialModule } from "../../material.module";
 import { SimpleDialogRefComponent } from "./simple-dialog-ref/simple-dialog-ref.component";
 import { SimpleDialogComponent } from "./simple-dialog.component";
+import { ImageZoomUserDialogModule } from "../image-zoom-user-dialog/image-zoom-user-dialog.module";
 
 
 
@@ -10,6 +11,7 @@ import { SimpleDialogComponent } from "./simple-dialog.component";
     imports: [
         CommonModule,
         MaterialModule,
+        ImageZoomUserDialogModule
     ],
 
     declarations: [

@@ -1,9 +1,10 @@
+<div *ngIf="data.type === 'delete-card'">
 <mat-dialog-content class="dialogContent">
     <mat-card class="card">
   
       <mat-card-header>
-        <mat-card-title *ngIf="obj">{{title}}</mat-card-title>
-        <mat-card-subtitle *ngIf="obj">{{subtitle}}</mat-card-subtitle>
+        <mat-card-title class="title" >{{title}}</mat-card-title>
+        <mat-card-subtitle class="subtitle">{{subtitle}}</mat-card-subtitle>
         <span class="spacer-r"></span>
         <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
       </mat-card-header>
@@ -15,9 +16,47 @@
   
       <mat-card-actions>
         <button type="button" mat-stroked-button color="accent" tabindex="1" (click)="cancel()" cdkFocusRegionstart>Cancelar</button>
-        <button type="button" mat-stroked-button color="primary" tabindex="2" (click)="accept()">{{successButton}}</button>
+        <button type="button" mat-stroked-button color="primary" tabindex="2" (click)="accept()">{{actionButton}}</button>
   
       </mat-card-actions>
   
     </mat-card>
   </mat-dialog-content>
+
+</div>
+
+  <div *ngIf="data.type === 'delete-classic'" style="width:500px !important">
+    <mat-toolbar color="primary">
+        <img class="imgLogo" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+        <span class="spacer-r"></span>
+        <mat-icon svgIcon={{icon}}></mat-icon>
+        <span>&nbsp;&nbsp;</span>
+        <h1 mat-dialog-title>{{dialogTitle}}</h1>
+    </mat-toolbar>
+
+    <div class="listContainer2">
+        <mat-list>
+            <mat-list-item>
+                <img *ngIf="avatar" matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type +';base64,' + avatar?.data)"
+                    (click)="imageZoom.openDialogImage()">
+                <h3 matLine> {{title}}</h3>
+                <p matLine>
+                    <span class="role-style">{{subtitle}}</span>
+                </p>
+            </mat-list-item>
+            <nx-image-zoom-user #imageZoom [avatar]="avatar"></nx-image-zoom-user>
+        </mat-list>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-dialog-actions>
+        <mat-toolbar>
+            <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+                Cancelar
+            </button>
+            <span class="spacer-r"></span>
+            <button type="button" mat-raised-button color="warn" (click)="accept()" tabindex="2">{{actionButton}}</button>
+        </mat-toolbar>
+    </mat-dialog-actions>
+</div>

@@ -3,17 +3,18 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    --display: flex;
-    --justify-content: center;
-    --align-items: flex-start;
+ 
+    
 }
 
 mat-card {
     min-width: 400px;
     max-width: 650px;
-    --width: 620px;
-    margin: 20px auto 64px;
+    width: 620px;
+    margin: 0 auto 84px;
     padding: 0;
+    top: 20px;
+    
 }
 
 mat-form-field {

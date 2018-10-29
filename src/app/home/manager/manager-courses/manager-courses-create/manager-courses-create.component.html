@@ -14,7 +14,7 @@
             </mat-optgroup>
           </mat-select>
           <mat-label>
-            <i class="mdi mdi-book-variant material-icons app-input-icon">&nbsp;</i>Nombre de Curso
+            <i class="mdi mdi-book-variant app-input-icon">&nbsp;</i>Nombre de Curso
           </mat-label>
           <mat-error *ngIf="name.hasError('required')">Nombre de Curso es
             <strong>requerido</strong>.
@@ -25,7 +25,7 @@
         <mat-form-field>
           <input matInput formControlName="year">
           <mat-label>
-            <i class="mdi mdi-calendar-range material-icons app-input-icon">&nbsp;</i>Año
+            <i class="mdi mdi-calendar-range app-input-icon">&nbsp;</i>Año
           </mat-label>
           <mat-error *ngIf="year.hasError('required')">Año es
             <strong>requerido</strong>.
@@ -129,17 +129,23 @@
 
       </mat-table>
 
-      <div class="wrapperPaginator">
-        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart
-          class="btnBack">
+
+
+      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+
+      <mat-divider></mat-divider>
+      <mat-toolbar>
+        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()"
+          cdkFocusRegionstart class="btnBack">
           <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
         </button>
-        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-        <button type="submit" mat-stroked-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine" class="btnSave">
+        <span class="spacer-r"></span>
+        <button type="submit" mat-stroked-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine"
+          class="btnSave">
           <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
         </button>
-        
-      </div>
+      </mat-toolbar>
+
 
     </mat-card>
 

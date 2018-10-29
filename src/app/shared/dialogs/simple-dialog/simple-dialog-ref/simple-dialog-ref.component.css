@@ -23,11 +23,52 @@ mat-card-actions button {
     margin: 0;
 }
 
-mat-card-title {
-    margin-bottom: 10px;
+.title {
+    margin-bottom: 10px !important;
+    font-size: 16px !important;
 }
 
+.subtitle {
+    font-size: 14px !important;
+}
 .message{
     display: flex;
     justify-content: center;
+
+}
+
+
+.listContainer2 {
+    display: flex;
+    justify-content: center;
+}
+
+.listContainer2 mat-list {
+    padding-top: 0 !important;
+    margin-bottom: 5px !important;
+}
+
+.listContainer2 .mat-list-item {
+    height: 90px;
+}
+
+.listContainer2 .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}
+
+.mat-list-avatar {
+    cursor: pointer;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+mat-dialog-actions {
+    margin: 0;
+    padding: 0;
 }

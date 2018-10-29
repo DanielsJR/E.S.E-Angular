@@ -2,18 +2,20 @@
 
 /*MATERIAL DESIGN*/
 
-@import 'https://fonts.googleapis.com/css?family=Roboto';
-@import 'https://fonts.googleapis.com/css?family=Black+Ops+One';
+/*@import 'https://fonts.googleapis.com/css?family=Roboto';
+@import 'https://fonts.googleapis.com/css?family=Black+Ops+One'; 
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';*/
 html,
 body,
 .myWrapper,
-mat-sidenav-container{
+mat-sidenav-container {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    --overflow: hidden;
-}
+   
+    font-family: 'Roboto', sans-serif;
+  }
 
 /*mat-toolbar */
 
@@ -42,6 +44,7 @@ mat-sidenav-container{
 
 .dialogService .mat-dialog-container {
     padding: 0;
+    overflow: hidden;
 }
 /*MATERIAL dialog*/
 

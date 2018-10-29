@@ -15,6 +15,7 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
 import { MatDialog } from '@angular/material';
 import { tap } from 'rxjs/internal/operators/tap';
+import { shortNameSecondName } from '../../../../shared/functions/shortName';
 
 
 @Component({
@@ -47,23 +48,26 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private snackbarService: SnackbarService, public dialog: MatDialog
-  ) {
-    this.dataSource = new MatTableDataSource<Course>();
-  }
+  ) { }
 
   ngOnInit() {
 
-    console.log("ONINITT!!!!!");
-    
+    this.dataSource = new MatTableDataSource<Course>();
+    this.dataSource.filterPredicate = (user: User, filterValue: string) =>
+      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
+      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
+      || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
+
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
     // paramMap re-uses the component
-   this.route.paramMap
+    this.route.paramMap
       .pipe(switchMap(params => this.getCurso(params.get('name'))))
-      .subscribe(); 
+      .subscribe();
 
     // snapshot doesn't re-uses the component
-       /* this.getCurso(this.route.snapshot.paramMap.get('name'))
-       .subscribe();*/
-
+    /* this.getCurso(this.route.snapshot.paramMap.get('name'))
+    .subscribe();*/
 
     this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
@@ -114,10 +118,10 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
 
 
   addStudent(student: User) {
-    let list =  this.listStudents.slice();
+    let list = this.listStudents.slice();
     list.push(student);
     this.listStudents = list;
-    this.dataSource.data =  this.listStudents;
+    this.dataSource.data = this.listStudents;
     this.btnDisabled = false;
   }
 

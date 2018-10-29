@@ -53,6 +53,8 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
 
     if (this.uriRole === URI_MANAGERS) {
       this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));

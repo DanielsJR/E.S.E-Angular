@@ -16,7 +16,7 @@
     <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
 
       <mat-label>
-        <i class="mdi mdi-security-account material-icons app-input-icon"></i>
+        <i class="mdi mdi-security-account app-input-icon"></i>
         Asignar a
         <strong *ngIf="user">{{user | shortName}}&nbsp;
         </strong>{{roles.length | i18nPlural: rolesMapping}}
@@ -51,7 +51,7 @@
     <!--{{roles | json}}-->
 
     <div *ngIf="!slideToggleManager.value && !slideToggleTeacher.value" class="errorRoles centerField">
-      <i class="mdi mdi-alert-circle material-icons app-input-icon">&nbsp;</i>
+      <i class="mdi mdi-alert-circle app-input-icon">&nbsp;</i>
       Al menos un Privilégio es &nbsp;
       <strong>requerido</strong>
     </div>
