@@ -135,13 +135,11 @@
 
       <mat-divider></mat-divider>
       <mat-toolbar>
-        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()"
-          cdkFocusRegionstart class="btnBack">
+        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart>
           <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
         </button>
         <span class="spacer-r"></span>
-        <button type="submit" mat-stroked-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine"
-          class="btnSave">
+        <button type="submit" mat-stroked-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine">
           <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
         </button>
       </mat-toolbar>

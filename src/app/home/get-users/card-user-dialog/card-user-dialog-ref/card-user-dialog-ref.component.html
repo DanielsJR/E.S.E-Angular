@@ -9,7 +9,7 @@
     </mat-card-header>
 
     <img mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-      alt="user">
+      alt="user" class="imageCard">
 
     <mat-card-actions>
       <button type="button" mat-button color="primary" tabindex="1" (click)="detail()">Detalles</button>

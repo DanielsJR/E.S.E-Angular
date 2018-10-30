@@ -4,6 +4,10 @@ mat-dialog-content {
     max-height: 100%;
 }
 
+mat-card-title {
+    margin-bottom: 10px;
+}
+
 .imgLogo {
     height: 40px;
 }
@@ -16,13 +20,13 @@ mat-dialog-content {
     font-size: 14px !important;
 }
 
-mat-card>img {
+.imageCard {
     margin-bottom: 0 !important;
 }
 
 mat-card-actions {
-    padding: 15px 0 5px 0 !important;
-    margin: 0;
+    --padding: 15px 0 5px 0 !important;
+    --margin: 0;
     display: flex;
     justify-content: space-between;
 }
@@ -31,6 +35,3 @@ mat-card-actions button {
     margin: 0;
 }
 
-mat-card-title {
-    margin-bottom: 10px;
-}

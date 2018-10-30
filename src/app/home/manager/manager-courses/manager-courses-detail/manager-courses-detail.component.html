@@ -95,7 +95,7 @@
           [obj]="student" 
           [title]="student | shortNameLastname"
           [subtitle]="student.roles | rolesToSpanish"
-          [message]="'Eliminar este Alumno?'" 
+          [message]="'Eliminar de este Curso?'" 
           [avatar]="student?.avatar"
           [type]="'delete-card'"
           (objSelected)="deleteStudent($event)">
@@ -114,13 +114,11 @@
 
     <mat-divider></mat-divider>
     <mat-toolbar>
-      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart
-        class="btnBack">
+      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart>
         <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
       </button>
       <span class="spacer-r"></span>
-      <button type="submit" mat-flat-button color="accent" tabindex="2" (click)="saveCourse()" class="btnSave"
-        [disabled]="btnDisabled">
+      <button type="submit" mat-flat-button color="accent" tabindex="2" (click)="saveCourse()" [disabled]="btnDisabled">
         <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
       </button>
 

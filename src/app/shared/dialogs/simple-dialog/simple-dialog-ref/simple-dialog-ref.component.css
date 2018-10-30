@@ -4,24 +4,14 @@ mat-dialog-content {
     max-height: 100%;
 }
 
+mat-card{
+    --padding: 24px 24px 15px;
+}
+
 .imgLogo {
     height: 40px;
 }
 
-mat-card>img {
-    margin-bottom: 0 !important;
-}
-
-mat-card-actions {
-    padding: 15px 0 5px 0 !important;
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
-}
-
-mat-card-actions button {
-    margin: 0;
-}
 
 .title {
     margin-bottom: 10px !important;
@@ -31,28 +21,41 @@ mat-card-actions button {
 .subtitle {
     font-size: 14px !important;
 }
-.message{
+
+.message {
     display: flex;
     justify-content: center;
-
+    margin: 10px 0;
+    font-size: 16px;
+    color: darkgray;
 }
 
+.imageCard {
+    margin-bottom: 0 !important;
+}
 
-.listContainer2 {
+mat-card-actions {
+    --padding: 15px 0 0 !important;
+    --margin: 0 !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+.listContainer {
     display: flex;
     justify-content: center;
 }
 
-.listContainer2 mat-list {
+.listContainer mat-list {
     padding-top: 0 !important;
     margin-bottom: 5px !important;
 }
 
-.listContainer2 .mat-list-item {
+.listContainer .mat-list-item {
     height: 90px;
 }
 
-.listContainer2 .mat-list-avatar {
+.listContainer .mat-list-avatar {
     height: 65px;
     width: 65px;
 }

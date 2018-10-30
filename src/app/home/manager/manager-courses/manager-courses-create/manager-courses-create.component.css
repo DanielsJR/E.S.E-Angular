@@ -71,12 +71,12 @@ mat-list {
 
 .add {
     justify-content: flex-end !important;
-    padding-right: 40px !important;
+    padding-right: 30px !important;
 }
 
 .crud {
     justify-content: flex-end !important;
-    padding-right: 40px !important;
+    padding-right: 30px !important;
 }
 
 mat-list-item {
@@ -103,10 +103,3 @@ mat-list-item p {
     align-items: center;
 }
 
-.btnBack{
-    margin-left:30px
-}
-
-.btnSave{
-    margin-right:30px
-}
