@@ -55,9 +55,14 @@
 
         <mat-cell *matCellDef="let subject" class="crud">
 
-          <button mat-icon-button color="primary" (click)="$event.stopPropagation()">
+          <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="crudUserDialog.openDialogDetail()"><mat-icon svgIcon="eye"></mat-icon> Profesor</button>
+            <button mat-menu-item [routerLink]="['../courses/detail',subject.course.name]"><mat-icon svgIcon="eye"></mat-icon> Curso</button>
+          </mat-menu>
+          <nx-crud-user-dialog #crudUserDialog [user]="subject.teacher" [uriRole]="'/teachers'" [areaRole]="'manager'"></nx-crud-user-dialog>
 
           <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>

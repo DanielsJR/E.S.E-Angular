@@ -10,6 +10,7 @@ import { SubjectStoreService } from '../../../services/subject-store.service';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { RESULT_SUCCESS, RESULT_CANCELED, RESULT_ERROR } from '../../../app.config';
 import { ManagerSubjectsCrudDialogRefComponent } from './manager-subjects-crud-dialog-ref/manager-subjects-crud-dialog-ref.component';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 @Component({
   selector: 'nx-manager-subjects',
@@ -93,9 +94,16 @@ export class ManagerSubjectsComponent implements OnInit, AfterViewInit {
   }
 
 
-  
-  deleteSubject(){
-    
+
+  deleteSubject(subject: Subject) {
+    this.isLoading = true;
+    this.subjectStoreService.delete(subject)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ => this.snackbarService.openSnackBar('Asignatura Eliminada', RESULT_SUCCESS)
+        , err => {
+          this.snackbarService.openSnackBar('Error al eliminar Asignatura', RESULT_ERROR);
+          console.error("Error deleting subject: " + err);
+        });
   }
 
 
