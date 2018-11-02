@@ -197,11 +197,14 @@
         <mat-sidenav-content>
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
+
             <div class="contenido" (nxScroller)="isScrolled=$event">
                 <router-outlet></router-outlet>
             </div>
+
+
         </mat-sidenav-content>
-
+        
     </mat-sidenav-container>
-
+   
 </div>

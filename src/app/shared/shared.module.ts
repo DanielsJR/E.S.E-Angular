@@ -47,7 +47,7 @@ import { ShortNameLastnamePipe } from './pipes/short-name-lastname.pipe';
     ShortNameLastnamePipe,
     RolesToSpanishPipe,
     SimpleDialogModule,
-
+   
   ]
 })
 export class SharedModule { }
