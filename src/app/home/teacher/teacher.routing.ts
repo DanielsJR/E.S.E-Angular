@@ -18,51 +18,47 @@ const teacherRoutes: Routes = [
                 children: [
                     {
                         path: 'subject',
-                        children: [
-                            {
-                                path: ':id',
-                                component: SubjectDetailComponent,
-                                children: [
-                                    {
-                                        path: 'class',
-                                        children: [
-                                            {
-                                                path: ':id',
-                                                component: SubjectDetailComponent,
-                                            }
-                                        ],
-                                    }
-                                ],
-                            }
-                        ],
+                        component: SubjectListComponent,
+                    },
 
+                    {
+                        path: 'subject/:id',
+                        component: SubjectDetailComponent,
+                    },
 
+                    {
+                        path: 'class',
+                        component: SubjectDetailComponent,
+                    },
+
+                    {
+                        path: ':id',
+                        component: SubjectDetailComponent,
                     },
 
                     {
                         path: 'test',
+                        component: SubjectDetailComponent,
+                    },
 
-                        children: [
-                            {
-                                path: 'make-test',
-                                component: SubjectDetailComponent,
-                            },
+                    {
+                        path: 'test/make-test',
+                        component: SubjectDetailComponent,
+                    },
 
-                            {
-                                path: 'take-test',
-                                component: SubjectDetailComponent,
-                            },
+                    {
+                        path: 'test/take-test',
+                        component: SubjectDetailComponent,
+                    },
 
-                            {
-                                path: 'edit-test',
-                                component: SubjectDetailComponent,
-                            },
+                    {
+                        path: 'test/edit-test',
+                        component: SubjectDetailComponent,
+                    },
 
-                            {
-                                path: 'historical',
-                                component: SubjectDetailComponent,
-                            }
-                        ],
+                    {
+                        path: 'test/historical',
+                        component: SubjectDetailComponent,
                     },
 
                     {

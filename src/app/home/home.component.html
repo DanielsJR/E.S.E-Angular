@@ -50,6 +50,27 @@
                 </div>
             </mat-toolbar>
 
+            <!-- sidenav menus -->
+            <mat-nav-list class="menu">
+                <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
+
+                <mat-list-item (click)="triggerUsers = !triggerUsers">
+                    <mat-icon matListIcon svgIcon="account-multiple"></mat-icon>
+                    <h3 matLine>Usuarios</h3>
+                    <mat-icon [@tdRotate]="!triggerUsers" svgIcon="menu-down"></mat-icon>
+                </mat-list-item>
+                <div [style.overflow]="'hidden'" [@tdCollapse]="triggerUsers">
+                    <nx-users-menu [privilege]='privilege' [roles]='roles'></nx-users-menu>
+                </div>
+
+                <nx-courses-menu [privilege]='privilege' [roles]='roles'></nx-courses-menu>
+
+                <nx-subjects-menu [privilege]='privilege' [roles]='roles'></nx-subjects-menu>
+
+                
+
+            </mat-nav-list>
+
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
 
@@ -157,24 +178,7 @@
 
 
 
-            <!-- sidenav menu -->
-            <mat-nav-list class="menu">
-                <nx-home-menu [privilege]='privilege' [roles]='roles'></nx-home-menu>
 
-                <mat-list-item (click)="triggerUsers = !triggerUsers">
-                    <mat-icon matListIcon svgIcon="account-multiple"></mat-icon>
-                    <h3 matLine>Usuarios</h3>
-                    <mat-icon [@tdRotate]="!triggerUsers" svgIcon="menu-down"></mat-icon>
-                </mat-list-item>
-                <div [style.overflow]="'hidden'" [@tdCollapse]="triggerUsers">
-                    <nx-users-menu [privilege]='privilege' [roles]='roles'></nx-users-menu>
-                </div>
-
-                <nx-courses-menu [privilege]='privilege' [roles]='roles'></nx-courses-menu>
-
-                <nx-subjects-menu [privilege]='privilege' [roles]='roles'></nx-subjects-menu>
-
-            </mat-nav-list>
 
         </mat-sidenav>
 
@@ -204,7 +208,7 @@
 
 
         </mat-sidenav-content>
-        
+
     </mat-sidenav-container>
-   
+
 </div>

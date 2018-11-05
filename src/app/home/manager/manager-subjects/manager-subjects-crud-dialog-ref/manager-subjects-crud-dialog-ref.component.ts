@@ -41,10 +41,13 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
   isLoading: boolean = false;
 
   avatar: Avatar;
-
   subjectGroup: FormGroup;
   courseGroup: FormGroup;
   teacherGroup: FormGroup;
+
+  subjectEditGroup: FormGroup;
+  courseEditGroup: FormGroup;
+  teacherEditGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<ManagerSubjectsCrudDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
@@ -52,19 +55,24 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
     , private subjectStoreService: SubjectStoreService) {
 
     console.log('type: ' + data.type);
+    if (data.type === 'edit') {
+      this.subject = this.data.subject;
+      this.subjectName = this.subjectsNames.find(sn => sn.value === this.data.subject.name);
+      this.course = this.data.subject.course;
+      this.teacher = this.data.subject.teacher;
+    }
   }
 
   ngOnInit() {
     this.buildForm();
-    if (this.data.type === 'create') this.setAvatarCreateDefault();
-
+    if (this.data.type === 'create')  this.setAvatarCreateDefault();
+  
     this.filteredSubjectNames$ = this.cName.valueChanges
       .pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value.value),
         map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
       );
-
 
     this.filteredTeachers$ = this.cTeacher.valueChanges
       .pipe(
@@ -73,9 +81,6 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
         map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
       );
 
-    this.userStoreService.teachers$.subscribe(data => this.teachers = data);
-
-
     this.filteredCourses$ = this.cCourse.valueChanges
       .pipe(
         startWith(''),
@@ -83,13 +88,40 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
         map(value => value ? this._filterCourses(value) : this.courses.slice()),
       );
 
+
+
+    this.filteredSubjectNames$ = this.eName.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.value),
+        map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
+      );
+
+    this.filteredTeachers$ = this.eTeacher.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.firstName),
+        map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
+      );
+
+    this.filteredCourses$ = this.eCourse.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(value => value ? this._filterCourses(value) : this.courses.slice()),
+      );
+
+
+
+    this.userStoreService.teachers$.subscribe(data => this.teachers = data);
     this.courseStoreService.courses$.subscribe(data => this.courses = data);
 
   }
 
   private _filterSubjectNames(value: string): SubjectName[] {
     const filterValue = value.toLowerCase();
-    return this.subjectsNames.filter(sn => sn.value.toLowerCase().indexOf(filterValue) === 0);
+    return this.subjectsNames.filter(sn =>
+      sn.value.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private _filterTeachers(value: string): User[] {
@@ -132,12 +164,6 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
 
 
   buildForm() {
-    /*  this.createForm = this.formBuilder.group({
-        name: [null, [Validators.required]],
-        teacher: [null, [Validators.required]],
-        course: [null, [Validators.required]]
-  
-      });  */
 
     this.subjectGroup = this.formBuilder.group({
       name: ['', [Validators.required]]
@@ -150,6 +176,20 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
     this.teacherGroup = this.formBuilder.group({
       teacher: ['', [Validators.required]]
     });
+
+
+    this.subjectEditGroup = this.formBuilder.group({
+      name: [this.subjectName, [Validators.required]]
+    });
+
+    this.courseEditGroup = this.formBuilder.group({
+      course: [this.course, [Validators.required]]
+    });
+
+    this.teacherEditGroup = this.formBuilder.group({
+      teacher: [this.teacher, [Validators.required]]
+    });
+
   }
 
   setAvatarCreateDefault(): void {
@@ -175,10 +215,15 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
     }
   }
 
+
   get cName() { return this.subjectGroup.get('name'); }
   get cCourse() { return this.courseGroup.get('course'); }
   get cTeacher() { return this.teacherGroup.get('teacher'); }
- 
+
+  get eName() { return this.subjectEditGroup.get('name'); }
+  get eCourse() { return this.courseEditGroup.get('course'); }
+  get eTeacher() { return this.teacherEditGroup.get('teacher'); }
+
 
   cancel(): void {
     this.dialogRef.close(RESULT_CANCELED);
@@ -197,6 +242,24 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
         , err => {
           this.dialogRef.close(RESULT_ERROR)
           console.error("Error creating Subject: " + err);
+        }
+
+      );
+  }
+
+  edit() {
+    let subject: Subject = Object.assign({}, this.subject);
+    subject.name = this.subjectName.value;
+    subject.course = this.course;
+    subject.teacher = this.teacher;
+    this.isLoading = true;
+    this.subjectStoreService.update(subject)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ =>
+        this.dialogRef.close(RESULT_SUCCESS)
+        , err => {
+          this.dialogRef.close(RESULT_ERROR)
+          console.error("Error editing Subject: " + err);
         }
 
       );

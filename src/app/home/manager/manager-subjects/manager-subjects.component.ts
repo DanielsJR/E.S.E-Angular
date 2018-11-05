@@ -68,7 +68,7 @@ export class ManagerSubjectsComponent implements OnInit, AfterViewInit {
 
   openDialogCreate(): void {
     let data = {
-      user: new Subject,
+      subject: new Subject,
       type: 'create',
 
     };
@@ -88,6 +88,33 @@ export class ManagerSubjectsComponent implements OnInit, AfterViewInit {
         console.error(RESULT_ERROR);
       } else if (result === RESULT_SUCCESS) {
         this.snackbarService.openSnackBar("Asignatura Creada", RESULT_SUCCESS);
+        console.log(RESULT_SUCCESS);
+      }
+    });
+  }
+
+  openDialogEdit(subject:Subject): void {
+    let data = {
+      subject: subject,
+      type: 'edit',
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(ManagerSubjectsCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        this.snackbarService.openSnackBar("Error al Editar Asignatura", RESULT_ERROR);
+        console.error(RESULT_ERROR);
+      } else if (result === RESULT_SUCCESS) {
+        this.snackbarService.openSnackBar("Asignatura Editada", RESULT_SUCCESS);
         console.log(RESULT_SUCCESS);
       }
     });

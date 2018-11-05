@@ -64,6 +64,10 @@
           </mat-menu>
           <nx-crud-user-dialog #crudUserDialog [user]="subject.teacher" [uriRole]="'/teachers'" [areaRole]="'manager'"></nx-crud-user-dialog>
 
+          <button mat-icon-button color="accent" (click)="openDialogEdit(subject) ;$event.stopPropagation()">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+
           <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
