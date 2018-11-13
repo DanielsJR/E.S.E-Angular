@@ -1,47 +1,47 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.config';
 
 @Component({
   selector: 'nx-home-menu',
   template: `
 
-<mat-list-item *ngIf="privilege === 'ADMIN' " routerLink="./admin">
+<mat-list-item *ngIf="roles?.includes(roleAdmin)" routerLink="./admin">
   <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
-  <h3 matLine>Home</h3>
-</mat-list-item>
+    <h3 matLine>Home</h3>
+</mat-list-item>  
   
-<mat-list-item *ngIf ="privilege === 'MANAGER' " routerLink="./manager">
-<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
-  <h3 matLine>Home</h3>
+<mat-list-item *ngIf="roles?.includes(roleManager)  && !roles?.includes(roleAdmin) && !roles?.includes(roleAdmin)" routerLink="./manager">
+  <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
+    <h3 matLine>Home</h3>
 </mat-list-item>  
 
-<mat-list-item *ngIf="privilege === 'TEACHER' " routerLink="./teacher">
-<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
-  <h3 matLine>Home</h3>
+<mat-list-item *ngIf="roles?.includes(roleTeacher)  && !roles?.includes(roleAdmin) && !roles?.includes(roleManager)" routerLink="./teacher">
+  <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
+    <h3 matLine>Home</h3>
 </mat-list-item>
 
-<mat-list-item *ngIf="privilege === 'STUDENT' " routerLink="./student">
-<mat-icon matListIcon svgIcon="home-variant"></mat-icon>
-  <h3 matLine>Home</h3>
+<mat-list-item *ngIf="roles?.includes(roleStudent)" routerLink="./student">
+  <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
+    <h3 matLine>Home</h3>
 </mat-list-item>
+
   
   `,
   styles: [],
-  animations: [
-    TdRotateAnimation(),
-    TdCollapseAnimation(),
-  ],
+
+
 })
 
 export class HomeMenuComponent implements OnInit {
 
   @Input()
-  privilege: string;
-
-  @Input()
   roles: string[];
 
-  triggerUsers = true;
+  roleAdmin = ROLE_ADMIN;
+  roleManager = ROLE_MANAGER;
+  roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
+ 
 
   constructor() { }
 

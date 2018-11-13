@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { Course } from "../models/course";
 import { finalize } from "rxjs/internal/operators/finalize";
 import { tap } from "rxjs/internal/operators/tap";
 import { IsLoadingService } from "./isLoadingService.service";
@@ -15,7 +14,7 @@ import { SubjectBackendService } from "./subject-backend.service";
 export class SubjectStoreService {
 
 
-    private subjectsSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
+    private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     public readonly subjects$ = this.subjectsSource.asObservable();
     private dataStore: { subjects: Subject[] };
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
@@ -50,7 +49,7 @@ export class SubjectStoreService {
     }
 
     loadOneSubject(name: string) {
-        console.log(`********loadOneCourse()-FROM-BACKEND********`);
+        console.log(`********loadOneSubject()-FROM-BACKEND********`);
         if (!this.subjectsSource.getValue().length) this.isLoadingGet.next(true);
         this.subjectBackendService.getSubjectByName(name)
             .pipe(finalize(() => this.isLoadingGet.next(false)))
@@ -103,7 +102,7 @@ export class SubjectStoreService {
         return this.subjectBackendService.delete(subject)
             .pipe(
                 tap(_ => {
-                    let index = this.dataStore.subjects.findIndex((c: Course) => c.id === ((typeof subject === 'string') ? subject : subject.id));
+                    let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject : subject.id));
                     if (index != -1) {
                         this.dataStore.subjects.splice(index, 1);
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);

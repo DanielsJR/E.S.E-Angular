@@ -102,7 +102,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
     return this.courseStoreService.courses$
       .pipe(
         tap(courses => {
-          this.course = courses.find(c => c.name === name)
+          this.course = courses.find(c => c.name === name);
           if (this.course) {
             this.chiefTeacher = this.course.chiefTeacher;
             this.dataSource.data = this.course.students;

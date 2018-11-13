@@ -12,14 +12,14 @@ import { IsLoadingService } from './isLoadingService.service';
 })
 export class UserLoggedService {
 
-    private userLoggedSource = <BehaviorSubject<User>>new BehaviorSubject(null);//new ReplaySubject<User>(1);// new Subject<User>();
+    private userLoggedSource = new ReplaySubject<User>(1);//<BehaviorSubject<User>>new BehaviorSubject(null);// new Subject<User>();
     userLogged$ = this.userLoggedSource.asObservable();
 
     constructor(private userBackendService: UserBackendService, private loginService: LoginService,
         private isLoadingService: IsLoadingService, private router: Router) { }
 
-    userLogged(user: User) {
-        console.log('userLogged NEXT....');
+    userLoggedNext(user: User) {
+        console.log('userLogged NEXT=======>');
         this.userLoggedSource.next(user);
     }
 
@@ -29,7 +29,7 @@ export class UserLoggedService {
             .getUserByUsernameSecured(username)
             .pipe(finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(user => {
-                    this.userLogged(user);
+                    this.userLoggedNext(user);
                     const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
                     if (redirectHome) this.router.navigate(['/home/' + endPoint]);
                     if (this.loginService.redirectUrl && (this.loginService.tokenUsername === username)) this.router.navigate([this.loginService.redirectUrl]);

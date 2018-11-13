@@ -158,7 +158,7 @@ export class UserProfileComponent implements OnInit {
         this.userBackendService.updateSecured(userEdit)
             .pipe(finalize(() => this.isLoading = false))
             .subscribe(user => {
-                this.userLoggedService.userLogged(user);
+                this.userLoggedService.userLoggedNext(user);
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
                 this.userStoreService.updateInManagerDataStore(user);

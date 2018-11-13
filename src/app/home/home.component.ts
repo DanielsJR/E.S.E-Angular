@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/internal/operators/finalize';
-import { RESULT_SUCCESS } from '../app.config';
+import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 
 
@@ -42,6 +42,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   subscriptionIsLoading: Subscription;
   isLoading: boolean = false;
 
+  roleAdmin = ROLE_ADMIN;
+  roleManager = ROLE_MANAGER;
+  roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
+
   //profile
   profileAction = '';
   profileTitle = '';
@@ -68,7 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
-      if (this.user) this.themePicker.getThemeFromServer(user.id);
+      if (this.user) this.themePicker.getThemeFromServer(this.user.id);
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     });
 
@@ -78,9 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     } else {
       console.log('user:null getting user from backend');
-     // this.isLoading = true;
       this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
-       // .pipe(finalize(() => this.isLoading = false))
         .subscribe();
     }
 

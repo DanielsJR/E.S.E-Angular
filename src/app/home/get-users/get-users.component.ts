@@ -47,7 +47,7 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
     console.log("AreaRole: " + this.areaRole);
-    this.dataSource = new MatTableDataSource<User>();
+    this.dataSource = new MatTableDataSource<User[]>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0

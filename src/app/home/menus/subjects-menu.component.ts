@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 <mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]="['./manager/subjects']">
   <mat-icon matListIcon svgIcon="school"></mat-icon>
-    <h3 matLine>Asignaturas</h3>
+    <h3 matLine>Administrar Asignaturas</h3>
 </mat-list-item>
   
   `,
@@ -17,8 +17,6 @@ import { Component, OnInit, Input } from '@angular/core';
 
 export class SubjectsMenuComponent implements OnInit {
 
-  @Input()
-  privilege: string;
 
   @Input()
   roles: string[];

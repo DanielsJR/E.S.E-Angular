@@ -57,7 +57,7 @@ import { Router } from '@angular/router';
 
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer, router: Router) {
-    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/svg-icons/mdi.svg'));
     //console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
 }

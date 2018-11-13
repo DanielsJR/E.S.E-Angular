@@ -50,9 +50,10 @@ export class ResetPassDialogRefComponent implements OnInit {
         } else {
           this.dialogRef.close();
           setTimeout(() => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR));
-        };
+        }
+      }, error => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR)
+      );
 
-      });
   }
 
   cancel(): void {

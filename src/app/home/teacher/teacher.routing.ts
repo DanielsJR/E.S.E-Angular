@@ -1,14 +1,15 @@
 import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
-import { SubjectDetailComponent } from './subject-list/subject-detail/subject-detail.component';
-import { SubjectListComponent } from './subject-list/subject-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { TeacherGuard } from '../../guards/teacher-guard.service';
+import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
+import { TeacherComponent } from './teacher.component';
 
 
 const teacherRoutes: Routes = [
     {
         path: '',
+        component: TeacherComponent,
         canActivate: [TeacherGuard],
         children: [
 
@@ -17,48 +18,48 @@ const teacherRoutes: Routes = [
                 canActivateChild: [TeacherGuard],
                 children: [
                     {
-                        path: 'subject',
-                        component: SubjectListComponent,
+                        path: 'subjects',
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'subject/:id',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'class',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: ':id',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'test',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'test/make-test',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'test/take-test',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'test/edit-test',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {
                         path: 'test/historical',
-                        component: SubjectDetailComponent,
+                        component: TeacherSubjectsComponent,
                     },
 
                     {

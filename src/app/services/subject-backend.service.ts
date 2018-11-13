@@ -23,7 +23,7 @@ export class SubjectBackendService {
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Subject[]>(url)
             .pipe(retry(3),
-                tap(resp => console.log(`N° Subject: ${resp.length}`))
+                tap(resp => console.log(`N° Subjects: ${resp.length}`))
             );
     }
 
@@ -80,6 +80,15 @@ export class SubjectBackendService {
         return this.httpCli.get<Subject>(url)
             .pipe(retry(3),
                 tap(_ => console.log(`fetched Subject name=${name}`))
+            );
+    }
+
+    getSubjectsByTeacher(id: string): Observable<Subject[]> {
+        const url = `${this.subjectURL}/teacher/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Subject[]>(url)
+            .pipe(retry(3),
+                tap(resp => console.log(`N° Subjects: ${resp.length}`))
             );
     }
 }
