@@ -62,17 +62,23 @@ export class GetUsersComponent implements OnInit, AfterViewInit {
       this.userRole = ROLE_MANAGER_SPANISH;
       this.usersRole = ROLE_MANAGER_SPANISH + 'res';
 
+      //this.userStoreService.loadAllManagers();
+
     } else if (this.uriRole === URI_TEACHERS) {
       this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
       this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
 
+      //this.userStoreService.loadAllTeachers();
+
     } else if (this.uriRole === URI_STUDENTS) {
       this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
       this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_STUDENT_SPANISH;
       this.usersRole = ROLE_STUDENT_SPANISH + 's';
+
+      //this.userStoreService.loadAllStudents();
     } else {
       console.error('NO uriRole');
     }

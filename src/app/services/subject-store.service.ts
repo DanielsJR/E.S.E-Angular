@@ -5,6 +5,8 @@ import { tap } from "rxjs/internal/operators/tap";
 import { IsLoadingService } from "./isLoadingService.service";
 import { Subject } from "../models/subject";
 import { SubjectBackendService } from "./subject-backend.service";
+import { Course } from "../models/course";
+import { User } from "../models/user";
 
 
 
@@ -87,7 +89,7 @@ export class SubjectStoreService {
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
-                    let index = this.dataStore.subjects.findIndex(c => c.id === data.id);
+                    let index = this.dataStore.subjects.findIndex(s => s.id === data.id);
                     if (index != -1) {
                         this.dataStore.subjects[index] = data;
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
@@ -113,6 +115,50 @@ export class SubjectStoreService {
                 ));
     }
 
+
+
+
+    //************courseStore
+    updateCourseInSubjectStore(course: Course) {
+        this.dataStore.subjects.forEach((subject, index) => {
+            if (subject.course.id === course.id) {
+                subject.course = course;
+                this.dataStore.subjects[index] = subject;
+            } else {
+                console.error("not found in dataStore.subjects");
+            }
+        });
+        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+    }
+
+    deleteCorseInSubjectStore(course: Course | string) {
+        let subject = this.dataStore.subjects.find(s => s.course.id === ((typeof course === 'string') ? course : course.id));
+        if (subject) {
+            // subject.course
+            let index = this.dataStore.subjects.findIndex(s => s.course.id === ((typeof course === 'string') ? course : course.id));
+            if (index != -1) {
+                //this.dataStore.subjects.splice(index, 1);
+                this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+            } else {
+                console.error("not found in dataStore.subjects");
+            }
+        }
+    }
+
+    updateTeacherInSubjectStore(teacher: User) {
+        this.dataStore.subjects.forEach((subject, index) => {
+            if (subject.teacher.id === teacher.id) {
+                subject.teacher= teacher;
+                this.dataStore.subjects[index] = subject;
+            } else {
+                console.error("not found in dataStore.subjects");
+            }
+        });
+        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+
+    }
+
 }
+
 
 

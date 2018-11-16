@@ -5,7 +5,6 @@ import { HomeRoutingModule } from './home.routing';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CovalentFileModule } from '@covalent/core';
-import { ImageZoomUserDialogModule } from '../shared/dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { SetPassDialogRefComponent } from './user-profile/set-pass-dialog/set-pass-dialog-ref/set-pass-dialog-ref.component';
 import { SetPassDialogComponent } from './user-profile/set-pass-dialog/set-pass-dialog.component';
 import { HomeMenuComponent } from './menus/home-menu.component';
@@ -21,7 +20,7 @@ import { QuizMenuComponent } from './menus/quiz-menu.component';
     SharedModule,
     HomeRoutingModule,
     CovalentFileModule,
-    ImageZoomUserDialogModule,
+    
 
   ],
 

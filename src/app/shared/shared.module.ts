@@ -13,6 +13,7 @@ import { SimpleDialogModule } from './dialogs/simple-dialog/simple-dialog.module
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MatPaginatorIntlSpa } from './paginatorCustom/mat-paginator-intl-spa';
 import { ShortNameLastnamePipe } from './pipes/short-name-lastname.pipe';
+import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 
 
 @NgModule({
@@ -47,7 +48,7 @@ import { ShortNameLastnamePipe } from './pipes/short-name-lastname.pipe';
     ShortNameLastnamePipe,
     RolesToSpanishPipe,
     SimpleDialogModule,
-   
+    ImageZoomUserDialogModule,
   ]
 })
 export class SharedModule { }

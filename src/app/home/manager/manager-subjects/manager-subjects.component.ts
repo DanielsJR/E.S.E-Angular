@@ -38,6 +38,8 @@ export class ManagerSubjectsComponent implements OnInit, AfterViewInit {
     this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.subjectStoreService.subjects$.subscribe(data => this.dataSource.data = data);
 
+    //this.subjectStoreService.loadAllSubjects();
+
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     this.sessionStorage.isThemeDark$.subscribe(isDark => {

@@ -15,7 +15,7 @@
 
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
-          <mat-icon svgIcon="account-multiple"></mat-icon>
+          <mat-icon svgIcon="school"></mat-icon>
           &nbsp; Asignaturas
         </mat-chip>
       </mat-chip-list>
@@ -35,7 +35,7 @@
           <mat-list style="flex-grow: 8">
             <mat-list-item>
               <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
-              alt="{{subject?.teacher?.username}}">
+                alt="{{subject?.teacher?.username}}">
               <h3 matLine>{{subject?.name}} </h3>
               <p matLine>
                 <span class="role-style">{{subject?.course?.name}} - {{subject?.teacher | shortName}}</span>
@@ -49,20 +49,15 @@
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
           <button mat-mini-fab matTooltip="Agregar Asignatura" style="margin-bottom:5px" (click)="openDialogCreate()">
-            <mat-icon svgIcon="account-plus"></mat-icon>
+            <mat-icon svgIcon="plus"></mat-icon>
           </button>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let subject" class="crud">
 
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+          <button mat-icon-button color="primary" [routerLink]="['../subjects',subject.id]">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="crudUserDialog.openDialogDetail()"><mat-icon svgIcon="eye"></mat-icon> Profesor</button>
-            <button mat-menu-item [routerLink]="['../courses/detail',subject.course.name]"><mat-icon svgIcon="eye"></mat-icon> Curso</button>
-          </mat-menu>
-          <nx-crud-user-dialog #crudUserDialog [user]="subject.teacher" [uriRole]="'/teachers'" [areaRole]="'manager'"></nx-crud-user-dialog>
 
           <button mat-icon-button color="accent" (click)="openDialogEdit(subject) ;$event.stopPropagation()">
             <mat-icon svgIcon="pencil"></mat-icon>
@@ -72,9 +67,9 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteDialog [obj]="subject" [icon]="'school'" [dialogTitle]= "'Borrar Asignatura'" [message]="'Eliminar esta Asignatura?'" [title]="subject.name + '/' + subject.course.name"
-          [subtitle]="(subject.teacher | shortName) + ', Profesor' " [avatar]="subject.teacher.avatar" [type]="'delete-classic'"
-          (objSelected)="deleteSubject($event)"></nx-simple-dialog>
+          <nx-simple-dialog #deleteDialog [obj]="subject" [icon]="'school'" [dialogTitle]="'Eliminar Asignatura'"
+            [message]="'Eliminar esta Asignatura?'" [title]="subject.name + '/' + subject.course.name" [subtitle]="(subject.teacher | shortName) + ', Profesor' "
+            [avatar]="subject.teacher.avatar" [type]="'delete-classic'" (objSelected)="deleteSubject($event)"></nx-simple-dialog>
 
         </mat-cell>
       </ng-container>

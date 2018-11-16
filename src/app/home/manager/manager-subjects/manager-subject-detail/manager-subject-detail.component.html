@@ -12,8 +12,8 @@
       <span class="spacer-r"></span>
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
-          <mat-icon svgIcon="book"></mat-icon>
-          &nbsp; {{course?.name}}
+          <mat-icon svgIcon="school"></mat-icon>
+          &nbsp; {{subject?.name}}/{{subject?.course?.name}}
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
@@ -24,35 +24,28 @@
     <mat-toolbar class="toolbar2">
       <mat-list style="flex-grow: 8">
         <mat-list-item>
-          <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
+          <img matListAvatar *ngIf="(teacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
             alt="{{t?.username}}" (click)="imageZoomT.openDialogImage()">
-          <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortNameLastname}}</h3>
+          <h3 matLine *ngIf="(teacher) as t">{{ t | shortNameLastname}}</h3>
           <p matLine>
-            <span class="role-style">Profesor Jefe</span>
+            <span class="role-style">Profesor</span>
           </p>
-          <nx-image-zoom-user #imageZoomT [avatar]="chiefTeacher?.avatar"></nx-image-zoom-user>
           <span class="spacer-r"></span>
-          <button mat-icon-button color="primary" (click)="crudUserDialogT.openDialogDetail()">
+          <button *ngIf="(teacher)" mat-icon-button color="primary" (click)="crudUserDialogT.openDialogDetail(); $event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
-          <button mat-icon-button color="accent" matTooltip="Cambiar Profesor" (click)="changeTeacherDialog.openDialogSearchUser()">
-            <mat-icon svgIcon="account-edit"></mat-icon>
-          </button>
-        </mat-list-item>
+          </mat-list-item>
       </mat-list>
-      <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="'MANAGER'"></nx-crud-user-dialog>
-      <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="changeTeacher($event)">
-      </nx-search-user-dialog>
-
-
-    </mat-toolbar>
+      <nx-image-zoom-user #imageZoomT [avatar]="teacher?.avatar"></nx-image-zoom-user>
+      <nx-crud-user-dialog #crudUserDialogT [user]="teacher" [uriRole]="'/teachers'" [areaRole]="'manager'"></nx-crud-user-dialog>
+     </mat-toolbar>
     <mat-divider></mat-divider>
 
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Alumno </mat-header-cell>
         <mat-cell *matCellDef="let student">
 
           <mat-list style="flex-grow: 8">
@@ -71,11 +64,7 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
-          <button mat-mini-fab matTooltip="Agregar Estudiante" (click)="addStudentDialog.openDialogSearchUser()">
-            <mat-icon svgIcon="account-plus"></mat-icon>
-          </button>
-          <nx-search-user-dialog #addStudentDialog [userRole]="'STUDENT'" (userSelected)="addStudent($event)">
-          </nx-search-user-dialog>
+
         </mat-header-cell>
 
         <mat-cell *matCellDef="let student" class="crud">
@@ -84,23 +73,12 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
-            <mat-icon svgIcon="account-minus"></mat-icon>
+          <button mat-icon-button color="accent" [routerLink]="['../grades', student.username, { sbjId:subject.id } ]">
+            <mat-icon svgIcon="book-multiple"></mat-icon>
           </button>
 
-         <!--<nx-search-user-dialog #deleteStudentDialog [userRole]="'STUDENT'" [user]="student" (userSelected)="deleteStudent($event)"> 
-          </nx-search-user-dialog>-->
 
           <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="'manager'"></nx-crud-user-dialog>
-          <nx-simple-dialog #deleteDialog
-          [obj]="student" 
-          [title]="student | shortNameLastname"
-          [subtitle]="student.roles | rolesToSpanish"
-          [message]="'Eliminar de este Curso?'" 
-          [avatar]="student?.avatar"
-          [type]="'delete-card'"
-          (objSelected)="deleteStudent($event)">
-          </nx-simple-dialog>
 
         </mat-cell>
       </ng-container>
@@ -115,13 +93,10 @@
 
     <mat-divider></mat-divider>
     <mat-toolbar>
-      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="gotoCourses()" cdkFocusRegionstart>
+      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="goBack()" cdkFocusRegionstart>
         <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
       </button>
       <span class="spacer-r"></span>
-      <button type="submit" mat-flat-button color="accent" tabindex="2" (click)="saveCourse()" [disabled]="btnDisabled">
-        <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
-      </button>
 
     </mat-toolbar>
 

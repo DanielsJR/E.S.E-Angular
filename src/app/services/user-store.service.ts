@@ -13,32 +13,32 @@ import { CourseStoreService } from "./course-store.service";
     providedIn: 'root',
 })
 export class UserStoreService {
-    private dataStore: { managers: User[], teachers: User[], students: User[] };
+    private dataStore: { managers: User[], teachers: User[], students: User[], oneStudent: User };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly managers$ = this.managersSource.asObservable();
     private managerUriRole: string = URI_MANAGERS;
     private managerRole: string = ROLE_MANAGER;
-    private isLoadingGetManagersSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetManagers$ = this.isLoadingGetManagersSubject.asObservable();
+    private isLoadingGetManagers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetManagers$ = this.isLoadingGetManagers.asObservable();
 
     private teachersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly teachers$ = this.teachersSource.asObservable();
     private teacherUriRole: string = URI_TEACHERS;
     private teacherRole: string = ROLE_TEACHER;
-    private isLoadingGetTeachersSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetTeachers$ = this.isLoadingGetTeachersSubject.asObservable();
+    private isLoadingGetTeachers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetTeachers$ = this.isLoadingGetTeachers.asObservable();
 
     private studentsSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
     public readonly students$ = this.studentsSource.asObservable();
     private studentUriRole: string = URI_STUDENTS;
     private studentRole: string = ROLE_STUDENT;
-    private isLoadingGetStudentsSubject = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetStudents$ = this.isLoadingGetStudentsSubject.asObservable();
+    private isLoadingGetStudents = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+    isLoadingGetStudents$ = this.isLoadingGetStudents.asObservable();
 
 
     constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService) {
-        this.dataStore = { managers: [], teachers: [], students: [] }
+        this.dataStore = { managers: [], teachers: [], students: [], oneStudent: null }
     }
 
 
@@ -50,9 +50,9 @@ export class UserStoreService {
 
         } else {
             console.log(`********GET-Managers-FROM-BACKEND********`);
-            this.isLoadingGetManagersSubject.next(true);
+            this.isLoadingGetManagers.next(true);
             this.userBackendService.getUsers(this.managerUriRole).pipe(
-                finalize(() => this.isLoadingGetManagersSubject.next(false)))
+                finalize(() => this.isLoadingGetManagers.next(false)))
                 .subscribe(users => {
                     if (users.length) {
                         this.dataStore.managers = users;
@@ -107,7 +107,7 @@ export class UserStoreService {
                     this.dataStore.managers[index] = data;
                     this.managersSource.next(Object.assign({}, this.dataStore).managers);
                     this.updateInTeacherDataStore(data);
-                    this.courseStoreService.updateChiefTeacher(data);
+                    if (data.roles.includes(ROLE_TEACHER)) this.courseStoreService.updateChiefTeacher(data);
                 } else {
                     console.error("not found in dataStore.namagers");
                 }
@@ -191,9 +191,9 @@ export class UserStoreService {
             this.teachersSource.next(this.dataStore.teachers);
         } else {
             console.log(`********GET-Teachers-FROM-BACKEND********`);
-            this.isLoadingGetTeachersSubject.next(true);
+            this.isLoadingGetTeachers.next(true);
             this.userBackendService.getUsers(this.teacherUriRole)
-                .pipe(finalize(() => this.isLoadingGetTeachersSubject.next(false)))
+                .pipe(finalize(() => this.isLoadingGetTeachers.next(false)))
                 .subscribe(users => {
                     this.dataStore.teachers = users;
                     this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
@@ -326,9 +326,9 @@ export class UserStoreService {
             this.studentsSource.next(this.dataStore.students);
         } else {
             console.log(`********GET-Students-FROM-BACKEND********`);
-            this.isLoadingGetStudentsSubject.next(true);
+            this.isLoadingGetStudents.next(true);
             this.userBackendService.getUsers(this.studentUriRole)
-                .pipe(finalize(() => this.isLoadingGetStudentsSubject.next(false)))
+                .pipe(finalize(() => this.isLoadingGetStudents.next(false)))
                 .subscribe(users => {
                     this.dataStore.students = users;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
@@ -338,24 +338,27 @@ export class UserStoreService {
 
     }
 
-    loadOneStudent(id: string) {
-        console.log(`********loadOneStudent()-FROM-BACKEND********`);
-        this.userBackendService.getUserById(id, this.studentUriRole)
-            .subscribe(data => {
-                let notFound = true;
+    loadOneStudent(username: string) {
 
+        console.log(`********loadOneStudent()-FROM-BACKEND********`);
+        this.userBackendService.getUserByUsername(username, this.studentUriRole)
+            .subscribe(data => {
+
+                let notFound = true;
                 this.dataStore.students.forEach((item, index) => {
                     if (item.id === data.id) {
                         this.dataStore.students[index] = data;
                         notFound = false;
+                        this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     }
                 });
 
-                if (notFound) {
+                if (notFound && this.studentsSource.getValue().length) {
                     this.dataStore.students.push(data);
+                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
                 }
 
-                this.studentsSource.next(Object.assign({}, this.dataStore).students);
+
             }, error => console.log('Could not load student.'));
     }
 
@@ -375,25 +378,27 @@ export class UserStoreService {
                 if (index != -1) {
                     this.dataStore.students[index] = data;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.updateStudentInCourse(data);
+                    this.courseStoreService.updateStudentInCourseStore(data);
                 } else {
                     console.error("not found in dataStore.students");
                 }
+
             }, err => console.error("Error updating student")
             ));
     }
 
-    deleteStudent(user: User): Observable<boolean> {
+    deleteStudent(user: User | string): Observable<boolean> {
         return this.userBackendService.delete(user, this.studentUriRole).pipe(
             tap(_ => {
-                let index = this.dataStore.students.findIndex((u: User) => u.id === user.id);
+                let index = this.dataStore.students.findIndex((u: User) => u.id === ((typeof user === 'string') ? user : user.id));
                 if (index != -1) {
                     this.dataStore.students.splice(index, 1);
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.deleteStudentInCourse(user);
+                    this.courseStoreService.deleteStudentInCourseStore(user);
                 } else {
                     console.error("not found in dataStore.students");
                 }
+
             }, err => console.error("Error deleting student")
             ));
     }

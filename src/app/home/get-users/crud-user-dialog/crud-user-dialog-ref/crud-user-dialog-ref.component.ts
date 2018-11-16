@@ -54,7 +54,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private userStoreService: UserStoreService, private loginService: LoginService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
-        
+
     ) {
         this.user = data.user;
         this.uriRole = data.uriRole;

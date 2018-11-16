@@ -38,6 +38,8 @@ export const URI_COURSES = '/courses';
 
 export const URI_SUBJECTS = '/subjects';
 
+export const URI_GRADES = '/grades';
+
 
 
 //*******************ROLES*************************/

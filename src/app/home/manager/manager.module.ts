@@ -11,6 +11,8 @@ import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.co
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
 import { ManagerSubjectsCrudDialogRefComponent } from './manager-subjects/manager-subjects-crud-dialog-ref/manager-subjects-crud-dialog-ref.component';
+import { ManagerSubjectDetailComponent } from './manager-subjects/manager-subject-detail/manager-subject-detail.component';
+import { ManagerSubjectGradesComponent } from './manager-subjects/manager-subject-grades/manager-subject-grades.component';
 
 
 
@@ -31,6 +33,8 @@ import { ManagerSubjectsCrudDialogRefComponent } from './manager-subjects/manage
     ManagerCoursesDetailComponent,
     ManagerCoursesCreateComponent,
     ManagerSubjectsCrudDialogRefComponent,
+    ManagerSubjectDetailComponent,
+    ManagerSubjectGradesComponent,
   ],
 
   providers: [

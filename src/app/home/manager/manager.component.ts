@@ -3,6 +3,7 @@ import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { LoginService } from '../../login/login.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
+import { GradeStoreService } from '../../services/grade-store.service';
 
 @Component({
     template: `
@@ -14,6 +15,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     constructor(
         private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
         private subjectStoreService: SubjectStoreService, private loginService: LoginService
+        , private gradeStoreService: GradeStoreService
     ) { }
 
     ngOnInit(): void {
@@ -26,6 +28,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
            this.courseStoreService.loadAllCourses(2018); 
            
            this.subjectStoreService.loadAllSubjects();
+
+           this.gradeStoreService.loadAllGrades();
     }
 
     ngOnDestroy() {

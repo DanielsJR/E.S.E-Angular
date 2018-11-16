@@ -62,9 +62,8 @@ export class TeacherSubjectsComponent implements OnInit, AfterViewInit {
   getFilteredSubjects(teacherUsername: string): Observable<Subject[]> {
     return this.subjectStoreService.subjects$
       .pipe(
-        tap(subjects => {
-          this.dataSource.data = subjects.filter(sj => sj.teacher.username.indexOf(teacherUsername) === 0);
-        })
+        tap(subjects => this.dataSource.data = subjects.filter(sj => sj.teacher.username.indexOf(teacherUsername) === 0)
+        )
       );
   }
 

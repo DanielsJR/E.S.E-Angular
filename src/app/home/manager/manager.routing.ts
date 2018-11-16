@@ -9,6 +9,8 @@ import { ManagerCoursesComponent } from './manager-courses/manager-courses.compo
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
+import { ManagerSubjectDetailComponent } from './manager-subjects/manager-subject-detail/manager-subject-detail.component';
+import { ManagerSubjectGradesComponent } from './manager-subjects/manager-subject-grades/manager-subject-grades.component';
 
 
 const adminRoutes: Routes = [
@@ -44,13 +46,23 @@ const adminRoutes: Routes = [
                     },
 
                     {
-                        path: 'courses/detail/:name',
+                        path: 'courses/:name',
                         component: ManagerCoursesDetailComponent,
                     },
 
                     {
                         path: 'subjects',
                         component: ManagerSubjectsComponent
+                    },
+
+                    {
+                        path: 'subjects/:id',
+                        component: ManagerSubjectDetailComponent
+                    },
+
+                    {
+                        path: 'subjects/grades/:username',
+                        component: ManagerSubjectGradesComponent
                     },
 
                     {

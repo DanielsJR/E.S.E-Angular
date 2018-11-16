@@ -7,6 +7,7 @@ import { CourseBackendService } from "./course-backend.service";
 import { tap } from "rxjs/internal/operators/tap";
 import { User } from "../models/user";
 import { IsLoadingService } from "./isLoadingService.service";
+import { SubjectStoreService } from "./subject-store.service";
 
 
 
@@ -23,7 +24,8 @@ export class CourseStoreService {
     isLoadingGetCourses$ = this.isLoadingGet.asObservable();
 
 
-    constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService) {
+    constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService,
+        private subjectStoreService: SubjectStoreService, ) {
         this.dataStore = { courses: [] };
     }
 
@@ -99,6 +101,7 @@ export class CourseStoreService {
                     if (index != -1) {
                         this.dataStore.courses[index] = data;
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                        this.subjectStoreService.updateCourseInSubjectStore(data);
                     } else {
                         console.error("not found in dataStore.courses");
                     }
@@ -114,6 +117,7 @@ export class CourseStoreService {
                     if (index != -1) {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                        this.subjectStoreService.deleteCorseInSubjectStore(course);
                     } else {
                         console.error("not found in dataStore.courses");
                     }
@@ -121,7 +125,9 @@ export class CourseStoreService {
                 ));
     }
 
-    //************CHIEF_TEACHER*/
+
+
+    //************userStore CHIEF_TEACHER
     updateChiefTeacher(teacher: User) {
         let curso = this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id);
         if (curso) {
@@ -130,6 +136,7 @@ export class CourseStoreService {
             if (index != -1) {
                 this.dataStore.courses[index] = curso;
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                this.subjectStoreService.updateTeacherInSubjectStore(teacher);
             } else {
                 console.error("not found in dataStore.courses");
             }
@@ -137,21 +144,20 @@ export class CourseStoreService {
     }
 
 
-    //************STUDENTS*/
-    private isStudentInACourse(student: User, students: User[]): boolean {
+    //************userStore STUDENTS
+    private isStudentInACourse(student: User | string, students: User[]): boolean {
         let found = false;
-        students.forEach((s) => {
-            if (s.id === student.id)
+        students.forEach(s => {
+            if (s.id === ((typeof student === 'string') ? student : student.id))
                 found = true;
         });
         return found;
     }
 
-    updateStudentInCourse(student: User) {
+    updateStudentInCourseStore(student: User) {
         let curso = this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students));
         if (curso) {
-            let list = curso.students.slice();
-            list.forEach((item, index) => {
+            curso.students.forEach((item, index) => {
                 if (item.id === student.id) {
                     curso.students[index] = student;
                 }
@@ -161,19 +167,19 @@ export class CourseStoreService {
             if (index != -1) {
                 this.dataStore.courses[index] = curso;
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                this.subjectStoreService.updateCourseInSubjectStore(curso);
             } else {
                 console.error("not found in dataStore.courses");
             }
         }
-
     }
 
-    deleteStudentInCourse(student: User) {
+
+    deleteStudentInCourseStore(student: User | string) {
         let curso = this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students));
         if (curso) {
-            let list = curso.students.slice();
-            list.forEach((item, index) => {
-                if (item.id === student.id) {
+            curso.students.forEach((item, index) => {
+                if (item.id === ((typeof student === 'string') ? student : student.id)) {
                     curso.students.splice(index, 1);
                 }
             });
@@ -188,4 +194,6 @@ export class CourseStoreService {
         }
 
     }
+
+
 }

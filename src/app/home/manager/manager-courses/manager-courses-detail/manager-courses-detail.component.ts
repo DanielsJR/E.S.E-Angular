@@ -65,7 +65,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
       .pipe(switchMap(params => this.getCurso(params.get('name'))))
       .subscribe();
 
-    // snapshot doesn't re-uses the component
+    // snapshot doesn't re-use the component
     /* this.getCurso(this.route.snapshot.paramMap.get('name'))
     .subscribe();*/
 
@@ -113,7 +113,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit {
   }
 
   gotoCourses() {
-    this.router.navigate(['../../'], { relativeTo: this.route });
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
 

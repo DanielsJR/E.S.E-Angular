@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { GetUsersComponent} from './get-users.component';
 import { CovalentFileModule } from '@covalent/core';
-import { ImageZoomUserDialogModule } from '../../shared/dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SetRolesDialogComponent } from './set-roles-dialog/set-roles-dialog.component';
@@ -19,8 +18,7 @@ import { SearchUserDialogComponent } from './search-user-dialog/search-user-dial
   imports: [
     SharedModule,
     CovalentFileModule,
-    ImageZoomUserDialogModule,
-    
+        
   ],
 
   declarations: [

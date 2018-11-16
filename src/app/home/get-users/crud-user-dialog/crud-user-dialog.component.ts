@@ -26,7 +26,8 @@ export class CrudUserDialogComponent implements OnInit {
             user: (user) ? user : this.user,
             uriRole: this.uriRole,
             type: 'detail',
-            areaRole: this.areaRole
+            areaRole: this.areaRole,
+ 
         };
         let config = new MatDialogConfig();
         config.data = data;
