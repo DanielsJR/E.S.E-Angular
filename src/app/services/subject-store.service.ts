@@ -93,9 +93,7 @@ export class SubjectStoreService {
                     if (index != -1) {
                         this.dataStore.subjects[index] = data;
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        console.error("not found in dataStore.subjects");
-                    }
+                    } 
                 }, err => console.error("Error updating subject" + err.message)
                 ));
     }
@@ -108,9 +106,7 @@ export class SubjectStoreService {
                     if (index != -1) {
                         this.dataStore.subjects.splice(index, 1);
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        console.error("not found in dataStore.subjects");
-                    }
+                    } 
                 }, err => console.error("Error deleting subject" + err.message)
                 ));
     }
@@ -124,9 +120,7 @@ export class SubjectStoreService {
             if (subject.course.id === course.id) {
                 subject.course = course;
                 this.dataStore.subjects[index] = subject;
-            } else {
-                console.error("not found in dataStore.subjects");
-            }
+            } 
         });
         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
     }
@@ -139,9 +133,7 @@ export class SubjectStoreService {
             if (index != -1) {
                 //this.dataStore.subjects.splice(index, 1);
                 this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-            } else {
-                console.error("not found in dataStore.subjects");
-            }
+            } 
         }
     }
 
@@ -150,9 +142,7 @@ export class SubjectStoreService {
             if (subject.teacher.id === teacher.id) {
                 subject.teacher= teacher;
                 this.dataStore.subjects[index] = subject;
-            } else {
-                console.error("not found in dataStore.subjects");
-            }
+            } 
         });
         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
 

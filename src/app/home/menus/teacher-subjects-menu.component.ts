@@ -8,7 +8,7 @@ import { ROLE_TEACHER, ROLE_ADMIN, ROLE_MANAGER } from '../../app.config';
 
 <mat-list-item *ngIf = "roles?.includes(roleTeacher)"
  [routerLink]="['./teacher/subjects']">
-  <mat-icon matListIcon svgIcon="book-variant"></mat-icon>
+  <mat-icon matListIcon svgIcon="school"></mat-icon>
     <h3 matLine>Asignaturas Impartidas</h3>
 </mat-list-item>
   

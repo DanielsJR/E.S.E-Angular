@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
 import { Observable } from 'rxjs';
 import { SessionStorageService } from '../services/session-storage.service';
+import { Token } from '../models/token';
 
 
 @Injectable()
@@ -21,10 +22,10 @@ export class LoginService {
         private httpCli: HttpClient
     ) { }
 
-    login(username: string, password: string): Observable<any> {
+    login(username: string, password: string): Observable<Token> {
         const credentials = { username: username, password: password };
         console.log('login::...');
-        return this.httpCli.post<any>(this.endpoint, credentials)
+        return this.httpCli.post<Token>(this.endpoint, credentials)
     }
 
     logout(): void {

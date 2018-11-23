@@ -37,7 +37,7 @@
           </mat-list-item>
       </mat-list>
       <nx-image-zoom-user #imageZoomT [avatar]="teacher?.avatar"></nx-image-zoom-user>
-      <nx-crud-user-dialog #crudUserDialogT [user]="teacher" [uriRole]="'/teachers'" [areaRole]="'manager'"></nx-crud-user-dialog>
+      <nx-crud-user-dialog #crudUserDialogT [user]="teacher" [uriRole]="'/teachers'" [areaRole]="areaRole"></nx-crud-user-dialog>
      </mat-toolbar>
     <mat-divider></mat-divider>
 
@@ -78,8 +78,7 @@
           </button>
 
 
-          <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="'manager'"></nx-crud-user-dialog>
-
+          <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="areaRole" [onlyRead]="onlyRead"></nx-crud-user-dialog>
         </mat-cell>
       </ng-container>
 

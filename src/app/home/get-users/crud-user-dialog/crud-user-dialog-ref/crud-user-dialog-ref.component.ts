@@ -21,6 +21,7 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { LoginService } from '../../../../login/login.service';
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { UserLoggedService } from '../../../../services/user-logged.service';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     subscriptionSetRolesSuccess: Subscription;
 
     isLoading = false;
+    onlyRead: boolean;
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -60,7 +62,10 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.uriRole = data.uriRole;
         this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
         this.userLoggedRoles.push(data.areaRole);
-        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole);
+        this.onlyRead = data.onlyRead
+
+        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: '
+            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead);
     }
 
     ngOnInit(): void {
@@ -322,7 +327,6 @@ export class CrudUserDialogRefComponent implements OnInit {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_SUCCESS) {
                 this.user = dialogRef.componentInstance.user;
-                //this.eRoles.setValue(this.user.roles);
                 this.setAvatarEditDefault();
                 if (this.uriRole === URI_MANAGERS) {
                     if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
@@ -421,8 +425,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.isLoading = true;
             this.userStoreService.updateManager(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
-                .subscribe(user => {
-                    //this.userStoreService.updateInTeacherDataStore(user);
+                .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -433,8 +436,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.isLoading = true;
             this.userStoreService.updateTeacher(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
-                .subscribe(user => {
-                    //this.userStoreService.updateInManagerDataStore(user);
+                .subscribe(_ => {
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -464,7 +466,6 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.deleteManager(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    //this.userStoreService.deleteInTeacherDataStore(this.user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);
@@ -476,7 +477,6 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.deleteTeacher(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    //this.userStoreService.deleteInManagerDataStore(this.user);
                     this.dialogRef.close(RESULT_SUCCESS);
                 }, err => {
                     this.dialogRef.close(RESULT_ERROR);

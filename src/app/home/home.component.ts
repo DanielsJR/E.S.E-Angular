@@ -10,7 +10,6 @@ import { SnackbarService } from '../services/snackbar.service';
 import { Router } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
-import { finalize } from 'rxjs/internal/operators/finalize';
 import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 

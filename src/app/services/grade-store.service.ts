@@ -94,9 +94,6 @@ export class GradeStoreService {
                     if (index != -1) {
                         this.dataStore.grades[index] = data;
                         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-
-                    } else {
-                        console.error("not found in dataStore.grades");
                     }
 
                 }, err => console.error("Error updating Grade" + err.message)
@@ -111,10 +108,7 @@ export class GradeStoreService {
                     if (index != -1) {
                         this.dataStore.grades.splice(index, 1);
                         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                    } else {
-                        console.error("not found in dataStore.grades");
                     }
-
                 }, err => console.error("Error deleting Grade" + err.message)
                 ));
     }

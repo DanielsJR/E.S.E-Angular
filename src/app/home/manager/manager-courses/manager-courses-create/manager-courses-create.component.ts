@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
@@ -15,12 +15,13 @@ import { COURSES_NAMES_GROUPS } from '../../../../models/courses-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   templateUrl: './manager-courses-create.component.html',
   styleUrls: ['./manager-courses-create.component.css']
 })
-export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
+export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   course: Course;
   coursesNamesGroups = COURSES_NAMES_GROUPS;
@@ -39,6 +40,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
   isDark = this.sessionStorage.isDarkTheme();
   rowClasses: {};
   isLoading: boolean = false;
+  isThemeDarkSubscription: Subscription;
 
   constructor(private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
@@ -50,7 +52,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource();
 
 
-    this.sessionStorage.isThemeDark$.subscribe(isDark => {
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
     });
@@ -59,6 +61,10 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy(): void {
+    this.isThemeDarkSubscription.unsubscribe();
   }
 
   setRowClass() {

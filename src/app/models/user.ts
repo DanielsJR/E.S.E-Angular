@@ -10,7 +10,7 @@ export class User {
         public dni?: string,
         public birthday?: string,
         public gender?: string,
-        public avatar?: Avatar,//any,
+        public avatar?: Avatar,
         public mobile?: number,
         public email?: string,
         public address?: string,
@@ -21,15 +21,5 @@ export class User {
 
     ) { }
 
-
-    equals(user: User): boolean {
-        return ((user.username === this.username) && (user.mobile === this.mobile) && (user.dni === this.dni) && (user.email === this.email));
-    }
-
-    shortName(): string {
-        const n1 = this.firstName.substr(0, this.firstName.indexOf(' ')) || this.firstName; 
-        const n2 = this.lastName.substr(0, this.lastName.indexOf(' ')) || this.lastName; 
-            return n1 + ' ' + n2;
-      }
 
 }

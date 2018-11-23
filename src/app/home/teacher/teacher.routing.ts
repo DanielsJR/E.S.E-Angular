@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { TeacherGuard } from '../../guards/teacher-guard.service';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
 import { TeacherComponent } from './teacher.component';
+import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subjects-detail.component';
+import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subjects-grades.component';
 
 
 const teacherRoutes: Routes = [
@@ -19,49 +21,17 @@ const teacherRoutes: Routes = [
                 children: [
                     {
                         path: 'subjects',
-                        component: TeacherSubjectsComponent,
+                        component: TeacherSubjectsComponent
                     },
-
                     {
-                        path: 'subject/:id',
-                        component: TeacherSubjectsComponent,
+                        path: 'subjects/:id',
+                        component: TeacherSubjectsDetailComponent
                     },
-
+    
                     {
-                        path: 'class',
-                        component: TeacherSubjectsComponent,
+                        path: 'subjects/grades/:username',
+                        component: TeacherSubjectsGradesComponent
                     },
-
-                    {
-                        path: ':id',
-                        component: TeacherSubjectsComponent,
-                    },
-
-                    {
-                        path: 'test',
-                        component: TeacherSubjectsComponent,
-                    },
-
-                    {
-                        path: 'test/make-test',
-                        component: TeacherSubjectsComponent,
-                    },
-
-                    {
-                        path: 'test/take-test',
-                        component: TeacherSubjectsComponent,
-                    },
-
-                    {
-                        path: 'test/edit-test',
-                        component: TeacherSubjectsComponent,
-                    },
-
-                    {
-                        path: 'test/historical',
-                        component: TeacherSubjectsComponent,
-                    },
-
                     {
                         path: '',
                         component: TeacherHomeComponent

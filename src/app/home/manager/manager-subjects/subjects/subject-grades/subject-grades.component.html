@@ -64,7 +64,7 @@
       <ng-container matColumnDef="grade">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Nota </mat-header-cell>
         <mat-cell *matCellDef="let grade">
-          {{grade?.grade | number:'1.1-1'}}
+         <span [style.color]="(grade?.grade < 4.0)? 'red' : 'blue'">{{grade?.grade | number:'1.1-1'}}</span> 
         </mat-cell>
       </ng-container>
 
@@ -79,6 +79,29 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
         <mat-cell *matCellDef="let grade">
           {{grade?.date | date: 'dd/MM/yyyy'}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="crud">
+        <mat-header-cell *matHeaderCellDef class="add">
+            <button mat-mini-fab matTooltip="Agregar Nota" (click)="$event.stopPropagation()">
+                <mat-icon svgIcon="book-plus"></mat-icon>
+              </button>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let grade" class="crud">
+
+          <button mat-icon-button color="primary" (click)="$event.stopPropagation()">
+            <mat-icon svgIcon="eye"></mat-icon>
+          </button>
+
+          <button mat-icon-button color="accent" (click)="$event.stopPropagation()">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+
+          <button mat-icon-button color="warn" (click)="$event.stopPropagation()">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+
         </mat-cell>
       </ng-container>
 

@@ -6,11 +6,12 @@ import { ManagerGetStudentsComponent } from './manager-get-students/manager-get-
 import { ManagerComponent } from './manager.component';
 import { ManagerGuard } from '../../guards/manager-guard.service';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
-import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
-import { ManagerSubjectDetailComponent } from './manager-subjects/manager-subject-detail/manager-subject-detail.component';
-import { ManagerSubjectGradesComponent } from './manager-subjects/manager-subject-grades/manager-subject-grades.component';
+import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
+import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
+import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
+
 
 
 const adminRoutes: Routes = [
@@ -50,20 +51,20 @@ const adminRoutes: Routes = [
                         component: ManagerCoursesDetailComponent,
                     },
 
-                    {
+                   {
                         path: 'subjects',
                         component: ManagerSubjectsComponent
                     },
 
-                    {
+                     {
                         path: 'subjects/:id',
-                        component: ManagerSubjectDetailComponent
+                        component: ManagerSubjectsDetailComponent
                     },
 
                     {
                         path: 'subjects/grades/:username',
-                        component: ManagerSubjectGradesComponent
-                    },
+                        component: ManagerSubjectsGradesComponent
+                    }, 
 
                     {
                         path: '',

@@ -102,11 +102,10 @@ export class CourseStoreService {
                         this.dataStore.courses[index] = data;
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                         this.subjectStoreService.updateCourseInSubjectStore(data);
-                    } else {
-                        console.error("not found in dataStore.courses");
                     }
                 }, err => console.error("Error updating Manager" + err.message)
-                ));
+                )
+            );
     }
 
     delete(course: Course | string): Observable<boolean> {
@@ -118,8 +117,6 @@ export class CourseStoreService {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                         this.subjectStoreService.deleteCorseInSubjectStore(course);
-                    } else {
-                        console.error("not found in dataStore.courses");
                     }
                 }, err => console.error("Error deleting Manager" + err.message)
                 ));
@@ -137,8 +134,6 @@ export class CourseStoreService {
                 this.dataStore.courses[index] = curso;
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 this.subjectStoreService.updateTeacherInSubjectStore(teacher);
-            } else {
-                console.error("not found in dataStore.courses");
             }
         }
     }
@@ -168,8 +163,6 @@ export class CourseStoreService {
                 this.dataStore.courses[index] = curso;
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 this.subjectStoreService.updateCourseInSubjectStore(curso);
-            } else {
-                console.error("not found in dataStore.courses");
             }
         }
     }
@@ -188,8 +181,6 @@ export class CourseStoreService {
             if (index != -1) {
                 this.dataStore.courses[index] = curso;
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            } else {
-                console.error("not found in dataStore.courses");
             }
         }
 

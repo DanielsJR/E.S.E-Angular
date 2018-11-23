@@ -14,11 +14,13 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
     constructor(
         private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService, private loginService: LoginService
-        , private gradeStoreService: GradeStoreService
+        private subjectStoreService: SubjectStoreService, private loginService: LoginService,
+        private gradeStoreService: GradeStoreService
     ) { }
 
     ngOnInit(): void {
+        console.log("ManagerComponent ngOnInit() called!!!");
+
           if (this.loginService.isAdmin()) {
                this.userStoreService.loadAllManagers();
            }
@@ -33,6 +35,6 @@ export class ManagerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        console.log("ManagerComponent ngOnDestroy called!!!");
+        console.log("ManagerComponent ngOnDestroy() called!!!");
     }
 }

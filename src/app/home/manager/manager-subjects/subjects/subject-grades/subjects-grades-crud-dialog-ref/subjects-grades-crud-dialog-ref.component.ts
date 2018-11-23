@@ -1,27 +1,27 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
-import { Observable } from 'rxjs';
-import { User } from '../../../../models/user';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map, finalize } from 'rxjs/operators';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UserStoreService } from '../../../../services/user-store.service';
-import { Course } from '../../../../models/course';
-import { CourseStoreService } from '../../../../services/course-store.service';
-import { SUBJECTS_NAMES, SubjectName } from '../../../../models/subjects-name';
-import { stringify } from 'querystring';
-import { Subject } from '../../../../models/subject';
-import { SubjectStoreService } from '../../../../services/subject-store.service';
-import { Avatar } from '../../../../models/avatar';
-import { shortNameSecondName } from '../../../../shared/functions/shortName';
+import { Subject } from '../../../../../../models/subject';
+import { User } from '../../../../../../models/user';
+import { Course } from '../../../../../../models/course';
+import { SubjectName, SUBJECTS_NAMES } from '../../../../../../models/subjects-name';
+import { Avatar } from '../../../../../../models/avatar';
+import { UserStoreService } from '../../../../../../services/user-store.service';
+import { CourseStoreService } from '../../../../../../services/course-store.service';
+import { SubjectStoreService } from '../../../../../../services/subject-store.service';
+import { shortNameSecondName } from '../../../../../../shared/functions/shortName';
+import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../../../../app.config';
+
 
 @Component({
-  selector: 'nx-manager-subjects-crud-dialog-ref',
-  templateUrl: './manager-subjects-crud-dialog-ref.component.html',
-  styleUrls: ['./manager-subjects-crud-dialog-ref.component.css']
+  selector: 'nx-subjects-grades-crud-dialog-ref',
+  templateUrl: './subjects-grades-crud-dialog-ref.component.html',
+  styleUrls: ['./subjects-grades-crud-dialog-ref.component.css']
 })
-export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
+export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
   filteredTeachers$: Observable<User[]>;
   teachers: User[];
@@ -49,7 +49,10 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
   courseEditGroup: FormGroup;
   teacherEditGroup: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<ManagerSubjectsCrudDialogRefComponent>,
+  usersSubscription: Subscription;
+  coursesSubscription: Subscription;
+
+  constructor(public dialogRef: MatDialogRef<SubjectsGradesCrudDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
     private userStoreService: UserStoreService, private courseStoreService: CourseStoreService
     , private subjectStoreService: SubjectStoreService) {
@@ -65,8 +68,8 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    if (this.data.type === 'create')  this.setAvatarCreateDefault();
-  
+    if (this.data.type === 'create') this.setAvatarCreateDefault();
+
     this.filteredSubjectNames$ = this.cName.valueChanges
       .pipe(
         startWith(''),
@@ -87,6 +90,7 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
         map(value => typeof value === 'string' ? value : value.name),
         map(value => value ? this._filterCourses(value) : this.courses.slice()),
       );
+
 
 
 
@@ -111,11 +115,14 @@ export class ManagerSubjectsCrudDialogRefComponent implements OnInit {
         map(value => value ? this._filterCourses(value) : this.courses.slice()),
       );
 
+    this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.teachers = data);
+    this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => this.courses = data);
 
+  }
 
-    this.userStoreService.teachers$.subscribe(data => this.teachers = data);
-    this.courseStoreService.courses$.subscribe(data => this.courses = data);
-
+  ngOnDestroy(): void {
+    this.usersSubscription.unsubscribe();
+    this.coursesSubscription.unsubscribe();
   }
 
   private _filterSubjectNames(value: string): SubjectName[] {

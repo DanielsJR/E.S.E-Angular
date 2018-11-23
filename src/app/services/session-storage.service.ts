@@ -27,11 +27,15 @@ export class SessionStorageService {
     isDarkTheme(): boolean {
         if (this.isStored(SESSION_STORAGE_THEME_KEY)) {
             //  console.log('darkTheme: ' + this.themeParsed().isDark);
-            this.isThemeDarkSource.next(this.themeParsed().isDark);
+           // this.isThemeDarkSource.next(this.themeParsed().isDark);
             return this.themeParsed().isDark;
         } else {
             return false;
         }
+    }
+
+    darkThemeNext(){
+        this.isThemeDarkSource.next(this.themeParsed().isDark);
     }
 
     isStored(key: string): boolean {

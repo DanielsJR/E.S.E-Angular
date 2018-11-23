@@ -9,6 +9,7 @@ import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 import { SnackbarService } from '../services/snackbar.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { switchMap } from 'rxjs/operators';
 
 
 
@@ -53,12 +54,14 @@ export class LoginComponent implements OnInit {
     this.user.username = this.username.value;
     this.user.password = this.password.value;
     this.loginService.login(this.user.username, this.user.password)
-      .subscribe(data => {
-        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-        this.userLoggedService.getUserFromBackEnd(this.user.username, true)
-          .pipe(finalize(() => this.isLoading = false))
-          .subscribe();
-      }, error => {
+      .pipe(finalize(() => this.isLoading = false),
+        switchMap(data => {
+          this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
+          return this.userLoggedService.getUserFromBackEnd(this.user.username, true)
+        }
+        ))
+      .subscribe()
+      , error => {
         console.error(error.message);
         if (error instanceof HttpErrorResponse) {
           if (error.status === 400) {
@@ -75,7 +78,7 @@ export class LoginComponent implements OnInit {
           this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', RESULT_ERROR);
         }
         this.isLoading = false;
-      });
+      };
   }
 
   badCredencialsError() {

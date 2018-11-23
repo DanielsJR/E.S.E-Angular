@@ -108,8 +108,6 @@ export class UserStoreService {
                     this.managersSource.next(Object.assign({}, this.dataStore).managers);
                     this.updateInTeacherDataStore(data);
                     if (data.roles.includes(ROLE_TEACHER)) this.courseStoreService.updateChiefTeacher(data);
-                } else {
-                    console.error("not found in dataStore.namagers");
                 }
             }, err => console.error("Error updating Manager" + err.message)
             ));
@@ -123,8 +121,6 @@ export class UserStoreService {
                     this.dataStore.managers.splice(index, 1);
                     this.managersSource.next(Object.assign({}, this.dataStore).managers);
                     this.deleteInTeacherDataStore(user);
-                } else {
-                    console.error("not found in dataStore.namagers");
                 }
             }, err => console.error("Error deleting Manager" + err.message)
             ));
@@ -149,22 +145,15 @@ export class UserStoreService {
         if ((index != -1) && user.roles.includes(this.managerRole)) {
             this.dataStore.managers[index] = user;
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            console.log('actualizado en la manager-store');
 
         } else if ((index != -1)) {
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            console.log('eliminado de la manager-store');
 
         } else if ((index = -1) && user.roles.includes(this.managerRole)) {
             this.dataStore.managers.push(user);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            console.log('agregado a la manager-store');
-
-        } else {
-            console.log("nothing to updateInManagerDataStore");
         }
-
     }
 
     deleteInManagerDataStore(user: User): void {
@@ -173,12 +162,7 @@ export class UserStoreService {
         if ((index != -1)) {
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            console.log('eliminado de la manager-store');
-
-        } else {
-            console.log("nothing to delete");
         }
-
     }
 
 
@@ -242,8 +226,6 @@ export class UserStoreService {
                     this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                     this.updateInManagerDataStore(data);
                     this.courseStoreService.updateChiefTeacher(data);
-                } else {
-                    console.error("not found in dataStore.teachers");
                 }
             }, err => console.error("Error updating teacher")
             ));
@@ -257,8 +239,6 @@ export class UserStoreService {
                     this.dataStore.teachers.splice(index, 1);
                     this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                     this.deleteInManagerDataStore(user);
-                } else {
-                    console.error("not found in dataStore.teachers");
                 }
             }, err => console.error("Error deleting teacher")
             ));
@@ -283,20 +263,14 @@ export class UserStoreService {
         if ((index != -1) && user.roles.includes(this.teacherRole)) {
             this.dataStore.teachers[index] = user;
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            console.log('actualizado en la teacher-store');
 
         } else if ((index != -1)) {
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            console.log('eliminado de la teacher-store');
 
         } else if ((index = -1) && user.roles.includes(this.teacherRole)) {
             this.dataStore.teachers.push(user);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            console.log('agregado a la teacher-store');
-
-        } else {
-            console.log("nothing to updateInTeacherDataStore");
         }
 
     }
@@ -307,10 +281,6 @@ export class UserStoreService {
         if ((index != -1)) {
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            console.log('eliminado de la teacher-store');
-
-        } else {
-            console.log("nothing to delete");
         }
 
     }
@@ -339,7 +309,6 @@ export class UserStoreService {
     }
 
     loadOneStudent(username: string) {
-
         console.log(`********loadOneStudent()-FROM-BACKEND********`);
         this.userBackendService.getUserByUsername(username, this.studentUriRole)
             .subscribe(data => {
@@ -379,10 +348,7 @@ export class UserStoreService {
                     this.dataStore.students[index] = data;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     this.courseStoreService.updateStudentInCourseStore(data);
-                } else {
-                    console.error("not found in dataStore.students");
                 }
-
             }, err => console.error("Error updating student")
             ));
     }
@@ -395,10 +361,7 @@ export class UserStoreService {
                     this.dataStore.students.splice(index, 1);
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     this.courseStoreService.deleteStudentInCourseStore(user);
-                } else {
-                    console.error("not found in dataStore.students");
                 }
-
             }, err => console.error("Error deleting student")
             ));
     }

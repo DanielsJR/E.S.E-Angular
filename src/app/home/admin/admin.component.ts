@@ -16,6 +16,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
+        console.log("AdminComponent ngOnInit() called!!!");
+
         this.userStoreService.loadAllManagers();
         this.userStoreService.loadAllTeachers();
 
@@ -28,6 +30,6 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        console.log("AdminComponent ngOnDestroy called!!!");
+        console.log("AdminComponent ngOnDestroy() called!!!");
     }
 }

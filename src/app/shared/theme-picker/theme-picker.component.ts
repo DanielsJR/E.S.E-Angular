@@ -73,7 +73,7 @@ export class ThemePickerComponent implements OnInit {
     this.overlayContainer.getContainerElement().classList.add(theme.name);
     this.selectTheme();
     this.installed = true;
-    this.sessionStorage.isDarkTheme();
+    this.sessionStorage.darkThemeNext();
 
   }
 

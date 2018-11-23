@@ -1,27 +1,27 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { Course } from '../../../../models/course';
-import { User } from '../../../../models/user';
+import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CourseStoreService } from '../../../../services/course-store.service';
-import { SessionStorageService } from '../../../../services/session-storage.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { SnackbarService } from '../../../../services/snackbar.service';
-import { shortNameSecondName } from '../../../../shared/functions/shortName';
-import { switchMap, tap, finalize } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
-import { SubjectStoreService } from '../../../../services/subject-store.service';
-import { Subject } from '../../../../models/subject';
+import { switchMap} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { Subject } from '../../../../../models/subject';
+import { SubjectStoreService } from '../../../../../services/subject-store.service';
+import { shortNameSecondName } from '../../../../../shared/functions/shortName';
+import { User } from '../../../../../models/user';
+import { Course } from '../../../../../models/course';
+import { SessionStorageService } from '../../../../../services/session-storage.service';
+import { SnackbarService } from '../../../../../services/snackbar.service';
+
 
 @Component({
-  selector: 'nx-manager-subject-detail',
-  templateUrl: './manager-subject-detail.component.html',
-  styleUrls: ['./manager-subject-detail.component.css']
+  selector: 'nx-subject-detail',
+  templateUrl: './subject-detail.component.html',
+  styleUrls: ['./subject-detail.component.css']
 })
-export class ManagerSubjectDetailComponent implements OnInit, AfterViewInit {
+export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  courseName: string;
+  @Input() areaRole;
+  courseId: string;
   subject: Subject;
   course: Course;
   teacher: User;
@@ -41,6 +41,11 @@ export class ManagerSubjectDetailComponent implements OnInit, AfterViewInit {
   rowClasses: {};
   isLoading: boolean = false;
 
+  isThemeDarkSubscription: Subscription;
+  isLoadingGetSubjectsSubscription: Subscription;
+  subjectsSubscription: Subscription;
+
+
   constructor(
     private route: ActivatedRoute, private router: Router, private subjectStoreService: SubjectStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
@@ -58,17 +63,26 @@ export class ManagerSubjectDetailComponent implements OnInit, AfterViewInit {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     // paramMap re-uses the component
-    this.route.paramMap
-      .pipe(switchMap(params => this.getSubject(params.get('id'))))
-      .subscribe();
+    this.subjectsSubscription = this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          this.courseId = params.get('id');
+          return this.subjectStoreService.subjects$;
+        })
+      )
+      .subscribe(subjects => {
+        let s = subjects.find(s => s.id === this.courseId)
+        if (s) {
+          this.subject = s;
+          this.teacher = s.teacher;
+          this.dataSource.data = s.course.students;
+          this.listStudents = this.dataSource.data;
+        }
+      });
 
-    // snapshot doesn't re-uses the component
-    /* this.getCurso(this.route.snapshot.paramMap.get('id'))
-    .subscribe();*/
+    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
-    this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-
-    this.sessionStorage.isThemeDark$.subscribe(isDark => {
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
       this.setRowClass();
     });
@@ -82,6 +96,12 @@ export class ManagerSubjectDetailComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  ngOnDestroy(): void {
+    this.isThemeDarkSubscription.unsubscribe();
+    this.isLoadingGetSubjectsSubscription.unsubscribe();
+    this.subjectsSubscription.unsubscribe();
+  }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
@@ -93,20 +113,6 @@ export class ManagerSubjectDetailComponent implements OnInit, AfterViewInit {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
-  }
-
-  getSubject(id): Observable<Subject[]> {
-    return this.subjectStoreService.subjects$
-      .pipe(
-        tap(subjects => {
-          this.subject = subjects.find(s => s.id === id);
-          if (this.subject) {
-            this.teacher = this.subject.teacher;
-            this.dataSource.data = this.subject.course.students;
-            this.listStudents = this.dataSource.data;
-          }
-        })
-      );
   }
 
 

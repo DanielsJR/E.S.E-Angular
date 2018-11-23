@@ -1,21 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ManagerSubjectsCrudDialogRefComponent } from './manager-subjects-crud-dialog-ref.component';
+import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref.component';
+
 
 
 
 describe('ManagerSubjectsCrudDialogComponent', () => {
-  let component: ManagerSubjectsCrudDialogRefComponent;
-  let fixture: ComponentFixture<ManagerSubjectsCrudDialogRefComponent>;
+  let component: SubjectsGradesCrudDialogRefComponent;
+  let fixture: ComponentFixture<SubjectsGradesCrudDialogRefComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManagerSubjectsCrudDialogRefComponent ]
+      declarations: [ SubjectsGradesCrudDialogRefComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ManagerSubjectsCrudDialogRefComponent);
+    fixture = TestBed.createComponent(SubjectsGradesCrudDialogRefComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

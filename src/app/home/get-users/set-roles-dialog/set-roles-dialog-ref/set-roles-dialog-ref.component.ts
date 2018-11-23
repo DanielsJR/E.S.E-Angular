@@ -83,7 +83,6 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          //this.userStoreService.updateInTeacherDataStore(user);
           this.dialogRef.close(RESULT_SUCCESS);
         }, err => {
           console.error("Error creating manager: " + err);
@@ -96,7 +95,6 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          //this.userStoreService.updateInManagerDataStore(user);
           this.dialogRef.close(RESULT_SUCCESS);
         }, err => {
           console.error("Error creating manager: " + err);

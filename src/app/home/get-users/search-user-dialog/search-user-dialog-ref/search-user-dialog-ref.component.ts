@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, OnDestroy } from '@angular/core';
 import { User } from '../../../../models/user';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { startWith } from 'rxjs/internal/operators/startWith';
 import { FormControl, Validators } from '@angular/forms';
@@ -16,7 +16,7 @@ import { tap } from 'rxjs/internal/operators/tap';
   templateUrl: './search-user-dialog-ref.component.html',
   styleUrls: ['./search-user-dialog-ref.component.css']
 })
-export class SearchUserDialogRefComponent implements OnInit {
+export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
 
   filteredUsers$: Observable<User[]>;
   users: User[];
@@ -25,6 +25,7 @@ export class SearchUserDialogRefComponent implements OnInit {
 
   //user$: Observable<User>;
   stateCtrl = new FormControl();
+  usersSubscription: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<SearchUserDialogRefComponent>,
@@ -46,17 +47,21 @@ export class SearchUserDialogRefComponent implements OnInit {
       );
 
     if (data.userRole === ROLE_MANAGER) {
-      this.userStoreService.managers$.subscribe(data => this.users = data);
+      this.usersSubscription = this.userStoreService.managers$.subscribe(data => this.users = data);
     } else if (data.userRole === ROLE_TEACHER) {
-      this.userStoreService.teachers$.subscribe(data => this.users = data);
+      this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.users = data);
     } else if (data.userRole === ROLE_STUDENT) {
-      this.userStoreService.students$.subscribe(data => this.users = data);
+      this.usersSubscription = this.userStoreService.students$.subscribe(data => this.users = data);
     } else {
       console.error('no user role!!');
     }
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.usersSubscription.unsubscribe();
   }
 
   cancel(): void {

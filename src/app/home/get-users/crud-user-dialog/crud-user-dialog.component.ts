@@ -16,6 +16,7 @@ export class CrudUserDialogComponent implements OnInit {
     @Input() user: User;
     @Input() uriRole: string;
     @Input() areaRole;
+    @Input() onlyRead: boolean;
 
     constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
 
@@ -27,7 +28,8 @@ export class CrudUserDialogComponent implements OnInit {
             uriRole: this.uriRole,
             type: 'detail',
             areaRole: this.areaRole,
- 
+            onlyRead: (this.onlyRead != null) ? this.onlyRead : false
+
         };
         let config = new MatDialogConfig();
         config.data = data;
