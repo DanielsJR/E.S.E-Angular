@@ -21,8 +21,10 @@
     </mat-toolbar>
 
     <mat-divider></mat-divider>
+    
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+   
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">

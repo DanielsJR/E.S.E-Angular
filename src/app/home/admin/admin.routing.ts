@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from '../../guards/admin-guard.service';
+import { ResolverService } from '../../services/resolver.service';
 
 
 const adminRoutes: Routes = [
@@ -11,6 +12,7 @@ const adminRoutes: Routes = [
         path: '',
         component: AdminComponent,
         canActivate: [AdminGuard],
+       // resolve: { theme: ResolverService } ,
         children: [
             {
                 path: '',

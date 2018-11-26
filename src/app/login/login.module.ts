@@ -8,8 +8,6 @@ import { AdminGuard } from '../guards/admin-guard.service';
 import { ManagerGuard } from '../guards/manager-guard.service';
 import { TeacherGuard } from '../guards/teacher-guard.service';
 import { StudentGuard } from '../guards/student-guard.service';
-import { ManagerTeacherGuard } from '../guards/manager-teacher-guard.service';
-
 
 
 const routes: Routes = [
@@ -33,7 +31,6 @@ const routes: Routes = [
     ManagerGuard,
     TeacherGuard,
     StudentGuard,
-    ManagerTeacherGuard,
     LoginService
   ]
 

@@ -11,6 +11,7 @@ import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
 import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
+import { ResolverService } from '../../services/resolver.service';
 
 
 
@@ -19,6 +20,7 @@ const adminRoutes: Routes = [
         path: '',
         component: ManagerComponent,
         canActivate: [ManagerGuard],
+        
         children: [
             {
                 path: '',

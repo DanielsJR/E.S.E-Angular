@@ -27,13 +27,13 @@ export class UserLoggedService {
         this.isLoadingService.isLoadingTrue();
         return this.userBackendService
             .getUserByUsernameSecured(username)
-            .pipe(finalize(() => this.isLoadingService.isLoadingFalse()),
+            .pipe(
                 tap(user => {
                     this.userLoggedNext(user);
                     const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
                     if (redirectHome) this.router.navigate(['/home/' + endPoint]);
                     if (this.loginService.redirectUrl && (this.loginService.tokenUsername === username)) this.router.navigate([this.loginService.redirectUrl]);
-                }, error => {
+                 }, error => {
                     console.error(`could not load user, ${error.message}`);
                 }
                 ));

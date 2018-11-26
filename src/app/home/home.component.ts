@@ -7,11 +7,13 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { Subscription } from 'rxjs';
 import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
+import { Theme } from '../shared/theme-picker/theme';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
@@ -60,32 +62,39 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
   @ViewChild("settings") private menu: MatMenu;
   @ViewChild("btnSettingsBack") private btnSettingsBack: MatButton;
+  themeName: any;
 
 
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer, private isLoadingService: IsLoadingService
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer, private isLoadingService: IsLoadingService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+
+    this.route.data
+      .subscribe((data: { theme: Theme }) => {
+        if (data.theme) {
+          this.themePicker.installTheme(data.theme);
+
+        }
+
+      });
+
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
-      if (this.user) this.themePicker.getThemeFromServer(this.user.id);
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
-    });
+    }
+    );
 
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCESS));
 
-    } else {
-      console.log('user:null getting user from backend');
-      this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
-        .subscribe();
     }
-
 
   }
 

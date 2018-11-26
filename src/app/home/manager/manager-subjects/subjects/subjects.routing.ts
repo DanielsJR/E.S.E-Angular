@@ -1,7 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { ManagerTeacherGuard } from '../../../../guards/manager-teacher-guard.service';
-
 import { SubjectGradesComponent } from './subject-grades/subject-grades.component';
 import { SubjectDetailComponent } from './subject-detail/subject-detail.component';
 import { SubjectsComponent } from './subjects.component';
@@ -11,31 +9,21 @@ import { SubjectsComponent } from './subjects.component';
 
 const subjectsRoutes: Routes = [
     {
+        path: 'subjects',
+        component: SubjectsComponent
+    },
 
-        path: '',
-        children: [{
+    {
+        path: 'subjects/:id',
+        component: SubjectDetailComponent
+    },
 
-            path: '',
-            canActivateChild: [ManagerTeacherGuard],
-            children: [
-                {
-                    path: 'subjects',
-                    component: SubjectsComponent
-                },
-                {
-                    path: 'subjects/:id',
-                    component: SubjectDetailComponent
-                },
+    {
+        path: 'subjects/grades/:username',
+        component: SubjectGradesComponent
+    }
 
-                {
-                    path: 'subjects/grades/:username',
-                    component: SubjectGradesComponent
-                },
-           
-            ]
-
-        }]
-    }]
+]
 
 
 @NgModule({

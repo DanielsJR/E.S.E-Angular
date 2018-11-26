@@ -10,6 +10,7 @@ import { noWhitespaceValidator } from '../shared/validators/no-white-space-valid
 import { SnackbarService } from '../services/snackbar.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder, private loginService: LoginService,
     private userLoggedService: UserLoggedService, private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService, private router: Router
   ) {
     this.user = new User();
   }
@@ -54,13 +55,12 @@ export class LoginComponent implements OnInit {
     this.user.username = this.username.value;
     this.user.password = this.password.value;
     this.loginService.login(this.user.username, this.user.password)
-      .pipe(finalize(() => this.isLoading = false),
-        switchMap(data => {
-          this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, data.token);
-          return this.userLoggedService.getUserFromBackEnd(this.user.username, true)
-        }
-        ))
-      .subscribe()
+      .subscribe(token => {
+        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.token);
+        const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
+        this.router.navigate(['/home/' + endPoint]);
+      }
+      )
       , error => {
         console.error(error.message);
         if (error instanceof HttpErrorResponse) {
