@@ -8,18 +8,17 @@ import { SessionStorageService } from '../../services/session-storage.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { shortNameSecondName } from '../../shared/functions/shortName';
-import { UserLoggedService } from '../../services/user-logged.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 
 
 @Component({
-  selector: 'nx-get-users',
-  templateUrl: './get-users.component.html',
-  styleUrls: ['./get-users.component.css']
+  selector: 'nx-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css']
 })
 
-export class GetUsersComponent implements OnInit, AfterViewInit, OnDestroy {
+export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userRole: string;
   usersRole: string;

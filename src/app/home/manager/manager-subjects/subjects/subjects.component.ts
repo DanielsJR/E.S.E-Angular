@@ -14,6 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../../models/subject';
 import { Subscription } from 'rxjs';
 import { User } from '../../../../models/user';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -44,9 +45,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   subjectsSubscription: Subscription;
   isLoadingGetSubjectsSubscription: Subscription;
   isThemeDarkSubscription: Subscription;
+  courseName: string;
 
   constructor(private sessionStorage: SessionStorageService, private subjectStoreService: SubjectStoreService,
-    private userLoggedService: UserLoggedService,
+    private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
     public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -55,18 +57,31 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     if (this.areaRole === this.roleManager) {
-      this.subjectsSubscription = this.subjectStoreService.subjects$.subscribe(data => this.dataSource.data = data);
+      this.subjectsSubscription = this.route.paramMap
+        .pipe(switchMap(params => {
+          this.courseName = params.get('name');
+          return this.subjectStoreService.subjects$
+        }))
+        .subscribe(subjects => {
+          let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
+          this.dataSource.data = filteredSubjects;
+        });
 
     } else if (this.areaRole === this.roleTeacher) {
       this.subjectsSubscription = this.userLoggedService.userLogged$
         .pipe(
           switchMap(user => {
             this.user = user;
+            return this.route.paramMap;
+          }),
+          switchMap(params => {
+            this.courseName = params.get('name');
             return this.subjectStoreService.subjects$
           })
+
         )
         .subscribe(subjects => {
-          let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0)
+          let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
           this.dataSource.data = filteredSubjects;
         });
 
@@ -107,6 +122,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       'fila': !this.isDark,
       'fila-dark': this.isDark
     };
+  }
+
+  goBack() {
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
 

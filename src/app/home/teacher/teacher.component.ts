@@ -22,7 +22,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
         console.log("TeacherComponent ngOnInit() called!!!");
 
           // this.userStoreService.loadAllTeachers();
-          // this.userStoreService.loadAllStudents();
+           this.userStoreService.loadAllStudents();
           // this.courseStoreService.loadAllCourses(2018); 
            this.subjectStoreService.loadAllSubjects();
            this.gradeStoreService.loadAllGrades();

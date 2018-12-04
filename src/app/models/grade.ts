@@ -6,7 +6,8 @@ export class Grade {
         public id?: string,
         public subject?: Subject,
         public student?: User,
-        public grade?: string,
+        public grade?: number,
+        public type?: string,
         public title?: string,
         public date?: string,
     ) { }

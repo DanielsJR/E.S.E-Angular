@@ -10,9 +10,10 @@ import { SetPassDialogComponent } from './user-profile/set-pass-dialog/set-pass-
 import { HomeMenuComponent } from './menus/home-menu.component';
 import { UsersMenuComponent } from './menus/users-menu.component';
 import { CoursesMenuComponent } from './menus/couses-menu.component';
-import { SubjectsMenuComponent } from './menus/subjects-menu.component';
 import { TeacherSubjectsMenuComponent } from './menus/teacher-subjects-menu.component';
 import { QuizMenuComponent } from './menus/quiz-menu.component';
+import { ManagerSubjectsMenuComponent } from './menus/manager-subjects-menu.component';
+
 
 
 @NgModule({
@@ -30,7 +31,7 @@ import { QuizMenuComponent } from './menus/quiz-menu.component';
     HomeMenuComponent,
     UsersMenuComponent,
     CoursesMenuComponent,
-    SubjectsMenuComponent,
+    ManagerSubjectsMenuComponent,
     TeacherSubjectsMenuComponent,
     QuizMenuComponent, 
 

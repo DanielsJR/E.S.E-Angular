@@ -8,10 +8,10 @@ import { ManagerGuard } from '../../guards/manager-guard.service';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
-import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
 import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
-import { ResolverService } from '../../services/resolver.service';
+import { ManagerSubjectsCoursesComponent } from './manager-subjects/manager-subjects-courses.component';
+import { ManagerSubjectsCoursesSubjectsComponent } from './manager-subjects/manager-subjects-courses-subjects.component';
 
 
 
@@ -20,7 +20,7 @@ const adminRoutes: Routes = [
         path: '',
         component: ManagerComponent,
         canActivate: [ManagerGuard],
-        
+
         children: [
             {
                 path: '',
@@ -53,20 +53,32 @@ const adminRoutes: Routes = [
                         component: ManagerCoursesDetailComponent,
                     },
 
-                   {
-                        path: 'subjects',
-                        component: ManagerSubjectsComponent
+
+
+
+                    {
+                        path: 'subjects/courses',
+                        component: ManagerSubjectsCoursesComponent
                     },
 
-                     {
-                        path: 'subjects/:id',
+                    {
+                        path: 'subjects/courses/:name',
+                        component: ManagerSubjectsCoursesSubjectsComponent
+                    },
+
+                    {
+                        path: 'subjects/detail/:id',
                         component: ManagerSubjectsDetailComponent
                     },
 
                     {
                         path: 'subjects/grades/:username',
                         component: ManagerSubjectsGradesComponent
-                    }, 
+                    },
+
+
+
+
 
                     {
                         path: '',

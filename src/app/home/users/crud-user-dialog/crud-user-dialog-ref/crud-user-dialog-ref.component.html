@@ -545,7 +545,7 @@
                             </td-file-input>
                         </mat-form-field>
 
-                        <mat-form-field appearance="standard" floatLabel="always">
+                        <mat-form-field appearance="outline" floatLabel="always">
                             <mat-label>
                                 <i class="mdi mdi-lock app-input-icon">&nbsp;</i>Contraseña de Usuario
                             </mat-label>
@@ -556,7 +556,7 @@
                             <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
-                        <mat-form-field appearance="standard" floatLabel="always" *ngIf="isAdmin && (usersRole!='student')">
+                        <mat-form-field appearance="outline" floatLabel="always" *ngIf="isAdmin && (usersRole!='student')">
                             <mat-label>
                                 <i class="mdi mdi-security-account app-input-icon">&nbsp;</i>Privilegios de Usuario
                             </mat-label>

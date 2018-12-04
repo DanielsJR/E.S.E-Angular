@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatDialogConfig, MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,9 @@ import { UserStoreService } from '../../../../../services/user-store.service';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
 import { Grade } from '../../../../../models/grade';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_EDIT } from '../../../../../app.config';
+import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
+import { SnackbarService } from '../../../../../services/snackbar.service';
 
 
 @Component({
@@ -20,6 +23,7 @@ import { Grade } from '../../../../../models/grade';
 export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() areaRole;
+  roleTeacher = ROLE_TEACHER;
   student: User;
   subject: Subject;
 
@@ -28,7 +32,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   // mat table
-  displayedColumns = ['grade', 'title', 'date', 'crud'];
+  displayedColumns = ['grade', 'title', 'date'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -47,10 +51,13 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
   gradesSubscription: Subscription;
 
   constructor(
-    private route: ActivatedRoute, private router: Router, private gradeStoreService: GradeStoreService,
+    private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
+    private gradeStoreService: GradeStoreService,
     private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
-  ) { }
+    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+  ) {
+
+  }
 
   ngOnInit() {
 
@@ -86,6 +93,8 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    if (this.areaRole === this.roleTeacher)
+      this.displayedColumns.push('crud');
   }
 
   ngOnDestroy(): void {
@@ -111,7 +120,89 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   goBack() {
-    this.router.navigate(['../../' + this.subjectId], { relativeTo: this.route });
+    this.router.navigate(['../../detail/' + this.subjectId], { relativeTo: this.route });
+  }
+
+  openDialogCreate(student: User, subject: Subject): void {
+    let data = {
+      student: student,
+      subject: subject,
+      grade: new Grade,
+      type: 'create',
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        this.snackbarService.openSnackBar("Error al Crear Evaluación", RESULT_ERROR);
+        console.error(RESULT_ERROR);
+      } else if (result === RESULT_SUCCESS) {
+        this.snackbarService.openSnackBar("Evaluación Creada", RESULT_SUCCESS);
+        console.log(RESULT_SUCCESS);
+      }
+    });
+  }
+
+  openDialogDetail(grade: Grade): void {
+    let data = {
+      grade: grade,
+      type: 'detail',
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        console.error(RESULT_ERROR);
+      } else if (result === RESULT_EDIT) {
+        console.log(RESULT_EDIT);
+        this.openDialogEdit(dialogRef.componentInstance.grade);
+      }
+    });
+  }
+
+  openDialogEdit(grade: Grade): void {
+    let data = {
+      grade: grade,
+      type: 'edit',
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '500px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        console.error(RESULT_ERROR);
+        this.snackbarService.openSnackBar("Error al Editar Calificación", RESULT_ERROR);
+      } else if (result === RESULT_SUCCESS) {
+        console.log(RESULT_SUCCESS);
+        this.snackbarService.openSnackBar("Calificación Editada", RESULT_SUCCESS);
+      }
+    });
   }
 
 

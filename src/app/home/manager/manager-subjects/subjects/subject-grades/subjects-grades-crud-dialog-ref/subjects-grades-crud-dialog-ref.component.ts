@@ -1,19 +1,19 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
-import { startWith, map, finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../../../../models/subject';
-import { User } from '../../../../../../models/user';
 import { Course } from '../../../../../../models/course';
-import { SubjectName, SUBJECTS_NAMES } from '../../../../../../models/subjects-name';
 import { Avatar } from '../../../../../../models/avatar';
 import { UserStoreService } from '../../../../../../services/user-store.service';
 import { CourseStoreService } from '../../../../../../services/course-store.service';
 import { SubjectStoreService } from '../../../../../../services/subject-store.service';
-import { shortNameSecondName } from '../../../../../../shared/functions/shortName';
-import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../../../../app.config';
+import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR, RESULT_EDIT, RESULT_DELETE } from '../../../../../../app.config';
+import { Grade } from '../../../../../../models/grade';
+import { GradeStoreService } from '../../../../../../services/grade-store.service';
+import * as moment from 'moment';
+
 
 
 @Component({
@@ -23,17 +23,9 @@ import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../../../..
 })
 export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
-  filteredTeachers$: Observable<User[]>;
-  teachers: User[];
-  teacher: User;
+  grade: Grade;
 
-  filteredCourses$: Observable<Course[]>;
-  courses: Course[];
   course: Course;
-
-  filteredSubjectNames$: Observable<SubjectName[]>;
-  subjectsNames = SUBJECTS_NAMES;
-  subjectName: SubjectName;
 
   subject: Subject;
 
@@ -41,236 +33,160 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
 
   avatar: Avatar;
-  subjectGroup: FormGroup;
-  courseGroup: FormGroup;
-  teacherGroup: FormGroup;
 
-  subjectEditGroup: FormGroup;
-  courseEditGroup: FormGroup;
-  teacherEditGroup: FormGroup;
+  typeGroup: FormGroup;
+  titleGroup: FormGroup;
+  dateGroup: FormGroup;
 
-  usersSubscription: Subscription;
-  coursesSubscription: Subscription;
+  typeEditGroup: FormGroup;
+  titleEditGroup: FormGroup;
+  dateEditGroup: FormGroup;
+
+  gradeEditGroup: FormGroup;
+
+  student: any;
 
   constructor(public dialogRef: MatDialogRef<SubjectsGradesCrudDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
-    private userStoreService: UserStoreService, private courseStoreService: CourseStoreService
-    , private subjectStoreService: SubjectStoreService) {
+    private userStoreService: UserStoreService, private courseStoreService: CourseStoreService,
+    private subjectStoreService: SubjectStoreService, private gradeStoreService: GradeStoreService, ) {
 
     console.log('type: ' + data.type);
-    if (data.type === 'edit') {
+    if (data.type === 'create') {
+      this.grade = this.data.grade;
+      this.grade.subject = this.data.subject;
       this.subject = this.data.subject;
-      this.subjectName = this.subjectsNames.find(sn => sn.value === this.data.subject.name);
-      this.course = this.data.subject.course;
-      this.teacher = this.data.subject.teacher;
+
     }
+
+    if (data.type === 'detail') {
+      this.grade = this.data.grade;
+      this.subject = this.data.grade.subject;
+    }
+
+    if (data.type === 'edit') {
+      this.grade = this.data.grade;
+      this.subject = this.data.grade.subject;
+    }
+
   }
 
   ngOnInit() {
     this.buildForm();
-    if (this.data.type === 'create') this.setAvatarCreateDefault();
-
-    this.filteredSubjectNames$ = this.cName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.value),
-        map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
-      );
-
-    this.filteredTeachers$ = this.cTeacher.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.firstName),
-        map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
-      );
-
-    this.filteredCourses$ = this.cCourse.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(value => value ? this._filterCourses(value) : this.courses.slice()),
-      );
-
-
-
-
-    this.filteredSubjectNames$ = this.eName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.value),
-        map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
-      );
-
-    this.filteredTeachers$ = this.eTeacher.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.firstName),
-        map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
-      );
-
-    this.filteredCourses$ = this.eCourse.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(value => value ? this._filterCourses(value) : this.courses.slice()),
-      );
-
-    this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.teachers = data);
-    this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => this.courses = data);
-
   }
 
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
-    this.coursesSubscription.unsubscribe();
+
   }
 
-  private _filterSubjectNames(value: string): SubjectName[] {
-    const filterValue = value.toLowerCase();
-    return this.subjectsNames.filter(sn =>
-      sn.value.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  private _filterTeachers(value: string): User[] {
-    const filterValue = value.toLowerCase();
-    return this.teachers.filter(user =>
-      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
-      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
-      || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  private _filterCourses(value: string): Course[] {
-    const filterValue = value.toLowerCase();
-    return this.courses.filter(course => course.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  selectedSubjectName(value: SubjectName) {
-    this.subjectName = value;
-  }
-
-  selectedUser(value: User) {
-    this.teacher = value;
-  }
-
-  selectedCourse(value: Course) {
-    this.course = value;
-  }
-
-
-  displayTeacher(user?: User): string | undefined {
-    return user ? user.firstName + ' ' + user.lastName : undefined;
-  }
-
-  displayCourse(course?: Course): string | undefined {
-    return course ? course.name : undefined;
-  }
-
-  displaySubject(subject?: SubjectName): string | undefined {
-    return subject ? subject.viewValue : undefined;
-  }
 
 
   buildForm() {
 
-    this.subjectGroup = this.formBuilder.group({
-      name: ['', [Validators.required]]
+    this.typeGroup = this.formBuilder.group({
+      type: ['', [Validators.required]]
     });
 
-    this.courseGroup = this.formBuilder.group({
-      course: ['', [Validators.required]]
+    this.titleGroup = this.formBuilder.group({
+      title: ['', [Validators.required]]
     });
 
-    this.teacherGroup = this.formBuilder.group({
-      teacher: ['', [Validators.required]]
+    this.dateGroup = this.formBuilder.group({
+      date: ['', [Validators.required]]
     });
 
 
-    this.subjectEditGroup = this.formBuilder.group({
-      name: [this.subjectName, [Validators.required]]
+    this.typeEditGroup = this.formBuilder.group({
+      type: [this.grade.type, [Validators.required]]
     });
 
-    this.courseEditGroup = this.formBuilder.group({
-      course: [this.course, [Validators.required]]
+    this.titleEditGroup = this.formBuilder.group({
+      title: [this.grade.title, [Validators.required]]
     });
 
-    this.teacherEditGroup = this.formBuilder.group({
-      teacher: [this.teacher, [Validators.required]]
+    this.dateEditGroup = this.formBuilder.group({
+      date: [this.grade.date, [Validators.required]]
+    });
+
+    this.gradeEditGroup = this.formBuilder.group({
+      grade: [this.grade.grade, [Validators.required]]
     });
 
   }
 
-  setAvatarCreateDefault(): void {
-    if (!this.teacher) {
-      let xhr = new XMLHttpRequest();
-      xhr.open("GET", `../assets/images/users/default-hombre-teacher.png`, true);
-      xhr.responseType = "blob";
-      xhr.onload = () => {
-        let reader = new FileReader();
-        let file = xhr.response;
-        file.name = `default-hombre-teacher.png`;
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          this.avatar = new Avatar();
-          this.avatar.name = file.name;
-          this.avatar.type = file.type;
-          this.avatar.data = (reader.result as string).split(',')[1];
-
-          //console.log('file.name: ' + file.name)
-        };
-      };
-      xhr.send()
-    }
-  }
 
 
-  get cName() { return this.subjectGroup.get('name'); }
-  get cCourse() { return this.courseGroup.get('course'); }
-  get cTeacher() { return this.teacherGroup.get('teacher'); }
+  get cType() { return this.typeGroup.get('type'); }
+  get cTitle() { return this.titleGroup.get('title'); }
+  get cDate() { return this.dateGroup.get('date'); }
 
-  get eName() { return this.subjectEditGroup.get('name'); }
-  get eCourse() { return this.courseEditGroup.get('course'); }
-  get eTeacher() { return this.teacherEditGroup.get('teacher'); }
+  get eType() { return this.typeEditGroup.get('type'); }
+  get eTitle() { return this.titleEditGroup.get('title'); }
+  get eDate() { return this.dateEditGroup.get('date'); }
+
+  get eGrade() { return this.gradeEditGroup.get('grade'); }
 
 
   cancel(): void {
     this.dialogRef.close(RESULT_CANCELED);
   }
 
-  create() {
-    let subject: Subject = new Subject();
-    subject.name = this.subjectName.value;
-    subject.course = this.course;
-    subject.teacher = this.teacher;
-    this.isLoading = true;
-    this.subjectStoreService.create(subject)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ =>
-        this.dialogRef.close(RESULT_SUCCESS)
-        , err => {
-          this.dialogRef.close(RESULT_ERROR)
-          console.error("Error creating Subject: " + err);
-        }
+  openDialogEdit() {
+    this.dialogRef.close(RESULT_EDIT);
+  }
 
-      );
+  openDialogDelete() {
+    this.dialogRef.close(RESULT_DELETE);
+  }
+
+  create() {
+    this.grade.type = this.cType.value;
+    this.grade.title = this.cTitle.value;
+    this.grade.date = moment(this.cDate.value).format('DD/MM/YYYY');
+
+    //TODO atomic in backend
+    this.grade.subject.course.students.forEach((student, index) => {
+      this.grade.student = student;
+
+      this.isLoading = true;
+      this.gradeStoreService.create(this.grade)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe(_ =>
+          this.dialogRef.close(RESULT_SUCCESS)
+          , err => {
+            this.dialogRef.close(RESULT_ERROR)
+            console.error("Error creating grade: " + err);
+          }
+
+        );
+
+    });
+
+
   }
 
   edit() {
-    let subject: Subject = Object.assign({}, this.subject);
-    subject.name = this.subjectName.value;
-    subject.course = this.course;
-    subject.teacher = this.teacher;
+    let g = this.eGrade.value;
     this.isLoading = true;
-    this.subjectStoreService.update(subject)
+    this.grade.grade = g;
+
+    this.gradeStoreService.update(this.grade)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ =>
         this.dialogRef.close(RESULT_SUCCESS)
         , err => {
           this.dialogRef.close(RESULT_ERROR)
-          console.error("Error editing Subject: " + err);
+          console.error("Error creating grade: " + err);
         }
 
       );
   }
+
+  delete() {
+
+  }
+
+
 
 
 }

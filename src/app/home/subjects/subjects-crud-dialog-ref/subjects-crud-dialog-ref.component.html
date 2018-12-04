@@ -1,0 +1,233 @@
+<div *ngIf="data.type === 'create'">
+
+
+  <mat-toolbar color="primary">
+    <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="school"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Agregar Asignatura</h1>
+  </mat-toolbar>
+
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <mat-list class="listContainer">
+    <mat-list-item>
+      <img *ngIf="!teacher" matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type+';base64,' + avatar?.data)"
+        alt="Profesor">
+      <img *ngIf="teacher" matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data)"
+        alt="Profesor">
+      <h3 matLine>{{subjectName?.viewValue}}</h3>
+      <p matLine>
+        <span class="role-style">{{course?.name}}</span>
+        <span *ngIf="teacher" class="role-style">, {{teacher | shortNameLastname}}</span>
+      </p>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-content>
+
+    <mat-horizontal-stepper [linear]="'true'" #stepper>
+
+      <mat-step [stepControl]="subjectGroup">
+        <form [formGroup]="subjectGroup">
+          <ng-template matStepLabel>Asigantura</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoSubjectName" formControlName="name">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Asignatura
+            </mat-label>
+            <mat-autocomplete #autoSubjectName="matAutocomplete" [displayWith]="displaySubject" (optionSelected)="selectedSubjectName($event.option.value)">
+              <mat-option *ngFor="let sn of filteredSubjectNames$ | async" [value]="sn">
+                <span>{{sn.viewValue}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="courseGroup">
+        <form [formGroup]="courseGroup">
+          <ng-template matStepLabel>Curso</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoCourse" formControlName="course">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Curso
+            </mat-label>
+            <mat-autocomplete #autoCourse="matAutocomplete" [displayWith]="displayCourse" (optionSelected)="selectedCourse($event.option.value)">
+              <mat-option *ngFor="let c of filteredCourses$ | async" [value]="c">
+                <span>{{c.name}}</span> |
+                <small>{{c.year}}</small>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious style="margin-right:30px">Atras</button>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="teacherGroup">
+        <form [formGroup]="teacherGroup">
+          <ng-template matStepLabel>Docente</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoUser" formControlName="teacher">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Profesor
+            </mat-label>
+            <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayTeacher" (optionSelected)="selectedUser($event.option.value)">
+              <mat-option *ngFor="let u of filteredTeachers$ | async" [value]="u">
+                <img class="example-option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
+                <span>{{u | shortNameLastname}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious>Atras</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+        cdkFocusRegionstart>
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <span class="spacer-r"></span>
+      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(subjectGroup.invalid || subjectGroup.pristine)
+      || (courseGroup.invalid || courseGroup.pristine) || (teacherGroup.invalid || teacherGroup.pristine)" (click)="create()">Agregar</button>
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</div>
+
+<div *ngIf="data.type === 'edit'">
+
+
+  <mat-toolbar color="primary">
+    <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="school"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Editar Asignatura</h1>
+  </mat-toolbar>
+
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <mat-list class="listContainer">
+    <mat-list-item>
+      <img *ngIf="!teacher" matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type+';base64,' + avatar?.data)"
+        alt="Profesor">
+      <img *ngIf="teacher" matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data)"
+        alt="Profesor">
+      <h3 matLine>{{subjectName?.viewValue}}</h3>
+      <p matLine>
+        <span class="role-style">{{course?.name}}</span>
+        <span *ngIf="teacher" class="role-style">, {{teacher | shortNameLastname}}</span>
+      </p>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-content>
+
+    <mat-horizontal-stepper [linear]="'true'" #stepper>
+
+      <mat-step [stepControl]="subjectEditGroup">
+        <form [formGroup]="subjectEditGroup">
+          <ng-template matStepLabel>Asigantura</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoSubjectName" formControlName="name">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Asignatura
+            </mat-label>
+            <mat-autocomplete #autoSubjectName="matAutocomplete" [displayWith]="displaySubject" (optionSelected)="selectedSubjectName($event.option.value)">
+              <mat-option *ngFor="let sn of filteredSubjectNames$ | async" [value]="sn">
+                <span>{{sn.viewValue}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="courseEditGroup">
+        <form [formGroup]="courseEditGroup">
+          <ng-template matStepLabel>Curso</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoCourse" formControlName="course">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Curso
+            </mat-label>
+            <mat-autocomplete #autoCourse="matAutocomplete" [displayWith]="displayCourse" (optionSelected)="selectedCourse($event.option.value)">
+              <mat-option *ngFor="let c of filteredCourses$ | async" [value]="c">
+                <span>{{c.name}}</span> |
+                <small>{{c.year}}</small>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious style="margin-right:30px">Atras</button>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="teacherEditGroup">
+        <form [formGroup]="teacherEditGroup">
+          <ng-template matStepLabel>Docente</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput [matAutocomplete]="autoUser" formControlName="teacher">
+            <mat-label>
+              <i class="mdi mdi-magnify"></i>&nbsp;Profesor
+            </mat-label>
+            <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayTeacher" (optionSelected)="selectedUser($event.option.value)">
+              <mat-option *ngFor="let u of filteredTeachers$ | async" [value]="u">
+                <img class="example-option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
+                <span>{{u | shortNameLastname}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious>Atras</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+        cdkFocusRegionstart>
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <span class="spacer-r"></span>
+      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(subjectEditGroup.invalid || courseEditGroup.invalid || teacherEditGroup.invalid)
+      || (subjectEditGroup.pristine && courseEditGroup.pristine && teacherEditGroup.pristine)" (click)="edit()">Guardar</button>
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</div>

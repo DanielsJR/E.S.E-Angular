@@ -3,13 +3,12 @@ import { ROLE_MANAGER } from '../../../app.config';
 
 
 @Component({
-  selector: 'nx-manager-subjects',
   template: `
-  <nx-subjects [areaRole]="areaRole"></nx-subjects>
+  <nx-subjects-courses [areaRole]="areaRole"></nx-subjects-courses>
   `,
   styles:['']
 })
-export class ManagerSubjectsComponent implements OnInit {
+export class ManagerSubjectsCoursesComponent implements OnInit {
   areaRole = ROLE_MANAGER;
 
   constructor() { }

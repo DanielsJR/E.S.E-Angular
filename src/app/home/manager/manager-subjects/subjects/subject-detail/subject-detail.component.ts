@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
+import { MatSort, MatPaginator, MatDialog, MatTableDataSource, MatDialogConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { switchMap} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Subject } from '../../../../../models/subject';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
@@ -11,6 +11,9 @@ import { User } from '../../../../../models/user';
 import { Course } from '../../../../../models/course';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../../services/snackbar.service';
+import { Grade } from '../../../../../models/grade';
+import { SubjectsGradesCrudDialogRefComponent } from '../subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
+import { RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, ROLE_TEACHER } from '../../../../../app.config';
 
 
 @Component({
@@ -21,7 +24,7 @@ import { SnackbarService } from '../../../../../services/snackbar.service';
 export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() areaRole;
-  courseId: string;
+  subjectId: string;
   subject: Subject;
   course: Course;
   teacher: User;
@@ -30,7 +33,7 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   btnDisabled = true;
 
   // mat table
-  displayedColumns = ['firstName', 'crud'];
+  displayedColumns = ['firstName','crud'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -44,6 +47,7 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   isThemeDarkSubscription: Subscription;
   isLoadingGetSubjectsSubscription: Subscription;
   subjectsSubscription: Subscription;
+  roleTeacher = ROLE_TEACHER;
 
 
   constructor(
@@ -54,6 +58,10 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
 
+    if (this.areaRole === this.roleTeacher){
+
+    }
+      
     this.dataSource = new MatTableDataSource<Course>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
@@ -66,12 +74,12 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     this.subjectsSubscription = this.route.paramMap
       .pipe(
         switchMap(params => {
-          this.courseId = params.get('id');
+          this.subjectId = params.get('id');
           return this.subjectStoreService.subjects$;
         })
       )
       .subscribe(subjects => {
-        let s = subjects.find(s => s.id === this.courseId)
+        let s = subjects.find(s => s.id === this.subjectId)
         if (s) {
           this.subject = s;
           this.teacher = s.teacher;
@@ -117,9 +125,35 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate(['../../courses/',this.subject.course.name], { relativeTo: this.route });
   }
 
+  openDialogCreate(subject: Subject): void {
+    let data = {
+      subject: subject,
+      grade: new Grade,
+      type: 'create',
 
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        this.snackbarService.openSnackBar("Error al Crear Nota", RESULT_ERROR);
+        console.error(RESULT_ERROR);
+      } else if (result === RESULT_SUCCESS) {
+        this.snackbarService.openSnackBar("Nota Creada", RESULT_SUCCESS);
+        console.log(RESULT_SUCCESS);
+      }
+    });
+  }
 
 }

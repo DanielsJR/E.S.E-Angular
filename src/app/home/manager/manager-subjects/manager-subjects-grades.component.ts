@@ -3,7 +3,6 @@ import { ROLE_MANAGER } from '../../../app.config';
 
 
 @Component({
-  selector: 'nx-manager-subject-grades',
   template: `
   <nx-subject-grades [areaRole]="areaRole"></nx-subject-grades>
   `,

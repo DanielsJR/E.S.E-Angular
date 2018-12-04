@@ -2,10 +2,11 @@ import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { TeacherGuard } from '../../guards/teacher-guard.service';
-import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
 import { TeacherComponent } from './teacher.component';
 import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subjects-detail.component';
 import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subjects-grades.component';
+import { TeacherSubjectsCoursesComponent } from './teacher-subjects/teacher-subjects-courses.component';
+import { TeacherSubjectsCoursesSubjectsComponent } from './teacher-subjects/teacher-subjects-courses-subjects.component';
 
 
 const teacherRoutes: Routes = [
@@ -19,12 +20,19 @@ const teacherRoutes: Routes = [
                 path: '',
                 canActivateChild: [TeacherGuard],
                 children: [
+
                     {
-                        path: 'subjects',
-                        component: TeacherSubjectsComponent
+                        path: 'subjects/courses',
+                        component: TeacherSubjectsCoursesComponent
                     },
+
                     {
-                        path: 'subjects/:id',
+                        path: 'subjects/courses/:name',
+                        component: TeacherSubjectsCoursesSubjectsComponent
+                    },
+
+                    {
+                        path: 'subjects/detail/:id',
                         component: TeacherSubjectsDetailComponent
                     },
     
@@ -32,6 +40,7 @@ const teacherRoutes: Routes = [
                         path: 'subjects/grades/:username',
                         component: TeacherSubjectsGradesComponent
                     },
+                    
                     {
                         path: '',
                         component: TeacherHomeComponent

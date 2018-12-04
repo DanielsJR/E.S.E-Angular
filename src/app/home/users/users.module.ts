@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { GetUsersComponent} from './get-users.component';
 import { CovalentFileModule } from '@covalent/core';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
@@ -12,6 +11,7 @@ import { CrudUserDialogRefComponent } from './crud-user-dialog/crud-user-dialog-
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
 import { SearchUserDialogRefComponent } from './search-user-dialog/search-user-dialog-ref/search-user-dialog-ref.component';
 import { SearchUserDialogComponent } from './search-user-dialog/search-user-dialog.component';
+import { UsersComponent } from './users.component';
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import { SearchUserDialogComponent } from './search-user-dialog/search-user-dial
   ],
 
   declarations: [
-    GetUsersComponent,
+    UsersComponent,
 
     CrudUserDialogComponent,
     CrudUserDialogRefComponent,
@@ -51,11 +51,11 @@ import { SearchUserDialogComponent } from './search-user-dialog/search-user-dial
   ],
 
   exports: [
-    GetUsersComponent,
+    UsersComponent,
     SearchUserDialogComponent,
     CrudUserDialogComponent
 
   ]
 
 })
-export class GetUsersModule { }
+export class UsersModule { }

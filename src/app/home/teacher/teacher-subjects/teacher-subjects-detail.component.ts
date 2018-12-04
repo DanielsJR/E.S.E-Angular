@@ -3,7 +3,6 @@ import { ROLE_TEACHER } from '../../../app.config';
 
 
 @Component({
-  selector: 'nx-teacher-subject-detail',
   template: `
   <nx-subject-detail [areaRole]="areaRole"></nx-subject-detail>
   `,

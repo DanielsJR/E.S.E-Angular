@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
   template: `
 
 
-<mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]="['./manager/subjects']">
+<mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]="['./manager/subjects/courses']">
   <mat-icon matListIcon svgIcon="school"></mat-icon>
     <h3 matLine>Administrar Asignaturas</h3>
 </mat-list-item>
@@ -15,7 +15,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 })
 
-export class SubjectsMenuComponent implements OnInit {
+export class ManagerSubjectsMenuComponent implements OnInit {
 
 
   @Input()

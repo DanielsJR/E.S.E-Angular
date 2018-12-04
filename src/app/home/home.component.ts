@@ -9,11 +9,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { Subscription } from 'rxjs';
 import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
-import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 @Component({
@@ -31,16 +29,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   roles = this.loginService.getRoles();
   uriRole = this.loginService.uriRole;
 
-  @ViewChild(ThemePickerComponent)
-  themePicker: ThemePickerComponent;
+  @ViewChild(ThemePickerComponent) themePicker: ThemePickerComponent;
 
   welcome: string;
 
   isScrolled = false;
   triggerUsers = true;
   menuUser = true;
-
-  subscriptionIsLoading: Subscription;
   isLoading: boolean = false;
 
   roleAdmin = ROLE_ADMIN;
@@ -53,17 +48,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   profileTitle = '';
   _isSidenavProfileOpen = new EventEmitter<boolean>();
   isSidenavProfileOpen: boolean = false;
-  @ViewChild("sidenavMenuProfile") private sidenavMenuProfile: MatSidenav;
-  @ViewChild("btnMenuProfileBack") private btnMenuProfileBack: MatButton;
-  @ViewChild("sidenavProfile") private sidenavProfile: MatSidenav;
-  @ViewChild("btnProfileBack") private btnProfileBack: MatButton;
+  @ViewChild("sidenavMenuProfile") sidenavMenuProfile: MatSidenav;
+  @ViewChild("btnMenuProfileBack") btnMenuProfileBack: MatButton;
+  @ViewChild("sidenavProfile") sidenavProfile: MatSidenav;
+  @ViewChild("btnProfileBack") btnProfileBack: MatButton;
 
   //settings
-  @ViewChild("sidenavSettings") private sidenavSettings: MatSidenav;
-  @ViewChild("settings") private menu: MatMenu;
-  @ViewChild("btnSettingsBack") private btnSettingsBack: MatButton;
-  themeName: any;
-
+  @ViewChild("sidenavSettings") sidenavSettings: MatSidenav;
+  @ViewChild("settings") menu: MatMenu;
+  @ViewChild("btnSettingsBack") btnSettingsBack: MatButton;
 
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
@@ -73,14 +66,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
     this.route.data
       .subscribe((data: { theme: Theme }) => {
-        if (data.theme) {
-          this.themePicker.installTheme(data.theme);
-
-        }
-
+        if (data.theme) this.themePicker.installTheme(data.theme);
       });
 
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
@@ -116,7 +104,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    //this.subscriptionIsLoading.unsubscribe();
   }
 
   shortName(user: User): string {

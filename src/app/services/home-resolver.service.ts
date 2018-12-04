@@ -26,21 +26,22 @@ export class HomeResolverService implements Resolve<Theme> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Theme> | Observable<never> {
 
-        return this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false).pipe(
-            switchMap(user => {
-                return this.themeService.getTheme(user.id)
-            }),
-            take(1),
-            mergeMap(t => {
-                if (t) {
-                    return of(t);
-                } else { // id not found
-                    this.router.navigate(['/welcome']);
-                    return EMPTY;
-                }
-            }),
-            finalize(() => this.isLoadingService.isLoadingFalse()),
-        )
+        return this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
+            .pipe(
+                switchMap(user => {
+                    return this.themeService.getTheme(user.id)
+                }),
+                take(1),
+                mergeMap(t => {
+                    if (t) {
+                        return of(t);
+                    } else { // id not found
+                        this.router.navigate(['/welcome']);
+                        return EMPTY;
+                    }
+                }),
+                finalize(() => this.isLoadingService.isLoadingFalse()),
+            )
 
 
     }

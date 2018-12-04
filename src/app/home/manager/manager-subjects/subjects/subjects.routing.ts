@@ -3,25 +3,34 @@ import { NgModule } from '@angular/core';
 import { SubjectGradesComponent } from './subject-grades/subject-grades.component';
 import { SubjectDetailComponent } from './subject-detail/subject-detail.component';
 import { SubjectsComponent } from './subjects.component';
+import { SubjectsCoursesComponent } from './subjects-courses/subjects-courses.component';
+
 
 
 
 
 const subjectsRoutes: Routes = [
+
     {
-        path: 'subjects',
+        path: 'subjects/courses',
+        component: SubjectsCoursesComponent
+    },
+
+    {
+        path: 'subjects/courses/:name',
         component: SubjectsComponent
     },
 
     {
-        path: 'subjects/:id',
+        path: 'subjects/detail/:id',
         component: SubjectDetailComponent
     },
 
     {
         path: 'subjects/grades/:username',
         component: SubjectGradesComponent
-    }
+    },
+
 
 ]
 
