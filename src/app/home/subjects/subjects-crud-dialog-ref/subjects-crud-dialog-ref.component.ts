@@ -27,49 +27,44 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   teachers: User[];
   teacher: User;
 
-  filteredCourses$: Observable<Course[]>;
-  courses: Course[];
-  course: Course;
-
   filteredSubjectNames$: Observable<SubjectName[]>;
   subjectsNames = SUBJECTS_NAMES;
   subjectName: SubjectName;
 
   subject: Subject;
 
-  createForm: FormGroup;
+  course: Course;
+
   isLoading: boolean = false;
 
   avatar: Avatar;
   subjectGroup: FormGroup;
-  courseGroup: FormGroup;
   teacherGroup: FormGroup;
 
   subjectEditGroup: FormGroup;
-  courseEditGroup: FormGroup;
   teacherEditGroup: FormGroup;
 
   usersSubscription: Subscription;
-  coursesSubscription: Subscription;
 
-  constructor(public dialogRef: MatDialogRef<SubjectsCrudDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
-    private userStoreService: UserStoreService, private courseStoreService: CourseStoreService
-    , private subjectStoreService: SubjectStoreService) {
+
+  constructor(public dialogRef: MatDialogRef<SubjectsCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+    public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
+    private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService) {
 
     console.log('type: ' + data.type);
+    this.subject = this.data.subject;
     if (data.type === 'edit') {
-      this.subject = this.data.subject;
-      this.subjectName = this.subjectsNames.find(sn => sn.value === this.data.subject.name);
       this.course = this.data.subject.course;
+      this.subjectName = this.subjectsNames.find(sn => sn.value === this.data.subject.name);
       this.teacher = this.data.subject.teacher;
     }
+
   }
 
   ngOnInit() {
     this.buildForm();
-    if (this.data.type === 'create')  this.setAvatarCreateDefault();
-  
+    if (this.data.type === 'create') this.setAvatarCreateDefault();
+
     this.filteredSubjectNames$ = this.cName.valueChanges
       .pipe(
         startWith(''),
@@ -84,22 +79,12 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
         map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
       );
 
-    this.filteredCourses$ = this.cCourse.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(value => value ? this._filterCourses(value) : this.courses.slice()),
-      );
-
-
-      
-
-    this.filteredSubjectNames$ = this.eName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.value),
-        map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
-      );
+    /* this.filteredSubjectNames$ = this.eName.valueChanges
+       .pipe(
+         startWith(''),
+         map(value => typeof value === 'string' ? value : value.value),
+         map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
+       ); */
 
     this.filteredTeachers$ = this.eTeacher.valueChanges
       .pipe(
@@ -108,21 +93,13 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
         map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
       );
 
-    this.filteredCourses$ = this.eCourse.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(value => value ? this._filterCourses(value) : this.courses.slice()),
-      );
 
-      this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.teachers = data);
-      this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => this.courses = data);
+    this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.teachers = data);
 
-  }  
+  }
 
   ngOnDestroy(): void {
     this.usersSubscription.unsubscribe();
-    this.coursesSubscription.unsubscribe();
   }
 
   private _filterSubjectNames(value: string): SubjectName[] {
@@ -139,10 +116,6 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0);
   }
 
-  private _filterCourses(value: string): Course[] {
-    const filterValue = value.toLowerCase();
-    return this.courses.filter(course => course.name.toLowerCase().indexOf(filterValue) === 0);
-  }
 
   selectedSubjectName(value: SubjectName) {
     this.subjectName = value;
@@ -152,17 +125,9 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.teacher = value;
   }
 
-  selectedCourse(value: Course) {
-    this.course = value;
-  }
-
 
   displayTeacher(user?: User): string | undefined {
     return user ? user.firstName + ' ' + user.lastName : undefined;
-  }
-
-  displayCourse(course?: Course): string | undefined {
-    return course ? course.name : undefined;
   }
 
   displaySubject(subject?: SubjectName): string | undefined {
@@ -176,22 +141,18 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required]]
     });
 
-    this.courseGroup = this.formBuilder.group({
-      course: ['', [Validators.required]]
-    });
-
     this.teacherGroup = this.formBuilder.group({
       teacher: ['', [Validators.required]]
     });
 
 
+
+    /*
     this.subjectEditGroup = this.formBuilder.group({
       name: [this.subjectName, [Validators.required]]
     });
 
-    this.courseEditGroup = this.formBuilder.group({
-      course: [this.course, [Validators.required]]
-    });
+  */
 
     this.teacherEditGroup = this.formBuilder.group({
       teacher: [this.teacher, [Validators.required]]
@@ -224,11 +185,9 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
 
 
   get cName() { return this.subjectGroup.get('name'); }
-  get cCourse() { return this.courseGroup.get('course'); }
   get cTeacher() { return this.teacherGroup.get('teacher'); }
 
-  get eName() { return this.subjectEditGroup.get('name'); }
-  get eCourse() { return this.courseEditGroup.get('course'); }
+  // get eName() { return this.subjectEditGroup.get('name'); }
   get eTeacher() { return this.teacherEditGroup.get('teacher'); }
 
 
@@ -237,15 +196,15 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   }
 
   create() {
-    let subject: Subject = new Subject();
+    //let subject: Subject = new Subject();
+    let subject: Subject = Object.assign({}, this.subject);
     subject.name = this.subjectName.value;
-    subject.course = this.course;
+    //subject.course = this.course;
     subject.teacher = this.teacher;
     this.isLoading = true;
     this.subjectStoreService.create(subject)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ =>
-        this.dialogRef.close(RESULT_SUCCESS)
+      .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
         , err => {
           this.dialogRef.close(RESULT_ERROR)
           console.error("Error creating Subject: " + err);
@@ -262,8 +221,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.subjectStoreService.update(subject)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ =>
-        this.dialogRef.close(RESULT_SUCCESS)
+      .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
         , err => {
           this.dialogRef.close(RESULT_ERROR)
           console.error("Error editing Subject: " + err);

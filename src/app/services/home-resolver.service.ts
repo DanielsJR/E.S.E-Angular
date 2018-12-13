@@ -12,6 +12,7 @@ import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { IsLoadingService } from './isLoadingService.service';
 import { LocalStorageService } from './local-storage.service';
+import { LoginService } from '../login/login.service';
 
 
 @Injectable({
@@ -21,21 +22,20 @@ export class HomeResolverService implements Resolve<Theme> {
 
     constructor(private userLoggedService: UserLoggedService,
         private themeService: ThemeService, private router: Router,
-        private isLoadingService: IsLoadingService, private localStorageService: LocalStorageService, ) { }
+        private isLoadingService: IsLoadingService, private localStorageService: LocalStorageService,
+    ) { }
 
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Theme> | Observable<never> {
 
-        return this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername(), false)
+        return this.userLoggedService.getUserFromBackEnd(this.localStorageService.getTokenUsername())
             .pipe(
-                switchMap(user => {
-                    return this.themeService.getTheme(user.id)
-                }),
+                switchMap(user => this.themeService.getTheme(user.id)),
                 take(1),
                 mergeMap(t => {
                     if (t) {
                         return of(t);
-                    } else { // id not found
+                    } else {
                         this.router.navigate(['/welcome']);
                         return EMPTY;
                     }

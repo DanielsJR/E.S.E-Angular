@@ -8,6 +8,7 @@ import { SubjectsGradesCrudDialogRefComponent } from "./subject-grades/subjects-
 import { SubjectsCoursesComponent } from './subjects-courses/subjects-courses.component';
 import { SharedModule } from "../../shared/shared.module";
 import { UsersModule } from "../users/users.module";
+import { SubjectsQuizComponent } from './subjects-quiz/subjects-quiz.component';
 
 
 
@@ -26,6 +27,7 @@ import { UsersModule } from "../users/users.module";
     SubjectGradesComponent,
     SubjectsGradesCrudDialogRefComponent,
     SubjectsCoursesComponent,
+    SubjectsQuizComponent,
   ],
 
   providers: [

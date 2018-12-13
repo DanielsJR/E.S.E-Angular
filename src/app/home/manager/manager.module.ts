@@ -8,12 +8,13 @@ import { ManagerComponent } from './manager.component';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
-import { SubjectsModule } from './manager-subjects/subjects/subejcts.module';
+
 import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
 import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
 import { ManagerSubjectsCoursesComponent } from './manager-subjects/manager-subjects-courses.component';
 import { ManagerSubjectsCoursesSubjectsComponent } from './manager-subjects/manager-subjects-courses-subjects.component';
 import { UsersModule } from '../users/users.module';
+import { SubjectsModule } from '../subjects/subejcts.module';
 
 
 @NgModule({

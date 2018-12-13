@@ -7,6 +7,7 @@ import { Observable } from "rxjs/internal/Observable";
 import { tap } from "rxjs/internal/operators/tap";
 import { finalize } from "rxjs/internal/operators/finalize";
 import { CourseStoreService } from "./course-store.service";
+import { GradeStoreService } from "./grade-store.service";
 
 
 @Injectable({
@@ -37,7 +38,7 @@ export class UserStoreService {
     isLoadingGetStudents$ = this.isLoadingGetStudents.asObservable();
 
 
-    constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService) {
+    constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService,private gradeStoreService: GradeStoreService) {
         this.dataStore = { managers: [], teachers: [], students: [], oneStudent: null }
     }
 
@@ -348,6 +349,7 @@ export class UserStoreService {
                     this.dataStore.students[index] = data;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     this.courseStoreService.updateStudentInCourseStore(data);
+                    this.gradeStoreService.updateStudentInGradeStore(data);
                 }
             }, err => console.error("Error updating student")
             ));
@@ -361,6 +363,7 @@ export class UserStoreService {
                     this.dataStore.students.splice(index, 1);
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     this.courseStoreService.deleteStudentInCourseStore(user);
+                    //this.gradeStoreService.deleteStudentInGradeStore(user);
                 }
             }, err => console.error("Error deleting student")
             ));

@@ -6,6 +6,8 @@ import { IsLoadingService } from "./isLoadingService.service";
 
 import { Grade } from "../models/grade";
 import { GradeBackendService } from "./grade-backend.service";
+import { Subject } from "../models/subject";
+import { User } from "../models/user";
 
 
 
@@ -13,7 +15,6 @@ import { GradeBackendService } from "./grade-backend.service";
     providedIn: 'root',
 })
 export class GradeStoreService {
-
     private dataStore: { grades: Grade[], grade: Grade };
 
     private gradesSource = <BehaviorSubject<Grade[]>>new BehaviorSubject([]);
@@ -112,6 +113,39 @@ export class GradeStoreService {
                 }, err => console.error("Error deleting Grade" + err.message)
                 ));
     }
+
+    //************* */
+
+    updateSubjectInGradeStore(subject: Subject) {
+        this.dataStore.grades.forEach((item, index) => {
+            if (item.subject.id === subject.id) {
+                item.subject = subject;
+                this.dataStore.grades[index] = item;
+            }
+        });
+        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+    }
+
+    deleteSubjectInGradeStore(subject: string | Subject): any {
+        throw new Error("Method not implemented.");
+    }
+
+    updateStudentInGradeStore(student: User) {
+        this.dataStore.grades.forEach((item, index) => {
+            if (item.student.id === student.id) {
+                item.student = student;
+                this.dataStore.grades[index] = item;
+            }
+        });
+
+        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+
+    }
+
+    deleteStudentInGradeStore(student: User | string) {
+        throw new Error("Method not implemented.");
+    }
+
 
 }
 

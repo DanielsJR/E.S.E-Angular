@@ -1,38 +1,37 @@
-import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatDialogConfig, MatDialog } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, RESULT_SUCCESS } from '../../../app.config';
+import { User } from '../../../models/user';
 import { Subscription } from 'rxjs';
-import { Subject } from '../../../../../models/subject';
-import { User } from '../../../../../models/user';
-import { GradeStoreService } from '../../../../../services/grade-store.service';
-import { UserStoreService } from '../../../../../services/user-store.service';
-import { SubjectStoreService } from '../../../../../services/subject-store.service';
-import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { Grade } from '../../../../../models/grade';
-import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_EDIT } from '../../../../../app.config';
-import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
-import { SnackbarService } from '../../../../../services/snackbar.service';
-
+import { MatSort, MatPaginator, MatDialog, MatTableDataSource, MatDialogConfig } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GradeStoreService } from '../../../services/grade-store.service';
+import { SessionStorageService } from '../../../services/session-storage.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { Grade } from '../../../models/grade';
+import { Subject } from '../../../models/subject';
+import { shortNameSecondName } from '../../../shared/functions/shortName';
+import { SubjectsGradesCrudDialogRefComponent } from '../subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 
 @Component({
-  selector: 'nx-subject-grades',
-  templateUrl: './subject-grades.component.html',
-  styleUrls: ['./subject-grades.component.css']
+  selector: 'nx-subjects-quiz',
+  templateUrl: './subjects-quiz.component.html',
+  styleUrls: ['./subjects-quiz.component.css']
 })
-export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() areaRole;
   roleTeacher = ROLE_TEACHER;
   student: User;
-  subject: Subject;
+  @Input() subject: Subject;
+  grades: Grade[];
 
   studentName;
   subjectId;
 
 
   // mat table
-  displayedColumns = ['grade', 'title', 'date'];
+  displayedColumns = ['student.firstName', 'grade'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -43,43 +42,37 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
   rowClasses: {};
   isLoading: boolean = false;
 
-
   isThemeDarkSubscription: Subscription;
-  usersSubscription: Subscription;
   subjectsSubscription: Subscription;
   isLoadingGetGradesSubscription: Subscription;
   gradesSubscription: Subscription;
+  gradesSubscription2: Subscription;
 
   constructor(
-    private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
-    private gradeStoreService: GradeStoreService,
-    private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
+    private route: ActivatedRoute, private router: Router, public dialog: MatDialog, private gradeStoreService: GradeStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
-
     this.dataSource = new MatTableDataSource<Grade[]>();
+
+    this.dataSource.filterPredicate = (grade: Grade, filterValue: string) =>
+      (grade.student.firstName.toLowerCase() + ' ' + grade.student.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
+      grade.student.firstName.toLowerCase().indexOf(filterValue) === 0 || grade.student.lastName.toLowerCase().indexOf(filterValue) === 0
+      || shortNameSecondName(grade.student).toLowerCase().indexOf(filterValue) === 0;
+
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    // snapshot doesn't re-use the component
-    this.studentName = this.route.snapshot.paramMap.get('username');
-    this.subjectId = this.route.snapshot.paramMap.get('sbjId');
     this.gradesSubscription = this.gradeStoreService.grades$
       .subscribe(grades => {
-        let filteredGrades = grades.filter(g => (g.student.username.indexOf(this.studentName) === 0) && (g.subject.id.indexOf(this.subjectId) === 0))
-        this.dataSource.data = filteredGrades;
+        let filteredGrades = grades.filter(g => g.subject.id.indexOf(this.subject.id) === 0)
+        this.grades = filteredGrades.filter((item, index, self) =>
+          index === self.findIndex(g => g.title === item.title)
+        )
       });
 
     this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
-    this.usersSubscription = this.userStoreService.students$
-      .subscribe(data => this.student = data.find(user => user.username === this.studentName));
-
-    this.subjectsSubscription = this.subjectStoreService.subjects$
-      .subscribe(data => this.subject = data.find(s => s.id === this.subjectId));
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
@@ -90,19 +83,23 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+
+
   ngAfterViewInit() {
+    this.dataSource.sortingDataAccessor = (obj, property) => this.getPropertySorting(obj, property);
     this.dataSource.sort = this.sort;
+
     this.dataSource.paginator = this.paginator;
+
     if (this.areaRole === this.roleTeacher)
       this.displayedColumns.push('crud');
   }
 
   ngOnDestroy(): void {
     this.isThemeDarkSubscription.unsubscribe();
-    this.usersSubscription.unsubscribe();
     this.isLoadingGetGradesSubscription.unsubscribe();
-    this.subjectsSubscription.unsubscribe();
     this.gradesSubscription.unsubscribe();
+    if (this.gradesSubscription2) this.gradesSubscription2.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -111,6 +108,10 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dataSource.filter = filterValue;
   }
 
+  getPropertySorting = (obj, path) => (
+    path.split('.').reduce((o, p) => o && o[p], obj)
+  )
+
   setRowClass() {
     this.rowClasses = {
       'fila': !this.isDark,
@@ -118,38 +119,16 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
     };
   }
 
-
-  goBack() {
-    this.router.navigate(['../../detail/' + this.subjectId], { relativeTo: this.route });
+  selectQuiz(selectedQuiz) {
+    this.gradesSubscription2 = this.gradeStoreService.grades$
+      .subscribe(grades => {
+        let filteredGrades = grades.filter(g => ((g.title.indexOf(selectedQuiz) === 0) && (g.subject.id.indexOf(this.subject.id) === 0)))
+        this.dataSource.data = filteredGrades;
+      });
   }
 
-  openDialogCreate(student: User, subject: Subject): void {
-    let data = {
-      student: student,
-      subject: subject,
-      grade: new Grade,
-      type: 'create',
-
-    };
-
-    let config = new MatDialogConfig();
-    config.data = data;
-    config.panelClass = 'dialogService';
-    config.width = '700px';
-    config.disableClose = true;
-
-    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === RESULT_CANCELED) {
-        console.log(RESULT_CANCELED);
-      } else if (result === RESULT_ERROR) {
-        this.snackbarService.openSnackBar("Error al Crear Evaluación", RESULT_ERROR);
-        console.error(RESULT_ERROR);
-      } else if (result === RESULT_SUCCESS) {
-        this.snackbarService.openSnackBar("Evaluación Creada", RESULT_SUCCESS);
-        console.log(RESULT_SUCCESS);
-      }
-    });
+  goBack() {
+    this.router.navigate(['../../courses/', this.subject.course.name], { relativeTo: this.route });
   }
 
   openDialogDetail(grade: Grade): void {
@@ -204,7 +183,5 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     });
   }
-
-
 
 }

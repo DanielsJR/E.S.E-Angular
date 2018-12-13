@@ -4,16 +4,18 @@
 
     <mat-toolbar color="primary">
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
-        <mat-placeholder>
-          <i class="mdi mdi-magnify"></i>Buscar
-        </mat-placeholder>
+        <mat-select placeholder="Seleccione una Evaluación" (selectionChange)="selectQuiz($event.value)">
+          <mat-option *ngFor="let g of grades" [value]="g.title">
+            <span>{{g.title}}</span> |
+            <small>{{g.date | lowercase}}</small>
+          </mat-option>
+        </mat-select>
       </mat-form-field>
       <span class="spacer-r"></span>
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="school"></mat-icon>
-          &nbsp; {{subject?.name}}
+          &nbsp; Detalles por Evaluación
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
@@ -22,72 +24,47 @@
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
-      <mat-list style="flex-grow: 8">
-        <mat-list-item>
-          <img matListAvatar *ngIf="(student) as s" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+s?.avatar.type+';base64,' + s?.avatar.data)"
-            alt="{{s?.username}}" (click)="imageZoom.openDialogImage()">
-          <h3 matLine *ngIf="(student) as s">{{ s | shortNameLastname}}</h3>
-          <p matLine>
-            <span *ngIf="student" class="role-style">{{student?.roles | rolesToSpanish}}</span>
-          </p>
-          <span class="spacer-r"></span>
-          <button mat-icon-button color="primary" *ngIf="(student)" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
-            <mat-icon svgIcon="eye"></mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-list>
-
-      <nx-image-zoom-user #imageZoom [avatar]="student?.avatar"></nx-image-zoom-user>
-      <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="'manager'"></nx-crud-user-dialog>
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar
+        </mat-placeholder>
+      </mat-form-field>
     </mat-toolbar>
     <mat-divider></mat-divider>
 
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+      <ng-container matColumnDef="student.firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Alumno </mat-header-cell>
         <mat-cell *matCellDef="let grade">
-
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <h3 matLine> {{grade?.grade}} </h3>
+              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+                alt="{{grade?.student?.username}}" (click)="imageZoomS.openDialogImage()">
+              <h3 matLine *ngIf="grade"> {{grade?.student | shortNameLastname}} </h3>
               <p matLine>
-                <span class="role-style">{{grade?.title}}/{{grade?.subject?.name}}</span>
+                <span class="role-style">{{grade?.student.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
-
+          <nx-image-zoom-user #imageZoomS [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="grade">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Nota </mat-header-cell>
         <mat-cell *matCellDef="let grade">
-         <span [style.color]="(grade?.grade < 4.0)? 'red' : 'blue'">{{grade?.grade | number : '1.1-1'}}</span> 
+          <span [style.color]="(grade?.grade < 4.0)? 'red' : 'blue'">{{grade?.grade | number : '1.1-1'}}</span>
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Titulo </mat-header-cell>
-        <mat-cell *matCellDef="let grade">
-          {{grade?.title}}
-        </mat-cell>
-      </ng-container>
+      <ng-container matColumnDef="crud" *ngIf="areaRole === roleTeacher">
+        <mat-header-cell *matHeaderCellDef>
 
-      <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let grade">
-          {{grade?.date}}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="crud"  *ngIf="areaRole === roleTeacher">
-        <mat-header-cell *matHeaderCellDef class="add">
-            <button *ngIf="student && subject" mat-mini-fab matTooltip="Agregar Calificación" (click)="openDialogCreate(student,subject)">
-                <mat-icon svgIcon="plus"></mat-icon>
-              </button>
         </mat-header-cell>
+
         <mat-cell *matCellDef="let grade" class="crud">
 
           <button mat-icon-button color="primary" (click)="openDialogDetail(grade);$event.stopPropagation()">

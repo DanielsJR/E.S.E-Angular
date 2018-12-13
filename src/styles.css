@@ -57,7 +57,11 @@ mat-sidenav-container {
 }
 /*MATERIAL snackBar*/
 
-
+/*MATERIAL table.... mat-list in tables*/
+mat-cell mat-list mat-list-item .mat-list-item-content {
+    padding: 0 !important;
+}
+/*MATERIAL snackBar*/
 
 /*MAT icons*/
 button.mat-menu-item {

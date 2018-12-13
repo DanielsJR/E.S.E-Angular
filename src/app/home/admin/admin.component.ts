@@ -3,6 +3,7 @@ import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { LoginService } from '../../login/login.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
+import { GradeStoreService } from '../../services/grade-store.service';
 
 @Component({
     template: `
@@ -12,19 +13,24 @@ import { SubjectStoreService } from '../../services/subject-store.service';
 export class AdminComponent implements OnInit, OnDestroy {
     constructor(
         private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService, private loginService: LoginService
+        private subjectStoreService: SubjectStoreService, private loginService: LoginService,
+        private gradeStoreService: GradeStoreService
     ) { }
 
     ngOnInit(): void {
         console.log("AdminComponent ngOnInit() called!!!");
 
         this.userStoreService.loadAllManagers();
-        this.userStoreService.loadAllTeachers();
 
         if (this.loginService.isManager()) {
+            this.userStoreService.loadAllTeachers();
             this.userStoreService.loadAllStudents();
-            this.courseStoreService.loadAllCourses(2018);
+    
+            this.courseStoreService.loadAllCourses(2018); 
+            
             this.subjectStoreService.loadAllSubjects();
+ 
+            this.gradeStoreService.loadAllGrades();
         }
 
     }

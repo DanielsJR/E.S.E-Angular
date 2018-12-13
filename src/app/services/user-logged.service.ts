@@ -23,20 +23,16 @@ export class UserLoggedService {
         this.userLoggedSource.next(user);
     }
 
-    getUserFromBackEnd(username: string, redirectHome: boolean): Observable<User> {
+    getUserFromBackEnd(username: string): Observable<User> {
         this.isLoadingService.isLoadingTrue();
-        return this.userBackendService
-            .getUserByUsernameSecured(username)
+        return this.userBackendService.getUserByUsernameSecured(username)
             .pipe(
                 tap(user => {
                     this.userLoggedNext(user);
-                    const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
-                    if (redirectHome) this.router.navigate(['/home/' + endPoint]);
-                    if (this.loginService.redirectUrl && (this.loginService.tokenUsername === username)) this.router.navigate([this.loginService.redirectUrl]);
-                 }, error => {
+                }, error => {
                     console.error(`could not load user, ${error.message}`);
-                }
-                ));
+                })
+            );
 
 
     }

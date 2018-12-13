@@ -15,6 +15,8 @@ import { SessionStorageService } from '../../services/session-storage.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { SnackbarService } from '../../services/snackbar.service';
+import { Course } from '../../models/course';
+import { CourseStoreService } from '../../services/course-store.service';
 
 
 @Component({
@@ -46,8 +48,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingGetSubjectsSubscription: Subscription;
   isThemeDarkSubscription: Subscription;
   courseName: string;
+  course: Course;
 
-  constructor(private sessionStorage: SessionStorageService, private subjectStoreService: SubjectStoreService,
+  constructor(private sessionStorage: SessionStorageService,
+    private subjectStoreService: SubjectStoreService, private courseStoreService: CourseStoreService,
     private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
     public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
 
@@ -65,6 +69,16 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(subjects => {
           let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
           this.dataSource.data = filteredSubjects;
+          let subject: Subject = subjects.find(sj => sj.course.name.indexOf(this.courseName) === 0);
+          if (subject) {
+            this.course = subject.course;
+          } else {
+            this.courseStoreService.courses$.subscribe(cs => {
+              this.course = cs.find(c => c.name.indexOf(this.courseName) === 0)
+            }
+            )
+          }
+
         });
 
     } else if (this.areaRole === this.roleTeacher) {
@@ -130,8 +144,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   openDialogCreate(): void {
+    let subject: Subject = new Subject();
+    subject.course = this.course;
     let data = {
-      subject: new Subject,
+      subject: subject,
       type: 'create',
 
     };

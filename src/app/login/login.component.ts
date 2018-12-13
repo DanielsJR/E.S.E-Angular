@@ -5,11 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR } from '../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService } from '../services/local-storage.service';
-import { UserLoggedService } from '../services/user-logged.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 import { SnackbarService } from '../services/snackbar.service';
-import { finalize } from 'rxjs/internal/operators/finalize';
-import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 
@@ -21,18 +18,14 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  user: User;
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
   isLoading = false;
 
-  constructor(
-    private formBuilder: FormBuilder, private loginService: LoginService,
-    private userLoggedService: UserLoggedService, private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService, private router: Router
-  ) {
-    this.user = new User();
-  }
+  constructor(private formBuilder: FormBuilder, private loginService: LoginService,
+    private localStorageService: LocalStorageService, private snackbarService: SnackbarService,
+    private router: Router
+  ) { }
 
 
   ngOnInit(): void {
@@ -42,8 +35,8 @@ export class LoginComponent implements OnInit {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      username: [this.user.username, [Validators.required, noWhitespaceValidator]],
-      password: [this.user.password, [Validators.required, noWhitespaceValidator]]
+      username: ['', [Validators.required, noWhitespaceValidator]],
+      password: ['', [Validators.required, noWhitespaceValidator]]
     });
   }
 
@@ -52,15 +45,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.isLoading = true;
-    this.user.username = this.username.value;
-    this.user.password = this.password.value;
-    this.loginService.login(this.user.username, this.user.password)
+
+    this.loginService.login(this.username.value, this.password.value)
       .subscribe(token => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.token);
         const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
         this.router.navigate(['/home/' + endPoint]);
-      }
-      )
+      })
       , error => {
         console.error(error.message);
         if (error instanceof HttpErrorResponse) {

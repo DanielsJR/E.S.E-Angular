@@ -45,22 +45,6 @@
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let grade">
-
-          <mat-list style="flex-grow: 8">
-            <mat-list-item>
-              <h3 matLine> {{grade?.grade}} </h3>
-              <p matLine>
-                <span class="role-style">{{grade?.title}}/{{grade?.subject?.name}}</span>
-              </p>
-            </mat-list-item>
-          </mat-list>
-
-        </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="grade">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Nota </mat-header-cell>
         <mat-cell *matCellDef="let grade">

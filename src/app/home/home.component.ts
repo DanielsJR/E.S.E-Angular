@@ -66,17 +66,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.data
-      .subscribe((data: { theme: Theme }) => {
-        if (data.theme) this.themePicker.installTheme(data.theme);
-      });
-
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
     }
     );
+
+    this.route.data
+      .subscribe((data: { theme: Theme }) => {
+        if (data.theme) this.themePicker.installTheme(data.theme);
+        if (this.loginService.redirectUrl && (this.loginService.tokenUsername === this.user.username))
+          this.router.navigate([this.loginService.redirectUrl]);
+      });
+
+
 
     if (this.user) {
       this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);

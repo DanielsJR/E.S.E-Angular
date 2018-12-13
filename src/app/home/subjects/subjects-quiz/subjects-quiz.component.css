@@ -14,11 +14,19 @@ mat-card {
     top: 20px;
 }
 
+mat-toolbar-row {
+    padding: 0;
+}
 
 mat-form-field {
     font-size: 14px;
     width: 50%;
     padding-top: 10px;
+}
+
+.toolbar2 {
+    padding-bottom: 5px !important;
+    height: 59px !important;
 }
 
 .fila:hover {
@@ -31,7 +39,6 @@ mat-form-field {
 }
 
 .fila-dark:hover {
-    --cursor: pointer;
     background: #353535;
 }
 
@@ -39,34 +46,52 @@ mat-form-field {
     background: #292929;
 }
 
-.mat-list-avatar {
-    opacity: 1;
-    transition: .5s ease;
-    backface-visibility: hidden;
-}
 
-.fila:hover .mat-list-avatar {
-    opacity: 0.3;
-}
-
-.fila-dark:hover .mat-list-avatar {
-    opacity: 0.3;
-}
 
 mat-list {
-    padding: 0;
+    padding: 0 !important;
 }
 
 .add {
     justify-content: flex-end !important;
+    padding-right: 30px !important;
 }
 
 .crud {
     justify-content: flex-end !important;
+    padding-right: 30px !important;
 }
 
 mat-list-item {
     height: 60px !important;
+}
+
+
+/*:host ::ng-deep .mat-list-item-content {
+    padding: 0!important;
+  } */
+
+mat-list-item h3 {
+    line-height: 17px !important;
+}
+
+mat-list-item p {
+    line-height: 20px !important;
+}
+
+.mat-list-avatar {
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    cursor: pointer;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
 }
 
 .role-style {

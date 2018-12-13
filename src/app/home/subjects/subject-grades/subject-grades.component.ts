@@ -7,12 +7,10 @@ import { Subject } from '../../../models/subject';
 import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_EDIT } from '../../../app.config';
 import { User } from '../../../models/user';
 import { GradeStoreService } from '../../../services/grade-store.service';
-import { UserStoreService } from '../../../services/user-store.service';
-import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { Grade } from '../../../models/grade';
-import { SubjectsGradesCrudDialogRefComponent } from '../../manager/manager-subjects/subjects/subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
+import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 
 
 
@@ -46,16 +44,13 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   isThemeDarkSubscription: Subscription;
-  usersSubscription: Subscription;
-  subjectsSubscription: Subscription;
   isLoadingGetGradesSubscription: Subscription;
   gradesSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
-    private gradeStoreService: GradeStoreService,
-    private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+    private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
+    public sanitizer: DomSanitizer, private snackbarService: SnackbarService
   ) {
 
   }
@@ -70,17 +65,19 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
     this.subjectId = this.route.snapshot.paramMap.get('sbjId');
     this.gradesSubscription = this.gradeStoreService.grades$
       .subscribe(grades => {
-        let filteredGrades = grades.filter(g => (g.student.username.indexOf(this.studentName) === 0) && (g.subject.id.indexOf(this.subjectId) === 0))
-        this.dataSource.data = filteredGrades;
+        if (grades) {
+          let filteredGrades = grades.filter(g => (g.student.username.indexOf(this.studentName) === 0) && (g.subject.id.indexOf(this.subjectId) === 0))
+          this.dataSource.data = filteredGrades;
+
+          let grade = grades.find(g => (g.student.username.indexOf(this.studentName) === 0) && (g.subject.id.indexOf(this.subjectId) === 0))
+          if (grade) {
+            this.subject = grade.subject;
+            this.student = grade.student;
+          }
+        }
       });
 
     this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-
-    this.usersSubscription = this.userStoreService.students$
-      .subscribe(data => this.student = data.find(user => user.username === this.studentName));
-
-    this.subjectsSubscription = this.subjectStoreService.subjects$
-      .subscribe(data => this.subject = data.find(s => s.id === this.subjectId));
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
       this.isDark = isDark;
@@ -100,9 +97,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnDestroy(): void {
     this.isThemeDarkSubscription.unsubscribe();
-    this.usersSubscription.unsubscribe();
     this.isLoadingGetGradesSubscription.unsubscribe();
-    this.subjectsSubscription.unsubscribe();
     this.gradesSubscription.unsubscribe();
   }
 

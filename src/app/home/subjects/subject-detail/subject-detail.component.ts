@@ -13,7 +13,7 @@ import { SessionStorageService } from '../../../services/session-storage.service
 import { SnackbarService } from '../../../services/snackbar.service';
 import { shortNameSecondName } from '../../../shared/functions/shortName';
 import { Grade } from '../../../models/grade';
-import { SubjectsGradesCrudDialogRefComponent } from '../../manager/manager-subjects/subjects/subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
+import { SubjectsGradesCrudDialogRefComponent } from '../subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 
 
 

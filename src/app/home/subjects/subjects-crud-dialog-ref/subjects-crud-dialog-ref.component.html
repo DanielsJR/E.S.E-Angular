@@ -20,7 +20,7 @@
         alt="Profesor">
       <h3 matLine>{{subjectName?.viewValue}}</h3>
       <p matLine>
-        <span class="role-style">{{course?.name}}</span>
+        <span class="role-style">{{subject?.course?.name}}</span>
         <span *ngIf="teacher" class="role-style">, {{teacher | shortNameLastname}}</span>
       </p>
     </mat-list-item>
@@ -51,7 +51,7 @@
           </div>
         </form>
       </mat-step>
-
+<!--
       <mat-step [stepControl]="courseGroup">
         <form [formGroup]="courseGroup">
           <ng-template matStepLabel>Curso</ng-template>
@@ -73,6 +73,7 @@
           </div>
         </form>
       </mat-step>
+      -->
 
       <mat-step [stepControl]="teacherGroup">
         <form [formGroup]="teacherGroup">
@@ -109,7 +110,7 @@
       </button>
       <span class="spacer-r"></span>
       <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(subjectGroup.invalid || subjectGroup.pristine)
-      || (courseGroup.invalid || courseGroup.pristine) || (teacherGroup.invalid || teacherGroup.pristine)" (click)="create()">Agregar</button>
+      || (teacherGroup.invalid || teacherGroup.pristine)" (click)="create()">Agregar</button>
     </mat-toolbar>
   </mat-dialog-actions>
 
@@ -148,7 +149,7 @@
   <mat-dialog-content>
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
-
+<!--
       <mat-step [stepControl]="subjectEditGroup">
         <form [formGroup]="subjectEditGroup">
           <ng-template matStepLabel>Asigantura</ng-template>
@@ -190,6 +191,7 @@
           </div>
         </form>
       </mat-step>
+      -->
 
       <mat-step [stepControl]="teacherEditGroup">
         <form [formGroup]="teacherEditGroup">
@@ -207,7 +209,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <div>
-            <button type="button" mat-button color="primary" matStepperPrevious>Atras</button>
+            
           </div>
         </form>
       </mat-step>
@@ -225,8 +227,8 @@
         <mat-icon svgIcon="arrow-left"></mat-icon>
       </button>
       <span class="spacer-r"></span>
-      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(subjectEditGroup.invalid || courseEditGroup.invalid || teacherEditGroup.invalid)
-      || (subjectEditGroup.pristine && courseEditGroup.pristine && teacherEditGroup.pristine)" (click)="edit()">Guardar</button>
+      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(teacherEditGroup.invalid)
+      || (teacherEditGroup.pristine)" (click)="edit()">Guardar</button>
     </mat-toolbar>
   </mat-dialog-actions>
 
