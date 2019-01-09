@@ -55,7 +55,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.subject = this.data.subject;
     if (data.type === 'edit') {
       this.course = this.data.subject.course;
-      this.subjectName = this.subjectsNames.find(sn => sn.value === this.data.subject.name);
+      this.subjectName = this.subjectsNames.find(sn => sn.viewValue === this.data.subject.name);
       this.teacher = this.data.subject.teacher;
     }
 

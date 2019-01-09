@@ -25,7 +25,7 @@ export class LoginService {
     login(username: string, password: string): Observable<Token> {
         const credentials = { username: username, password: password };
         console.log('login::...');
-        return this.httpCli.post<Token>(this.endpoint, credentials)
+        return this.httpCli.post<Token>(this.endpoint, credentials);
     }
 
     logout(): void {

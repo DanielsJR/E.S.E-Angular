@@ -12,7 +12,7 @@ import { UserStoreService } from '../../../../services/user-store.service';
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
 import { GradeStoreService } from '../../../../services/grade-store.service';
-import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
+import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_SUCCESS, RESULT_ERROR, ROLE_MANAGER, ROLE_TEACHER } from '../../../../app.config';
 
 
 
@@ -23,6 +23,10 @@ import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_SUCCESS, RESULT_ERR
 })
 export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
+  areaRole;
+  roleManager = ROLE_MANAGER;
+  roleTeacher = ROLE_TEACHER;
+  
   grade: Grade;
 
   course: Course;
@@ -50,6 +54,8 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
     private userStoreService: UserStoreService, private courseStoreService: CourseStoreService,
     private subjectStoreService: SubjectStoreService, private gradeStoreService: GradeStoreService, ) {
+
+      this.areaRole = this.data.areaRole;
 
     console.log('type: ' + data.type);
     if (data.type === 'create') {

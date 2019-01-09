@@ -19,19 +19,19 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('ManagerGuard#canActivate called');
+        //console.log('ManagerGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
         //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('ManagerGuard#canActivateChild called');
+        //console.log('ManagerGuard#canActivateChild called');
         return this.canActivate(route, state);
     }
 
     canLoad(route: Route): boolean {
-        console.log('ManagerGuard#canLoad called');
+        //console.log('ManagerGuard#canLoad called');
         const url = `/${route.path}`;
         return this.checkLogin(url);
     }
@@ -39,7 +39,7 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
     checkLogin(url: string): boolean {
         const roles = this.loginService.getRoles();
         if (roles.includes(ROLE_MANAGER)) {
-            console.log('checkLogin: true');
+            //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');

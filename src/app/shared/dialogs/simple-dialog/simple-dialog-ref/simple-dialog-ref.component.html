@@ -1,4 +1,4 @@
-<div *ngIf="data.type === 'delete-card'">
+<div *ngIf="data.type === 'card'">
     <mat-dialog-content class="dialogContent">
         <mat-card>
             <mat-card-header>
@@ -10,12 +10,14 @@
 
             <img *ngIf="avatar" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type +';base64,' + avatar?.data)"
                 class="imageCard">
-            <p class="message">{{message}}</p>
+            <p *ngIf="message" class="message">{{message}}</p>
 
             <mat-card-actions>
-                <button type="button" mat-button color="accent" tabindex="1" (click)="cancel()"
+                <button *ngIf="cancelButton" type="button" mat-button color="accent" tabindex="1" (click)="cancel()"
                     cdkFocusRegionstart>Cancelar</button>
-                <button type="button" mat-button color="primary" tabindex="2" (click)="accept()">{{actionButton}}</button>
+                <button type="button" mat-button color="primary" tabindex="2" (click)="action1()">{{actionButton1}}</button>
+                <button *ngIf="actionButton2" type="button" mat-button color="accent" tabindex="3" (click)="action2()">{{actionButton2}}</button>
+                <button *ngIf="actionButton3" type="button" mat-button color="warn" tabindex="3" (click)="action3()">{{actionButton3}}</button>
             </mat-card-actions>
 
         </mat-card>
@@ -54,7 +56,7 @@
                 Cancelar
             </button>
             <span class="spacer-r"></span>
-            <button type="button" mat-raised-button color="warn" (click)="accept()" tabindex="2">{{actionButton}}</button>
+            <button type="button" mat-raised-button color="warn" (click)="action1()" tabindex="2">{{actionButton1}}</button>
         </mat-toolbar>
     </mat-dialog-actions>
 </div>

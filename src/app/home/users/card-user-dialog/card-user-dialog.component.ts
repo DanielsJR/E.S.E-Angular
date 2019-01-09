@@ -13,11 +13,8 @@ import { CardUserDialogRefComponent } from './card-user-dialog-ref/card-user-dia
 export class CardUserDialogComponent implements OnInit {
 
     @Input() user: User;
-
-    @Input() uriRole: string;
-
     @Input() areaRole;
-
+    @Input() onlyRead: boolean;
 
     constructor(public dialog: MatDialog) { }
 
@@ -28,9 +25,9 @@ export class CardUserDialogComponent implements OnInit {
     openDialogCardUser(): MatDialogRef<CardUserDialogRefComponent> {
         let data = {
             user: this.user,
-            uriRole: this.uriRole,
             type: 'cardUser',
-            areaRole: this.areaRole
+            areaRole: this.areaRole,
+            onlyRead: (this.onlyRead != null) ? this.onlyRead : false
         };
         let config = new MatDialogConfig();
         config.data = data;

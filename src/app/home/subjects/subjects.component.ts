@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectsCrudDialogRefComponent } from './subjects-crud-dialog-ref/subjects-crud-dialog-ref.component';
@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../models/subject';
-import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS } from '../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../app.config';
 import { User } from '../../models/user';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
@@ -17,6 +17,7 @@ import { UserLoggedService } from '../../services/user-logged.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { Course } from '../../models/course';
 import { CourseStoreService } from '../../services/course-store.service';
+import { SimpleDialogRefComponent } from '../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 
 
 @Component({
@@ -199,9 +200,31 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  deleteSubject(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ACTION1) {
+        console.log(RESULT_ACTION1);
 
+        this.isLoading = true;
+        this.subjectStoreService.delete(dialogRef.componentInstance.obj)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe(_ => this.snackbarService.openSnackBar('Asignatura Eliminada', RESULT_SUCCESS)
+            , err => {
+              this.snackbarService.openSnackBar('Error al eliminar Asignatura', RESULT_ERROR);
+              console.error("Error deleting subject: " + err);
+            });
 
-  deleteSubject(subject: Subject) {
+      } else if (result === RESULT_ACTION2) {
+        console.log(RESULT_ACTION2);
+      } else if (result === RESULT_ACTION3) {
+        console.log(RESULT_ACTION3);
+      }
+    });
+  }
+
+  deleteSubject2(subject: Subject) {
     this.isLoading = true;
     this.subjectStoreService.delete(subject)
       .pipe(finalize(() => this.isLoading = false))

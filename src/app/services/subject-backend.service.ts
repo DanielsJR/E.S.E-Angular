@@ -46,13 +46,13 @@ export class SubjectBackendService {
             );
     }
 
-    delete(subject: Subject | string): Observable<boolean> {
-        const subjectName = (typeof subject === 'string') ? subject : subject.id;
-        const url = `${this.subjectURL}/${subjectName}`;
+    delete(subject: Subject | string): Observable<Subject> {
+        const subjectId = (typeof subject === 'string') ? subject : subject.id;
+        const url = `${this.subjectURL}/${subjectId}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<boolean>(url)
+        return this.httpCli.delete<Subject>(url)
             .pipe(
-                tap(_ => console.log(`deleted Subject id=${subjectName}`))
+                tap(_ => console.log(`deleted Subject id=${subjectId}`))
             );
     }
 

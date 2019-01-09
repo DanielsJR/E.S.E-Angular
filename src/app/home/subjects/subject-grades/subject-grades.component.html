@@ -66,7 +66,7 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="crud"  *ngIf="areaRole === roleTeacher">
+      <ng-container matColumnDef="crud"  >
         <mat-header-cell *matHeaderCellDef class="add">
             <button *ngIf="student && subject" mat-mini-fab matTooltip="Agregar Calificación" (click)="openDialogCreate(student,subject)">
                 <mat-icon svgIcon="plus"></mat-icon>
@@ -78,7 +78,7 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button mat-icon-button color="accent" (click)="openDialogEdit(grade);$event.stopPropagation()">
+          <button mat-icon-button color="accent" (click)="openDialogEdit(grade);$event.stopPropagation()" *ngIf="areaRole === roleTeacher">
             <mat-icon svgIcon="pencil"></mat-icon>
           </button>
 

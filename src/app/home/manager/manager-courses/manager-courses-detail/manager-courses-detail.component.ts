@@ -11,10 +11,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
-import { MatDialog } from '@angular/material';
+import { RESULT_SUCCESS, RESULT_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_TEACHERS, URI_STUDENTS, URI_MANAGERS } from '../../../../app.config';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
+import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 
 
 @Component({
@@ -29,7 +32,15 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   chiefTeacher: User;
   listStudents: User[] = [];
 
+  areaRole = ROLE_MANAGER;
+  roleManager = ROLE_MANAGER;
+  roleStudent = ROLE_STUDENT;
+  roleTeacher = ROLE_TEACHER;
+  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
+  
   btnDisabled = true;
+
+ 
 
   // mat table
   displayedColumns = ['firstName', 'crud'];
@@ -80,9 +91,17 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       );
 
     // snapshot doesn't re-use the component
-    /* this.courseName = this.route.snapshot.paramMap.get('name');
+    /*this.courseName = this.route.snapshot.paramMap.get('name');
     this.courseStoreService.courses$
-    .subscribe();*/
+    .subscribe(courses => {
+      let c = courses.find(course => course.name === this.courseName);
+      if (c) {
+        this.course = c;
+        this.chiefTeacher = c.chiefTeacher;
+        this.dataSource.data = c.students;
+        this.listStudents = this.dataSource.data;
+      }
+    }); */
 
     this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
@@ -98,6 +117,8 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
+
   }
 
   ngOnDestroy(): void {
@@ -124,6 +145,26 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   }
 
 
+  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+      let user = dialogRef.componentInstance.user;
+      this.crudUserDialog.areaRole = this.areaRole;
+      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_DETAIL) {
+        this.crudUserDialog.openDialogDetail(user);
+      } else if (result === RESULT_EDIT) {
+        this.crudUserDialog.openDialogEdit(user);
+      } else if (result === RESULT_DELETE) {
+        this.crudUserDialog.openDialogDelete(user);
+      }
+    });
+  }
+
+
+
+
   addStudent(student: User) {
     let list = this.listStudents.slice();
     list.push(student);
@@ -132,10 +173,22 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     this.btnDisabled = false;
   }
 
-  deleteStudent(user: User) {
-    this.listStudents = this.listStudents.filter(s => s.id !== (user.id));
-    this.dataSource.data = this.listStudents;
-    this.btnDisabled = false;
+
+  deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ACTION1) {
+        console.log(RESULT_ACTION1);
+        this.listStudents = this.listStudents.filter(s => s.id !== (dialogRef.componentInstance.obj.id));
+        this.dataSource.data = this.listStudents;
+        this.btnDisabled = false;
+      } else if (result === RESULT_ACTION2) {
+        console.log(RESULT_ACTION2);
+      } else if (result === RESULT_ACTION3) {
+        console.log(RESULT_ACTION3);
+      }
+    });
   }
 
   changeTeacher(teacher: User) {
@@ -157,5 +210,8 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         });
 
   }
+
+
+
 
 }

@@ -127,7 +127,8 @@ export class GradeStoreService {
     }
 
     deleteSubjectInGradeStore(subject: string | Subject): any {
-        throw new Error("Method not implemented.");
+        //throw new Error("Method not implemented.");
+        console.error('Method not implemented: deleteSubjectInGradeStore');
     }
 
     updateStudentInGradeStore(student: User) {

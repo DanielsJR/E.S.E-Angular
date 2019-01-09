@@ -49,13 +49,13 @@ export class CourseBackendService {
             );
     }
 
-    delete(course: Course | string): Observable<boolean> {
-        const courseName = (typeof course === 'string') ? course : course.id;
-        const url = `${this.courseURL}/${courseName}`;
+    delete(course: Course | string): Observable<Course> {
+        const courseId= (typeof course === 'string') ? course : course.id;
+        const url = `${this.courseURL}/${courseId}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<boolean>(url)
+        return this.httpCli.delete<Course>(url)
             .pipe(
-                tap(_ => console.log(`deleted course id=${courseName}`))
+                tap(_ => console.log(`deleted course id=${courseId}`))
                 // ,catchError(this.handleError<{}>(`deletecourse`))
             );
     }

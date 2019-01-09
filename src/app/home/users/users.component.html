@@ -74,8 +74,8 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses" (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
-        <nx-card-user-dialog #cardUserDialog [user]="row" [uriRole]="uriRole" [areaRole]="areaRole"></nx-card-user-dialog>
+      <mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]="rowClasses" (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
+        <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"></nx-card-user-dialog>
       </mat-row>
 
     </mat-table>

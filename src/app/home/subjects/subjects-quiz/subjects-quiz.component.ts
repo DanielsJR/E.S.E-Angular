@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
-import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, RESULT_SUCCESS } from '../../../app.config';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, RESULT_SUCCESS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT } from '../../../app.config';
 import { User } from '../../../models/user';
 import { Subscription } from 'rxjs';
-import { MatSort, MatPaginator, MatDialog, MatTableDataSource, MatDialogConfig } from '@angular/material';
+import { MatSort, MatPaginator, MatDialog, MatTableDataSource, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../services/grade-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
@@ -12,6 +12,8 @@ import { Grade } from '../../../models/grade';
 import { Subject } from '../../../models/subject';
 import { shortNameSecondName } from '../../../shared/functions/shortName';
 import { SubjectsGradesCrudDialogRefComponent } from '../subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
+import { CardUserDialogRefComponent } from '../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { CrudUserDialogComponent } from '../../users/crud-user-dialog/crud-user-dialog.component';
 
 @Component({
   selector: 'nx-subjects-quiz',
@@ -21,7 +23,6 @@ import { SubjectsGradesCrudDialogRefComponent } from '../subject-grades/subjects
 export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() areaRole;
-  roleTeacher = ROLE_TEACHER;
   student: User;
   @Input() subject: Subject;
   grades: Grade[];
@@ -29,6 +30,10 @@ export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   studentName;
   subjectId;
 
+  roleManager = ROLE_MANAGER;
+  roleStudent = ROLE_STUDENT;
+  roleTeacher = ROLE_TEACHER;
+  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
   // mat table
   displayedColumns = ['student.firstName', 'grade'];
@@ -180,6 +185,51 @@ export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if (result === RESULT_SUCCESS) {
         console.log(RESULT_SUCCESS);
         this.snackbarService.openSnackBar("Calificación Editada", RESULT_SUCCESS);
+      }
+    });
+  }
+
+  openDialogCreateEvaluation(subject: Subject): void {
+    let data = {
+      subject: subject,
+      grade: new Grade,
+      type: 'create',
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '700px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ERROR) {
+        this.snackbarService.openSnackBar("Error al Crear Evaluación", RESULT_ERROR);
+        console.error(RESULT_ERROR);
+      } else if (result === RESULT_SUCCESS) {
+        this.snackbarService.openSnackBar("Evaluación Creada", RESULT_SUCCESS);
+        console.log(RESULT_SUCCESS);
+      }
+    });
+  }
+
+  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+      let user = dialogRef.componentInstance.user;
+      this.crudUserDialog.areaRole = this.areaRole;
+      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_DETAIL) {
+        this.crudUserDialog.openDialogDetail(user);
+      } else if (result === RESULT_EDIT) {
+        this.crudUserDialog.openDialogEdit(user);
+      } else if (result === RESULT_DELETE) {
+        this.crudUserDialog.openDialogDelete(user);
       }
     });
   }

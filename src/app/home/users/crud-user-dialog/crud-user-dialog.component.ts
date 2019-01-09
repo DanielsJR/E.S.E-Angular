@@ -15,10 +15,10 @@ export class CrudUserDialogComponent implements OnInit {
 
     @Input() user: User;
     @Input() uriRole: string;
-    @Input() areaRole;
+    @Input() areaRole: string;
     @Input() onlyRead: boolean;
 
-    constructor(public dialog: MatDialog, private snackbarService: SnackbarService) { }
+    constructor(private dialog: MatDialog, private snackbarService: SnackbarService) { }
 
     ngOnInit() { }
 

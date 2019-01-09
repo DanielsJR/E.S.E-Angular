@@ -8,5 +8,10 @@ export class Course {
         public students?: User[],
         public year?: string,
 
+        public createdBy?:string,
+        public createdDate?:string,
+        public lastModifiedUser?:string,
+        public lastModifiedDate?:string,
+
     ) { }
 }

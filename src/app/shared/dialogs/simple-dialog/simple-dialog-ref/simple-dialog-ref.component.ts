@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RESULT_CANCELED, RESULT_ACCEPT } from '../../../../app.config';
+import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ACTION1, RESULT_ACTION3, RESULT_ACTION2 } from '../../../../app.config';
 import { Avatar } from '../../../../models/avatar';
 
 @Component({
@@ -12,7 +12,7 @@ export class SimpleDialogRefComponent implements OnInit {
 
 
   obj: any;
-  actionButton ='Aceptar';
+  
   dialogTitle;
   title;
   subtitle;
@@ -20,6 +20,10 @@ export class SimpleDialogRefComponent implements OnInit {
   avatar: Avatar;
   icon;
   type;
+  actionButton1 ='Aceptar';
+  actionButton2: any;
+  actionButton3: any;
+  cancelButton: any;
 
   constructor(
     public dialogRef: MatDialogRef<SimpleDialogRefComponent>,
@@ -32,7 +36,10 @@ export class SimpleDialogRefComponent implements OnInit {
     this.subtitle = this.data.subtitle;
     this.message = this.data.message;
     this.avatar = this.data.avatar;
-    this.actionButton = this.data.actionButton ? this.data.actionButton : this.actionButton;
+    this.actionButton1 = this.data.actionButton1 ? this.data.actionButton1 : this.actionButton1;
+    this.actionButton2 = this.data.actionButton2;
+    this.actionButton3 = this.data.actionButton3;
+    this.cancelButton = this.data.cancelButton;
     this.type = this.data.type;
     console.log('Dialog*** type: ' + data.type);
     //if (data.user !== null) this.user = this.data.user;
@@ -46,8 +53,16 @@ export class SimpleDialogRefComponent implements OnInit {
     this.dialogRef.close(RESULT_CANCELED);
   }
 
-  accept(): void {
-    this.dialogRef.close(RESULT_ACCEPT);
+  action1(): void {
+    this.dialogRef.close(RESULT_ACTION1);
+  }
+
+  action2(): void {
+    this.dialogRef.close(RESULT_ACTION2);
+  }
+
+  action3(): void {
+    this.dialogRef.close(RESULT_ACTION3);
   }
 
   selectedObj(obj: any) {

@@ -8,7 +8,7 @@
           <mat-select formControlName="name">
             <mat-option>-- None --</mat-option>
             <mat-optgroup *ngFor="let group of coursesNamesGroups" [label]="group.name" [disabled]="group.disabled">
-              <mat-option *ngFor="let courseName of group.course" [value]="courseName.value">
+              <mat-option *ngFor="let courseName of group.course" [value]="courseName.viewValue">
                 {{courseName.viewValue}}
               </mat-option>
             </mat-optgroup>
@@ -49,7 +49,7 @@
         <mat-list style="flex-grow: 8">
           <mat-list-item>
             <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
-              alt="{{t?.username}}">
+              alt="{{t?.username}}" (click)="userCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
             <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
             <p matLine>
               <span class="role-style">Profesor Jefe</span>
@@ -67,10 +67,11 @@
             </button>
           </mat-list-item>
         </mat-list>
-
-        <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="'MANAGER'"></nx-crud-user-dialog>
+        <!--@ViewChild--><nx-crud-user-dialog></nx-crud-user-dialog>
+        <nx-crud-user-dialog #crudUserDialogT [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="areaRole" [onlyRead]="true"></nx-crud-user-dialog>
         <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="addTeacher($event)">
         </nx-search-user-dialog>
+        <nx-card-user-dialog #cardTeacherDialog [user]="chiefTeacher" [areaRole]="areaRole" [onlyRead]="true"></nx-card-user-dialog>
 
       </mat-toolbar>
       <mat-divider></mat-divider>
@@ -84,14 +85,14 @@
             <mat-list style="flex-grow: 8">
               <mat-list-item>
                 <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
-                  alt="{{student?.username}}">
+                  alt="{{student?.username}}" (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
                 <h3 matLine *ngIf="student"> {{student | shortName}} </h3>
                 <p matLine>
                   <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
                 </p>
               </mat-list-item>
             </mat-list>
-
+            <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole" [onlyRead]="true"></nx-card-user-dialog>
           </mat-cell>
         </ng-container>
 
@@ -110,14 +111,21 @@
               <mat-icon svgIcon="eye"></mat-icon>
             </button>
 
-            <button type="button" mat-icon-button color="warn" (click)="deleteStudentDialog.openDialogSearchUser();$event.stopPropagation()">
+            <button type="button" mat-icon-button color="warn" (click)="deleteStudent(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
               <mat-icon svgIcon="account-minus"></mat-icon>
             </button>
 
-            <nx-search-user-dialog #deleteStudentDialog [userRole]="'STUDENT'" [user]="student" (userSelected)="deleteStudent($event)">
-            </nx-search-user-dialog>
+            <nx-simple-dialog #deleteDialog
+            [obj]="student" 
+            [title]="student | shortNameLastname"
+            [subtitle]="student.roles | rolesToSpanish"
+            [message]="'Eliminar de este Curso?'" 
+            [avatar]="student?.avatar"
+            [cancelButton]="'Descartar'"
+            [type]="'card'">
+          </nx-simple-dialog>
 
-            <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="'manager'"></nx-crud-user-dialog>
+            <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="'/students'" [areaRole]="areaRole" [onlyRead]="true"></nx-crud-user-dialog>
 
           </mat-cell>
         </ng-container>

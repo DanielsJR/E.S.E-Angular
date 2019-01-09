@@ -132,25 +132,10 @@
 
   <mat-dialog-content>
 
-
     <mat-form-field appearance="fill">
       <input matInput [(ngModel)]="grade.title" readonly>
       <mat-label>
         <i class="mdi mdi-format-title">&nbsp;</i>Título
-      </mat-label>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <input matInput [(ngModel)]="grade.subject.name" readonly>
-      <mat-label>
-        <i class="mdi mdi-school">&nbsp;</i>Asignatura
-      </mat-label>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <input matInput [(ngModel)]="grade.date" readonly>
-      <mat-label>
-        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha
       </mat-label>
     </mat-form-field>
 
@@ -161,11 +146,62 @@
       </mat-label>
     </mat-form-field>
 
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.date" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.subject.name" readonly>
+      <mat-label>
+        <i class="mdi mdi-school">&nbsp;</i>Asignatura
+      </mat-label>
+    </mat-form-field>
+
+
     <mat-form-field appearance="outline">
-      <input matInput [value]="grade.grade | number : '1.1-1'" readonly
-      [style.color]="(grade.grade < 4.0)? 'red' : 'blue'">
+      <input matInput [value]="grade.grade | number : '1.1-1'" readonly [style.color]="(grade.grade < 4.0)? 'red' : 'blue'">
       <mat-label>
         <i class="mdi mdi-star">&nbsp;</i>Calificación
+      </mat-label>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill" style="visibility: hidden;">
+      <input matInput readonly hidden>
+    </mat-form-field>
+
+    <!--
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.createdBy" readonly>
+      <mat-label>
+        <i class="mdi mdi-account">&nbsp;</i>Creada por
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.createdDate" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha de Creación
+      </mat-label>
+    </mat-form-field>
+
+    -->
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.lastModifiedUser" readonly>
+      <mat-label>
+        <i class="mdi mdi-account">&nbsp;</i>Ingreasada por
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.lastModifiedDate" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha de Ingreso
       </mat-label>
     </mat-form-field>
 
@@ -181,7 +217,7 @@
         <mat-icon svgIcon="arrow-left"></mat-icon>
       </button>
       <span class="spacer-r"></span>
-      <button type="button" mat-raised-button color="accent" (click)="openDialogEdit()">Editar</button>
+      <button type="button" mat-raised-button color="accent" *ngIf="areaRole === roleTeacher" (click)="openDialogEdit()">Editar</button>
       <!-- <button type="button" mat-raised-button color="warn" (click)="openDialogDelete()">Borrar</button> -->
     </mat-toolbar>
   </mat-dialog-actions>
@@ -203,7 +239,8 @@
 
     <mat-list class="listContainer">
       <mat-list-item>
-        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"          alt="estudiante">
+        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+          alt="estudiante">
         <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
         <p matLine>
           <span class="role-style">{{grade?.student | rolesToSpanish}}</span>
@@ -218,12 +255,12 @@
     <mat-dialog-content>
       <mat-form-field appearance="standard">
         <input matInput formControlName="grade" placeholder="7.0" [style.color]="(eGrade.value < 4.0)? 'red' : 'blue'"
-        [value]="eGrade.value | number : '1.1-1'">
+          [value]="eGrade.value | number : '1.1-1'">
         <mat-label>
           <i class="mdi mdi-star">&nbsp;</i>Calificación
         </mat-label>
         <i class="mdi mdi-pencil" matSuffix></i>
-        <mat-error *ngIf="eGrade.hasError('required')">Este campo es 
+        <mat-error *ngIf="eGrade.hasError('required')">Este campo es
           <strong>requerido</strong>.
         </mat-error>
       </mat-form-field>

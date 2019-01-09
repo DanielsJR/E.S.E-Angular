@@ -7,5 +7,10 @@ export class Subject {
         public name?: string,
         public teacher?: User,
         public course?: Course,
+
+        public createdBy?:string,
+        public createdDate?:string,
+        public lastModifiedUser?:string,
+        public lastModifiedDate?:string,
     ) { }
 }

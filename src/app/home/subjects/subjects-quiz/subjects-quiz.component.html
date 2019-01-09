@@ -30,6 +30,11 @@
           <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
+      <span class="spacer-r"></span>
+      <button mat-mini-fab matTooltip="Agregar Evaluación" (click)="openDialogCreateEvaluation(subject)">
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+
     </mat-toolbar>
     <mat-divider></mat-divider>
 
@@ -42,14 +47,16 @@
           <mat-list style="flex-grow: 8">
             <mat-list-item>
               <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
-                alt="{{grade?.student?.username}}" (click)="imageZoomS.openDialogImage()">
+                alt="{{grade?.student?.username}}" (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <h3 matLine *ngIf="grade"> {{grade?.student | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{grade?.student.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
-          <nx-image-zoom-user #imageZoomS [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+          <!--@ViewChild--><nx-crud-user-dialog></nx-crud-user-dialog>
+          <nx-card-user-dialog #cardStudentDialog [user]="grade?.student" [areaRole]="areaRole"></nx-card-user-dialog>
+          <!--<nx-image-zoom-user #imageZoomS [avatar]="grade?.student?.avatar"></nx-image-zoom-user>-->
         </mat-cell>
       </ng-container>
 

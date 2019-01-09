@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Course } from '../../../../models/course';
 import { User } from '../../../../models/user';
@@ -13,15 +13,24 @@ import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { COURSES_NAMES_GROUPS } from '../../../../models/courses-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
+import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
+import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 
 @Component({
   templateUrl: './manager-courses-create.component.html',
   styleUrls: ['./manager-courses-create.component.css']
 })
 export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  areaRole = ROLE_MANAGER;
+  roleManager = ROLE_MANAGER;
+  roleStudent  = ROLE_STUDENT;
+  roleTeacher = ROLE_TEACHER;
+
+  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
   course: Course;
   coursesNamesGroups = COURSES_NAMES_GROUPS;
@@ -56,6 +65,8 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
       this.isDark = isDark;
       this.setRowClass();
     });
+
+    this.setRowClass();
   }
 
   ngAfterViewInit() {
@@ -115,6 +126,42 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
         }
       });
 
+  }
+
+  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+       let user = dialogRef.componentInstance.user;
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_DETAIL) {
+        this.crudUserDialog.onlyRead = true;
+        this.crudUserDialog.areaRole = this.areaRole;
+        this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
+        this.crudUserDialog.openDialogDetail(user);
+      } else if (result === RESULT_EDIT) {
+        this.crudUserDialog.openDialogEdit(user);
+      } else if (result === RESULT_DELETE) {
+        this.crudUserDialog.openDialogDelete(user);
+      }
+    });
+  }
+
+
+  deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+      } else if (result === RESULT_ACTION1) {
+        console.log(RESULT_ACTION1);
+        this.listStudents = this.listStudents.filter(s => s.id !== (dialogRef.componentInstance.obj.id));
+        this.dataSource.data = this.listStudents;
+       // this.btnDisabled = false;
+      } else if (result === RESULT_ACTION2) {
+        console.log(RESULT_ACTION2);
+      } else if (result === RESULT_ACTION3) {
+        console.log(RESULT_ACTION3);
+      }
+    });
   }
 
 

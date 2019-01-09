@@ -31,7 +31,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   // mat table
-  displayedColumns = ['grade', 'title', 'date'];
+  displayedColumns = ['grade', 'title', 'date', 'crud'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -91,8 +91,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    if (this.areaRole === this.roleTeacher)
-      this.displayedColumns.push('crud');
+   // if (this.areaRole === this.roleTeacher) this.displayedColumns.push('crud');
   }
 
   ngOnDestroy(): void {
@@ -125,7 +124,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
       subject: subject,
       grade: new Grade,
       type: 'create',
-
+      
     };
 
     let config = new MatDialogConfig();
@@ -152,6 +151,7 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
     let data = {
       grade: grade,
       type: 'detail',
+      areaRole: this.areaRole
 
     };
 

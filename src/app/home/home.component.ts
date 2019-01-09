@@ -83,7 +83,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
     if (this.user) {
-      this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
+      if (this.user.username === '111') {
+        this.welcome = 'Bienvenido Sr. ' + this.shortName(this.user);
+      } else {
+        this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
+      }
+
       setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCESS));
 
     }

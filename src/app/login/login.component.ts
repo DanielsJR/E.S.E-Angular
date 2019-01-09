@@ -8,6 +8,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 
 
@@ -47,29 +48,28 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
 
     this.loginService.login(this.username.value, this.password.value)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(token => {
         this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.token);
         const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
         this.router.navigate(['/home/' + endPoint]);
-      })
-      , error => {
-        console.error(error.message);
+      }, error => {
+        console.error('message: ' + error.message + '   status: ' + error.status);
         if (error instanceof HttpErrorResponse) {
-          if (error.status === 400) {
+          if (error.status === 401) {
             this.loginForm.reset();
             this.badCredencialsError();
             this.loginForm.markAsPristine();
-          } else if (error.status === 0) {
-            this.snackbarService.openSnackBar('Servidor caido', RESULT_ERROR);
+            this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
+            this.router.navigate(['/login']);
           } else {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          }
-
-        } else {
-          this.snackbarService.openSnackBar('Error al logearse, intente nuevamente', RESULT_ERROR);
+            this.snackbarService.openSnackBar('Error al Logearse, intente nuevamente', RESULT_ERROR);
+            this.router.navigate(['/login']);
         }
-        this.isLoading = false;
-      };
+
+
+        }
+      });
   }
 
   badCredencialsError() {

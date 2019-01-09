@@ -18,19 +18,19 @@ export class TeacherGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('TeacherGuard#canActivate called');
+        //console.log('TeacherGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
         //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('TeacherGuard#canActivateChild called');
+        //console.log('TeacherGuard#canActivateChild called');
         return this.canActivate(route, state);
     }
 
     canLoad(route: Route): boolean {
-        console.log('TeacherGuard#canLoad called');
+        //console.log('TeacherGuard#canLoad called');
         const url = `/${route.path}`;
         return this.checkLogin(url);
     }
@@ -38,7 +38,7 @@ export class TeacherGuard implements CanActivate, CanActivateChild, CanLoad {
     checkLogin(url: string): boolean {
         const roles = this.loginService.getRoles();
         if (roles.includes(ROLE_TEACHER)) {
-            console.log('checkLogin: true');
+            //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');

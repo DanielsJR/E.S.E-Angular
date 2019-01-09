@@ -18,26 +18,26 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('AuthGuard#canActivate called');
+        //console.log('AuthGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
         //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('AuthGuard#canActivateChild called');
+        //console.log('AuthGuard#canActivateChild called');
         return this.canActivate(route, state);
     }
 
     canLoad(route: Route): boolean {
-        console.log('AuthGuard#canLoad called');
+        //console.log('AuthGuard#canLoad called');
         const url = `/${route.path}`;
         return this.checkLogin(url);
     }
 
     checkLogin(url: string): boolean {
         if (this.loginService.hasPrivileges()) {
-            console.log('checkLogin: true');
+           //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');

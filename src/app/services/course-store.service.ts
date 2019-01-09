@@ -108,7 +108,7 @@ export class CourseStoreService {
             );
     }
 
-    delete(course: Course | string): Observable<boolean> {
+    delete(course: Course | string): Observable<Course> {
         return this.courseBackendService.delete(course)
             .pipe(
                 tap(_ => {
@@ -125,7 +125,9 @@ export class CourseStoreService {
 
 
     //************userStore CHIEF_TEACHER
-    updateChiefTeacher(teacher: User) {
+
+    //one to one
+    updateChiefTeacher2(teacher: User) {
         let curso = this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id);
         if (curso) {
             curso.chiefTeacher = teacher;
@@ -138,6 +140,24 @@ export class CourseStoreService {
         }
     }
 
+    //one to many
+    updateChiefTeacher(teacher: User) {
+        if (this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id)) {
+
+            this.dataStore.courses.forEach((c, index) => {
+                if (c.chiefTeacher.id === teacher.id) {
+                    c.chiefTeacher = teacher;
+                    this.dataStore.courses[index] = c;
+                }
+            });
+
+            this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+            this.subjectStoreService.updateTeacherInSubjectStore(teacher);
+
+        }
+    }
+
+
 
     //************userStore STUDENTS
     private isStudentInACourse(student: User | string, students: User[]): boolean {
@@ -149,7 +169,8 @@ export class CourseStoreService {
         return found;
     }
 
-    updateStudentInCourseStore(student: User) {
+    //one to one
+    updateStudentInCourseStore2(student: User) {
         let curso = this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students));
         if (curso) {
             curso.students.forEach((item, index) => {
@@ -164,6 +185,28 @@ export class CourseStoreService {
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 this.subjectStoreService.updateCourseInSubjectStore(curso);
             }
+        }
+    }
+
+    //one to many
+    updateStudentInCourseStore(student: User) {
+        if (this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students))) {
+
+                this.dataStore.courses.forEach((c, index) => {
+                    if (this.isStudentInACourse(student, c.students)) {
+                        c.students.forEach((item, index) => {
+                            if (item.id === student.id) {
+                                c.students[index] = student;
+                            }
+                        });
+                        this.dataStore.courses[index] = c;
+                        this.subjectStoreService.updateCourseInSubjectStore(c);
+                    }
+                });
+
+                this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                
+            
         }
     }
 

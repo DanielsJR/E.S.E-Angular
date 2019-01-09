@@ -53,7 +53,8 @@ import { UsersComponent } from './users.component';
   exports: [
     UsersComponent,
     SearchUserDialogComponent,
-    CrudUserDialogComponent
+    CrudUserDialogComponent,
+    CardUserDialogComponent,
 
   ]
 

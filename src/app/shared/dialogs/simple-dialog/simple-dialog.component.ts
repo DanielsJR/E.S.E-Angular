@@ -1,6 +1,5 @@
 import { Component, Output, Input, EventEmitter } from "@angular/core";
-import { User } from "../../../models/user";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatDialog, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
 import { SimpleDialogRefComponent } from "./simple-dialog-ref/simple-dialog-ref.component";
 import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ERROR } from "../../../app.config";
 import { Avatar } from "../../../models/avatar";
@@ -14,7 +13,7 @@ import { Avatar } from "../../../models/avatar";
 
 export class SimpleDialogComponent {
 
-    @Output() objSelected = new EventEmitter<any>();
+    //@Output() objSelected = new EventEmitter<any>();
     @Input() obj: any;
     @Input() icon: string;
     @Input() dialogTitle: string;
@@ -22,7 +21,10 @@ export class SimpleDialogComponent {
     @Input() subtitle: string;
     @Input() avatar: Avatar;
     @Input() message: string;
-    @Input() actionButton: string;
+    @Input() actionButton1: string;
+    @Input() actionButton2: string;
+    @Input() actionButton3: string;
+    @Input() cancelButton: string;
     @Input() type: string;
 
 
@@ -30,7 +32,7 @@ export class SimpleDialogComponent {
 
     ngOnInit() { }
 
-    openSimpleDialog(): void {
+    openSimpleDialog(): MatDialogRef<SimpleDialogRefComponent> {
         let data = {
             obj: (this.obj) ? this.obj : null,
             icon:this.icon,
@@ -39,7 +41,10 @@ export class SimpleDialogComponent {
             subtitle: this.subtitle,
             message: this.message,
             avatar: (this.avatar) ? this.avatar : null,
-            actionButton: this.actionButton,
+            actionButton1: this.actionButton1,
+            actionButton2: this.actionButton2,
+            actionButton3: this.actionButton3,
+            cancelButton: this.cancelButton,
             type: this.type
         };
         let config = new MatDialogConfig();
@@ -48,8 +53,9 @@ export class SimpleDialogComponent {
         config.width = this.type === 'delete-classic' ? '500px' : '320px';
         config.height = 'auto';
 
-        let dialogRef = this.dialog.open(SimpleDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
+        return this.dialog.open(SimpleDialogRefComponent, config);
+    /* let  dialogRef = this.dialog.open(SimpleDialogRefComponent, config);  
+     dialogRef.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ACCEPT) {
@@ -59,7 +65,8 @@ export class SimpleDialogComponent {
                 console.log(RESULT_ERROR);
 
             }
-        });
+        });*/
     }
+    
 
 }

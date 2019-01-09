@@ -10,5 +10,10 @@ export class Grade {
         public type?: string,
         public title?: string,
         public date?: string,
+       
+        public createdBy?:string,
+        public createdDate?:string,
+        public lastModifiedUser?:string,
+        public lastModifiedDate?:string,
     ) { }
 }

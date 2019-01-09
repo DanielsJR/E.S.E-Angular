@@ -101,11 +101,11 @@ export class SubjectStoreService {
                 ));
     }
 
-    delete(subject: Subject | string): Observable<boolean> {
+    delete(subject: Subject | string): Observable<Subject> {
         return this.subjectBackendService.delete(subject)
             .pipe(
                 tap(_ => {
-                    let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject : subject.id));
+                    let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject: subject.id));
                     if (index != -1) {
                         this.dataStore.subjects.splice(index, 1);
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);

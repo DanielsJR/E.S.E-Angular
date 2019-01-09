@@ -19,19 +19,19 @@ export class StudentGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private loginService: LoginService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('StudentGuard#canActivate called');
+        //console.log('StudentGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
         //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        console.log('StudentGuard#canActivateChild called');
+        //console.log('StudentGuard#canActivateChild called');
         return this.canActivate(route, state);
     }
 
     canLoad(route: Route): boolean {
-        console.log('StudentGuard#canLoad called');
+        //console.log('StudentGuard#canLoad called');
         const url = `/${route.path}`;
         return this.checkLogin(url);
     }
@@ -39,7 +39,7 @@ export class StudentGuard implements CanActivate, CanActivateChild, CanLoad {
     checkLogin(url: string): boolean {
         const roles = this.loginService.getRoles();
         if (roles.includes(ROLE_STUDENT)) {
-            console.log('checkLogin: true');
+            //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');

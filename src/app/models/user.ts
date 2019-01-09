@@ -17,7 +17,12 @@ export class User {
         public commune?: string,
         public roles?: string[],
         public token?: string,
-        public active?: boolean
+        public active?: boolean,
+
+        public createdBy?:string,
+        public createdDate?:string,
+        public lastModifiedUser?:string,
+        public lastModifiedDate?:string,
 
     ) { }
 

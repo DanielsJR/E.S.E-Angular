@@ -63,19 +63,26 @@
             <mat-icon svgIcon="pencil"></mat-icon>
           </button>
 
-          <button *ngIf="areaRole === roleManager" mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
+          <button *ngIf="areaRole === roleManager" mat-icon-button color="warn" (click)="deleteSubject(deleteSubjectDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteDialog [obj]="subject" [icon]="'school'" [dialogTitle]="'Eliminar Asignatura'"
-            [message]="'Eliminar esta Asignatura?'" [title]="subject.name + '/' + subject.course.name" [subtitle]="(subject.teacher | shortName) + ', Profesor' "
-            [avatar]="subject.teacher.avatar" [type]="'delete-classic'" (objSelected)="deleteSubject($event)"></nx-simple-dialog>
+          <nx-simple-dialog #deleteSubjectDialog
+            [obj]="subject"
+            [icon]="'school'"
+            [dialogTitle]="'Eliminar Asignatura'"
+            [message]="'Eliminar esta Asignatura?'"
+            [title]="subject.name + '/' + subject.course.name"
+            [subtitle]="(subject.teacher | shortName) + ', Profesor' "
+            [avatar]="subject.teacher.avatar"
+            [type]="'delete-classic'">
+          </nx-simple-dialog>
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
+      <mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['../../detail',subject.id]">
 
       </mat-row>
 

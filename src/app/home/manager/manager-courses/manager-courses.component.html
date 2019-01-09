@@ -16,7 +16,7 @@
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="book-multiple"></mat-icon>
-          &nbsp; Cursos
+           &nbsp; Cursos / <span>{{courseYear?.year}}</span>
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
@@ -59,7 +59,7 @@
           </button>
 
 
-          <button mat-icon-button color="warn" (click)="deleteDialog.openSimpleDialog();$event.stopPropagation()">
+          <button mat-icon-button color="warn" (click)="deleteCourse(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
@@ -69,10 +69,9 @@
             [dialogTitle]="'Eliminar Curso'"
             [title]="course.name"
             [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
-            [message]="'Eliminar este curso?'" 
-            [avatar]="course.chiefTeacher.avatar"
-            [type]="'delete-classic'"
-            (objSelected)="deleteCourse($event)">
+            [message]="'¿Eliminar este Curso?'" 
+            [avatar]="course?.chiefTeacher?.avatar"
+            [type]="'delete-classic'">
           </nx-simple-dialog>
           
 
@@ -80,7 +79,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
+      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]" [ngClass]="rowClasses">
 
       </mat-row>
 

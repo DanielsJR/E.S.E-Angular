@@ -25,7 +25,7 @@
       <mat-list style="flex-grow: 8">
         <mat-list-item>
           <img matListAvatar *ngIf="(teacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
-            alt="{{t?.username}}" (click)="imageZoomT.openDialogImage()">
+            alt="{{t?.username}}" (click)="userCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
           <h3 matLine *ngIf="(teacher) as t">{{ t | shortNameLastname}}</h3>
           <p matLine>
             <span class="role-style">Profesor</span>
@@ -36,7 +36,9 @@
           </button>
         </mat-list-item>
       </mat-list>
-      <nx-image-zoom-user #imageZoomT [avatar]="teacher?.avatar"></nx-image-zoom-user>
+      <nx-card-user-dialog #cardTeacherDialog [user]="teacher" [areaRole]="areaRole"></nx-card-user-dialog>
+      <!--<nx-image-zoom-user #imageZoomT [avatar]="teacher?.avatar"></nx-image-zoom-user>-->
+      <!--@ViewChild--><nx-crud-user-dialog></nx-crud-user-dialog>
       <nx-crud-user-dialog #crudUserDialogT [user]="teacher" [uriRole]="'/teachers'" [areaRole]="areaRole"></nx-crud-user-dialog>
     </mat-toolbar>
     <mat-divider></mat-divider>
@@ -51,22 +53,22 @@
           <mat-list style="flex-grow: 8">
             <mat-list-item>
               <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
-                alt="{{student?.username}}" (click)="imageZoomS.openDialogImage()">
+                alt="{{student?.username}}" 
+                (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
-          <nx-image-zoom-user #imageZoomS [avatar]="student?.avatar"></nx-image-zoom-user>
+          <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"></nx-card-user-dialog>
+          <!--<nx-image-zoom-user #imageZoomS [avatar]="student?.avatar"></nx-image-zoom-user>-->
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
-          <button mat-mini-fab matTooltip="Agregar Evaluación" (click)="openDialogCreate(subject)">
-            <mat-icon svgIcon="plus"></mat-icon>
-          </button>
+
         </mat-header-cell>
 
         <mat-cell *matCellDef="let student" class="crud">
@@ -104,7 +106,7 @@
 
   </mat-card>
 
-  <nx-subjects-quiz [subject]="subject" [areaRole]="areaRole"></nx-subjects-quiz>
+  <nx-subjects-quiz *ngIf="subject" [subject]="subject" [areaRole]="areaRole"></nx-subjects-quiz>
 
 </div>
 

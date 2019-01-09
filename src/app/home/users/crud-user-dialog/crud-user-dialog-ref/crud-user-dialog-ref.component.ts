@@ -21,7 +21,6 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { LoginService } from '../../../../login/login.service';
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { UserLoggedService } from '../../../../services/user-logged.service';
 
 
 @Component({
@@ -62,10 +61,10 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.uriRole = data.uriRole;
         this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
         this.userLoggedRoles.push(data.areaRole);
-        this.onlyRead = data.onlyRead
+        this.onlyRead = (data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
 
         console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: '
-            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead);
+            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead + ' usersRole ' + this.usersRole);
     }
 
     ngOnInit(): void {

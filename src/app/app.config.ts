@@ -55,6 +55,9 @@ export const RESULT_EDIT = "edit";
 export const RESULT_DETAIL= "detail";
 export const RESULT_DELETE = "delete";
 export const RESULT_ACCEPT = "accept";
+export const RESULT_ACTION1 = "action1";
+export const RESULT_ACTION2 = "action2";
+export const RESULT_ACTION3 = "action3";
 
 
 
