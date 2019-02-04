@@ -14,6 +14,8 @@ import { CourseStoreService } from '../../../services/course-store.service';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { shortNameSecondName } from '../../../shared/functions/shortName';
 import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../app.config';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 
 @Component({
@@ -49,7 +51,9 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
 
   constructor(public dialogRef: MatDialogRef<SubjectsCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
     public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
-    private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService) {
+    private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
+    private snackbarService: SnackbarService,
+  ) {
 
     console.log('type: ' + data.type);
     this.subject = this.data.subject;
@@ -196,18 +200,19 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   }
 
   create() {
-    //let subject: Subject = new Subject();
     let subject: Subject = Object.assign({}, this.subject);
     subject.name = this.subjectName.value;
-    //subject.course = this.course;
     subject.teacher = this.teacher;
     this.isLoading = true;
     this.subjectStoreService.create(subject)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
-        , err => {
-          this.dialogRef.close(RESULT_ERROR)
-          console.error("Error creating Subject: " + err);
+        , error => {
+          if (error instanceof HttpErrorResponse) {
+            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
+          } else {
+            this.snackbarService.openSnackBar('Error al Crear Asignatura', RESULT_ERROR);
+          }
         }
 
       );
@@ -222,9 +227,12 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.subjectStoreService.update(subject)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
-        , err => {
-          this.dialogRef.close(RESULT_ERROR)
-          console.error("Error editing Subject: " + err);
+        , error => {
+          if (error instanceof HttpErrorResponse) {
+            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
+          } else {
+            this.snackbarService.openSnackBar('Error al Editar Asignatura', RESULT_ERROR);
+          }
         }
 
       );

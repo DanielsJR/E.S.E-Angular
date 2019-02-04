@@ -37,12 +37,12 @@ export class AppAuthInterceptor implements HttpInterceptor {
 
                         if (err.status === 403) {
                             this.snackbarService.openSnackBar('Role Insuficiente', RESULT_ERROR);
-                            this.router.navigate(['/login']);
+                            //this.router.navigate(['/login']);
 
-                        } else {
-                            this.snackbarService.openSnackBar('Error! session expirada', RESULT_ERROR);
-                            this.router.navigate(['/login']);
+                        } else if (err.status === 401) {
+                            this.snackbarService.openSnackBar('No Autorizado', RESULT_ERROR);
                         }
+
                     }
 
                 }));

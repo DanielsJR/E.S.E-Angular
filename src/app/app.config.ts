@@ -13,7 +13,7 @@ export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 export const API_SERVER = 'http://192.168.1.30:8080/api/v0';
 export const API_GENERIC_URI = '/api/v0';
 
-export const URI_TOKEN_AUTH = "/token/generate-token";
+export const URI_TOKEN_AUTH = '/token/generate-token';
 
 export const URI_USERS = '/users';
 export const URI_ADMINS = '/admins';
@@ -33,6 +33,9 @@ export const URI_STUDENT = '/students';
 export const URI_COURSES = '/courses';
 export const URI_SUBJECTS = '/subjects';
 export const URI_GRADES = '/grades';
+export const URI_QUIZES = '/quizes';
+export const URI_QUIZES_STUDENT = '/quizes-student';
+
 
 
 
@@ -48,16 +51,16 @@ export const ROLE_STUDENT_SPANISH  = 'Estudiante';
 
 
 //*******************SNACKBAR---DIALOG_REF*************************/
-export const RESULT_SUCCESS = "success";
-export const RESULT_CANCELED = "canceled";
-export const RESULT_ERROR = "error";
-export const RESULT_EDIT = "edit";
-export const RESULT_DETAIL= "detail";
-export const RESULT_DELETE = "delete";
-export const RESULT_ACCEPT = "accept";
-export const RESULT_ACTION1 = "action1";
-export const RESULT_ACTION2 = "action2";
-export const RESULT_ACTION3 = "action3";
+export const RESULT_SUCCESS = 'success';
+export const RESULT_CANCELED = 'canceled';
+export const RESULT_ERROR = 'error';
+export const RESULT_EDIT = 'edit';
+export const RESULT_DETAIL= 'detail';
+export const RESULT_DELETE = 'delete';
+export const RESULT_ACCEPT = 'accept';
+export const RESULT_ACTION1 = 'action1';
+export const RESULT_ACTION2 = 'action2';
+export const RESULT_ACTION3 = 'action3';
 
 
 

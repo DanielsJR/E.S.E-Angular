@@ -81,7 +81,9 @@ export class SubjectStoreService {
                 tap(data => {
                     this.dataStore.subjects.push(data);
                     this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                }, error => console.error('could not create subject, ' + error.message)
+                }, error => {
+                    console.error('could not create subject, ' + error.message);
+                }
                 ));
     }
 
@@ -95,7 +97,7 @@ export class SubjectStoreService {
                     if (index != -1) {
                         this.dataStore.subjects[index] = data;
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        this.gradeStoreService.updateSubjectInGradeStore(data); 
+                        this.gradeStoreService.updateSubjectInGradeStore(data);
                     }
                 }, err => console.error("Error updating subject" + err.message)
                 ));
@@ -105,11 +107,11 @@ export class SubjectStoreService {
         return this.subjectBackendService.delete(subject)
             .pipe(
                 tap(_ => {
-                    let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject: subject.id));
+                    let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject : subject.id));
                     if (index != -1) {
                         this.dataStore.subjects.splice(index, 1);
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        this.gradeStoreService.deleteSubjectInGradeStore(subject); 
+                        this.gradeStoreService.deleteSubjectInGradeStore(subject);
                     }
                 }, err => console.error("Error deleting subject" + err.message)
                 ));

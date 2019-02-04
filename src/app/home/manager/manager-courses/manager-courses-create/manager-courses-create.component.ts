@@ -116,13 +116,13 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
     this.courseStoreService.create(this.course)
       .subscribe(_ => {
-        this.snackbarService.openSnackBar('Curso agregado', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar('Curso Creado', RESULT_SUCCESS);
         this.gotoCourses();
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
         } else {
-          this.snackbarService.openSnackBar('Error al agregar curso', RESULT_ERROR);
+          this.snackbarService.openSnackBar('Error al Crear curso', RESULT_ERROR);
         }
       });
 

@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -37,10 +38,10 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   roleStudent = ROLE_STUDENT;
   roleTeacher = ROLE_TEACHER;
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
-  
+
   btnDisabled = true;
 
- 
+
 
   // mat table
   displayedColumns = ['firstName', 'crud'];
@@ -204,9 +205,12 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
       .subscribe(_ => this.snackbarService.openSnackBar('Curso Actualizado', RESULT_SUCCESS)
-        , err => {
-          this.snackbarService.openSnackBar('Error al Actualizar Curso', RESULT_ERROR);
-          console.error("Error editing Course: " + err);
+        , error => {
+          if (error instanceof HttpErrorResponse) {
+            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
+          } else {
+            this.snackbarService.openSnackBar('Error al Actualizar curso', RESULT_ERROR);
+          }
         });
 
   }
