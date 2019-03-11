@@ -9,6 +9,7 @@ import { TeacherSubjectsCoursesComponent } from './teacher-subjects/teacher-subj
 import { TeacherSubjectsCoursesSubjectsComponent } from './teacher-subjects/teacher-subjects-courses-subjects.component';
 import { UsersModule } from '../users/users.module';
 import { SubjectsModule } from '../subjects/subejcts.module';
+import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { SubjectsModule } from '../subjects/subejcts.module';
     TeacherSubjectsCoursesSubjectsComponent,
     TeacherSubjectsDetailComponent,
     TeacherSubjectsGradesComponent,
+    TeacherQuizesComponent,
   ],
 
   providers: [

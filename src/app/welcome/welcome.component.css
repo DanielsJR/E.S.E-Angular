@@ -113,3 +113,18 @@ h6 {
     -ms-transform: translate( -2%, -50%);
     transform: translate(-2%, -50%);
 }
+
+
+mat-card,
+.form {
+    --grid-area: 2/2/2/3;
+    z-index: 2;
+}
+
+mat-card {
+    padding: 0;
+}
+
+.right{
+    justify-content: flex-end;
+}

@@ -7,6 +7,7 @@ import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subje
 import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subjects-grades.component';
 import { TeacherSubjectsCoursesComponent } from './teacher-subjects/teacher-subjects-courses.component';
 import { TeacherSubjectsCoursesSubjectsComponent } from './teacher-subjects/teacher-subjects-courses-subjects.component';
+import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
 
 
 const teacherRoutes: Routes = [
@@ -39,6 +40,26 @@ const teacherRoutes: Routes = [
                     {
                         path: 'subjects/grades/:username',
                         component: TeacherSubjectsGradesComponent
+                    },
+
+                    {
+                        path: 'quizes',
+                        component: TeacherQuizesComponent
+                    },
+
+                    {
+                        path: 'quizes/create-quiz',
+                        component: TeacherQuizesComponent
+                    },
+
+                    {
+                        path: 'quizes/take-quiz',
+                        component: TeacherQuizesComponent
+                    },
+
+                    {
+                        path: 'quizes/historical-quiz',
+                        component: TeacherQuizesComponent
                     },
                     
                     {

@@ -1,4 +1,4 @@
-import { LoginService } from '../login/login.service';
+
 
 import { Injectable } from '@angular/core';
 import {
@@ -12,6 +12,7 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { ROLE_MANAGER } from '../app.config';
+import { LoginService } from '../login/login-form/login.service';
 
 
 @Injectable()

@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { ReplaySubject, BehaviorSubject, Observable } from 'rxjs';
 import { UserBackendService } from './user-backend.service';
-import { LoginService } from '../login/login.service';
-import { Router } from '@angular/router';
-import { tap, finalize } from 'rxjs/operators';
+import { tap} from 'rxjs/operators';
 import { IsLoadingService } from './isLoadingService.service';
 
 @Injectable({
@@ -15,8 +13,8 @@ export class UserLoggedService {
     private userLoggedSource = new ReplaySubject<User>(1);//<BehaviorSubject<User>>new BehaviorSubject(null);// new Subject<User>();
     userLogged$ = this.userLoggedSource.asObservable();
 
-    constructor(private userBackendService: UserBackendService, private loginService: LoginService,
-        private isLoadingService: IsLoadingService, private router: Router) { }
+    constructor(private userBackendService: UserBackendService,
+        private isLoadingService: IsLoadingService,) { }
 
     userLoggedNext(user: User) {
         console.log('userLogged NEXT=======>');

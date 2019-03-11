@@ -14,17 +14,22 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 
 <div [style.overflow]="'hidden'" [@tdCollapse]="trigger">
 
-<mat-list-item [routerLink]="['./teacher/create-quiz']">
+<mat-list-item [routerLink]="['./teacher/quizes']">
+  <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box-outline"></mat-icon>
+    <h3 matLine>Mis Pruebas</h3>
+</mat-list-item>
+
+<mat-list-item [routerLink]="['./teacher/quizes/create-quiz']">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box-outline"></mat-icon>
     <h3 matLine>Crear Prueba</h3>
 </mat-list-item>
 
-<mat-list-item [routerLink]="['./teacher/take-quiz']">
+<mat-list-item [routerLink]="['./teacher/quizes/take-quiz']">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box"></mat-icon>
     <h3 matLine>Tomar Prueba</h3>
 </mat-list-item>
 
-<mat-list-item [routerLink]="['./teacher/historical-quiz']">
+<mat-list-item [routerLink]="['./teacher/quizes/historical-quiz']">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box-multiple"></mat-icon>
     <h3 matLine>Historial de Pruebas</h3>
 </mat-list-item>

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { API_SERVER, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TOKEN_AUTH, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
+
 import { HttpClient } from '@angular/common/http';
-import { LocalStorageService } from '../services/local-storage.service';
 import { Observable } from 'rxjs';
-import { SessionStorageService } from '../services/session-storage.service';
-import { Token } from '../models/token';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { SessionStorageService } from '../../services/session-storage.service';
+
+import { API_SERVER, URI_TOKEN_AUTH, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../../app.config';
+import { Token } from '../../models/token';
 
 
 @Injectable()

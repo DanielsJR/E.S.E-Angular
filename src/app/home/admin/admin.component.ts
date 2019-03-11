@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
-import { LoginService } from '../../login/login.service';
+
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { GradeStoreService } from '../../services/grade-store.service';
+import { LoginService } from '../../login/login-form/login.service';
 
 @Component({
     template: `

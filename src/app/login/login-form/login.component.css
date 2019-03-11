@@ -1,0 +1,52 @@
+
+
+form .login-content {
+    position: absolute;
+    padding: 0 45px;
+    top: 100px;
+    bottom: 0;
+    line-height: 4.5em;
+    overflow: hidden;
+}
+
+.unauthMessage {
+    position: relative;
+    top: 20px;
+    color: red;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+}
+
+.login-actions {
+    position: relative;
+    display: block;
+    margin: auto;
+    width: 60%;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+mat-form-field {
+    width: 100%
+}
+
+h1 {
+    font-size: 27px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}
+
+span {
+    font-family: 'Fascinate', sans-serif;
+    font-size: 15px;
+}
+
+
+

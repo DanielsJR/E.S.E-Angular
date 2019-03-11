@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './error-pages/page-not-found.component';
 import { AppRoutingModule } from './app.routing';
-import { LoginModule } from './login/login.module';
 import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -13,6 +12,7 @@ import { MatIconRegistry } from '@angular/material';
 import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { Router } from '@angular/router';
+import { LoginHostModule } from './login/login-host/login-host.module';
 
 
 
@@ -21,9 +21,12 @@ import { Router } from '@angular/router';
   imports: [
     // BrowserModule,
     BrowserAnimationsModule,
+
     SharedModule,
+    
     WelcomeModule,
-    LoginModule,
+    LoginHostModule,
+
     AppRoutingModule, // after the other modules with routes
     HttpClientModule,
     MatMomentDateModule,

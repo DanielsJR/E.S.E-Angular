@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
-import { LoginService } from '../login/login.service';
+
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
@@ -12,6 +12,7 @@ import { UserLoggedService } from '../services/user-logged.service';
 import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
+import { LoginService } from '../login/login-form/login.service';
 
 
 @Component({

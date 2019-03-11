@@ -4,10 +4,10 @@ import { SessionStorageService } from '../../services/session-storage.service';
 import { SESSION_STORAGE_THEME_KEY } from '../../app.config';
 import { Theme } from './theme';
 import { THEMESDARK, THEMESLIGHT } from './themes';
-import { LoginService } from '../../login/login.service';
 import { ThemeService } from './theme.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { User } from '../../models/user';
+import { LoginService } from '../../login/login-form/login.service';
 
 
 
@@ -121,7 +121,7 @@ export class ThemePickerComponent implements OnInit {
     }
   }
 
-  saveThemeOnServer(id: string, theme: Theme) {
+  private saveThemeOnServer(id: string, theme: Theme) {
     if (this.loginService.hasPrivileges()) {
       this.themeService.saveTheme(id, theme).subscribe();
     }

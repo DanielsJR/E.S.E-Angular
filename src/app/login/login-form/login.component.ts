@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from './login.service';
-import { User } from '../models/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR } from '../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
-import { LocalStorageService } from '../services/local-storage.service';
-import { noWhitespaceValidator } from '../shared/validators/no-white-space-validator';
-import { SnackbarService } from '../services/snackbar.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/internal/operators/finalize';
-
+import { LocalStorageService } from '../../services/local-storage.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
+import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR } from '../../app.config';
 
 
 @Component({
@@ -63,7 +61,7 @@ export class LoginComponent implements OnInit {
             this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
             this.router.navigate(['/login']);
           } else {
-            this.snackbarService.openSnackBar('Error al Logearse, intente nuevamente', RESULT_ERROR);
+            this.snackbarService.openSnackBar('al Logearse, intente nuevamente', RESULT_ERROR);
             this.router.navigate(['/login']);
         }
 

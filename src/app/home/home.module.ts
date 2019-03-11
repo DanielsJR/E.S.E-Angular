@@ -22,7 +22,6 @@ import { ManagerSubjectsMenuComponent } from './menus/manager-subjects-menu.comp
     HomeRoutingModule,
     CovalentFileModule,
     
-
   ],
 
   declarations: [

@@ -18,9 +18,10 @@ import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patte
 import { Avatar } from '../../../../models/avatar';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
-import { LoginService } from '../../../../login/login.service';
+
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { LoginService } from '../../../../login/login-form/login.service';
 
 
 @Component({

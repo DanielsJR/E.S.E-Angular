@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'nx-welcome',
   templateUrl: './welcome.component.html',
@@ -10,6 +11,10 @@ export class WelcomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  get year() {
+    return new Date().getFullYear();
   }
 
 }

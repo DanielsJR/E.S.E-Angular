@@ -12,7 +12,6 @@ import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { IsLoadingService } from './isLoadingService.service';
 import { LocalStorageService } from './local-storage.service';
-import { LoginService } from '../login/login.service';
 
 
 @Injectable({
