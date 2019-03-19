@@ -7,7 +7,8 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
-import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR } from '../../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
+import { UserLoggedService } from '../../services/user-logged.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
 
   constructor(private formBuilder: FormBuilder, private loginService: LoginService,
+    private userLoggedService: UserLoggedService,
     private localStorageService: LocalStorageService, private snackbarService: SnackbarService,
     private router: Router
   ) { }
@@ -48,9 +50,11 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.username.value, this.password.value)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(token => {
-        this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.token);
-        const endPoint = this.loginService.getPrivilege().toLocaleLowerCase();
-        this.router.navigate(['/home/' + endPoint]);
+        // this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.tokenValue);
+        this.localStorageService.setToken(token.token);
+        const endPoint = '/' + this.userLoggedService.getPrivilege().toLocaleLowerCase();
+        this.router.navigate([URI_HOME + endPoint]);
+
       }, error => {
         console.error('message: ' + error.message + '   status: ' + error.status);
         if (error instanceof HttpErrorResponse) {
@@ -59,11 +63,11 @@ export class LoginComponent implements OnInit {
             this.badCredencialsError();
             this.loginForm.markAsPristine();
             this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
-            this.router.navigate(['/login']);
+            this.router.navigate([URI_LOGIN]);
           } else {
             this.snackbarService.openSnackBar('al Logearse, intente nuevamente', RESULT_ERROR);
-            this.router.navigate(['/login']);
-        }
+            this.router.navigate([URI_LOGIN]);
+          }
 
 
         }

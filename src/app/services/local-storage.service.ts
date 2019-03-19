@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
-import { default as decode } from 'jwt-decode';
+//import { default as decode } from 'jwt-decode';
 import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
+import * as decode from 'jwt-decode';
 
 
 @Injectable({
     providedIn: 'root',
 })
+
 export class LocalStorageService {
 
-    constructor() { }
+
+    jwtDecode = decode;
+
+    constructor() {  }
 
     isStored(key: string): boolean {
         return (this.getItem(key) !== null);
@@ -19,49 +24,57 @@ export class LocalStorageService {
     }
 
     setItem(key: string, value: any): void {
-        localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(key, value);
     }
 
     removeItem(key: string): void {
         localStorage.removeItem(key);
     }
 
-    signOut() {
+    clearLocalStorage() {
         localStorage.clear();
     }
 
 
     //**********--TOKEN--**************
+
+    setToken(token: string): void {
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
+    }
+
+
     isTokenStored(): boolean {
         return (this.isStored(LOCAL_STORAGE_TOKEN_KEY));
     }
 
-    getFullToken(): string {
-        if (this.isTokenStored()) return localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY).slice(1, -1);
-        console.error('getFullToken() no token stored');
+    getToken(): string {
+        return (this.isTokenStored()) ? this.getItem(LOCAL_STORAGE_TOKEN_KEY) : null;
     }
 
     getExpireDate() {
-        if(this.isTokenStored()) return decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).exp;
-        console.error('getExpireDate() no token stored');
+        return (this.isTokenStored()) ? this.jwtDecode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).exp : null;
     }
 
     isTokenExpired(): boolean {
         if (this.isTokenStored()) return (this.getExpireDate() < (Date.now().valueOf() / 1000));
-        console.error('isTokenExpired() no token stored');
         return true;
     }
 
     getTokenUsername(): string {
-        if (this.isTokenStored()) return decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).sub;
-        console.error('getTokenUsername() no token stored');
+        return (this.isTokenStored()) ? this.jwtDecode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)).sub : null;
+    }
+
+    private getTokenRolesSplited() {
+        let paidLoad = this.jwtDecode(this.getItem(LOCAL_STORAGE_TOKEN_KEY));
+        return paidLoad.scopes.replace(/ROLE_/g, '').split(",");
     }
 
     getTokenRoles(): string[] {
-        let tokenPayload = (this.isTokenStored()) ? decode(this.getItem(LOCAL_STORAGE_TOKEN_KEY)) : null;
-        if (tokenPayload != null && !this.isTokenExpired()) return tokenPayload.scopes.replace(/ROLE_/g, '').split(",");
-        console.error('getTokenRoles() tokenPayload: null or token expired');
-        return [];
+        if (!this.isTokenExpired()) {
+            return this.getTokenRolesSplited();
+        } else {
+            return [];
+        }
     }
 
 

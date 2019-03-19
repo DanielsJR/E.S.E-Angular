@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
-import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR, URI_TOKEN_AUTH, API_SERVER } from './app.config';
+import { RESULT_ERROR, URI_TOKEN_AUTH, API_SERVER, URI_LOGIN } from './app.config';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SnackbarService } from './services/snackbar.service';
@@ -12,16 +12,19 @@ import { SnackbarService } from './services/snackbar.service';
 
 @Injectable()
 export class AppAuthInterceptor implements HttpInterceptor {
-    constructor(private localStorageService: LocalStorageService, private router: Router, private snackbarService: SnackbarService, ) { }
+    constructor(
+        private localStorageService: LocalStorageService,
+        private router: Router,
+        private snackbarService: SnackbarService,
+    ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const loginUrl = API_SERVER + URI_TOKEN_AUTH;
         if (!req.headers.has('Authorization') && (req.url.search(loginUrl) === -1)) {
-            if ((this.localStorageService.isStored(LOCAL_STORAGE_TOKEN_KEY))) {
-                let token = this.localStorageService.getFullToken();
+            if ((!this.localStorageService.isTokenExpired())) {
                 const authReq = req.clone({
                     setHeaders: {
-                        'Authorization': 'Bearer ' + token,
+                        'Authorization': 'Bearer ' + this.localStorageService.getToken(),
                         'Content-Type': 'application/json'
                     }
                 });
@@ -52,14 +55,13 @@ export class AppAuthInterceptor implements HttpInterceptor {
                         // do stuff with response if you want
                     }
                 }, (err: any) => {
-                    console.error('**from interceptor** no token in local storage!', err.message);
-                    this.router.navigate(['/login']);
+                    console.error('**from interceptor** token expired or null', err.message);
+                    this.router.navigate([URI_LOGIN]);
                 }
                 ));
             }
         } else {
-            // has authorization or it's logining
-           // console.log('**from interceptor** go on');
+            // console.log('**from interceptor** has authorization or it's logining');
             return next.handle(req);
         }
     }

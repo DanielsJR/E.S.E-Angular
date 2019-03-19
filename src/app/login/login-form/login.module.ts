@@ -19,11 +19,6 @@ import { StudentGuard } from '../../guards/student-guard.service';
     ],
 
   providers: [
-    AuthGuard,
-    AdminGuard,
-    ManagerGuard,
-    TeacherGuard,
-    StudentGuard,
     LoginService
   ],
   exports: [

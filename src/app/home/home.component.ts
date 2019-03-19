@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
-
 import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
-import { LocalStorageService } from '../services/local-storage.service';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
@@ -26,9 +24,9 @@ import { LoginService } from '../login/login-form/login.service';
 export class HomeComponent implements OnInit, OnDestroy {
 
   user: User;
-  privilege = this.loginService.getPrivilege();
-  roles = this.loginService.getRoles();
-  uriRole = this.loginService.uriRole;
+  privilege = this.userLoggedService.getPrivilege();
+  roles = this.userLoggedService.getRoles();
+  uriRole = this.userLoggedService.getUriRole();
 
   @ViewChild(ThemePickerComponent) themePicker: ThemePickerComponent;
 
@@ -61,9 +59,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private router: Router, private localStorageService: LocalStorageService,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer, private isLoadingService: IsLoadingService,
-    private route: ActivatedRoute
+    private router: Router, private route: ActivatedRoute,
+    private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    private isLoadingService: IsLoadingService,
+   
   ) { }
 
   ngOnInit() {
@@ -77,8 +76,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.route.data
       .subscribe((data: { theme: Theme }) => {
         if (data.theme) this.themePicker.installTheme(data.theme);
-        if (this.loginService.redirectUrl && (this.loginService.tokenUsername === this.user.username))
-          this.router.navigate([this.loginService.redirectUrl]);
+        if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
+          this.router.navigate([this.userLoggedService.redirectUrl]);
       });
 
 

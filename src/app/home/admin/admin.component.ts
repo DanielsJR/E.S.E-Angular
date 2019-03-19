@@ -5,6 +5,7 @@ import { UserStoreService } from '../../services/user-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { GradeStoreService } from '../../services/grade-store.service';
 import { LoginService } from '../../login/login-form/login.service';
+import { UserLoggedService } from '../../services/user-logged.service';
 
 @Component({
     template: `
@@ -14,7 +15,7 @@ import { LoginService } from '../../login/login-form/login.service';
 export class AdminComponent implements OnInit, OnDestroy {
     constructor(
         private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService, private loginService: LoginService,
+        private subjectStoreService: SubjectStoreService, private userLoggedService: UserLoggedService,
         private gradeStoreService: GradeStoreService
     ) { }
 
@@ -23,11 +24,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 
         this.userStoreService.loadAllManagers();
 
-        if (this.loginService.isManager()) {
+        if (this.userLoggedService.isManager()) {
             this.userStoreService.loadAllTeachers();
             this.userStoreService.loadAllStudents();
     
-            this.courseStoreService.loadAllCourses(2018); 
+            this.courseStoreService.loadAllCourses('2018'); 
             
             this.subjectStoreService.loadAllSubjects();
  

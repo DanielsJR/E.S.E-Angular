@@ -11,13 +11,14 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
-import { ROLE_MANAGER } from '../app.config';
+import { ROLE_MANAGER, URI_LOGIN } from '../app.config';
 import { LoginService } from '../login/login-form/login.service';
+import { UserLoggedService } from '../services/user-logged.service';
 
 
 @Injectable()
 export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService, private router: Router) { }
+    constructor(private userLoggedService: UserLoggedService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         //console.log('ManagerGuard#canActivate called');
@@ -38,16 +39,15 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     checkLogin(url: string): boolean {
-        const roles = this.loginService.getRoles();
+        const roles = this.userLoggedService.getRoles();
         if (roles.includes(ROLE_MANAGER)) {
             //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');
-            this.loginService.getTokenUsername();
-            this.loginService.redirectUrl = url;
-            console.log('ManagerGuard#attempted url: ' + url + ' tokenUsername: '+ this.loginService.tokenUsername);
-            this.router.navigate(['/login']);
+            this.userLoggedService.redirectUrl = url;
+            console.log('ManagerGuard#attempted url: ' + url + ' tokenUsername: '+ this.userLoggedService.getTokenUsername());
+            this.router.navigate([URI_LOGIN]);
             return false;
         }
     }

@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import {
     ActivatedRouteSnapshot,
@@ -11,12 +9,13 @@ import {
     Router,
     RouterStateSnapshot,
 } from '@angular/router';
-import { LoginService } from '../login/login-form/login.service';
+import { UserLoggedService } from '../services/user-logged.service';
+import { URI_LOGIN } from '../app.config';
 
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private loginService: LoginService, private router: Router) { }
+    constructor(private userLoggedService: UserLoggedService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         //console.log('AuthGuard#canActivate called');
@@ -37,15 +36,14 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     checkLogin(url: string): boolean {
-        if (this.loginService.hasPrivileges()) {
+        if (this.userLoggedService.hasPrivileges()) {
            //console.log('checkLogin: true');
             return true;
         } else {
             console.error('checkLogin: false');
-            this.loginService.getTokenUsername();
-            this.loginService.redirectUrl = url;
-            console.log('AuthGuard#attempted url: ' + url + ' tokenUsername: ' + this.loginService.tokenUsername);
-            this.router.navigate(['/login']);
+            this.userLoggedService.redirectUrl = url;
+            console.log('AuthGuard#attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.getTokenUsername());
+            this.router.navigate([URI_LOGIN]);
             return false;
         }
     }

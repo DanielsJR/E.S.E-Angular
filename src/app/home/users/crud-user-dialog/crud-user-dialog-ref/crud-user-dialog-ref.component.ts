@@ -22,6 +22,7 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { LoginService } from '../../../../login/login-form/login.service';
+import { UserLoggedService } from '../../../../services/user-logged.service';
 
 
 @Component({
@@ -54,7 +55,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private userStoreService: UserStoreService, private loginService: LoginService,
+        private userStoreService: UserStoreService, private userLoggedService: UserLoggedService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
 
     ) {
@@ -72,7 +73,7 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.buildForm();
         if (this.data.type === 'create') this.setAvatarCreateDefault();
 
-        this.isAdmin = this.loginService.isAdmin();
+        this.isAdmin = this.userLoggedService.isAdmin();
 
     }
 

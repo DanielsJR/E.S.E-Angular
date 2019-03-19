@@ -51,21 +51,20 @@ export class GradeStoreService {
 
     loadOneGrade(title: string) {
         console.log(`********loadOneGrade()-FROM-BACKEND********`);
-        this.isLoadingGet.next(true);
         this.gradeBackendService.getGradeByTitle(title)
-            .pipe(finalize(() => this.isLoadingGet.next(false)))
             .subscribe(data => {
-
                 let notFound = true;
                 this.dataStore.grades.forEach((item, index) => {
                     if (item.id === data.id) {
+                        console.log('found (updates)');
                         this.dataStore.grades[index] = data;
                         notFound = false;
                         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
                     }
                 });
 
-                if (notFound && this.gradesSource.getValue().length) {
+                if (notFound) {
+                    console.log('not found (adds)');
                     this.dataStore.grades.push(data)
                     this.gradesSource.next(Object.assign({}, this.dataStore).grades);
                 }
@@ -76,8 +75,10 @@ export class GradeStoreService {
     }
 
     create(grade: Grade): Observable<Grade> {
+        this.isLoadingService.isLoadingTrue();
         return this.gradeBackendService.create(grade)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     this.dataStore.grades.push(data);
                     this.gradesSource.next(Object.assign({}, this.dataStore).grades);
@@ -101,7 +102,7 @@ export class GradeStoreService {
                 ));
     }
 
-    delete(grade: Grade | string): Observable<boolean> {
+    delete(grade: Grade | string): Observable<Grade> {
         return this.gradeBackendService.delete(grade)
             .pipe(
                 tap(_ => {

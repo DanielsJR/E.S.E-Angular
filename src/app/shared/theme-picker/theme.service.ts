@@ -3,13 +3,13 @@ import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Theme } from './theme';
-import { API_SERVER } from '../../app.config';
+import { API_SERVER, URI_THEME, URI_PREFERENCES } from '../../app.config';
 
 
 @Injectable()
 export class ThemeService {
 
-    private themeURL = API_SERVER + '/preferences/theme';
+    private themeURL = API_SERVER + URI_PREFERENCES + URI_THEME;
 
     constructor(private httpCli: HttpClient) { }
 
@@ -22,8 +22,8 @@ export class ThemeService {
             );
     }
 
-    saveTheme(id: string, theme: Theme): Observable<boolean> {
-        const url = `${this.themeURL}/${id}`;
+    saveTheme(userId: string, theme: Theme): Observable<boolean> {
+        const url = `${this.themeURL}/${userId}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<boolean>(url, theme)
             .pipe(

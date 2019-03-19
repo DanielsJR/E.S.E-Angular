@@ -12,15 +12,12 @@ import { MatCard } from '@angular/material';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { Theme } from '../shared/theme-picker/theme';
 import { By } from '@angular/platform-browser';
+import { httpStub, routerStub } from '../testing/stubs';
 
 
-describe('WelcomeComponent', () => {
+describe('Welcome Component', () => {
   let component: WelcomeComponent;
   let fixture: ComponentFixture<WelcomeComponent>;
-
-  let loginServiceStub: Partial<LoginService>;
-  let httpStub: Partial<HttpClient>;
-  let routerStub: Partial<Router>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

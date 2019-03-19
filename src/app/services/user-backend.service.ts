@@ -48,7 +48,7 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<boolean>(url).pipe(
-            tap(_ => console.log(`deleted user id=${username}`))
+            tap(_ => console.log(`deleted user username=${username}`))
         );
     }
 

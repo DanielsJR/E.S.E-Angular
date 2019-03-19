@@ -5,13 +5,12 @@ import { LoginHostModule } from './login-host.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { httpStub, routerStub } from '../../testing/stubs';
 
-describe('LoginHostComponent', () => {
+describe('Login Host Component', () => {
   let component: LoginHostComponent;
   let fixture: ComponentFixture<LoginHostComponent>;
 
-  let httpStub: Partial<HttpClient>;
-  let routerStub: Partial<Router>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,7 +32,7 @@ describe('LoginHostComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

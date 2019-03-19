@@ -29,11 +29,11 @@ export class CourseStoreService {
         this.dataStore = { courses: [] };
     }
 
-    loadAllCourses(year: number) {
-        if (this.coursesSource.getValue().length) {
+    loadAllCourses(year: string) {
+      /*  if (this.coursesSource.getValue().length) {
             console.log(`********GET-Courses-FROM-CACHE********`);
             this.coursesSource.next(this.dataStore.courses);
-        } else {
+        } else {*/
             console.log(`********GET-Courses-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
             this.courseBackendService.getCourses(year)
@@ -48,33 +48,33 @@ export class CourseStoreService {
                     }
                 }, error => console.error('error retrieving cursos, ' + error.message)
                 );
-        }
+        //}
 
     }
 
-    loadOneCourse(name: string, year: number) {
+    loadOneCourse(name: string, year: string) {
         console.log(`********loadOneCourse()-FROM-BACKEND********`);
-        if (!this.coursesSource.getValue().length) this.isLoadingGet.next(true);
         this.courseBackendService.getCourseByName(name, year)
-            .pipe(finalize(() => this.isLoadingGet.next(false)))
             .subscribe(data => {
                 let notFound = true;
-
                 this.dataStore.courses.forEach((item, index) => {
                     if (item.id === data.id) {
+                        console.log('found (updates)');
                         this.dataStore.courses[index] = data;
                         notFound = false;
+                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                     }
                 });
 
                 if (notFound) {
+                    console.log('not found (adds)');
                     this.dataStore.courses.push(data);
+                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 }
 
-                this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            }, error => console.log('Could not load course.'));
-    }
 
+            }, error => console.log('Could not load course.', error));
+    }
 
     create(course: Course): Observable<Course> {
         this.isLoadingService.isLoadingTrue();
@@ -87,9 +87,6 @@ export class CourseStoreService {
                 }, error => console.error('could not create User, ' + error.message)
                 ));
     }
-
-
-
 
     update(course: Course): Observable<Course> {
         this.isLoadingService.isLoadingTrue();
@@ -104,8 +101,7 @@ export class CourseStoreService {
                         this.subjectStoreService.updateCourseInSubjectStore(data);
                     }
                 }, err => console.error("Error updating Manager" + err.message)
-                )
-            );
+                ));
     }
 
     delete(course: Course | string): Observable<Course> {
@@ -127,7 +123,7 @@ export class CourseStoreService {
     //************userStore CHIEF_TEACHER
 
     //one to one
-    updateChiefTeacher2(teacher: User) {
+    updateChiefTeacherInCourseStoreOneToOne(teacher: User) {
         let curso = this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id);
         if (curso) {
             curso.chiefTeacher = teacher;
@@ -137,11 +133,13 @@ export class CourseStoreService {
                 this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 this.subjectStoreService.updateTeacherInSubjectStore(teacher);
             }
+        } else {
+            console.log('not found');
         }
     }
 
     //one to many
-    updateChiefTeacher(teacher: User) {
+    updateChiefTeacherInCourseStoreOneToMany(teacher: User) {
         if (this.dataStore.courses.find(c => c.chiefTeacher.id === teacher.id)) {
 
             this.dataStore.courses.forEach((c, index) => {
@@ -155,12 +153,16 @@ export class CourseStoreService {
             this.subjectStoreService.updateTeacherInSubjectStore(teacher);
 
         }
+        else {
+            console.log('not found');
+        }
     }
 
 
 
     //************userStore STUDENTS
-    private isStudentInACourse(student: User | string, students: User[]): boolean {
+    //private
+    isStudentInACourse(student: User | string, students: User[]): boolean {
         let found = false;
         students.forEach(s => {
             if (s.id === ((typeof student === 'string') ? student : student.id))
@@ -170,7 +172,7 @@ export class CourseStoreService {
     }
 
     //one to one
-    updateStudentInCourseStore2(student: User) {
+    updateStudentInCourseStoreOneToOne(student: User) {
         let curso = this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students));
         if (curso) {
             curso.students.forEach((item, index) => {
@@ -189,29 +191,29 @@ export class CourseStoreService {
     }
 
     //one to many
-    updateStudentInCourseStore(student: User) {
+    updateStudentInCourseStoreOnetoMany(student: User) {
         if (this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students))) {
 
-                this.dataStore.courses.forEach((c, index) => {
-                    if (this.isStudentInACourse(student, c.students)) {
-                        c.students.forEach((item, index) => {
-                            if (item.id === student.id) {
-                                c.students[index] = student;
-                            }
-                        });
-                        this.dataStore.courses[index] = c;
-                        this.subjectStoreService.updateCourseInSubjectStore(c);
-                    }
-                });
+            this.dataStore.courses.forEach((c, index) => {
+                if (this.isStudentInACourse(student, c.students)) {
+                    c.students.forEach((item, index) => {
+                        if (item.id === student.id) {
+                            c.students[index] = student;
+                        }
+                    });
+                    this.dataStore.courses[index] = c;
+                    this.subjectStoreService.updateCourseInSubjectStore(c);
+                }
+            });
 
-                this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                
-            
+            this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+
+
         }
     }
 
 
-    deleteStudentInCourseStore(student: User | string) {
+    deleteStudentInCourseStoreOneToOne(student: User | string) {
         let curso = this.dataStore.courses.find(c => this.isStudentInACourse(student, c.students));
         if (curso) {
             curso.students.forEach((item, index) => {

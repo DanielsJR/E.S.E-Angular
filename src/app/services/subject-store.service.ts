@@ -16,7 +16,6 @@ import { GradeStoreService } from "./grade-store.service";
 })
 export class SubjectStoreService {
 
-
     private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     public readonly subjects$ = this.subjectsSource.asObservable();
     private dataStore: { subjects: Subject[] };
@@ -54,30 +53,33 @@ export class SubjectStoreService {
 
     loadOneSubject(name: string) {
         console.log(`********loadOneSubject()-FROM-BACKEND********`);
-        if (!this.subjectsSource.getValue().length) this.isLoadingGet.next(true);
         this.subjectBackendService.getSubjectByName(name)
-            .pipe(finalize(() => this.isLoadingGet.next(false)))
             .subscribe(data => {
                 let notFound = true;
-
                 this.dataStore.subjects.forEach((item, index) => {
                     if (item.id === data.id) {
+                        console.log('found (updates)');
                         this.dataStore.subjects[index] = data;
                         notFound = false;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                     }
                 });
 
                 if (notFound) {
+                    console.log('not found (adds)');
                     this.dataStore.subjects.push(data);
+                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                 }
 
-                this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+
             }, error => console.log('Could not load subject.'));
     }
 
     create(subject: Subject): Observable<Subject> {
+        this.isLoadingService.isLoadingTrue();
         return this.subjectBackendService.create(subject)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     this.dataStore.subjects.push(data);
                     this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
@@ -122,17 +124,18 @@ export class SubjectStoreService {
 
     //************courseStore
     updateCourseInSubjectStore(course: Course) {
-
         this.dataStore.subjects.forEach((subject, index) => {
             if (subject.course.id === course.id) {
                 subject.course = course;
                 this.dataStore.subjects[index] = subject;
+                this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+            } else {
+                console.log('not found');
             }
         });
 
-        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-    }
 
+    }
 
     deleteCorseInSubjectStore(course: Course | string) {
         //TODO
@@ -152,10 +155,11 @@ export class SubjectStoreService {
             if (subject.teacher.id === teacher.id) {
                 subject.teacher = teacher;
                 this.dataStore.subjects[index] = subject;
+                this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+            } else {
+                console.log('not found');
             }
         });
-        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-
     }
 
 }

@@ -7,8 +7,6 @@ import { THEMESDARK, THEMESLIGHT } from './themes';
 import { ThemeService } from './theme.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { User } from '../../models/user';
-import { LoginService } from '../../login/login-form/login.service';
-
 
 
 @Component({
@@ -29,11 +27,9 @@ export class ThemePickerComponent implements OnInit {
   private saveTheme: Theme;
   private installed: boolean;
 
-  constructor(
-    public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService,
-    private loginService: LoginService, private themeService: ThemeService, private userLoggedService: UserLoggedService
+  constructor(public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService,
+    private themeService: ThemeService, private userLoggedService: UserLoggedService
   ) {
-
     this.defaultTheme = this.themesLight[4];//new Theme( 'indigo-pink', false, '#3F51B5' );
   }
 
@@ -48,10 +44,8 @@ export class ThemePickerComponent implements OnInit {
   }
 
   private theme(): Theme {
-    if (this.sessionStorage.isStored(SESSION_STORAGE_THEME_KEY))
-      return new Theme(this.sessionStorage.getTheme(), this.sessionStorage.isDarkTheme());
+    return this.sessionStorage.getTheme();
   }
-
 
   get themeName(): string {
     if (this.theme()) return this.theme().name;
@@ -69,7 +63,7 @@ export class ThemePickerComponent implements OnInit {
 
   installTheme(theme: Theme): void {
     this.overlayContainer.getContainerElement().classList.remove(this.themeName);
-    this.sessionStorage.setItem(SESSION_STORAGE_THEME_KEY, theme);
+    this.sessionStorage.setTheme(SESSION_STORAGE_THEME_KEY, theme);
     this.overlayContainer.getContainerElement().classList.add(theme.name);
     this.selectTheme();
     this.installed = true;
@@ -91,7 +85,7 @@ export class ThemePickerComponent implements OnInit {
     const darkThemeName = this.themeName + '-dark';
     const darkTheme = new Theme(darkThemeName, true);
     this.installTheme(darkTheme);
-    if (this.loginService.hasPrivileges()) this.saveThemeOnServer(this.user.id, darkTheme);
+    if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, darkTheme);
   }
 
   installLightTheme(): void {
@@ -99,7 +93,7 @@ export class ThemePickerComponent implements OnInit {
       const lightThemeName = this.themeName.slice(0, -5);
       const lightTheme = new Theme(lightThemeName, false);
       this.installTheme(lightTheme);
-      if (this.loginService.hasPrivileges()) this.saveThemeOnServer(this.user.id, lightTheme);
+      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, lightTheme);
     } else {
       this.installDarkTheme();
     }
@@ -112,7 +106,7 @@ export class ThemePickerComponent implements OnInit {
   }
 
   getThemeFromServer(id: string) {
-    if (this.loginService.hasPrivileges()) {
+    if (this.userLoggedService.hasPrivileges()) {
       this.themeService.getTheme(id).subscribe(theme => {
         if (theme) {
           this.installTheme(theme);
@@ -121,9 +115,9 @@ export class ThemePickerComponent implements OnInit {
     }
   }
 
-  private saveThemeOnServer(id: string, theme: Theme) {
-    if (this.loginService.hasPrivileges()) {
-      this.themeService.saveTheme(id, theme).subscribe();
+  private saveThemeOnServer(userId: string, theme: Theme) {
+    if (this.userLoggedService.hasPrivileges()) {
+      this.themeService.saveTheme(userId, theme).subscribe();
     }
 
   }

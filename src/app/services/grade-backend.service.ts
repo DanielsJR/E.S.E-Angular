@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_GRADES } from "../app.config";
+import { API_SERVER, URI_GRADES, URI_TITLE, URI_STUDENT } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -48,11 +48,11 @@ export class GradeBackendService {
             );
     }
 
-    delete(grade: Grade | string): Observable<boolean> {
+    delete(grade: Grade | string): Observable<Grade> {
         const gradeId = (typeof grade === 'string') ? grade : grade.id;
         const url = `${this.gradeURL}/${gradeId}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<boolean>(url)
+        return this.httpCli.delete<Grade>(url)
             .pipe(
                 tap(_ => console.log(`deleted Grade id=${gradeId}`))
             );
@@ -68,7 +68,7 @@ export class GradeBackendService {
     }
 
     getGradeByTitle(title: string): Observable<Grade> {
-        const url = `${this.gradeURL}/title/${title}`;
+        const url = `${this.gradeURL}${URI_TITLE}/${title}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Grade>(url)
             .pipe(retry(3),
@@ -78,7 +78,7 @@ export class GradeBackendService {
 
 
     getGradesByStudent(id: string): Observable<Grade[]> {
-        const url = `${this.gradeURL}/student/${id}`;
+        const url = `${this.gradeURL}${URI_STUDENT}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Grade[]>(url)
             .pipe(retry(3),

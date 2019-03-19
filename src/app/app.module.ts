@@ -13,6 +13,11 @@ import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/materia
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { Router } from '@angular/router';
 import { LoginHostModule } from './login/login-host/login-host.module';
+import { AuthGuard } from './guards/auth-guard.service';
+import { AdminGuard } from './guards/admin-guard.service';
+import { ManagerGuard } from './guards/manager-guard.service';
+import { TeacherGuard } from './guards/teacher-guard.service';
+import { StudentGuard } from './guards/student-guard.service';
 
 
 
@@ -44,6 +49,11 @@ import { LoginHostModule } from './login/login-host/login-host.module';
     { provide: MAT_DATE_LOCALE, useValue: 'es' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    AuthGuard,
+    AdminGuard,
+    ManagerGuard,
+    TeacherGuard,
+    StudentGuard,
   ],
 
 

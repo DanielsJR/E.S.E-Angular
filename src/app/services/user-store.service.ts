@@ -38,7 +38,7 @@ export class UserStoreService {
     isLoadingGetStudents$ = this.isLoadingGetStudents.asObservable();
 
 
-    constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService,private gradeStoreService: GradeStoreService) {
+    constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService, private gradeStoreService: GradeStoreService) {
         this.dataStore = { managers: [], teachers: [], students: [], oneStudent: null }
     }
 
@@ -72,24 +72,9 @@ export class UserStoreService {
         console.log(`********loadOneManager()-FROM-BACKEND********`);
         this.userBackendService.getUserById(id, this.managerUriRole)
             .subscribe(data => {
-                let notFound = true;
-
-                this.dataStore.managers.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        this.dataStore.managers[index] = data;
-                        notFound = false;
-                    }
-                });
-
-                if (notFound) {
-                    this.dataStore.managers.push(data);
-                }
-
-                this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            }, error => console.log('Could not load manager.'));
+                this.updateInManagerDataStore(data);
+            }, error => console.log('Could not load manager.', error));
     }
-
-
 
     createManager(newUser: User): Observable<User> {
         return this.userBackendService.create(newUser, this.managerUriRole).pipe(
@@ -98,6 +83,7 @@ export class UserStoreService {
                 this.managersSource.next(Object.assign({}, this.dataStore).managers);
             }, err => console.error("Error creating Manager" + err.message)
             ));
+
     }
 
     updateManager(user: User): Observable<User> {
@@ -108,7 +94,7 @@ export class UserStoreService {
                     this.dataStore.managers[index] = data;
                     this.managersSource.next(Object.assign({}, this.dataStore).managers);
                     this.updateInTeacherDataStore(data);
-                    if (data.roles.includes(ROLE_TEACHER)) this.courseStoreService.updateChiefTeacher(data);
+                    if (data.roles.includes(ROLE_TEACHER)) this.courseStoreService.updateChiefTeacherInCourseStoreOneToMany(data);
                 }
             }, err => console.error("Error updating Manager" + err.message)
             ));
@@ -135,7 +121,7 @@ export class UserStoreService {
                     data.roles.includes(this.managerRole) ? this.dataStore.managers[index] = data : this.dataStore.managers.splice(index, 1);
                     this.managersSource.next(Object.assign({}, this.dataStore).managers);
                     this.updateInTeacherDataStore(data);
-                }
+                } else { console.error("not found") }
             }, err => console.error("Error setting Roles Manager" + err.message)
             ));
     }
@@ -144,17 +130,23 @@ export class UserStoreService {
         let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
 
         if ((index != -1) && user.roles.includes(this.managerRole)) {
+            console.log('found and includes role (it updates)');
             this.dataStore.managers[index] = user;
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
 
         } else if ((index != -1)) {
+            console.log('found and not includes role (it deletes)');
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
 
         } else if ((index = -1) && user.roles.includes(this.managerRole)) {
+            console.log('not found and includes role (it adds)');
             this.dataStore.managers.push(user);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
+        } else {
+            console.log('not found and not includes role (it does nothing)')
         }
+
     }
 
     deleteInManagerDataStore(user: User): void {
@@ -163,6 +155,9 @@ export class UserStoreService {
         if ((index != -1)) {
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
+        }
+        else {
+            console.error('not found in deleteInManagerDataStore()');
         }
     }
 
@@ -192,21 +187,8 @@ export class UserStoreService {
         console.log(`********loadOneTeacher()-FROM-BACKEND********`);
         this.userBackendService.getUserById(id, this.teacherUriRole)
             .subscribe(data => {
-                let notFound = true;
-
-                this.dataStore.teachers.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        this.dataStore.teachers[index] = data;
-                        notFound = false;
-                    }
-                });
-
-                if (notFound) {
-                    this.dataStore.teachers.push(data);
-                }
-
-                this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            }, error => console.log('Could not load teacher.'));
+                this.updateInTeacherDataStore(data);
+            }, error => console.log('Could not load teacher. ', error));
     }
 
     createTeacher(newUser: User): Observable<User> {
@@ -226,7 +208,7 @@ export class UserStoreService {
                     this.dataStore.teachers[index] = data;
                     this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
                     this.updateInManagerDataStore(data);
-                    this.courseStoreService.updateChiefTeacher(data);
+                    this.courseStoreService.updateChiefTeacherInCourseStoreOneToMany(data);
                 }
             }, err => console.error("Error updating teacher")
             ));
@@ -262,16 +244,21 @@ export class UserStoreService {
         let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
 
         if ((index != -1) && user.roles.includes(this.teacherRole)) {
+            console.log('found and includes role (it updates)');
             this.dataStore.teachers[index] = user;
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
 
         } else if ((index != -1)) {
+            console.log('found and not includes role (it deletes)');
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
 
         } else if ((index = -1) && user.roles.includes(this.teacherRole)) {
+            console.log('not found and includes role (it adds)');
             this.dataStore.teachers.push(user);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+        } else {
+            console.log('not found and not includes role (it does nothing)');
         }
 
     }
@@ -309,27 +296,28 @@ export class UserStoreService {
 
     }
 
-    loadOneStudent(username: string) {
+    loadOneStudent(id: string) {
         console.log(`********loadOneStudent()-FROM-BACKEND********`);
-        this.userBackendService.getUserByUsername(username, this.studentUriRole)
+        this.userBackendService.getUserById(id, this.studentUriRole)
             .subscribe(data => {
-
                 let notFound = true;
                 this.dataStore.students.forEach((item, index) => {
                     if (item.id === data.id) {
+                        console.log('found (updates)');
                         this.dataStore.students[index] = data;
                         notFound = false;
                         this.studentsSource.next(Object.assign({}, this.dataStore).students);
                     }
                 });
 
-                if (notFound && this.studentsSource.getValue().length) {
+                if (notFound) {
+                    console.log('not found (adds)');
                     this.dataStore.students.push(data);
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
                 }
 
 
-            }, error => console.log('Could not load student.'));
+            }, error => console.log('Could not load student.', error));
     }
 
     createStudent(newUser: User): Observable<User> {
@@ -348,7 +336,7 @@ export class UserStoreService {
                 if (index != -1) {
                     this.dataStore.students[index] = data;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.updateStudentInCourseStore(data);
+                    this.courseStoreService.updateStudentInCourseStoreOnetoMany(data);
                     this.gradeStoreService.updateStudentInGradeStore(data);
                 }
             }, err => console.error("Error updating student")
@@ -362,7 +350,7 @@ export class UserStoreService {
                 if (index != -1) {
                     this.dataStore.students.splice(index, 1);
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.deleteStudentInCourseStore(user);
+                    this.courseStoreService.deleteStudentInCourseStoreOneToOne(user);
                     //this.gradeStoreService.deleteStudentInGradeStore(user);
                 }
             }, err => console.error("Error deleting student")

@@ -1,5 +1,5 @@
 import { Injectable } from "../../../node_modules/@angular/core";
-import { API_SERVER, URI_COURSES } from "../app.config";
+import { API_SERVER, URI_COURSES, URI_YEAR, URI_NAME } from "../app.config";
 import { HttpClient } from "../../../node_modules/@angular/common/http";
 import { Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
@@ -18,8 +18,8 @@ export class CourseBackendService {
     constructor(private httpCli: HttpClient) { }
 
 
-    getCourses(year:number): Observable<Course[]> {
-        const url = `${this.courseURL}/year/${year}`;
+    getCourses(year:string): Observable<Course[]> {
+        const url = `${this.courseURL}${URI_YEAR}/${year}`;
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Course[]>(url)
             .pipe(retry(3),
@@ -70,8 +70,8 @@ export class CourseBackendService {
             );
     }
 
-    getCourseByName(name: string, year: number): Observable<Course> {
-        const url = `${this.courseURL}/name/${name}/${year}`;
+    getCourseByName(name: string, year: string): Observable<Course> {
+        const url = `${this.courseURL}${URI_NAME}/${name}/${year}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Course>(url)
             .pipe(retry(3),
