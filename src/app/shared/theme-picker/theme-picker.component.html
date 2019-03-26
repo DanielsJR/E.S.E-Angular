@@ -1,20 +1,17 @@
 <div matTooltip="Tema Oscuro" *ngIf="!isDark" style="display: inline">
-    <button mat-icon-button (click)="installDarkTheme()">
+    <button id="btnDark" mat-icon-button (click)="installDarkTheme()">
         <mat-icon svgIcon="brightness-7"></mat-icon>
     </button>
 </div>
 
 <div matTooltip="Tema Claro" *ngIf="isDark" style="display: inline">
-    <button mat-icon-button (click)="installLightTheme()">
+    <button id="btnLight" mat-icon-button (click)="installLightTheme()">
         <mat-icon svgIcon="brightness-5"></mat-icon>
     </button>
 </div>
 
 <div matTooltip="Selecciona un Tema!" style="display: inline">
-    <button mat-icon-button [matMenuTriggerFor]="themeMenu">
-       <!-- <mat-icon svgIcon="color-helper" style="position: absolute; top: 50%; left: 50%;
-         transform: translate(-50%, -50%);"></mat-icon>
-        <mat-icon svgIcon="format-color-fill" ></mat-icon> -->
+    <button id = "btnMenu" mat-icon-button [matMenuTriggerFor]="themeMenu">
         <mat-icon svgIcon="palette"></mat-icon>
     </button>
 </div>

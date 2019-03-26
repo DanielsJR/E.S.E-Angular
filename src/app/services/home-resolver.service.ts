@@ -31,9 +31,9 @@ export class HomeResolverService implements Resolve<Theme> {
             .pipe(
                 switchMap(user => this.themeService.getTheme(user.id)),
                 take(1),
-                mergeMap(t => {
-                    if (t) {
-                        return of(t);
+                mergeMap(theme => {
+                    if (theme) {
+                        return of(theme);
                     } else {
                         this.router.navigate([URI_WELCOME]);
                         return EMPTY;

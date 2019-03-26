@@ -12,7 +12,6 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { ROLE_MANAGER, URI_LOGIN } from '../app.config';
-import { LoginService } from '../login/login-form/login.service';
 import { UserLoggedService } from '../services/user-logged.service';
 
 
@@ -24,7 +23,6 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
         //console.log('ManagerGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
-        //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

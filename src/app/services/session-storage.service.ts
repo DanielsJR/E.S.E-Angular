@@ -43,8 +43,12 @@ export class SessionStorageService {
         return (this.isStored(SESSION_STORAGE_THEME_KEY)) ? JSON.parse(this.getItem(SESSION_STORAGE_THEME_KEY)) : null;
     }
 
-    setTheme(key: string, theme: Theme): void {
-        sessionStorage.setItem(key, JSON.stringify(theme));
+    setTheme(theme: Theme): void {
+        sessionStorage.setItem(SESSION_STORAGE_THEME_KEY, JSON.stringify(theme));
+    }
+
+    removeTheme(): void {
+        sessionStorage.removeItem(SESSION_STORAGE_THEME_KEY);
     }
 
     isDarkTheme(): boolean {

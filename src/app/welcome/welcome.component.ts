@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Theme } from '../shared/theme-picker/theme';
 
 
 @Component({
@@ -8,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WelcomeComponent implements OnInit {
 
+  initialTheme: Theme;
   constructor() { }
 
   ngOnInit() {
+    this.initialTheme = { name: 'lightblue-lime-dark', color: '#03A9F4', isDark: true };
   }
 
   get year() {

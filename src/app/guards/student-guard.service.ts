@@ -11,7 +11,6 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { ROLE_STUDENT, URI_LOGIN } from '../app.config';
-import { LoginService } from '../login/login-form/login.service';
 import { UserLoggedService } from '../services/user-logged.service';
 
 
@@ -24,7 +23,6 @@ export class StudentGuard implements CanActivate, CanActivateChild, CanLoad {
         //console.log('StudentGuard#canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
-        //return true;
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

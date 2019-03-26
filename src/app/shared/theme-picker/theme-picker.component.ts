@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SessionStorageService } from '../../services/session-storage.service';
-import { SESSION_STORAGE_THEME_KEY } from '../../app.config';
 import { Theme } from './theme';
 import { THEMESDARK, THEMESLIGHT } from './themes';
 import { ThemeService } from './theme.service';
@@ -16,104 +15,93 @@ import { User } from '../../models/user';
   encapsulation: ViewEncapsulation.None
 })
 export class ThemePickerComponent implements OnInit {
-
   themesLight = THEMESLIGHT;
   themesDark = THEMESDARK;
   themeArray: Theme[];
 
+  @Input() initialTheme: Theme;
+  private defaultTheme: Theme = this.themesLight[4]; //indigo-pink
+  private savedTheme: Theme;
+
+  isInstalled: boolean = !!this.sessionStorage.getTheme();
+
   user: User;
 
-  private defaultTheme: Theme;
-  private saveTheme: Theme;
-  private installed: boolean;
-
-  constructor(public overlayContainer: OverlayContainer, private sessionStorage: SessionStorageService,
-    private themeService: ThemeService, private userLoggedService: UserLoggedService
-  ) {
-    this.defaultTheme = this.themesLight[4];//new Theme( 'indigo-pink', false, '#3F51B5' );
-  }
+  constructor(public overlayContainer: OverlayContainer,
+    private sessionStorage: SessionStorageService,
+    private themeService: ThemeService,
+    private userLoggedService: UserLoggedService
+  ) { }
 
   ngOnInit() {
-    this.installed = false;
-    this.overlayContainer.getContainerElement().classList.add(this.themeName);
-    this.selectTheme();
-
+    console.log('**********ngOnInit************* ');
+    if (!this.isInstalled) {
+      this.installTheme((this.initialTheme) ? this.initialTheme : this.defaultTheme);//indigo-pink default
+    }
+    this.overlayContainer.getContainerElement().classList.add(this.theme().name);
+    this.setThemeArray();
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
     });
   }
 
-  private theme(): Theme {
+
+  theme(): Theme {
     return this.sessionStorage.getTheme();
   }
 
   get themeName(): string {
-    if (this.theme()) return this.theme().name;
-    return this.defaultTheme.name;
+    return this.theme().name;
   }
 
   get isDark(): boolean {
-    if (this.theme()) return this.theme().isDark;
-    return this.defaultTheme.isDark;
+    return this.theme().isDark;
   }
 
-  selectTheme(): void {
-    (this.isDark) ? this.themeArray = this.themesDark : this.themeArray = this.themesLight;
+  setThemeArray(): void {
+    this.themeArray = (this.isDark) ? this.themesDark : this.themesLight;
   }
 
   installTheme(theme: Theme): void {
-    this.overlayContainer.getContainerElement().classList.remove(this.themeName);
-    this.sessionStorage.setTheme(SESSION_STORAGE_THEME_KEY, theme);
+    console.log('**********installTheme************* ');
+    let oldThemeName = (this.theme()) ? this.themeName : undefined;
+    this.sessionStorage.setTheme(theme);
+    if (oldThemeName) this.overlayContainer.getContainerElement().classList.remove(oldThemeName);
     this.overlayContainer.getContainerElement().classList.add(theme.name);
-    this.selectTheme();
-    this.installed = true;
+    this.setThemeArray();
+    this.isInstalled = true;
     this.sessionStorage.darkThemeNext();
 
   }
 
   mouseOverTheme(theme: Theme): void {
-    (this.theme()) ? this.saveTheme = this.theme() : this.saveTheme = this.defaultTheme;
+    this.savedTheme = this.theme();
     this.installTheme(theme);
-    this.installed = false;
+    this.isInstalled = false;
   }
 
   mouseOutTheme(): void {
-    if (!this.installed) this.installTheme(this.saveTheme);
+    if (!this.isInstalled) this.installTheme(this.savedTheme);
   }
 
   installDarkTheme(): void {
-    const darkThemeName = this.themeName + '-dark';
-    const darkTheme = new Theme(darkThemeName, true);
-    this.installTheme(darkTheme);
-    if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, darkTheme);
+    if (!this.isDark) {
+      const darkThemeName = this.themeName + '-dark';
+      const darkTheme = this.themesDark.find(t => t.name === darkThemeName);
+      this.installTheme(darkTheme);
+      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, darkTheme);
+    }
   }
 
   installLightTheme(): void {
-    if (this.themeName !== this.defaultTheme.name) {
+    if (this.isDark) {
       const lightThemeName = this.themeName.slice(0, -5);
-      const lightTheme = new Theme(lightThemeName, false);
+      const lightTheme = this.themesLight.find(t => t.name === lightThemeName);
       this.installTheme(lightTheme);
       if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, lightTheme);
-    } else {
-      this.installDarkTheme();
     }
   }
 
-  removeTheme(): void {
-    this.overlayContainer.getContainerElement().classList.remove(this.themeName);
-    this.sessionStorage.removeItem(SESSION_STORAGE_THEME_KEY);
-    this.installed = false;
-  }
-
-  getThemeFromServer(id: string) {
-    if (this.userLoggedService.hasPrivileges()) {
-      this.themeService.getTheme(id).subscribe(theme => {
-        if (theme) {
-          this.installTheme(theme);
-        }
-      }, error => console.error('getThemeFromServer Error!!'));
-    }
-  }
 
   private saveThemeOnServer(userId: string, theme: Theme) {
     if (this.userLoggedService.hasPrivileges()) {

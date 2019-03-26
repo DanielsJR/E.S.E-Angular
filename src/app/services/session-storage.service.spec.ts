@@ -1,7 +1,6 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Theme } from '../shared/theme-picker/theme';
 import { SessionStorageService } from './session-storage.service';
-import { LOCAL_STORAGE_THEME_KEY } from '../app.config';
 
 
 describe('Session Storage Service Theme', () => {
@@ -31,17 +30,17 @@ describe('Session Storage Service Theme', () => {
 
   it('should get Theme', () => {
     expect(sessionStorageService.getTheme()).toBeNull();
-    sessionStorageService.setTheme(LOCAL_STORAGE_THEME_KEY, themeTest);
+    sessionStorageService.setTheme(themeTest);
     expect(sessionStorageService.getTheme()).toBeTruthy();
   });
 
   it('should tell if it is DarkTheme ', () => {
-    sessionStorageService.setTheme(LOCAL_STORAGE_THEME_KEY, themeTest);
+    sessionStorageService.setTheme(themeTest);
     expect(sessionStorageService.isDarkTheme()).toBeFalsy();
   });
 
   it('should emit darkTheme observable', fakeAsync(() => {
-    sessionStorageService.setTheme(LOCAL_STORAGE_THEME_KEY, themeTest);
+    sessionStorageService.setTheme(themeTest);
     sessionStorageService.isThemeDark$.subscribe(data => expect(data).toBeFalsy());
     tick();
 

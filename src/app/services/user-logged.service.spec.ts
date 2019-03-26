@@ -7,7 +7,7 @@ import { asyncData } from '../testing/async-helpers';
 import { adminTest } from '../testing/models';
 import { User } from '../models/user';
 import { LocalStorageService } from './local-storage.service';
-import { ROLE_MANAGER, ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, URI_ADMINS, URI_STUDENTS, URI_TEACHER, URI_MANAGERS, URI_TEACHERS } from '../app.config';
+import { ROLE_MANAGER, ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, URI_ADMINS, URI_STUDENTS, URI_MANAGERS, URI_TEACHERS } from '../app.config';
 
 
 describe('User Logged Service', () => {
@@ -18,7 +18,7 @@ describe('User Logged Service', () => {
 
   beforeEach(() => {
     const spy = jasmine.createSpyObj('UserBackendService', ['getUserByUsernameSecured']);
-
+     
     TestBed.configureTestingModule({
       providers: [
         UserLoggedService,
@@ -32,7 +32,7 @@ describe('User Logged Service', () => {
     userLoggedService = TestBed.get(UserLoggedService);
     userBackendServiceSpy = TestBed.get(UserBackendService);
     localStorageService = TestBed.get(LocalStorageService);
-
+  
   });
 
   afterEach(() => {
@@ -45,7 +45,6 @@ describe('User Logged Service', () => {
 
   it('should get User from Backend', fakeAsync(() => {
     spyOn(userLoggedService, 'userLoggedNext').and.callThrough();
-
     userBackendServiceSpy.getUserByUsernameSecured.and.returnValue(asyncData(adminTest));
 
     let user: User;
@@ -54,7 +53,6 @@ describe('User Logged Service', () => {
 
     expect(user).toEqual(adminTest);
     expect(userLoggedService.userLoggedNext).toHaveBeenCalled();
-
   }));
 
   it('should emit user observable', fakeAsync(() => {
@@ -89,46 +87,37 @@ describe('User Logged Service', () => {
   });
 
   it('should check on hasPrivileges', () => {
-    spyOn(userLoggedService, 'sortRoles').and.callThrough();
-
     expect(userLoggedService.hasPrivileges()).toBeFalsy();
     let spy = spyOn(localStorageService, 'getTokenRoles').and.returnValue([ROLE_ADMIN])
     expect(userLoggedService.hasPrivileges()).toBeTruthy();
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
     spy.and.returnValue([ROLE_MANAGER]);
     expect(userLoggedService.hasPrivileges()).toBeTruthy();
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
     spy.and.returnValue([ROLE_TEACHER]);
     expect(userLoggedService.hasPrivileges()).toBeTruthy();
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
     spy.and.returnValue([ROLE_STUDENT]);
     expect(userLoggedService.hasPrivileges()).toBeTruthy();
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
+
+    spy.and.returnValue([]);
+    expect(userLoggedService.hasPrivileges()).toBeFalsy();
 
   });
 
   it('should getPrivilege', () => {
-    spyOn(userLoggedService, 'sortRoles').and.callThrough();
-
     expect(userLoggedService.getPrivilege()).toEqual('no role');
     let spy = spyOn(localStorageService, 'getTokenRoles').and.returnValue([ROLE_ADMIN, ROLE_MANAGER]);
     expect(userLoggedService.getPrivilege()).toEqual(ROLE_ADMIN);
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
-    spy.and.returnValue([ROLE_TEACHER, ROLE_MANAGER]);
+    spy.and.returnValue([ROLE_MANAGER, ROLE_TEACHER]);
     expect(userLoggedService.getPrivilege()).toEqual(ROLE_MANAGER);
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
-    spy.and.returnValue([ROLE_STUDENT, ROLE_TEACHER]);
+    spy.and.returnValue([ROLE_TEACHER]);
     expect(userLoggedService.getPrivilege()).toEqual(ROLE_TEACHER);
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
     spy.and.returnValue([ROLE_STUDENT]);
     expect(userLoggedService.getPrivilege()).toEqual(ROLE_STUDENT);
-    expect(userLoggedService.sortRoles).toHaveBeenCalled();
 
   });
 
@@ -147,11 +136,7 @@ describe('User Logged Service', () => {
 
   });
 
-  it('should sortRoles', () => {
-    expect(userLoggedService.sortRoles([ROLE_MANAGER, ROLE_ADMIN])).toEqual([ROLE_ADMIN, ROLE_MANAGER]);
-    expect(userLoggedService.sortRoles([ROLE_MANAGER, ROLE_ADMIN, ROLE_TEACHER])).toEqual([ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER]);
-    expect(userLoggedService.sortRoles([ROLE_TEACHER, ROLE_MANAGER])).toEqual([ROLE_MANAGER, ROLE_TEACHER]);
-  });
+
 
 });
 

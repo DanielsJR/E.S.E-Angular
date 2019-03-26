@@ -49,8 +49,8 @@ describe('Welcome Component', () => {
   });
 
   it('should display theme properly', () => {
-    let matCard = fixture.nativeElement.querySelector('#center') as HTMLInputElement;
-    let matSidenavContainer = fixture.nativeElement.querySelector('mat-sidenav-container') as HTMLInputElement;
+    let matCard = fixture.nativeElement.querySelector('#center') as HTMLElement;
+    let matSidenavContainer = fixture.nativeElement.querySelector('mat-sidenav-container') as HTMLElement;
     let themeDebugElement = fixture.debugElement.query(By.css('nx-theme-picker'));
     let theme : ThemePickerComponent = themeDebugElement.componentInstance;
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 //import { default as decode } from 'jwt-decode';
-import { LOCAL_STORAGE_TOKEN_KEY } from '../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
 import * as decode from 'jwt-decode';
 
 
@@ -13,7 +13,7 @@ export class LocalStorageService {
 
     jwtDecode = decode;
 
-    constructor() {  }
+    constructor() { }
 
     isStored(key: string): boolean {
         return (this.getItem(key) !== null);
@@ -69,9 +69,18 @@ export class LocalStorageService {
         return paidLoad.scopes.replace(/ROLE_/g, '').split(",");
     }
 
+    sortRoles(array: string[]): string[] {
+        let pattern = [ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT];
+        return array.sort((a, b) => {
+            if (pattern.indexOf(a) === pattern.indexOf(b))
+                return 0;
+            return pattern.indexOf(a) > pattern.indexOf(b) ? 1 : -1;
+        });
+    }
+
     getTokenRoles(): string[] {
         if (!this.isTokenExpired()) {
-            return this.getTokenRolesSplited();
+            return this.sortRoles(this.getTokenRolesSplited());
         } else {
             return [];
         }

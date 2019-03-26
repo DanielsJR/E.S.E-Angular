@@ -13,8 +13,8 @@ export class ThemeService {
 
     constructor(private httpCli: HttpClient) { }
 
-    getTheme(id: string): Observable<Theme> {
-        const url = `${this.themeURL}/${id}`;
+    getTheme(userId: string): Observable<Theme> {
+        const url = `${this.themeURL}/${userId}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Theme>(url)
             .pipe(

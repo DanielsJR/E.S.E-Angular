@@ -43,17 +43,10 @@ export class UserLoggedService {
             );
     }
 
-    sortRoles(array: string[]): string[] {
-        let pattern = [ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT];
-        return array.sort((a, b) => {
-            if (pattern.indexOf(a) === pattern.indexOf(b))
-                return 0;
-            return pattern.indexOf(a) > pattern.indexOf(b) ? 1 : -1;
-        });
-    }
+
 
     getRoles(): string[] {
-        return this.sortRoles(this.localStorageService.getTokenRoles());
+        return this.localStorageService.getTokenRoles();
     }
 
     getTokenUsername(): string {
