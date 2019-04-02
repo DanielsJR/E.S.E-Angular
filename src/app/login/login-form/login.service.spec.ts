@@ -49,12 +49,10 @@ describe('Login Service', () => {
 
   it('should login', () => {
     const testToken: Token = { token: 'TestToken' };
-    loginService.login('user01', 'password01').subscribe(token =>
-      expect(token).toEqual(testToken)
-    );
+    loginService.login('user01', 'password01')
+      .subscribe(token => expect(token).toEqual(testToken));
 
     const req = httpTestingController.expectOne(loginUrl);
-
     expect(req.request.method).toEqual('POST');
 
     req.flush(testToken);
@@ -64,7 +62,9 @@ describe('Login Service', () => {
   it('should logout', () => {
     spyOn(localStorageService, 'clearLocalStorage');
     spyOn(sessionStorageService, 'clearSessionStorage');
+
     loginService.logout();
+
     expect(loginService.isAuth).toBeFalsy();
     expect(localStorageService.clearLocalStorage).toHaveBeenCalled();
     expect(sessionStorageService.clearSessionStorage).toHaveBeenCalled();
