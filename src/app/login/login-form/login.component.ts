@@ -7,7 +7,7 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
-import { LOCAL_STORAGE_TOKEN_KEY, RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
+import { RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';
 
 
@@ -30,29 +30,27 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('************LOGIN***************');
     this.buildForm();
   }
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required, noWhitespaceValidator]],
-      password: ['', [Validators.required, noWhitespaceValidator]]
+      username: [null, [Validators.required, noWhitespaceValidator]],
+      password: [null, [Validators.required, noWhitespaceValidator]]
     });
   }
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
 
-  onSubmit(): void {
+  login(): void {
     this.isLoading = true;
 
     this.loginService.login(this.username.value, this.password.value)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(token => {
-        // this.localStorageService.setItem(LOCAL_STORAGE_TOKEN_KEY, token.tokenValue);
         this.localStorageService.setToken(token.token);
-        const endPoint = '/' + this.userLoggedService.getPrivilege().toLocaleLowerCase();
+        const endPoint = '/' + this.userLoggedService.getPrivilege().toLowerCase();
         this.router.navigate([URI_HOME + endPoint]);
 
       }, error => {
@@ -61,7 +59,6 @@ export class LoginComponent implements OnInit {
           if (error.status === 401) {
             this.loginForm.reset();
             this.badCredencialsError();
-            this.loginForm.markAsPristine();
             this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
             this.router.navigate([URI_LOGIN]);
           } else {

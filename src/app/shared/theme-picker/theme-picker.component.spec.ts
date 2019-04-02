@@ -1,21 +1,18 @@
-import { async, ComponentFixture, TestBed, inject, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ThemePickerComponent } from './theme-picker.component';
 import { ThemePickerModule } from './theme-picker.module';
 import { HttpClient } from '@angular/common/http';
 import { httpStub } from '../../testing/stubs';
 import { UserLoggedService } from '../../services/user-logged.service';
-import { click } from '../../testing/click-helper';
+import { click } from '../../testing/helper-utilities';
 import { ThemeService } from './theme.service';
-import { managerTest, adminTest } from '../../testing/models';
+import { adminTest } from '../../testing/models';
 import { Theme } from './theme';
-import { JsonPipe } from '@angular/common';
-import { stringify } from '@angular/core/src/util';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { By } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DebugElement, SimpleChange } from '@angular/core';
-import { THEMESLIGHT } from './themes';
+import { DebugElement } from '@angular/core';
 import { asyncData } from '../../testing/async-helpers';
 
 describe('Theme Picker Component', () => {
@@ -31,7 +28,6 @@ describe('Theme Picker Component', () => {
   let sessionStorageService: SessionStorageService;
 
   let themeDarkTest: Theme = { name: 'pink-purple-dark', color: '#E91E63', isDark: true };
-  //let themeLightTest: Theme = { name: 'pink-purple', color: '#E91E63', isDark: false };
   let themeLightTest: Theme = { name: 'red-indigo', color: '#F44336', isDark: false };
 
 
@@ -39,7 +35,6 @@ describe('Theme Picker Component', () => {
     TestBed.configureTestingModule({
       imports: [ThemePickerModule, BrowserAnimationsModule],
       providers: [
-        //ThemeService,
         { provide: HttpClient, useValue: httpStub },
       ]
     })
@@ -132,7 +127,7 @@ describe('Theme Picker Component', () => {
   });
 
   it('should install Theme by clicking', () => {
-    
+
     component.user = adminTest;
     let hasPrivilegesSpy = spyOn(userLoggedService, 'hasPrivileges').and.returnValue(true);
     let saveThemeSpy = spyOn(themeService, 'saveTheme').and.returnValue(asyncData(true));

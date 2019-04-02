@@ -34,7 +34,6 @@ export class ThemePickerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('**********ngOnInit************* ');
     if (!this.isInstalled) {
       this.installTheme((this.initialTheme) ? this.initialTheme : this.defaultTheme);//indigo-pink default
     }
@@ -63,7 +62,6 @@ export class ThemePickerComponent implements OnInit {
   }
 
   installTheme(theme: Theme): void {
-    console.log('**********installTheme************* ');
     let oldThemeName = (this.theme()) ? this.themeName : undefined;
     this.sessionStorage.setTheme(theme);
     if (oldThemeName) this.overlayContainer.getContainerElement().classList.remove(oldThemeName);
