@@ -13,15 +13,19 @@ export class RolesToSpanishPipe implements PipeTransform {
             if (role === ROLE_ADMIN) {
                 role = ROLE_ADMIN_SPANISH;
             }
-            if (role === ROLE_MANAGER) {
+
+            else if (role === ROLE_MANAGER) {
                 role = ROLE_MANAGER_SPANISH;
             }
-            if (role === ROLE_TEACHER) {
+
+            else if (role === ROLE_TEACHER) {
                 role = ROLE_TEACHER_SPANISH;
             }
-            if (role === ROLE_STUDENT) {
+
+            else if (role === ROLE_STUDENT) {
                 role = ROLE_STUDENT_SPANISH;
             };
+
             rolesSpanish.push(role);
         }
         return rolesSpanish.toString().replace(/,/g, ', ');
