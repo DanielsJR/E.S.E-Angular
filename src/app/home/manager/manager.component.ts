@@ -4,7 +4,6 @@ import { UserStoreService } from '../../services/user-store.service';
 
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { GradeStoreService } from '../../services/grade-store.service';
-import { LoginService } from '../../login/login-form/login.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 
 @Component({
@@ -23,17 +22,17 @@ export class ManagerComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         console.log("ManagerComponent ngOnInit() called!!!");
 
-          if (this.userLoggedService.isAdmin()) {
-               this.userStoreService.loadAllManagers();
-           }
-           this.userStoreService.loadAllTeachers();
-           this.userStoreService.loadAllStudents();
-   
-           this.courseStoreService.loadAllCourses('2018'); 
-           
-           this.subjectStoreService.loadAllSubjects();
+        if (this.userLoggedService.isAdmin()) {
+            this.userStoreService.loadAllManagers();
+        }
+        this.userStoreService.loadAllTeachers();
+        this.userStoreService.loadAllStudents();
 
-           this.gradeStoreService.loadAllGrades();
+        this.courseStoreService.loadAllCourses('2018');
+
+        this.subjectStoreService.loadAllSubjects();
+
+        this.gradeStoreService.loadAllGrades();
     }
 
     ngOnDestroy() {

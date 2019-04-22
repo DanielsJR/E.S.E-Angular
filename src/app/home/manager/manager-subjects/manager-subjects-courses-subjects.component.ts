@@ -4,7 +4,7 @@ import { ROLE_MANAGER } from '../../../app.config';
 
 @Component({
   template: `
-  <nx-subjects [areaRole]="areaRole"></nx-subjects>
+  <nx-subjects [areaRole] = "areaRole"></nx-subjects>
   `,
   styles:['']
 })

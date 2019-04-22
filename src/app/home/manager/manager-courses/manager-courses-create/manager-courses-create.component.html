@@ -48,8 +48,8 @@
 
         <mat-list style="flex-grow: 8">
           <mat-list-item>
-            <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
-              alt="{{t?.username}}" (click)="userCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
+            <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
+              alt="{{t?.username}}" (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
             <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
             <p matLine>
               <span class="role-style">Profesor Jefe</span>
@@ -84,8 +84,8 @@
 
             <mat-list style="flex-grow: 8">
               <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
-                  alt="{{student?.username}}" (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar?.type+';base64,' + student?.avatar?.data)"
+                  alt="{{student?.username}}" (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
                 <h3 matLine *ngIf="student"> {{student | shortName}} </h3>
                 <p matLine>
                   <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
@@ -131,7 +131,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
 
         </mat-row>
 

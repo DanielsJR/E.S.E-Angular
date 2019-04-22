@@ -43,7 +43,7 @@ export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -78,13 +78,7 @@ export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
-
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
 
   }
 
@@ -116,13 +110,6 @@ export class SubjectsQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   getPropertySorting = (obj, path) => (
     path.split('.').reduce((o, p) => o && o[p], obj)
   )
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
-  }
 
   selectQuiz(selectedQuiz) {
     this.gradesSubscription2 = this.gradeStoreService.grades$

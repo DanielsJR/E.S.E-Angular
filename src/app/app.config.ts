@@ -74,6 +74,9 @@ export const RESULT_ACTION2 = 'action2';
 export const RESULT_ACTION3 = 'action3';
 
 
+export const WELCOME_ADMIN = 'Bienvenido Sr. ';
+
+
 
 
 

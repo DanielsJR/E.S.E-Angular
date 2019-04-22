@@ -69,25 +69,7 @@ describe('Subject Store Service', () => {
 
   }));
 
-  it('should get one Subject', fakeAsync(() => {
-    let subjects: Subject[];
-    subjectStoreService.subjects$.subscribe(data => subjects = data);
 
-    //not found and adds
-    subjectBackendServiceSpy.getSubjectByName.and.returnValue(asyncData(subjectTest));
-    subjectStoreService.loadOneSubject(subjectTest.name);
-    tick();
-
-    expect(subjects.length).toEqual(1);
-
-    //found and update
-    subjectBackendServiceSpy.getSubjectByName.and.returnValue(asyncData(subjectTest));
-    subjectStoreService.loadOneSubject(subjectTest.name);
-    tick();
-
-    expect(subjects.length).toEqual(1);
-
-  }));
 
   it('should create Subject', fakeAsync(() => {
     let isLoading;

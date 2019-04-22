@@ -48,7 +48,7 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -96,12 +96,7 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
 
   }
 
@@ -121,14 +116,6 @@ export class SubjectDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
-  }
-
 
   goBack() {
     this.router.navigate(['../../courses/',this.subject.course.name], { relativeTo: this.route });

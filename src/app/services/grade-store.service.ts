@@ -16,14 +16,19 @@ import { User } from "../models/user";
 })
 export class GradeStoreService {
     private dataStore: { grades: Grade[], grade: Grade };
-
     private gradesSource = <BehaviorSubject<Grade[]>>new BehaviorSubject([]);
-    public readonly grades$ = this.gradesSource.asObservable();
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetGrades$ = this.isLoadingGet.asObservable();
 
     constructor(private gradeBackendService: GradeBackendService, private isLoadingService: IsLoadingService) {
         this.dataStore = { grades: [], grade: null };
+    }
+
+    get grades$() {
+        return this.gradesSource.asObservable();
+    }
+
+    get isLoadingGetGrades$() {
+        return this.isLoadingGet.asObservable();
     }
 
     loadAllGrades() {
@@ -48,31 +53,7 @@ export class GradeStoreService {
         }
 
     }
-
-    loadOneGrade(title: string) {
-        console.log(`********loadOneGrade()-FROM-BACKEND********`);
-        this.gradeBackendService.getGradeByTitle(title)
-            .subscribe(data => {
-                let notFound = true;
-                this.dataStore.grades.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        console.log('found (updates)');
-                        this.dataStore.grades[index] = data;
-                        notFound = false;
-                        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                    }
-                });
-
-                if (notFound) {
-                    console.log('not found (adds)');
-                    this.dataStore.grades.push(data)
-                    this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                }
-
-
-            }, error => console.log('Could not load Grade.'));
-
-    }
+    
 
     create(grade: Grade): Observable<Grade> {
         this.isLoadingService.isLoadingTrue();

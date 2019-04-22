@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
+import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router, private route: ActivatedRoute,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService,
-   
+
   ) { }
 
   ngOnInit() {
@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.user) {
       if (this.user.username === '111') {
-        this.welcome = 'Bienvenido Sr. ' + this.shortName(this.user);
+        this.welcome = WELCOME_ADMIN + this.shortName(this.user);
       } else {
         this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       }
@@ -120,9 +120,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    location.reload();//cache clean
     this.loginService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate([URI_WELCOME]).then(() => {
+      window.location.reload(true);//cache clean
+    });
+
   }
 
 

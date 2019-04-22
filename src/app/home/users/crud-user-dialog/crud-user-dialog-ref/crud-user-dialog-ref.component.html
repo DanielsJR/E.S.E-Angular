@@ -11,7 +11,7 @@
 
     <mat-list class="listContainer">
         <mat-list-item>
-            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
                 alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
             <h3 matLine> {{user | shortNameLastname}} </h3>
             <p matLine>
@@ -606,7 +606,7 @@
     <div class="listContainer2">
         <mat-list>
             <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
                     alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
                 <h3 matLine> {{user | shortNameLastname}}</h3>
                 <p matLine>

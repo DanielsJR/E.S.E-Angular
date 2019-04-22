@@ -16,6 +16,7 @@ import { newEvent, click } from '../../testing/helper-utilities';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../services/snackbar.service';
+import { httpError401, httpError500 } from '../../testing/models';
 
 
 let component: LoginComponent;
@@ -108,7 +109,6 @@ describe('LoginComponent', () => {
   });
 
   it('should login', fakeAsync(() => {
-
     const testToken: Token = { token: 'TestToken' };
     loginServiceSpy.login.and.returnValue(asyncData(testToken));
     userLoggedServiceSpy.getPrivilege.and.returnValue(ROLE_ADMIN);
@@ -161,12 +161,7 @@ describe('LoginComponent', () => {
   }));
 
   it('should show http error 401', fakeAsync(() => {
-
-    const errorResponse = new HttpErrorResponse({
-      error: 'test 401 error',
-      status: 401, statusText: 'Not Found'
-    });
-    loginServiceSpy.login.and.returnValue(asyncError(errorResponse));
+    loginServiceSpy.login.and.returnValue(asyncError(httpError401));
 
     component.username.setValue('admin');
     component.password.setValue('admin');
@@ -198,12 +193,7 @@ describe('LoginComponent', () => {
   }));
 
   it('should show http error', fakeAsync(() => {
-
-    const errorResponse = new HttpErrorResponse({
-      error: 'test 500 error',
-      status: 500, statusText: 'Not Found'
-    });
-    loginServiceSpy.login.and.returnValue(asyncError(errorResponse));
+    loginServiceSpy.login.and.returnValue(asyncError(httpError500));
 
     component.username.setValue('admin');
     component.password.setValue('admin');

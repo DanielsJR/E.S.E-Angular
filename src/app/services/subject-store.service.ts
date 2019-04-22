@@ -15,17 +15,21 @@ import { GradeStoreService } from "./grade-store.service";
     providedIn: 'root',
 })
 export class SubjectStoreService {
-
-    private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
-    public readonly subjects$ = this.subjectsSource.asObservable();
     private dataStore: { subjects: Subject[] };
+    private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetSubjects$ = this.isLoadingGet.asObservable();
-
 
     constructor(private subjectBackendService: SubjectBackendService, private isLoadingService: IsLoadingService,
         private gradeStoreService: GradeStoreService) {
         this.dataStore = { subjects: [] };
+    }
+
+    get subjects$() {
+        return this.subjectsSource.asObservable();
+    }
+
+    get isLoadingGetSubjects$() {
+        return this.isLoadingGet.asObservable();
     }
 
     loadAllSubjects() {
@@ -51,29 +55,7 @@ export class SubjectStoreService {
 
     }
 
-    loadOneSubject(name: string) {
-        console.log(`********loadOneSubject()-FROM-BACKEND********`);
-        this.subjectBackendService.getSubjectByName(name)
-            .subscribe(data => {
-                let notFound = true;
-                this.dataStore.subjects.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        console.log('found (updates)');
-                        this.dataStore.subjects[index] = data;
-                        notFound = false;
-                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    }
-                });
-
-                if (notFound) {
-                    console.log('not found (adds)');
-                    this.dataStore.subjects.push(data);
-                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                }
-
-
-            }, error => console.log('Could not load subject.'));
-    }
+  
 
     create(subject: Subject): Observable<Subject> {
         this.isLoadingService.isLoadingTrue();

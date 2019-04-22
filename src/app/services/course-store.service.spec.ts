@@ -50,7 +50,7 @@ describe('Course Store Service', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get courses', fakeAsync(() => {
+  it('should get Allcourses', fakeAsync(() => {
     let courses: Course[];
     courseStoreService.courses$.subscribe(data => courses = data);
 
@@ -70,29 +70,26 @@ describe('Course Store Service', () => {
   }));
 
   it('should get one course', fakeAsync(() => {
-    let courses: Course[];
-    courseStoreService.courses$.subscribe(data => courses = data);
+    const coursesTest: Course[] = [courseTest, courseTest2];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses('2019');
 
-    //not found and adds
-    courseBackendServiceSpy.getCourseByName.and.returnValue(asyncData(courseTest));
-    courseStoreService.loadOneCourse(courseTest.name, courseTest.year);
+    let course: Course;
+    courseStoreService.loadOneCourse(courseTest.name).subscribe(data => course = data);
+
+    //not found
+    expect(course).not.toEqual(courseTest);
+
     tick();
-
-    expect(courses.length).toEqual(1);
-
-    //found and update
-    courseBackendServiceSpy.getCourseByName.and.returnValue(asyncData(courseTest));
-    courseStoreService.loadOneCourse(courseTest.name, courseTest.year);
-    tick();
-
-    expect(courses.length).toEqual(1);
+    //found
+    expect(course).toEqual(courseTest);
 
   }));
 
   it('should create course', fakeAsync(() => {
     let isLoading;
     isLoadingService.isLoading$.subscribe(data => isLoading = data);
-    
+
     courseBackendServiceSpy.create.and.returnValue(asyncData(courseTest));
     let course: Course;
     courseStoreService.create(courseTest).subscribe(data => course = data);

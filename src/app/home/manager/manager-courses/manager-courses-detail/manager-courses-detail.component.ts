@@ -28,7 +28,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  courseName: string;
   course: Course;
   chiefTeacher: User;
   listStudents: User[] = [];
@@ -41,8 +40,6 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
   btnDisabled = true;
 
-
-
   // mat table
   displayedColumns = ['firstName', 'crud'];
   dataSource;
@@ -51,7 +48,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -77,11 +74,9 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     // paramMap re-uses the component
     this.coursesSubscription = this.route.paramMap
       .pipe(switchMap(params => {
-        this.courseName = params.get('name');
-        return this.courseStoreService.courses$
+        return this.courseStoreService.loadOneCourse(params.get('name'));
       }))
-      .subscribe(courses => {
-        let c = courses.find(course => course.name === this.courseName);
+      .subscribe(c => {
         if (c) {
           this.course = c;
           this.chiefTeacher = c.chiefTeacher;
@@ -92,10 +87,9 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       );
 
     // snapshot doesn't re-use the component
-    /*this.courseName = this.route.snapshot.paramMap.get('name');
-    this.courseStoreService.courses$
-    .subscribe(courses => {
-      let c = courses.find(course => course.name === this.courseName);
+    /*let courseName = this.route.snapshot.paramMap.get('name');
+    this.courseStoreService.loadOneCourse(courseName)
+    .subscribe(c=> {
       if (c) {
         this.course = c;
         this.chiefTeacher = c.chiefTeacher;
@@ -104,22 +98,15 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       }
     }); */
 
-    this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => setTimeout(() => this.isLoading = isLoading));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(data => this.isDark = data);
 
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-
-
   }
 
   ngOnDestroy(): void {
@@ -134,19 +121,11 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     this.dataSource.filter = filterValue;
   }
 
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
-  }
-
   gotoCourses() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-
-  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+  openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     dialogRef.afterClosed().subscribe(result => {
       let user = dialogRef.componentInstance.user;
       this.crudUserDialog.areaRole = this.areaRole;
@@ -159,14 +138,13 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         this.crudUserDialog.openDialogEdit(user);
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete(user);
+      } else {
+        console.error('no result');
       }
     });
   }
 
-
-
-
-  addStudent(student: User) {
+  addStudentToDataSource(student: User) {
     let list = this.listStudents.slice();
     list.push(student);
     this.listStudents = list;
@@ -174,6 +152,11 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     this.btnDisabled = false;
   }
 
+  private deleteStudentFromDataSource(id: string) {
+    this.listStudents = this.listStudents.filter(s => s.id !== (id));
+    this.dataSource.data = this.listStudents;
+    this.btnDisabled = false;
+  }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
     dialogRef.afterClosed().subscribe(result => {
@@ -181,9 +164,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
-        this.listStudents = this.listStudents.filter(s => s.id !== (dialogRef.componentInstance.obj.id));
-        this.dataSource.data = this.listStudents;
-        this.btnDisabled = false;
+        this.deleteStudentFromDataSource(dialogRef.componentInstance.obj.id);
       } else if (result === RESULT_ACTION2) {
         console.log(RESULT_ACTION2);
       } else if (result === RESULT_ACTION3) {

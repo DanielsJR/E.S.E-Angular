@@ -60,7 +60,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let course; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['./',course.name]">
+      <mat-row *matRowDef="let course; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " [routerLink]="['./',course.name]">
 
       </mat-row>
 

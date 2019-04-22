@@ -42,7 +42,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   isLoading: boolean = false;
 
   subjectsSubscription: Subscription;
@@ -107,12 +107,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
 
   ngAfterViewInit() {
@@ -130,13 +125,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
   }
 
   goBack() {

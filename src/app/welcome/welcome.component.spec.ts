@@ -56,7 +56,8 @@ describe('Welcome Component', () => {
     expect(themePicker.themeName).toEqual('deeppurple-amber-dark');
     expect(themePicker.isDark).toBeTruthy();
 
-    expect(matSidenavContainer.className).toEqual('deeppurple-amber-dark');
+    //expect(matSidenavContainer.className).toEqual('deeppurple-amber-dark');
+    expect(matSidenavContainer.classList.contains('deeppurple-amber-dark')).toBeTruthy();
     let expectedMatCardColor = 'rgb(46, 46, 46)';
     expect(matCard.style.backgroundColor).toEqual(expectedMatCardColor);
         

@@ -22,7 +22,6 @@ import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/
 export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // mat table
-
   displayedColumns = ['name', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
@@ -30,7 +29,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   pageSize = 20;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   isLoading: boolean = false;
   courseYear;
 
@@ -50,16 +49,9 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     }
     );
 
-    //this.courseStoreService.loadAllCourses(2018);
-
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
 
   ngAfterViewInit() {
@@ -67,7 +59,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.isThemeDarkSubscription.unsubscribe();
     this.coursesSubscription.unsubscribe();
     this.isLoadingGetCoursesSubscription.unsubscribe();
@@ -79,36 +71,30 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.dataSource.filter = filterValue;
   }
 
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
+  dialogAction(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === RESULT_CANCELED) {
+          console.log(RESULT_CANCELED);
+          
+        } else if (result === RESULT_ACTION1) {
+          console.log(RESULT_ACTION1);
+          this.deleteCourse(dialogRef);
+        }
+      })
+
   }
 
-
-  deleteCourse(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === RESULT_CANCELED) {
-        console.log(RESULT_CANCELED);
-      } else if (result === RESULT_ACTION1) {
-        console.log(RESULT_ACTION1);
-
-        this.isLoading = true;
-        this.courseStoreService.delete(dialogRef.componentInstance.obj)
-          .pipe(finalize(() => this.isLoading = false))
-          .subscribe(_ => this.snackbarService.openSnackBar('Curso Eliminado', RESULT_SUCCESS)
-            , err => {
-              this.snackbarService.openSnackBar('Error al eliminar Curso', RESULT_ERROR);
-              console.error("Error deleting Course: " + err);
-            });
-
-      } else if (result === RESULT_ACTION2) {
-        console.log(RESULT_ACTION2);
-      } else if (result === RESULT_ACTION3) {
-        console.log(RESULT_ACTION3);
-      }
-    });
+  deleteCourse(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
+    this.isLoading = true;
+    this.courseStoreService.delete(dialogRef.componentInstance.obj)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe((c: Course) => {
+        this.snackbarService.openSnackBar('Curso: ' + c.name + ' eliminado', RESULT_SUCCESS);
+      }, err => {
+        this.snackbarService.openSnackBar('Error al eliminar Curso', RESULT_ERROR);
+        console.error("Error deleting Course: " + err);
+      });
   }
 
 }

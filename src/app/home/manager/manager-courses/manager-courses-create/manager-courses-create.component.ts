@@ -27,7 +27,7 @@ import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dial
 export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
   areaRole = ROLE_MANAGER;
   roleManager = ROLE_MANAGER;
-  roleStudent  = ROLE_STUDENT;
+  roleStudent = ROLE_STUDENT;
   roleTeacher = ROLE_TEACHER;
 
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
@@ -46,7 +46,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
   isThemeDarkSubscription: Subscription;
@@ -59,14 +59,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     this.buildForm();
     this.course = new Course();
     this.dataSource = new MatTableDataSource();
-
-
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
 
   ngAfterViewInit() {
@@ -76,13 +69,6 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   ngOnDestroy(): void {
     this.isThemeDarkSubscription.unsubscribe();
-  }
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
   }
 
   buildForm() {
@@ -108,12 +94,15 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     this.chiefTeacher = teacher;
   }
 
-  createCourse() {
+  private setCourse() {
     this.course.name = this.createForm.value.name;
     this.course.year = this.createForm.value.year;
     this.course.students = this.listStudents;
     this.course.chiefTeacher = (this.chiefTeacher) ? this.chiefTeacher : null;
+  }
 
+  createCourse() {
+    this.setCourse();
     this.courseStoreService.create(this.course)
       .subscribe(_ => {
         this.snackbarService.openSnackBar('Curso Creado', RESULT_SUCCESS);
@@ -128,24 +117,31 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   }
 
-  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+  openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     dialogRef.afterClosed().subscribe(result => {
-       let user = dialogRef.componentInstance.user;
+      let user = dialogRef.componentInstance.user;
+      this.crudUserDialog.onlyRead = true;
+      this.crudUserDialog.areaRole = this.areaRole;
+      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.onlyRead = true;
-        this.crudUserDialog.areaRole = this.areaRole;
-        this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
         this.crudUserDialog.openDialogDetail(user);
       } else if (result === RESULT_EDIT) {
         this.crudUserDialog.openDialogEdit(user);
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete(user);
+      } else {
+        console.error('no result');
       }
     });
   }
 
+  private deleteStudentFromDataSource(id: string) {
+    this.listStudents = this.listStudents.filter(s => s.id !== (id));
+    this.dataSource.data = this.listStudents;
+    // this.btnDisabled = false;
+  }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
     dialogRef.afterClosed().subscribe(result => {
@@ -153,9 +149,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
-        this.listStudents = this.listStudents.filter(s => s.id !== (dialogRef.componentInstance.obj.id));
-        this.dataSource.data = this.listStudents;
-       // this.btnDisabled = false;
+        this.deleteStudentFromDataSource(dialogRef.componentInstance.obj.id);
       } else if (result === RESULT_ACTION2) {
         console.log(RESULT_ACTION2);
       } else if (result === RESULT_ACTION3) {

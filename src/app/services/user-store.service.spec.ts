@@ -66,30 +66,6 @@ describe('User Store Service', () => {
 
   }));
 
-  it('should get one Manager', fakeAsync(() => {
-    let users: User[];
-    userStoreService.managers$.subscribe(data => users = data);
-
-    spyOn(userStoreService, 'updateInManagerDataStore').and.callThrough();
-
-    //not found and adds
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(managerTest));
-    userStoreService.loadOneManager(managerTest.id);
-    tick();
-
-    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalled();
-    expect(users.length).toEqual(1);
-
-    //found and update
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(managerTest));
-    userStoreService.loadOneManager(managerTest.id);
-    tick();
-
-    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalled();
-    expect(users.length).toEqual(1);
-
-  }));
-
   it('should create Manager', fakeAsync(() => {
     let users: User[];
     userStoreService.managers$.subscribe(data => users = data);
@@ -255,30 +231,6 @@ describe('User Store Service', () => {
     expect(users).toEqual(teachersTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
-
-  }));
-
-  it('should get one Teacher', fakeAsync(() => {
-    let users: User[];
-    userStoreService.teachers$.subscribe(data => users = data);
-
-    spyOn(userStoreService, 'updateInTeacherDataStore').and.callThrough();
-
-    //not found and adds
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(teacherTest));
-    userStoreService.loadOneTeacher(teacherTest.id);
-    tick();
-
-    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalled();
-    expect(users.length).toEqual(1);
-
-    //found and update
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(teacherTest));
-    userStoreService.loadOneTeacher(teacherTest.id);
-    tick();
-
-    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalled();
-    expect(users.length).toEqual(1);
 
   }));
 
@@ -451,27 +403,6 @@ describe('User Store Service', () => {
     expect(users).toEqual(studentsTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
-
-  }));
-
-  it('should get one Student', fakeAsync(() => {
-    let users: User[];
-    userStoreService.students$.subscribe(data => users = data);
-
-    //not found and adds
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(studentTest));
-    userStoreService.loadOneStudent(studentTest.id);
-    tick();
-
-    expect(users.length).toEqual(1);
-
-    //found and update
-    userBackendServiceSpy.getUserById.and.returnValue(asyncData(studentTest));
-    userStoreService.loadOneStudent(studentTest.id);
-    tick();
-
-    expect(users.length).toEqual(1);
-
 
   }));
 

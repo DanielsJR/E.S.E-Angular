@@ -8,6 +8,7 @@ import { tap } from "rxjs/internal/operators/tap";
 import { User } from "../models/user";
 import { IsLoadingService } from "./isLoadingService.service";
 import { SubjectStoreService } from "./subject-store.service";
+import { map } from "rxjs/operators";
 
 
 
@@ -15,65 +16,49 @@ import { SubjectStoreService } from "./subject-store.service";
     providedIn: 'root',
 })
 export class CourseStoreService {
-
-
-    private coursesSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
-    public readonly courses$ = this.coursesSource.asObservable();
     private dataStore: { courses: Course[] };
+    private coursesSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetCourses$ = this.isLoadingGet.asObservable();
-
 
     constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService,
         private subjectStoreService: SubjectStoreService, ) {
         this.dataStore = { courses: [] };
     }
 
+    get courses$() {
+        return this.coursesSource.asObservable();
+    }
+
+    get isLoadingGetCourses$() {
+        return this.isLoadingGet.asObservable();
+    }
+
     loadAllCourses(year: string) {
-      /*  if (this.coursesSource.getValue().length) {
-            console.log(`********GET-Courses-FROM-CACHE********`);
-            this.coursesSource.next(this.dataStore.courses);
-        } else {*/
-            console.log(`********GET-Courses-FROM-BACKEND********`);
-            this.isLoadingGet.next(true);
-            this.courseBackendService.getCourses(year)
-                .pipe(finalize(() => this.isLoadingGet.next(false)))
-                .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.courses = data;
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                    } else {
-                        data = null;
-                        console.error('Lista de Cursos vacia');
-                    }
-                }, error => console.error('error retrieving cursos, ' + error.message)
-                );
+        /*  if (this.coursesSource.getValue().length) {
+              console.log(`********GET-Courses-FROM-CACHE********`);
+              this.coursesSource.next(this.dataStore.courses);
+          } else {*/
+        console.log(`********GET-Courses-FROM-BACKEND********`);
+        this.isLoadingGet.next(true);
+        this.courseBackendService.getCourses(year)
+            .pipe(finalize(() => this.isLoadingGet.next(false)))
+            .subscribe(data => {
+                if (data.length) {
+                    this.dataStore.courses = data;
+                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                } else {
+                    data = null;
+                    console.error('Lista de Cursos vacia');
+                }
+            }, error => console.error('error retrieving cursos, ' + error.message)
+            );
         //}
 
     }
 
-    loadOneCourse(name: string, year: string) {
-        console.log(`********loadOneCourse()-FROM-BACKEND********`);
-        this.courseBackendService.getCourseByName(name, year)
-            .subscribe(data => {
-                let notFound = true;
-                this.dataStore.courses.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        console.log('found (updates)');
-                        this.dataStore.courses[index] = data;
-                        notFound = false;
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                    }
-                });
-
-                if (notFound) {
-                    console.log('not found (adds)');
-                    this.dataStore.courses.push(data);
-                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                }
-
-
-            }, error => console.log('Could not load course.', error));
+    loadOneCourse(name: string) {
+        return this.courses$
+            .pipe(map(courses => courses.find(course => course.name === name)));
     }
 
     create(course: Course): Observable<Course> {

@@ -33,7 +33,7 @@
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ course?.chiefTeacher?.avatar.type+';base64,' + course?.chiefTeacher?.avatar.data)"
+              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ course?.chiefTeacher?.avatar?.type+';base64,' + course?.chiefTeacher?.avatar?.data)"
                 alt="{{course?.chiefTeacher?.username}}">
               <h3 matLine> {{course?.name}} </h3>
               <p matLine>
@@ -54,12 +54,12 @@
 
         <mat-cell *matCellDef="let course" class="crud">
 
-          <button mat-icon-button color="primary" (click)="$event.stopPropagation()" [routerLink]="['./',course.name]">
+          <button mat-icon-button color="primary" [routerLink]="['./',course.name]">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
 
-          <button mat-icon-button color="warn" (click)="deleteCourse(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
+          <button mat-icon-button color="warn" (click)="dialogAction(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
@@ -79,7 +79,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]" [ngClass]="rowClasses">
+      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
 
       </mat-row>
 

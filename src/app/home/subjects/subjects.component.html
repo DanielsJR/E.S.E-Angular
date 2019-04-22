@@ -82,7 +82,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]="rowClasses" [routerLink]="['../../detail',subject.id]">
+      <mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " [routerLink]="['../../detail',subject.id]">
 
       </mat-row>
 

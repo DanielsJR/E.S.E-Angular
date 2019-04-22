@@ -11,7 +11,7 @@ describe('RolesToSpanishPipe', () => {
     let userTest: User = deepCopy(adminTest);
     userTest.roles = [ROLE_ADMIN, ROLE_MANAGER];
 
-    fit('should return user roles in spanish', () => {
+    it('should return user roles in spanish', () => {
         expect(pipe.transform(userTest.roles)).toEqual(ROLE_ADMIN_SPANISH + ', ' + ROLE_MANAGER_SPANISH);
     });
 

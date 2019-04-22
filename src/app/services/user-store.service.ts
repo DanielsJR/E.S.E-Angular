@@ -14,36 +14,38 @@ import { GradeStoreService } from "./grade-store.service";
     providedIn: 'root',
 })
 export class UserStoreService {
-    private dataStore: { managers: User[], teachers: User[], students: User[], oneStudent: User };
+    private dataStore: { managers: User[], teachers: User[], students: User[] };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    public readonly managers$ = this.managersSource.asObservable();
     private managerUriRole: string = URI_MANAGERS;
     private managerRole: string = ROLE_MANAGER;
     private isLoadingGetManagers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetManagers$ = this.isLoadingGetManagers.asObservable();
 
     private teachersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    public readonly teachers$ = this.teachersSource.asObservable();
     private teacherUriRole: string = URI_TEACHERS;
     private teacherRole: string = ROLE_TEACHER;
     private isLoadingGetTeachers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetTeachers$ = this.isLoadingGetTeachers.asObservable();
 
     private studentsSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    public readonly students$ = this.studentsSource.asObservable();
     private studentUriRole: string = URI_STUDENTS;
     private studentRole: string = ROLE_STUDENT;
     private isLoadingGetStudents = <BehaviorSubject<boolean>>new BehaviorSubject(false);
-    isLoadingGetStudents$ = this.isLoadingGetStudents.asObservable();
-
 
     constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService, private gradeStoreService: GradeStoreService) {
-        this.dataStore = { managers: [], teachers: [], students: [], oneStudent: null }
+        this.dataStore = { managers: [], teachers: [], students: [] }
     }
 
 
     /******************************MANAGERS***************************************************** */
+
+    get managers$() {
+        return this.managersSource.asObservable();
+    }
+
+    get isLoadingGetManagers$() {
+        return this.isLoadingGetManagers.asObservable();
+    }
+
     loadAllManagers() {
         if (this.managersSource.getValue().length) {
             console.log(`********GET-Managers-FROM-CACHE********`);
@@ -68,13 +70,7 @@ export class UserStoreService {
 
     }
 
-    loadOneManager(id: string) {
-        console.log(`********loadOneManager()-FROM-BACKEND********`);
-        this.userBackendService.getUserById(id, this.managerUriRole)
-            .subscribe(data => {
-                this.updateInManagerDataStore(data);
-            }, error => console.log('Could not load manager.', error));
-    }
+   
 
     createManager(newUser: User): Observable<User> {
         return this.userBackendService.create(newUser, this.managerUriRole).pipe(
@@ -165,6 +161,14 @@ export class UserStoreService {
 
 
     /******************************TEACHERS***************************************************** */
+
+    get teachers$() {
+        return this.teachersSource.asObservable();
+    }
+    get isLoadingGetTeachers$() {
+        return this.isLoadingGetTeachers.asObservable();
+    }
+
     loadAllTeachers() {
         if (this.teachersSource.getValue().length) {
             console.log(`********GET-Teachers-FROM-CACHE********`);
@@ -183,13 +187,7 @@ export class UserStoreService {
 
     }
 
-    loadOneTeacher(id: string) {
-        console.log(`********loadOneTeacher()-FROM-BACKEND********`);
-        this.userBackendService.getUserById(id, this.teacherUriRole)
-            .subscribe(data => {
-                this.updateInTeacherDataStore(data);
-            }, error => console.log('Could not load teacher. ', error));
-    }
+   
 
     createTeacher(newUser: User): Observable<User> {
         return this.userBackendService.create(newUser, this.teacherUriRole).pipe(
@@ -278,6 +276,14 @@ export class UserStoreService {
 
 
     /******************************STUDENTS***************************************************** */
+
+    get students$() {
+        return this.studentsSource.asObservable();
+    }
+    get isLoadingGetStudents$() {
+        return this.isLoadingGetStudents.asObservable();
+    }
+
     loadAllStudents() {
         if (this.studentsSource.getValue().length) {
             console.log(`********GET-Students-FROM-CACHE********`);
@@ -296,29 +302,6 @@ export class UserStoreService {
 
     }
 
-    loadOneStudent(id: string) {
-        console.log(`********loadOneStudent()-FROM-BACKEND********`);
-        this.userBackendService.getUserById(id, this.studentUriRole)
-            .subscribe(data => {
-                let notFound = true;
-                this.dataStore.students.forEach((item, index) => {
-                    if (item.id === data.id) {
-                        console.log('found (updates)');
-                        this.dataStore.students[index] = data;
-                        notFound = false;
-                        this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    }
-                });
-
-                if (notFound) {
-                    console.log('not found (adds)');
-                    this.dataStore.students.push(data);
-                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                }
-
-
-            }, error => console.log('Could not load student.', error));
-    }
 
     createStudent(newUser: User): Observable<User> {
         return this.userBackendService.create(newUser, this.studentUriRole).pipe(

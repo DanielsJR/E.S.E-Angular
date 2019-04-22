@@ -4,6 +4,7 @@ import { Subject } from "../models/subject";
 import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN } from "../app.config";
 import { Grade } from "../models/grade";
 import { Theme } from "../shared/theme-picker/theme";
+import { HttpErrorResponse } from "@angular/common/http";
 
 
 
@@ -11,56 +12,77 @@ import { Theme } from "../shared/theme-picker/theme";
 export const adminTest: User = {
     id: 'a01',
     username: '111',
+    firstName: '111_firstName',
+    lastName: '111_lastName',
     roles: [ROLE_ADMIN]
 };
 
 export const managerTest: User = {
     id: 'm01',
     username: 'manager01',
+    firstName: 'm01_firstName',
+    lastName: 'm01_lastName',
     roles: [ROLE_MANAGER]
 };
 
 export const managerTest2: User = {
     id: 'm02',
     username: 'manager02',
+    firstName: 'm02_firstName',
+    lastName: 'm02_lastName',
     roles: [ROLE_MANAGER]
 };
 
-export const studentTest: User = {
-    id: 's01',
-    username: 'student01',
-    roles: [ROLE_STUDENT]
-};
-
-export const studentTest2: User = {
-    id: 's02',
-    username: 'student02',
-    roles: [ROLE_STUDENT]
-};
-
-export const studentTest3: User = {
-    id: 's03',
-    username: 'student03',
-    roles: [ROLE_STUDENT]
-};
-
-export const studentTest4: User = {
-    id: 's04',
-    username: 'student04',
-    roles: [ROLE_STUDENT]
-};
 
 export const teacherTest: User = {
     id: 't01',
     username: 'teacher01',
+    firstName: 't01_firstName',
+    lastName: 't01_lastName',
     roles: [ROLE_TEACHER]
 };
 
 export const teacherTest2: User = {
     id: 't02',
     username: 'teacher02',
+    firstName: 't02_firstName',
+    lastName: 't02_lastName',
     roles: [ROLE_TEACHER]
 };
+
+export const studentTest: User = {
+    id: 's01',
+    username: 'student01',
+    firstName: 's01_firstName',
+    lastName: 's01_lastName',
+    roles: [ROLE_STUDENT]
+};
+
+export const studentTest2: User = {
+    id: 's02',
+    username: 'student02',
+    firstName: 's02_firstName',
+    lastName: 's02_lastName',
+    roles: [ROLE_STUDENT]
+};
+
+export const studentTest3: User = {
+    id: 's03',
+    username: 'student03',
+    firstName: 's03_firstName',
+    lastName: 's03_lastName',
+    roles: [ROLE_STUDENT]
+};
+
+export const studentTest4: User = {
+    id: 's04',
+    username: 'student04',
+    firstName: 's04_firstName',
+    lastName: 's04_lastName',
+    roles: [ROLE_STUDENT]
+};
+
+
 
 export const courseTest: Course = {
     id: 'c01',
@@ -123,4 +145,37 @@ export const themeDarkTest: Theme = {
     color: '#F44336',
     isDark: true
 }
+
+
+export const httpError400 = new HttpErrorResponse({
+    error: 'test 400 error',
+    status: 400,
+    statusText: 'Bad Request'
+});
+
+export const httpError401 = new HttpErrorResponse({
+    error: 'test 401 error',
+    status: 401,
+    statusText: 'Unauthorized'
+});
+
+export const httpError403 = new HttpErrorResponse({
+    error: 'test 403 error',
+    status: 403,
+    statusText: 'Forbidden'
+});
+
+export const httpError404 = new HttpErrorResponse({
+    error: 'test 404 error',
+    status: 404,
+    statusText: 'Not Found'
+});
+
+export const httpError500 = new HttpErrorResponse({
+    error: 'test 500 error',
+    status: 500,
+    statusText: 'Internal Server Error'
+});
+
+export const simpleError = new Error('ups!');
 

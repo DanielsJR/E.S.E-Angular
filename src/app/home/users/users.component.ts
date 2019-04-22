@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 20;
   pageSizeOptions = [5, 10, 20];
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -50,8 +50,8 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-   this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
-   console.log("AreaRole: " + this.areaRole);
+    this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
+    console.log("AreaRole: " + this.areaRole);
 
     this.dataSource = new MatTableDataSource<User[]>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
@@ -89,12 +89,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('NO uriRole');
     }
 
-
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-       this.isDark = isDark;
-      this.setRowClass();
-    });
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
 
   }
 
@@ -107,13 +102,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isThemeDarkSubscription.unsubscribe();
     this.usersSubscription.unsubscribe();
     this.isLoadingGetSubscription.unsubscribe();
-  }
-
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
   }
 
   applyFilter(filterValue: string) {

@@ -24,8 +24,8 @@
     <mat-toolbar class="toolbar2">
       <mat-list style="flex-grow: 8">
         <mat-list-item>
-          <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
-            alt="{{t?.username}}" (click)="userCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
+          <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
+            alt="{{t?.username}}" (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
           <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortNameLastname}}</h3>
           <p matLine>
             <span class="role-style">Profesor Jefe</span>
@@ -72,7 +72,7 @@
               <img matListAvatar
                 [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar?.type+';base64,' + student?.avatar?.data)"
                 alt="{{student?.username}}"
-                (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+                (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
@@ -89,7 +89,7 @@
           <button mat-mini-fab matTooltip="Agregar Estudiante" (click)="addStudentDialog.openDialogSearchUser()">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
-          <nx-search-user-dialog #addStudentDialog [userRole]="roleStudent" (userSelected)="addStudent($event)">
+          <nx-search-user-dialog #addStudentDialog [userRole]="roleStudent" (userSelected)="addStudentToDataSource($event)">
           </nx-search-user-dialog>
         </mat-header-cell>
 
@@ -121,9 +121,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="rowClasses">
-
-      </mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "></mat-row>
 
     </mat-table>
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>

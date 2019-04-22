@@ -25,6 +25,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.userStoreService.loadAllManagers();
 
         if (this.userLoggedService.isManager()) {
+            
             this.userStoreService.loadAllTeachers();
             this.userStoreService.loadAllStudents();
     

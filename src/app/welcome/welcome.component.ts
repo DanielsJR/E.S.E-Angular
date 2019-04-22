@@ -13,7 +13,7 @@ export class WelcomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.initialTheme = { name: 'lightblue-lime-dark', color: '#03A9F4', isDark: true };
+    
   }
 
   get year() {

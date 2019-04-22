@@ -34,7 +34,7 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark = this.sessionStorage.isDarkTheme();
+  isDark;
   isLoading: boolean = false;
 
   isThemeDarkSubscription: Subscription;
@@ -87,12 +87,7 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => {
-      this.isDark = isDark;
-      this.setRowClass();
-    });
-
-    this.setRowClass();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
 
   ngAfterViewInit() {
@@ -112,10 +107,4 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
     this.dataSource.filter = filterValue;
   }
 
-  setRowClass() {
-    this.rowClasses = {
-      'fila': !this.isDark,
-      'fila-dark': this.isDark
-    };
-  }
 }

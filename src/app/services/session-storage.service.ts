@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SESSION_STORAGE_THEME_KEY } from '../app.config';
-import { Subject } from 'rxjs';
+import { Subject, ReplaySubject } from 'rxjs';
 import { Theme } from '../shared/theme-picker/theme';
 
 
@@ -9,10 +9,10 @@ import { Theme } from '../shared/theme-picker/theme';
 })
 
 export class SessionStorageService {
-    private isThemeDarkSource = new Subject<boolean>();
-    isThemeDark$ = this.isThemeDarkSource.asObservable();
+    private isThemeDarkSource = new ReplaySubject<boolean>(1);//Subject<boolean>();
 
     constructor() { }
+
 
     isStored(key: string): boolean {
         return (this.getItem(key) !== null);
@@ -38,6 +38,10 @@ export class SessionStorageService {
 
 
     //THEME**************************************
+
+    get isThemeDark$() {
+        return this.isThemeDarkSource.asObservable();
+    }
 
     getTheme(): Theme {
         return (this.isStored(SESSION_STORAGE_THEME_KEY)) ? JSON.parse(this.getItem(SESSION_STORAGE_THEME_KEY)) : null;
