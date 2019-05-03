@@ -8,6 +8,7 @@ import { tap } from "rxjs/internal/operators/tap";
 import { finalize } from "rxjs/internal/operators/finalize";
 import { CourseStoreService } from "./course-store.service";
 import { GradeStoreService } from "./grade-store.service";
+import { map } from "rxjs/internal/operators/map";
 
 
 @Injectable({
@@ -70,10 +71,13 @@ export class UserStoreService {
 
     }
 
-   
+    loadOneManager(id: string) {
+        return this.managers$
+            .pipe(map(managers => managers.find(manager => manager.id === id)));
+    }
 
-    createManager(newUser: User): Observable<User> {
-        return this.userBackendService.create(newUser, this.managerUriRole).pipe(
+    createManager(user: User): Observable<User> {
+        return this.userBackendService.create(user, this.managerUriRole).pipe(
             tap(data => {
                 this.dataStore.managers.push(data);
                 this.managersSource.next(Object.assign({}, this.dataStore).managers);
@@ -85,26 +89,19 @@ export class UserStoreService {
     updateManager(user: User): Observable<User> {
         return this.userBackendService.update(user, this.managerUriRole).pipe(
             tap(data => {
-                let index = this.dataStore.managers.findIndex((u: User) => u.id === data.id);
-                if (index != -1) {
-                    this.dataStore.managers[index] = data;
-                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
-                    this.updateInTeacherDataStore(data);
-                    if (data.roles.includes(ROLE_TEACHER)) this.courseStoreService.updateChiefTeacherInCourseStoreOneToMany(data);
-                }
-            }, err => console.error("Error updating Manager" + err.message)
+                this.updateInManagerDataStore(data);
+                this.updateInTeacherDataStore(data);
+
+            }, err => console.error('Error updating Manager', err.message)
             ));
     }
 
     deleteManager(user: User): Observable<boolean> {
         return this.userBackendService.delete(user, this.managerUriRole).pipe(
             tap(_ => {
-                let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
-                if (index != -1) {
-                    this.dataStore.managers.splice(index, 1);
-                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
-                    this.deleteInTeacherDataStore(user);
-                }
+                this.deleteInManagerDataStore(user);
+                this.deleteInTeacherDataStore(user);
+
             }, err => console.error("Error deleting Manager" + err.message)
             ));
     }
@@ -112,13 +109,10 @@ export class UserStoreService {
     setManagerRoles(user: User): Observable<User> {
         return this.userBackendService.setRoles(user.username, user.roles, this.managerUriRole).pipe(
             tap(data => {
-                let index = this.dataStore.managers.findIndex((u: User) => u.id === data.id);
-                if (index != -1) {
-                    data.roles.includes(this.managerRole) ? this.dataStore.managers[index] = data : this.dataStore.managers.splice(index, 1);
-                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
-                    this.updateInTeacherDataStore(data);
-                } else { console.error("not found") }
-            }, err => console.error("Error setting Roles Manager" + err.message)
+                this.updateInManagerDataStore(data);
+                this.updateInTeacherDataStore(data);
+
+            }, err => console.error('Error setting Roles Manager', err.message)
             ));
     }
 
@@ -130,7 +124,7 @@ export class UserStoreService {
             this.dataStore.managers[index] = user;
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
 
-        } else if ((index != -1)) {
+        } else if (index != -1) {
             console.log('found and not includes role (it deletes)');
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
@@ -148,7 +142,7 @@ export class UserStoreService {
     deleteInManagerDataStore(user: User): void {
         let index = this.dataStore.managers.findIndex((u: User) => u.id === user.id);
 
-        if ((index != -1)) {
+        if (index != -1) {
             this.dataStore.managers.splice(index, 1);
             this.managersSource.next(Object.assign({}, this.dataStore).managers);
         }
@@ -165,6 +159,7 @@ export class UserStoreService {
     get teachers$() {
         return this.teachersSource.asObservable();
     }
+
     get isLoadingGetTeachers$() {
         return this.isLoadingGetTeachers.asObservable();
     }
@@ -187,10 +182,13 @@ export class UserStoreService {
 
     }
 
-   
+    loadOneTeacher(id: string) {
+        return this.teachers$
+            .pipe(map(teachers => teachers.find(teacher => teacher.id === id)));
+    }
 
-    createTeacher(newUser: User): Observable<User> {
-        return this.userBackendService.create(newUser, this.teacherUriRole).pipe(
+    createTeacher(user: User): Observable<User> {
+        return this.userBackendService.create(user, this.teacherUriRole).pipe(
             tap(data => {
                 this.dataStore.teachers.push(data);
                 this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
@@ -201,40 +199,30 @@ export class UserStoreService {
     updateTeacher(user: User): Observable<User> {
         return this.userBackendService.update(user, this.teacherUriRole).pipe(
             tap(data => {
-                let index = this.dataStore.teachers.findIndex((u: User) => u.id === data.id);
-                if (index != -1) {
-                    this.dataStore.teachers[index] = data;
-                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-                    this.updateInManagerDataStore(data);
-                    this.courseStoreService.updateChiefTeacherInCourseStoreOneToMany(data);
-                }
-            }, err => console.error("Error updating teacher")
+                this.updateInManagerDataStore(data);
+                this.updateInTeacherDataStore(data);
+
+            }, err => console.error("Error updating teacher", err.message)
             ));
     }
 
     deleteTeacher(user: User): Observable<boolean> {
         return this.userBackendService.delete(user, this.teacherUriRole).pipe(
             tap(_ => {
-                let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
-                if (index != -1) {
-                    this.dataStore.teachers.splice(index, 1);
-                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-                    this.deleteInManagerDataStore(user);
-                }
-            }, err => console.error("Error deleting teacher")
+                this.deleteInTeacherDataStore(user);
+                this.deleteInManagerDataStore(user);
+
+            }, err => console.error('Error deleting teacher', err.message)
             ));
     }
 
     setTeacherRoles(user: User): Observable<User> {
         return this.userBackendService.setRoles(user.username, user.roles, this.teacherUriRole).pipe(
             tap(data => {
-                let index = this.dataStore.teachers.findIndex((u: User) => u.id === data.id);
-                if (index != -1) {
-                    data.roles.includes(this.teacherRole) ? this.dataStore.teachers[index] = data : this.dataStore.teachers.splice(index, 1);
-                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-                    this.updateInManagerDataStore(data);
-                }
-            }, err => console.error("Error setting Roles teacher")
+                this.updateInManagerDataStore(data);
+                this.updateInTeacherDataStore(data);
+
+            }, err => console.error('Error setting Roles teacher', err.message)
             ));
     }
 
@@ -245,16 +233,20 @@ export class UserStoreService {
             console.log('found and includes role (it updates)');
             this.dataStore.teachers[index] = user;
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
 
-        } else if ((index != -1)) {
+        } else if (index != -1) {
             console.log('found and not includes role (it deletes)');
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
 
         } else if ((index = -1) && user.roles.includes(this.teacherRole)) {
             console.log('not found and includes role (it adds)');
             this.dataStore.teachers.push(user);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+            this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
+
         } else {
             console.log('not found and not includes role (it does nothing)');
         }
@@ -263,10 +255,11 @@ export class UserStoreService {
 
     deleteInTeacherDataStore(user: User): void {
         let index = this.dataStore.teachers.findIndex((u: User) => u.id === user.id);
-
-        if ((index != -1)) {
+        if (index != -1) {
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+        } else {
+            console.error('not found in deleteInTeacherDataStore()');
         }
 
     }
@@ -280,6 +273,7 @@ export class UserStoreService {
     get students$() {
         return this.studentsSource.asObservable();
     }
+
     get isLoadingGetStudents$() {
         return this.isLoadingGetStudents.asObservable();
     }
@@ -302,9 +296,13 @@ export class UserStoreService {
 
     }
 
+    loadOneStudent(id: string) {
+        return this.students$
+            .pipe(map(students => students.find(student => student.id === id)));
+    }
 
-    createStudent(newUser: User): Observable<User> {
-        return this.userBackendService.create(newUser, this.studentUriRole).pipe(
+    createStudent(user: User): Observable<User> {
+        return this.userBackendService.create(user, this.studentUriRole).pipe(
             tap(data => {
                 this.dataStore.students.push(data);
                 this.studentsSource.next(Object.assign({}, this.dataStore).students);
@@ -315,30 +313,48 @@ export class UserStoreService {
     updateStudent(user: User): Observable<User> {
         return this.userBackendService.update(user, this.studentUriRole).pipe(
             tap(data => {
-                let index = this.dataStore.students.findIndex((u: User) => u.id === data.id);
-                if (index != -1) {
-                    this.dataStore.students[index] = data;
-                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.updateStudentInCourseStoreOnetoMany(data);
-                    this.gradeStoreService.updateStudentInGradeStore(data);
-                }
-            }, err => console.error("Error updating student")
+                this.updateInStudentDataStore(data);
+
+            }, err => console.error('Error updating student', err.message)
             ));
     }
 
     deleteStudent(user: User | string): Observable<boolean> {
         return this.userBackendService.delete(user, this.studentUriRole).pipe(
             tap(_ => {
-                let index = this.dataStore.students.findIndex((u: User) => u.id === ((typeof user === 'string') ? user : user.id));
-                if (index != -1) {
-                    this.dataStore.students.splice(index, 1);
-                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    this.courseStoreService.deleteStudentInCourseStoreOneToOne(user);
-                    //this.gradeStoreService.deleteStudentInGradeStore(user);
-                }
-            }, err => console.error("Error deleting student")
+                this.deleteInStudentDataStore(user);
+            }, err => console.error('Error deleting student', err.message)
             ));
     }
+
+    updateInStudentDataStore(user: User): void {
+        let index = this.dataStore.students.findIndex((u: User) => u.id === user.id);
+
+        if ((index != -1) && user.roles.includes(this.studentRole)) {
+            //console.log('found and includes role (it updates)');
+            this.dataStore.students[index] = user;
+            this.studentsSource.next(Object.assign({}, this.dataStore).students);
+            this.courseStoreService.updateStudentInCourseStoreOneToOne(user);
+            this.gradeStoreService.updateStudentInGradeStore(user);
+        } else {
+            console.log('not found and not includes role (it does nothing)');
+        }
+
+    }
+
+    deleteInStudentDataStore(user: User | string): void {
+        let index = this.dataStore.students.findIndex((u: User) => u.id === ((typeof user === 'string') ? user : user.id));
+
+        if (index != -1) {
+            this.dataStore.students.splice(index, 1);
+            this.studentsSource.next(Object.assign({}, this.dataStore).students);
+            this.courseStoreService.deleteStudentInCourseStoreOneToOne(user);
+        } else {
+            console.error('not found in deleteInStudentDataStore()');
+        }
+
+    }
+
 
 
 }

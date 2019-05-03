@@ -15,7 +15,8 @@ import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStoreService } from '../../services/user-store.service';
-import { RESULT_ERROR, RESULT_SUCCESS } from '../../app.config';
+import { RESULT_ERROR, RESULT_SUCCESS, ROLE_MANAGER, ROLE_TEACHER, USER_UPDATE_ERROR, USER_UPDATE_SUCCESS, DD_MM_YYYY } from '../../app.config';
+import { Avatar } from '../../models/avatar';
 
 
 @Component({
@@ -27,9 +28,6 @@ export class UserProfileComponent implements OnInit {
 
     @Input()
     user: User;
-
-    @Input()
-    uriRole: string;
 
     private _profileAction: string;
 
@@ -59,7 +57,6 @@ export class UserProfileComponent implements OnInit {
         }
     }
 
-
     editProfileForm: FormGroup;
     genders = GENDERS;
     compareFn: ((a1: any, a2: any) => boolean) | null = this.compareByViewValue;
@@ -83,7 +80,6 @@ export class UserProfileComponent implements OnInit {
     }
 
     buildForm() {
-
         this.editProfileForm = this.formBuilder.group({
             id: [this.user.id],
             username: [{ value: this.user.username, disabled: true }],
@@ -91,7 +87,7 @@ export class UserProfileComponent implements OnInit {
             firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             dni: [this.user.dni, [noWhitespaceValidator, rutValidator]],
-            birthday: [(this.user.birthday != null) ? moment(this.user.birthday, 'DD/MM/YYYY') : null],
+            birthday: [(this.user.birthday != null) ? moment(this.user.birthday, DD_MM_YYYY) : null],
             gender: [this.user.gender],
             avatar: [this.user.avatar],
             mobile: [this.user.mobile, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
@@ -99,40 +95,10 @@ export class UserProfileComponent implements OnInit {
             address: [this.user.address, noWhitespaceValidator],
             commune: [this.user.commune],
             roles: [this.user.roles]
-
         });
 
     }
 
-    selectEventEdit(files: FileList | File): void {
-        let reader = new FileReader();
-        if (files instanceof FileList) {
-
-        } else {
-            reader.readAsDataURL(files);
-            reader.onload = () => {
-                this.avatar.setValue({
-                    name: files.name,
-                    type: files.type,
-                    data: (reader.result as string).split(',')[1]
-                })
-            };
-        }
-        this.avatar.markAsDirty();
-    }
-
-    resetAvatar() {
-        this.avatar.setValue(this.user.avatar);
-        this.avatar.markAsPristine();
-    }
-
-    compareByViewValue(a1: any, a2: any) {
-        // console.log('a1: ' + a1 + '    '+'a2: ' + a2);
-        return a1 && a2 && a1 === a2;
-    }
-
-
-    // getters required
     get username() { return this.editProfileForm.get('username'); }
     get firstName() { return this.editProfileForm.get('firstName'); }
     get lastName() { return this.editProfileForm.get('lastName'); }
@@ -143,19 +109,43 @@ export class UserProfileComponent implements OnInit {
     get address() { return this.editProfileForm.get('address'); }
     get avatar() { return this.editProfileForm.get('avatar'); }
 
+    selectEventEdit(file: File): void {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            this.avatar.setValue(new Avatar(
+                file.name,
+                file.type,
+                (reader.result as string).split(',')[1])
+            )
+        };
+
+        this.avatar.markAsDirty();
+    }
+
+    resetAvatar() {
+        this.avatar.setValue(this.user.avatar);
+        this.avatar.markAsPristine();
+    }
+
+    compareByViewValue(a1: any, a2: any): boolean {
+        return a1 && a2 && a1 === a2;
+    }
+
     save(): void {
         this.isLoading = true;
+
         this.editProfileForm.value.username = this.username.value;
-        this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format('DD/MM/YYYY') : null;
+        this.editProfileForm.value.birthday = (this.editProfileForm.value.birthday != null) ? moment(this.editProfileForm.value.birthday).format(DD_MM_YYYY) : null;
         this.editProfileForm.value.gender = (this.editProfileForm.value.gender != null) ? this.editProfileForm.value.gender.toUpperCase() : null;
         this.editProfileForm.value.commune = (this.editProfileForm.value.commune != null) ? this.editProfileForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
-        this.editProfileForm.value.dni = (this.dni.value === "") ? null : this.dni.value;
-        this.editProfileForm.value.mobile = (this.mobile.value === "") ? null : this.mobile.value;
-        this.editProfileForm.value.email = (this.email.value === "") ? null : this.email.value;
-        this.editProfileForm.value.address = (this.address.value === "") ? null : this.address.value;
-        //this.user = this.editProfileForm.value;
-        let userEdit: User = this.editProfileForm.value;
-        this.userBackendService.updateSecured(userEdit)
+        this.editProfileForm.value.dni = (this.dni.value === '') ? null : this.dni.value;
+        this.editProfileForm.value.mobile = (this.mobile.value === '') ? null : this.mobile.value;
+        this.editProfileForm.value.email = (this.email.value === '') ? null : this.email.value;
+        this.editProfileForm.value.address = (this.address.value === '') ? null : this.address.value;
+
+        let userEdited: User = this.editProfileForm.value;
+        this.userBackendService.updateSecured(userEdited)
             .pipe(finalize(() => this.isLoading = false))
             .subscribe(user => {
                 this.userLoggedService.userLoggedNext(user);
@@ -163,14 +153,15 @@ export class UserProfileComponent implements OnInit {
                 this.editProfileForm.markAsPristine();
                 this.userStoreService.updateInManagerDataStore(user);
                 this.userStoreService.updateInTeacherDataStore(user);
+                this.userStoreService.updateInStudentDataStore(user);
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
                 } else {
-                    this.snackbarService.openSnackBar('Error al actualizar usuario', RESULT_ERROR);
+                    this.snackbarService.openSnackBar(USER_UPDATE_ERROR, RESULT_ERROR);
                 }
             }, () => {
-                this.snackbarService.openSnackBar('Datos Actualizados', RESULT_SUCCESS);
+                this.snackbarService.openSnackBar(USER_UPDATE_SUCCESS, RESULT_SUCCESS);
             }
             );
 

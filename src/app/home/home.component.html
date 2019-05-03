@@ -34,7 +34,7 @@
             <mat-toolbar class="side-toolbar">
                 <mat-list style="flex-grow: 8">
                     <mat-list-item>
-                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
                             alt="{{privilege | lowercase}}">
                         <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
                         <p matLine>

@@ -13,21 +13,22 @@ import { Token } from '../models/token';
 })
 export class UserLoggedService {
 
-
     private userLoggedSource = new ReplaySubject<User>(1);//<BehaviorSubject<User>>new BehaviorSubject(null);// new Subject<User>();
-    userLogged$ = this.userLoggedSource.asObservable();
 
     redirectUrl: string;
 
-    constructor(private userBackendService: UserBackendService,
+    constructor(
+        private userBackendService: UserBackendService,
         private isLoadingService: IsLoadingService,
         private localStorageService: LocalStorageService,
-    ) {
+    ) { }
 
+    get userLogged$() {
+        return this.userLoggedSource.asObservable();
     }
 
     userLoggedNext(user: User) {
-        console.log('userLogged NEXT=======>');
+        //console.log('userLogged NEXT=======>');
         this.userLoggedSource.next(user);
     }
 
@@ -42,8 +43,6 @@ export class UserLoggedService {
                 })
             );
     }
-
-
 
     getRoles(): string[] {
         return this.localStorageService.getTokenRoles();
@@ -80,7 +79,7 @@ export class UserLoggedService {
     }
 
     getPrivilege(): string {
-           for (var i = 0; i < this.getRoles().length; i++) {
+        for (var i = 0; i < this.getRoles().length; i++) {
             let role = this.getRoles()[i];
             if (role === ROLE_ADMIN) return ROLE_ADMIN;
             if (role === ROLE_MANAGER) return ROLE_MANAGER;

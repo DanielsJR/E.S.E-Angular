@@ -9,7 +9,6 @@ import { CourseStoreService } from '../../../services/course-store.service';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { SnackbarService } from '../../../services/snackbar.service';
 import { Course } from '../../../models/course';
 import { switchMap } from 'rxjs/operators';
 
@@ -26,7 +25,6 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
   roleTeacher = ROLE_TEACHER;
 
   // mat table
-
   displayedColumns = ['name', 'crud'];
   dataSource;
   @ViewChild(MatSort) sort: MatSort;
@@ -41,18 +39,16 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
   coursesSubscription: Subscription;
   isLoadingGetCoursesSubscription: Subscription;
   user: User;
-  //filteredCourses: Course[];
-  filteredSubjects: Subject[];
+  filteredCourses: Course[];
+  teacherSubjects: Subject[];
 
   constructor(private sessionStorage: SessionStorageService,
     private courseStoreService: CourseStoreService, private userLoggedService: UserLoggedService,
     private subjectStoreService: SubjectStoreService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
+    public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Course>();
-
-
 
     if (this.areaRole === this.roleManager) {
       this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
@@ -65,24 +61,18 @@ export class SubjectsCoursesComponent implements OnInit, AfterViewInit, OnDestro
           switchMap(user => {
             this.user = user;
             return this.subjectStoreService.subjects$
+          }),
+          switchMap(subjects => {
+            this.teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
+            return this.courseStoreService.courses$
           })
-        ).subscribe(sjs => {
-          this.filteredSubjects = sjs.filter(s => s.teacher.id.indexOf(this.user.id) === 0)
-
-          let courses: Course[] = [];
-          
-          this.filteredSubjects.forEach((item, index) => courses[index] = item.course);
-
-          courses = courses.filter((item, index, self) =>
-            index === self.findIndex((c) => (
-              c.id === item.id
-            ))
-          )
-
-          this.dataSource = courses;
+        ).subscribe(courses => {
+          this.dataSource = courses.filter(c => this.teacherSubjects.map(s => s.course.id).indexOf(c.id) !== -1);
         }
 
         );
+    } else {
+      console.error('No area role');
     }
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);

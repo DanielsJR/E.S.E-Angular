@@ -73,8 +73,16 @@ export const RESULT_ACTION1 = 'action1';
 export const RESULT_ACTION2 = 'action2';
 export const RESULT_ACTION3 = 'action3';
 
+export const USER_UPDATE_ERROR = 'Error al actualizar usuario';
+export const USER_UPDATE_SUCCESS = 'Datos Actualizados';
 
+
+//*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';
+
+
+//*******************DATE-FORMAT*************************/
+export const DD_MM_YYYY ='DD/MM/YYYY';
 
 
 

@@ -8,6 +8,7 @@ import { Grade } from "../models/grade";
 import { GradeBackendService } from "./grade-backend.service";
 import { Subject } from "../models/subject";
 import { User } from "../models/user";
+import { map } from "rxjs/internal/operators/map";
 
 
 
@@ -53,7 +54,11 @@ export class GradeStoreService {
         }
 
     }
-    
+
+    loadOneGrade(id: string) {
+        return this.grades$
+            .pipe(map(grades => grades.find(g => g.id === id)));
+    }
 
     create(grade: Grade): Observable<Grade> {
         this.isLoadingService.isLoadingTrue();
@@ -96,37 +101,34 @@ export class GradeStoreService {
                 ));
     }
 
-    //************* */
+
+
+
+    //*****subjectStore******** */
 
     updateSubjectInGradeStore(subject: Subject) {
-        this.dataStore.grades.forEach((item, index) => {
-            if (item.subject.id === subject.id) {
-                item.subject = subject;
-                this.dataStore.grades[index] = item;
-            }
-        });
-        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-    }
-
-    deleteSubjectInGradeStore(subject: string | Subject): any {
-        //throw new Error("Method not implemented.");
-        console.error('Method not implemented: deleteSubjectInGradeStore');
+        if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
+            this.dataStore.grades.forEach((item, index) => {
+                if (item.subject.id === subject.id) {
+                    item.subject = subject;
+                    this.dataStore.grades[index] = item;
+                }
+            });
+            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+        }
     }
 
     updateStudentInGradeStore(student: User) {
-        this.dataStore.grades.forEach((item, index) => {
-            if (item.student.id === student.id) {
-                item.student = student;
-                this.dataStore.grades[index] = item;
-            }
-        });
+        if (this.dataStore.grades.find(g => g.student.id === student.id)) {
+            this.dataStore.grades.forEach((item, index) => {
+                if (item.student.id === student.id) {
+                    item.student = student;
+                    this.dataStore.grades[index] = item;
+                }
+            });
+            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+        }
 
-        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-
-    }
-
-    deleteStudentInGradeStore(student: User | string) {
-        throw new Error("Method not implemented.");
     }
 
 

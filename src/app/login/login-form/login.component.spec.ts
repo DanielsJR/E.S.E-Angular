@@ -71,9 +71,9 @@ describe('LoginComponent', () => {
   it('should validate username', () => {
     expect(component.username.valid).toBeFalsy();
     let errors = {};
-    errors = component.username.errors || {};
-
+  
     component.username.setValue('');
+    errors = component.username.errors || {};
     expect(errors['required']).toBeTruthy('required error');
     expect(component.username.valid).toBeFalsy('username valid required');
 

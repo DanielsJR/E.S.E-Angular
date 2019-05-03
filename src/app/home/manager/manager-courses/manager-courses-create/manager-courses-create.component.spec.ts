@@ -64,9 +64,9 @@ describe('ManagerCreateCourseComponent', () => {
   it('should validate name', () => {
     expect(component.name.valid).toBeFalsy();
     let errors = {};
-    errors = component.name.errors || {};
-
+   
     component.name.setValue('');
+    errors = component.name.errors || {};
     expect(errors['required']).toBeTruthy('required error');
     expect(component.name.valid).toBeFalsy('courseName valid required');
 
@@ -79,9 +79,9 @@ describe('ManagerCreateCourseComponent', () => {
   it('should validate year', () => {
     expect(component.year.valid).toBeFalsy();
     let errors = {};
-    errors = component.year.errors || {};
-
+   
     component.year.setValue('');
+    errors = component.year.errors || {};
     expect(errors['required']).toBeTruthy('required error');
     expect(component.year.valid).toBeFalsy('courseYear valid required');
 

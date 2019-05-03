@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../../../../models/user';
 import {
     URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
-    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE
+    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, DD_MM_YYYY
 } from '../../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES } from '../../../../models/communes';
@@ -21,7 +21,6 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { LoginService } from '../../../../login/login-form/login.service';
 import { UserLoggedService } from '../../../../services/user-logged.service';
 
 
@@ -78,7 +77,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     }
 
     convertDate(birthDay: any) {
-        return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, 'DD/MM/YYYY') : null;
+        return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, DD_MM_YYYY) : null;
     }
 
     compareByViewValue(a1: any, a2: any) {
@@ -132,7 +131,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             firstName: [this.user.firstName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             lastName: [this.user.lastName, [Validators.required, Validators.pattern(NAME_PATTERN)]],
             dni: [this.user.dni, [noWhitespaceValidator, rutValidator]],
-            birthday: [(this.user.birthday != null) ? moment(this.user.birthday, 'DD/MM/YYYY') : null],
+            birthday: [(this.user.birthday != null) ? moment(this.user.birthday, DD_MM_YYYY) : null],
             gender: [this.user.gender],
             avatar: [this.user.avatar],
             mobile: [this.user.mobile, [Validators.pattern(PHONE_PATTERN), Validators.minLength(9), Validators.maxLength(9), noWhitespaceValidator]],
@@ -318,7 +317,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     }
 
     private createBirthday(): string {
-        return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format('DD/MM/YYYY') : null;
+        return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format(DD_MM_YYYY) : null;
     }
 
     editRolesSubs(dialogRef: MatDialogRef<SetRolesDialogRefComponent>) {
@@ -412,7 +411,7 @@ export class CrudUserDialogRefComponent implements OnInit {
 
     save(): void {
         this.editForm.value.username = this.eUsername.value;
-        this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format('DD/MM/YYYY') : null;
+        this.editForm.value.birthday = (this.editForm.value.birthday != null) ? moment(this.editForm.value.birthday).format(DD_MM_YYYY) : null;
         this.editForm.value.gender = (this.editForm.value.gender != null) ? this.editForm.value.gender.toUpperCase() : null;
         this.editForm.value.commune = (this.editForm.value.commune != null) ? this.editForm.value.commune.replace(/ /g, '_').toUpperCase() : null;
         this.editForm.value.dni = (this.eDni.value === "") ? null : this.eDni.value;

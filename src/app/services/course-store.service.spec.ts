@@ -9,11 +9,13 @@ import { asyncData } from '../testing/async-helpers';
 import { IsLoadingService } from './isLoadingService.service';
 import { User } from '../models/user';
 import { deepCopy } from '../shared/functions/deepCopy';
+import { SubjectStoreService } from './subject-store.service';
 
 
 
 describe('Course Store Service', () => {
   let courseStoreService: CourseStoreService;
+  let subjectStoreService: SubjectStoreService;
   let courseBackendServiceSpy: jasmine.SpyObj<CourseBackendService>;
   let isLoadingService: IsLoadingService;
 
@@ -28,15 +30,15 @@ describe('Course Store Service', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        CourseStoreService,
         { provide: CourseBackendService, useValue: spy },
         { provide: HttpClient, useValue: httpStub },
-        IsLoadingService,
+
       ]
 
     });
 
     courseStoreService = TestBed.get(CourseStoreService);
+    subjectStoreService = TestBed.get(SubjectStoreService);
     courseBackendServiceSpy = TestBed.get(CourseBackendService);
     isLoadingService = TestBed.get(IsLoadingService);
 
@@ -50,7 +52,7 @@ describe('Course Store Service', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get Allcourses', fakeAsync(() => {
+  it('should get All courses', fakeAsync(() => {
     let courses: Course[];
     courseStoreService.courses$.subscribe(data => courses = data);
 
@@ -62,14 +64,23 @@ describe('Course Store Service', () => {
     courseStoreService.loadAllCourses('2019');
 
     expect(isLoading).toBeTruthy();
+    expect(courses.length).toEqual(0);
     tick();
     expect(courses).toEqual(coursesTest);
     expect(courses.length).toEqual(2);
     expect(isLoading).toBeFalsy();
+    expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledWith('2019');
+    expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledTimes(1);
+
+    courseStoreService.loadAllCourses('2019');
+    expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledTimes(1);//cache
 
   }));
 
   it('should get one course', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
     const coursesTest: Course[] = [courseTest, courseTest2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
     courseStoreService.loadAllCourses('2019');
@@ -77,73 +88,81 @@ describe('Course Store Service', () => {
     let course: Course;
     courseStoreService.loadOneCourse(courseTest.name).subscribe(data => course = data);
 
-    //not found
     expect(course).not.toEqual(courseTest);
-
     tick();
-    //found
-    expect(course).toEqual(courseTest);
+    expect(courses[0]).toEqual(course);
 
   }));
 
   it('should create course', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
+    const coursesTest: Course[] = [courseTest];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses('2019');
+    tick();
+
     let isLoading;
     isLoadingService.isLoading$.subscribe(data => isLoading = data);
 
-    courseBackendServiceSpy.create.and.returnValue(asyncData(courseTest));
+    courseBackendServiceSpy.create.and.returnValue(asyncData(courseTest2));
     let course: Course;
-    courseStoreService.create(courseTest).subscribe(data => course = data);
+    courseStoreService.create(courseTest2).subscribe(data => course = data);
 
     expect(isLoading).toBeTruthy();
+    expect(courses.length).toEqual(1);
     tick();
-    expect(course).toEqual(courseTest);
+    expect(course).toEqual(courseTest2);
+    expect(courses.length).toEqual(2);
     expect(isLoading).toBeFalsy();
 
   }));
 
   it('should update course', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
+    const coursesTest: Course[] = [courseTest];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses('2019');
+    tick();
+
     let isLoading;
     isLoadingService.isLoading$.subscribe(data => isLoading = data);
+
+    spyOn(subjectStoreService, 'updateCourseInSubjectStore');
 
     courseBackendServiceSpy.update.and.returnValue(asyncData(courseTest));
     let course: Course;
     courseStoreService.update(courseTest).subscribe(data => course = data);
+
     expect(isLoading).toBeTruthy();
     tick();
-
     expect(course).toEqual(courseTest);
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledWith(course);
     expect(isLoading).toBeFalsy();
+    expect(courses.length).toEqual(1);
+    expect(courses[0]).toEqual(course);
   }));
 
   it('should delete course', fakeAsync(() => {
-    courseBackendServiceSpy.delete.and.returnValue(asyncData(courseTest));
-    let course: Course;
-    courseStoreService.delete(courseTest).subscribe(data => course = data);
-    tick();
-
-    expect(course).toEqual(courseTest);
-
-  }));
-
-  it('should update a ChiefTeacher In CourseStore OneToMany', fakeAsync(() => {
     let courses: Course[];
     courseStoreService.courses$.subscribe(data => courses = data);
 
-    const coursesTest: Course[] = [deepCopy(courseTest)];
+    const coursesTest: Course[] = [courseTest];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseTest.year);
+    courseStoreService.loadAllCourses('2019');
     tick();
 
-    let teacherModified: User = deepCopy(teacherTest);
-    teacherModified.username = 'tModif';
-    courseStoreService.updateChiefTeacherInCourseStoreOneToMany(teacherModified);
-    tick();
-    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    courseBackendServiceSpy.delete.and.returnValue(asyncData(courseTest));
+    let course: Course;
+    courseStoreService.delete(courseTest).subscribe(data => course = data);
 
-    //not found
-    courseStoreService.updateChiefTeacherInCourseStoreOneToMany(teacherTest2);
+    expect(courses.length).toEqual(1);
     tick();
-    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    expect(course).toEqual(courseTest);
+    expect(courses.length).toEqual(0);
 
   }));
 
@@ -151,52 +170,73 @@ describe('Course Store Service', () => {
     let courses: Course[];
     courseStoreService.courses$.subscribe(data => courses = data);
 
-    const coursesTest: Course[] = [deepCopy(courseTest)];
-    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseTest.year);
-    tick();
-
-    let teacherModified: User = deepCopy(teacherTest);
-    teacherModified.username = 'tModif';
-    courseStoreService.updateChiefTeacherInCourseStoreOneToOne(teacherModified);
-    tick();
-    expect(courses[0].chiefTeacher.username).toEqual('tModif');
-
-    //not found
-    courseStoreService.updateChiefTeacherInCourseStoreOneToMany(teacherTest2);
-    tick();
-    expect(courses[0].chiefTeacher).toEqual(teacherModified);
-
-  }));
-
-  it('should tell if there is a Student In A Course', () => {
-    expect(courseStoreService.isStudentInACourse(studentTest, courseTest.students)).toBeTruthy();
-    expect(courseStoreService.isStudentInACourse(studentTest3, courseTest.students)).toBeFalsy();
-  });
-
-  it('should update a Student In CourseStore oneToMany', fakeAsync(() => {
-    let courses: Course[];
-    courseStoreService.courses$.subscribe(data => courses = data);
-
     let courseModified: Course = deepCopy(courseTest);
     let courseModified2: Course = deepCopy(courseTest2);
-    courseModified2.students[2] = courseModified.students[0];
+    courseModified.chiefTeacher = teacherTest;
+    courseModified2.chiefTeacher = teacherTest;
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
     courseStoreService.loadAllCourses(courseModified.year);
     tick();
 
-    let studentModified: User = deepCopy(courseModified.students[0]);
-    studentModified.username = 'sModif';
-    courseStoreService.updateStudentInCourseStoreOnetoMany(studentModified);
-    tick();
-    expect(courses[0].students[0].username).toEqual('sModif');
-    expect(courses[1].students[2].username).toEqual('sModif');
+    spyOn(subjectStoreService, 'updateTeacherInSubjectStore');
+
+    let teacherModified: User = deepCopy(teacherTest);
+    teacherModified.username = 'tModif';
+
+    expect(courses[0].chiefTeacher).toEqual(teacherTest);
+    expect(courses[1].chiefTeacher).toEqual(teacherTest);
+
+    courseStoreService.updateChiefTeacherInCourseStoreOneToOne(teacherModified);
+
+    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    expect(courses[1].chiefTeacher).not.toEqual(teacherModified);// change in only one course
+    expect(courses[1].chiefTeacher).toEqual(teacherTest);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledWith(teacherModified);
 
     //not found
-    courseStoreService.updateStudentInCourseStoreOnetoMany(studentTest3);
+    courseStoreService.updateChiefTeacherInCourseStoreOneToOne(teacherTest2);
+
+    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    expect(courses[1].chiefTeacher).not.toEqual(teacherModified);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledTimes(1);
+
+  }));
+
+  it('should update a ChiefTeacher In CourseStore OneToMany', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
+    let courseModified: Course = deepCopy(courseTest);
+    let courseModified2: Course = deepCopy(courseTest2);
+    courseModified.chiefTeacher = teacherTest;
+    courseModified2.chiefTeacher = teacherTest;
+    const coursesTest: Course[] = [courseModified, courseModified2];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses(courseModified.year);
     tick();
-    expect(courses[0].students).not.toContain(studentTest3);
+
+    spyOn(subjectStoreService, 'updateTeacherInSubjectStore');
+
+    let teacherModified: User = deepCopy(teacherTest);
+    teacherModified.username = 'tModif';
+
+    expect(courses[0].chiefTeacher).toEqual(teacherTest);
+    expect(courses[1].chiefTeacher).toEqual(teacherTest);
+        
+    courseStoreService.updateChiefTeacherInCourseStoreOneToMany(teacherModified);
+
+    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    expect(courses[1].chiefTeacher).toEqual(teacherModified);
+    expect(courses[0].chiefTeacher).not.toEqual(teacherTest);
+    expect(courses[1].chiefTeacher).not.toEqual(teacherTest);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledWith(teacherModified);
+
+    //not found
+    courseStoreService.updateChiefTeacherInCourseStoreOneToMany(teacherTest2);
+
+    expect(courses[0].chiefTeacher).toEqual(teacherModified);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledTimes(1);
 
   }));
 
@@ -206,23 +246,26 @@ describe('Course Store Service', () => {
 
     let courseModified: Course = deepCopy(courseTest);
     let courseModified2: Course = deepCopy(courseTest2);
-    courseModified2.students[2] = courseModified.students[0];
+    courseModified2.students[0] = courseModified.students[0];
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
     courseStoreService.loadAllCourses(courseModified.year);
     tick();
 
+    spyOn(subjectStoreService, 'updateCourseInSubjectStore');
+
     let studentModified: User = deepCopy(studentTest);
     studentModified.username = 'sModif';
     courseStoreService.updateStudentInCourseStoreOneToOne(studentModified);
-    tick();
-    expect(courses[0].students[0].username).toEqual('sModif');
-    expect(courses[1].students[2].username).toEqual('student01');
+    expect(courses[0].students[0]).toEqual(studentModified);
+    expect(courses[1].students[0]).not.toEqual(studentModified);
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(1);
 
     //not found
-    courseStoreService.updateStudentInCourseStoreOnetoMany(studentTest3);
-    tick();
+    courseStoreService.updateStudentInCourseStoreOneToMany(studentTest3);
     expect(courses[0].students).not.toContain(studentTest3);
+    expect(courses[1].students).not.toContain(studentTest3);
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(1);
 
 
 
@@ -232,18 +275,96 @@ describe('Course Store Service', () => {
     let courses: Course[];
     courseStoreService.courses$.subscribe(data => courses = data);
 
-    const coursesTest: Course[] = [deepCopy(courseTest)];
+    let courseModified: Course = deepCopy(courseTest);
+    let courseModified2: Course = deepCopy(courseTest2);
+    courseModified2.students[0] = courseModified.students[0];
+    const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadAllCourses(courseModified.year);
     tick();
+
+    spyOn(subjectStoreService, 'updateCourseInSubjectStore');
+
+    expect(courses.length).toEqual(2);
     expect(courses[0].students.length).toEqual(2);
+    expect(courses[1].students.length).toEqual(2);
 
     courseStoreService.deleteStudentInCourseStoreOneToOne(studentTest);
-    tick();
+
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(1);
+    expect(courses[0].students.length).toEqual(1);//delete in only one course
+    expect(courses[1].students.length).toEqual(2);
+
+    //not found
+    courseStoreService.deleteStudentInCourseStoreOneToOne(studentTest3);
+    
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(1);
     expect(courses[0].students.length).toEqual(1);
-    expect(courseTest.students.length).toEqual(2);
+    expect(courses[1].students.length).toEqual(2);
+   
+  }));
+
+  it('should update a Student In CourseStore oneToMany', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
+    let courseModified: Course = deepCopy(courseTest);
+    let courseModified2: Course = deepCopy(courseTest2);
+    courseModified2.students[0] = courseModified.students[0];
+    const coursesTest: Course[] = [courseModified, courseModified2];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses(courseModified.year);
+    tick();
+
+    spyOn(subjectStoreService, 'updateCourseInSubjectStore');
+
+    let studentModified: User = deepCopy(courseModified.students[0]);
+    studentModified.username = 'sModif';
+
+    expect(courses[0].students[0]).toEqual(courseModified.students[0]);
+    expect(courses[1].students[0]).toEqual(courseModified.students[0]);
+
+    courseStoreService.updateStudentInCourseStoreOneToMany(studentModified);
+
+    expect(courses[0].students[0]).toEqual(studentModified);
+    expect(courses[1].students[0]).toEqual(studentModified);
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(2);
+
+    //not found
+    courseStoreService.updateStudentInCourseStoreOneToMany(studentTest3);
+
+    expect(courses[0].students).not.toContain(studentTest3);
+    expect(courses[1].students).not.toContain(studentTest3);
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(2);
 
   }));
+
+  it('should delete a Student In CourseStore OneToMany', fakeAsync(() => {
+    let courses: Course[];
+    courseStoreService.courses$.subscribe(data => courses = data);
+
+    let courseModified: Course = deepCopy(courseTest);
+    let courseModified2: Course = deepCopy(courseTest2);
+    courseModified2.students[0] = courseModified.students[0];
+    const coursesTest: Course[] = [courseModified, courseModified2];
+    courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
+    courseStoreService.loadAllCourses(courseModified.year);
+    tick();
+
+    spyOn(subjectStoreService, 'updateCourseInSubjectStore');
+
+    expect(courses[0].students.length).toEqual(2);
+    expect(courses[1].students.length).toEqual(2);
+
+    courseStoreService.deleteStudentInCourseStoreOneToMany(courseModified.students[0]);
+
+    expect(subjectStoreService.updateCourseInSubjectStore).toHaveBeenCalledTimes(2);
+    expect(courses[0].students.length).toEqual(1);
+    expect(courses[1].students.length).toEqual(1);
+
+  }));
+
+
 
 });
 

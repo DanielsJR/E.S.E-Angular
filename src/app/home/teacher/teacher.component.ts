@@ -22,7 +22,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
 
           // this.userStoreService.loadAllTeachers();
            this.userStoreService.loadAllStudents();
-          // this.courseStoreService.loadAllCourses(2018); 
+           this.courseStoreService.loadAllCourses('2018'); 
            this.subjectStoreService.loadAllSubjects();
            this.gradeStoreService.loadAllGrades();
     }

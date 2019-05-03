@@ -6,12 +6,18 @@ import { asyncData } from '../testing/async-helpers';
 import { UserStoreService } from './user-store.service';
 import { UserBackendService } from './user-backend.service';
 import { User } from '../models/user';
-import { ROLE_MANAGER, ROLE_TEACHER } from '../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../app.config';
 import { deepCopy } from '../shared/functions/deepCopy';
+import { CourseStoreService } from './course-store.service';
+import { GENDERS } from '../models/genders';
+import { GradeStoreService } from './grade-store.service';
+import { GradeBackendService } from './grade-backend.service';
 
 
 describe('User Store Service', () => {
   let userStoreService: UserStoreService;
+  let courseStoreService: CourseStoreService;
+  let gradeStoreService: GradeStoreService;
   let userBackendServiceSpy: jasmine.SpyObj<UserBackendService>;
 
   beforeEach(() => {
@@ -26,7 +32,6 @@ describe('User Store Service', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        UserStoreService,
         { provide: UserBackendService, useValue: spy },
         { provide: HttpClient, useValue: httpStub },
 
@@ -35,6 +40,8 @@ describe('User Store Service', () => {
     });
 
     userStoreService = TestBed.get(UserStoreService);
+    courseStoreService = TestBed.get(CourseStoreService);
+    gradeStoreService = TestBed.get(GradeStoreService);
     userBackendServiceSpy = TestBed.get(UserBackendService);
   });
 
@@ -47,7 +54,7 @@ describe('User Store Service', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get Managers', fakeAsync(() => {
+  it('should get all Managers', fakeAsync(() => {
     let users: User[];
     userStoreService.managers$.subscribe(data => users = data);
 
@@ -63,7 +70,26 @@ describe('User Store Service', () => {
     expect(users).toEqual(managersTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_MANAGERS);
 
+    userStoreService.loadAllManagers();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache
+  }));
+
+  it('should get one Manager', fakeAsync(() => {
+    let users: User[];
+    userStoreService.managers$.subscribe(data => users = data);
+
+    const managersTest: User[] = [managerTest, managerTest2];
+    userBackendServiceSpy.getUsers.and.returnValue(asyncData(managersTest));
+    userStoreService.loadAllManagers();
+
+    let user: User;
+    userStoreService.loadOneManager(managerTest.id).subscribe(data => user = data);
+
+    expect(user).toEqual(undefined);
+    tick();
+    expect(users[0]).toEqual(user);
   }));
 
   it('should create Manager', fakeAsync(() => {
@@ -79,6 +105,8 @@ describe('User Store Service', () => {
     let user: User;
     userStoreService.createManager(managerTest2).subscribe(data => user = data);
 
+    expect(user).toEqual(undefined);
+    expect(users.length).toEqual(1);
     tick();
     expect(user).toEqual(managerTest2);
     expect(users[0]).toEqual(managerTest);
@@ -95,15 +123,24 @@ describe('User Store Service', () => {
     userStoreService.loadAllManagers();
     tick();
 
-    userBackendServiceSpy.update.and.returnValue(asyncData(managerTest));
+    spyOn(userStoreService, 'updateInManagerDataStore').and.callThrough();
+    spyOn(userStoreService, 'updateInTeacherDataStore').and.callThrough();
+
+    let userCopy: User = deepCopy(managerTest);
+    userCopy.gender = GENDERS[1].value;
+    userBackendServiceSpy.update.and.returnValue(asyncData(userCopy));
 
     let user: User;
     userStoreService.updateManager(managerTest).subscribe(data => user = data);
 
+    expect(users.length).toEqual(1);
     tick();
-    expect(user).toEqual(managerTest);
+    expect(user).toEqual(userCopy);
     expect(users[0]).toEqual(user);
     expect(users.length).toEqual(1);
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
+
   }));
 
   it('should delete Manager', fakeAsync(() => {
@@ -115,6 +152,8 @@ describe('User Store Service', () => {
     userStoreService.loadAllManagers();
     tick();
 
+    spyOn(userStoreService, 'deleteInManagerDataStore').and.callThrough();
+    spyOn(userStoreService, 'deleteInTeacherDataStore').and.callThrough();
     userBackendServiceSpy.delete.and.returnValue(asyncData(managerTest));
 
     let deleted: boolean;
@@ -122,6 +161,8 @@ describe('User Store Service', () => {
 
     expect(users.length).toEqual(1);
     tick();
+    expect(userStoreService.deleteInManagerDataStore).toHaveBeenCalledWith(managerTest);
+    expect(userStoreService.deleteInTeacherDataStore).toHaveBeenCalledWith(managerTest);
     expect(deleted).toBeTruthy();
     expect(users.length).toEqual(0);
   }));
@@ -135,6 +176,7 @@ describe('User Store Service', () => {
     userStoreService.loadAllManagers();
     tick();
 
+    spyOn(userStoreService, 'updateInManagerDataStore').and.callThrough();
     spyOn(userStoreService, 'updateInTeacherDataStore').and.callThrough();
 
     let userModif: User = deepCopy(managerTest);
@@ -142,19 +184,36 @@ describe('User Store Service', () => {
     userBackendServiceSpy.setRoles.and.returnValue(asyncData(userModif));
 
     let user: User;
-    userStoreService.setManagerRoles(userModif).subscribe(data => user = data);
+    userStoreService.setManagerRoles(managerTest).subscribe(data => user = data);//update
     tick();
 
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
     expect(users[0]).toEqual(user);
     expect(users.length).toEqual(1);
-    expect(users[0].roles).toContain(ROLE_TEACHER);
-    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalled();
+    expect(users[0].roles.includes(ROLE_TEACHER)).toBeTruthy('now it is a teacher too');
 
-    userBackendServiceSpy.setRoles.and.returnValue(asyncData(managerTest2));
+
+    userBackendServiceSpy.setRoles.and.returnValue(asyncData(managerTest2));//adds
     userStoreService.setManagerRoles(managerTest2).subscribe();
     tick();
-    expect(users.length).toEqual(1);//not found
+
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
+    expect(users.length).toEqual(2);
     expect(users[0]).toEqual(user);
+    expect(users[1]).toEqual(managerTest2);
+
+
+    userBackendServiceSpy.setRoles.and.returnValue(asyncData(teacherTest));//not found
+    userStoreService.setManagerRoles(teacherTest).subscribe();
+    tick();
+
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
+    expect(users.length).toEqual(2);
+    expect(users[0]).toEqual(user);
+    expect(users[1]).toEqual(managerTest2);
 
 
   }));
@@ -169,29 +228,32 @@ describe('User Store Service', () => {
     tick();
 
     //found && includes managerRole (updates it)
-    userStoreService.updateInManagerDataStore(managerTest);
-    tick();
-    expect(users[0]).toEqual(managerTest);
+    let userModif = deepCopy(managerTest);
+    userModif.roles = [ROLE_MANAGER, ROLE_TEACHER];
+    userStoreService.updateInManagerDataStore(userModif);
+
+    expect(users[0]).toEqual(userModif);
     expect(users.length).toEqual(1);
+    expect(users[0].roles).toContain(ROLE_TEACHER);
+
+    //found && not includes managerRole (splices it)
+    userModif.roles = [ROLE_TEACHER];
+    userStoreService.updateInManagerDataStore(userModif);
+
+    expect(users.length).toEqual(0);
 
     //not found && includes managerRole (adds it)
     userStoreService.updateInManagerDataStore(managerTest2);
-    tick();
-    expect(users[1]).toEqual(managerTest2);
-    expect(users.length).toEqual(2);
 
-    //not found and not includes role
-    userStoreService.updateInManagerDataStore(teacherTest);
-    tick();
-    expect(users.length).toEqual(2);
-
-    //found && not includes managerRole (splices it)
-    let userModif = deepCopy(managerTest);
-    userModif.roles = [ROLE_TEACHER];
-    userStoreService.updateInManagerDataStore(userModif);
-    tick();
     expect(users[0]).toEqual(managerTest2);
     expect(users.length).toEqual(1);
+
+    //not found and not includes role (do nothing)
+    userStoreService.updateInManagerDataStore(studentTest);
+
+    expect(users.length).toEqual(1);
+
+
   }));
 
   it('should delete In ManagerDataStore', fakeAsync(() => {
@@ -203,19 +265,17 @@ describe('User Store Service', () => {
     userStoreService.loadAllManagers();
     tick();
 
-    //found
-    userStoreService.deleteInManagerDataStore(managerTest);
-    tick();
+    expect(users.length).toBe(1, 'there is one');
+    userStoreService.deleteInManagerDataStore(managerTest);//found
     expect(users).toEqual([]);
 
-    //not found
-    userStoreService.deleteInManagerDataStore(managerTest);
-    tick();
-    expect(users.length).toEqual(0);
+    expect(users.length).toBe(0, 'there is cero');
+    userStoreService.deleteInManagerDataStore(managerTest);//not found
+    expect(users.length).toBe(0, 'there is cero');
   }));
 
   //TEACHERS********************************
-  it('should get Teachers', fakeAsync(() => {
+  it('should get all Teachers', fakeAsync(() => {
     let users: User[];
     userStoreService.teachers$.subscribe(data => users = data);
 
@@ -231,7 +291,27 @@ describe('User Store Service', () => {
     expect(users).toEqual(teachersTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_TEACHERS);
 
+    userStoreService.loadAllTeachers();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache
+
+  }));
+
+  it('should get one Teacher', fakeAsync(() => {
+    let users: User[];
+    userStoreService.teachers$.subscribe(data => users = data);
+
+    const teachersTest: User[] = [teacherTest, teacherTest2];
+    userBackendServiceSpy.getUsers.and.returnValue(asyncData(teachersTest));
+    userStoreService.loadAllTeachers();
+
+    let user: User;
+    userStoreService.loadOneTeacher(teacherTest.id).subscribe(data => user = data);
+
+    expect(user).toEqual(undefined);
+    tick();
+    expect(users[0]).toEqual(user);
   }));
 
   it('should create Teacher', fakeAsync(() => {
@@ -241,11 +321,14 @@ describe('User Store Service', () => {
     const teachersTest: User[] = [teacherTest];
     userBackendServiceSpy.getUsers.and.returnValue(asyncData(teachersTest));
     userStoreService.loadAllTeachers();
+    tick();
 
     userBackendServiceSpy.create.and.returnValue(asyncData(teacherTest2));
     let user: User;
     userStoreService.createTeacher(teacherTest2).subscribe(data => user = data);
 
+    expect(user).toEqual(undefined);
+    expect(users.length).toEqual(1);
     tick();
     expect(user).toEqual(teacherTest2);
     expect(users[0]).toEqual(teacherTest);
@@ -259,20 +342,27 @@ describe('User Store Service', () => {
     userStoreService.teachers$.subscribe(data => users = data);
 
     spyOn(userStoreService, 'updateInManagerDataStore').and.callThrough();
+    spyOn(userStoreService, 'updateInTeacherDataStore').and.callThrough();
 
     const teachersTest: User[] = [teacherTest];
     userBackendServiceSpy.getUsers.and.returnValue(asyncData(teachersTest));
     userStoreService.loadAllTeachers();
+    tick();
 
-    userBackendServiceSpy.update.and.returnValue(asyncData(teacherTest));
+    let userCopy: User = deepCopy(teacherTest);
+    userCopy.gender = GENDERS[1].value;
+    userBackendServiceSpy.update.and.returnValue(asyncData(userCopy));
+
     let user: User;
     userStoreService.updateTeacher(teacherTest).subscribe(data => user = data);
 
+    expect(users.length).toEqual(1);
     tick();
-    expect(user).toEqual(teacherTest);
+    expect(user).toEqual(userCopy);
     expect(users[0]).toEqual(user);
     expect(users.length).toEqual(1);
-    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalled();
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
 
   }));
 
@@ -280,21 +370,25 @@ describe('User Store Service', () => {
     let users: User[];
     userStoreService.teachers$.subscribe(data => users = data);
 
-    spyOn(userStoreService, 'deleteInManagerDataStore').and.callThrough();
-
     const teachersTest: User[] = [teacherTest];
     userBackendServiceSpy.getUsers.and.returnValue(asyncData(teachersTest));
     userStoreService.loadAllTeachers();
+    tick();
 
+    spyOn(userStoreService, 'deleteInManagerDataStore').and.callThrough();
+    spyOn(userStoreService, 'deleteInTeacherDataStore').and.callThrough();
     userBackendServiceSpy.delete.and.returnValue(asyncData(teacherTest));
+
     let deleted: boolean;
     userStoreService.deleteTeacher(teacherTest).subscribe(data => deleted = data);
 
+    expect(users.length).toEqual(1);
     tick();
+    expect(userStoreService.deleteInTeacherDataStore).toHaveBeenCalledWith(teacherTest);
+    expect(userStoreService.deleteInManagerDataStore).toHaveBeenCalledWith(teacherTest);
     expect(deleted).toBeTruthy();
     expect(users).toEqual([]);
     expect(users.length).toEqual(0);
-    expect(userStoreService.deleteInManagerDataStore).toHaveBeenCalled();
 
   }));
 
@@ -308,24 +402,38 @@ describe('User Store Service', () => {
     tick();
 
     spyOn(userStoreService, 'updateInManagerDataStore').and.callThrough();
+    spyOn(userStoreService, 'updateInTeacherDataStore').and.callThrough();
 
     let userModif = deepCopy(teacherTest);
     userModif.roles = [ROLE_MANAGER, ROLE_TEACHER];
     userBackendServiceSpy.setRoles.and.returnValue(asyncData(userModif));
 
     let user: User;
-    userStoreService.setTeacherRoles(userModif).subscribe(data => user = data);
+    userStoreService.setTeacherRoles(teacherTest).subscribe(data => user = data);//updates
     tick();
 
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
     expect(users[0]).toEqual(user);
     expect(users.length).toEqual(1);
     expect(users[0].roles).toContain(ROLE_TEACHER);
-    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalled();
 
-    userBackendServiceSpy.setRoles.and.returnValue(asyncData(managerTest2));
+    userBackendServiceSpy.setRoles.and.returnValue(asyncData(teacherTest2));//adds
+    userStoreService.setTeacherRoles(teacherTest2).subscribe();
+    tick();
+
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
+    expect(users.length).toEqual(2);
+
+    userBackendServiceSpy.setRoles.and.returnValue(asyncData(managerTest2));//not found
     userStoreService.setTeacherRoles(managerTest2).subscribe();
     tick();
-    expect(users.length).toEqual(1);//not found
+
+    expect(userStoreService.updateInManagerDataStore).toHaveBeenCalledWith(user);
+    expect(userStoreService.updateInTeacherDataStore).toHaveBeenCalledWith(user);
+    expect(users.length).toEqual(2);
+
   }));
 
   it('should update In TeacherDataStore', fakeAsync(() => {
@@ -337,33 +445,38 @@ describe('User Store Service', () => {
     userStoreService.loadAllTeachers();
     tick();
 
+    spyOn(courseStoreService, 'updateChiefTeacherInCourseStoreOneToOne');
+                     
     //found && includes teacherRole (updates it)
     let userModif = deepCopy(teacherTest);
     userModif.roles = [ROLE_MANAGER, ROLE_TEACHER];
     userStoreService.updateInTeacherDataStore(userModif);
-    tick();
 
     expect(users[0]).toEqual(userModif);
     expect(users.length).toEqual(1);
-    expect(users[0].roles).toContain(ROLE_TEACHER);
+    expect(users[0].roles).toContain(ROLE_MANAGER);
+    expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
 
     //found && not includes teacherRole (splices it)
     userModif.roles = [ROLE_MANAGER];
     userStoreService.updateInTeacherDataStore(userModif);
-    tick();
+
     expect(users).toEqual([]);
     expect(users.length).toEqual(0);
+    expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
 
     //not found && includes teacherRole (adds it)
     userStoreService.updateInTeacherDataStore(teacherTest2);
-    tick();
+
     expect(users[0]).toEqual(teacherTest2);
     expect(users.length).toEqual(1);
+    expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
 
     //not found and not includes teacherRole
     userStoreService.updateInTeacherDataStore(studentTest);
-    tick();
+
     expect(users.length).toEqual(1);
+    expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledTimes(3);
   }));
 
   it('should delete In TeacherDataStore', fakeAsync(() => {
@@ -375,19 +488,17 @@ describe('User Store Service', () => {
     userStoreService.loadAllTeachers();
     tick();
 
-    //found
-    userStoreService.deleteInTeacherDataStore(teacherTest);
-    tick();
+    expect(users.length).toBe(1, 'there is one');
+    userStoreService.deleteInTeacherDataStore(teacherTest);//found
     expect(users).toEqual([]);
 
-    //not found
-    userStoreService.deleteInTeacherDataStore(teacherTest);
-    tick();
+    expect(users.length).toEqual(0);
+    userStoreService.deleteInTeacherDataStore(teacherTest);//not found
     expect(users.length).toEqual(0);
   }));
 
   //STUDENTS********************************
-  it('should get Students', fakeAsync(() => {
+  it('should get all Students', fakeAsync(() => {
     let users: User[];
     userStoreService.students$.subscribe(data => users = data);
 
@@ -403,6 +514,27 @@ describe('User Store Service', () => {
     expect(users).toEqual(studentsTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_STUDENTS);
+
+    userStoreService.loadAllStudents();
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache
+
+  }));
+
+  it('should get one Student', fakeAsync(() => {
+    let users: User[];
+    userStoreService.students$.subscribe(data => users = data);
+
+    const studentsTest: User[] = [studentTest, studentTest2];
+    userBackendServiceSpy.getUsers.and.returnValue(asyncData(studentsTest));
+    userStoreService.loadAllStudents();
+
+    let user: User;
+    userStoreService.loadOneStudent(studentTest.id).subscribe(data => user = data);
+
+    expect(user).toEqual(undefined);
+    tick();
+    expect(users[0]).toEqual(user);
 
   }));
 
@@ -419,6 +551,7 @@ describe('User Store Service', () => {
     let user: User;
     userStoreService.createStudent(studentTest2).subscribe(data => user = data);
 
+    expect(user).toEqual(undefined);
     expect(users.length).toEqual(1);
     tick();
     expect(user).toEqual(studentTest2);
@@ -437,15 +570,21 @@ describe('User Store Service', () => {
     userStoreService.loadAllStudents();
     tick();
 
-    userBackendServiceSpy.update.and.returnValue(asyncData(studentTest));
+    spyOn(userStoreService, 'updateInStudentDataStore').and.callThrough();
+
+    let userCopy: User = deepCopy(studentTest);
+    userCopy.gender = GENDERS[1].value;
+    userBackendServiceSpy.update.and.returnValue(asyncData(userCopy));
+
     let user: User;
     userStoreService.updateStudent(studentTest).subscribe(data => user = data);
 
     expect(users.length).toEqual(1);
     tick();
-    expect(user).toEqual(studentTest);
+    expect(user).toEqual(userCopy);
     expect(users[0]).toEqual(user);
     expect(users.length).toEqual(1);
+    expect(userStoreService.updateInStudentDataStore).toHaveBeenCalledWith(user);
   }));
 
   it('should delete Student', fakeAsync(() => {
@@ -457,15 +596,66 @@ describe('User Store Service', () => {
     userStoreService.loadAllStudents();
     tick();
 
+    spyOn(userStoreService, 'deleteInStudentDataStore').and.callThrough();
     userBackendServiceSpy.delete.and.returnValue(asyncData(studentTest));
+
     let deleted: boolean;
     userStoreService.deleteStudent(studentTest).subscribe(data => deleted = data);
 
     expect(users.length).toEqual(1);
     tick();
+    expect(userStoreService.deleteInStudentDataStore).toHaveBeenCalledWith(studentTest);
     expect(deleted).toBeTruthy();
     expect(users.length).toEqual(0);
 
+  }));
+
+  it('should update In StudentDataStore', fakeAsync(() => {
+    let users: User[];
+    userStoreService.students$.subscribe(data => users = data);
+
+    const studentsTest: User[] = [studentTest];
+    userBackendServiceSpy.getUsers.and.returnValue(asyncData(studentsTest));
+    userStoreService.loadAllStudents();
+    tick();
+
+    spyOn(courseStoreService, 'updateStudentInCourseStoreOneToOne');
+    spyOn(gradeStoreService, 'updateStudentInGradeStore');
+
+    //found && includes studentRole (updates it)
+    let userModif: User = deepCopy(studentTest);
+    userModif.gender = GENDERS[1].value;
+    userStoreService.updateInStudentDataStore(userModif);
+
+    expect(users[0]).toEqual(userModif);
+    expect(users.length).toEqual(1);
+    expect(users[0].gender).toEqual(GENDERS[1].value);
+    expect(courseStoreService.updateStudentInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
+    expect(gradeStoreService.updateStudentInGradeStore).toHaveBeenCalledWith(userModif);
+
+    //not found and not includes studentRole
+    userStoreService.updateInStudentDataStore(teacherTest);
+    expect(courseStoreService.updateStudentInCourseStoreOneToOne).toHaveBeenCalledTimes(1);
+    expect(gradeStoreService.updateStudentInGradeStore).toHaveBeenCalledTimes(1);
+    expect(users.length).toEqual(1);
+  }));
+
+  it('should delete In StudentDataStore', fakeAsync(() => {
+    let users: User[];
+    userStoreService.students$.subscribe(data => users = data);
+
+    const studentsTest: User[] = [studentTest];
+    userBackendServiceSpy.getUsers.and.returnValue(asyncData(studentsTest));
+    userStoreService.loadAllStudents();
+    tick();
+
+    expect(users.length).toEqual(1);
+    userStoreService.deleteInStudentDataStore(studentTest);
+    expect(users).toEqual([]);
+
+    expect(users.length).toEqual(0);
+    userStoreService.deleteInStudentDataStore(studentTest);
+    expect(users.length).toEqual(0);
   }));
 
 

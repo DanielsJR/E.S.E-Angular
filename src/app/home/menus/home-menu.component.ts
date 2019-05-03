@@ -10,7 +10,7 @@ import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../app.
     <h3 matLine>Home</h3>
 </mat-list-item>  
   
-<mat-list-item *ngIf="roles?.includes(roleManager)  && !roles?.includes(roleAdmin) && !roles?.includes(roleAdmin)" routerLink="./manager">
+<mat-list-item *ngIf="roles?.includes(roleManager)  && !roles?.includes(roleAdmin)" routerLink="./manager">
   <mat-icon matListIcon svgIcon="home-variant"></mat-icon>
     <h3 matLine>Home</h3>
 </mat-list-item>  
