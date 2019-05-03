@@ -1,7 +1,6 @@
 import { Injectable } from "../../../node_modules/@angular/core";
-import { BehaviorSubject, Subject, Observable } from "../../../node_modules/rxjs";
+import { BehaviorSubject, Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
-import { HttpClient, HttpErrorResponse } from "../../../node_modules/@angular/common/http";
 import { finalize } from "../../../node_modules/rxjs/internal/operators/finalize";
 import { CourseBackendService } from "./course-backend.service";
 import { tap } from "rxjs/internal/operators/tap";
@@ -114,10 +113,8 @@ export class CourseStoreService {
             let index = this.dataStore.courses.findIndex(c => c.id === curso.id);
             this.dataStore.courses[index] = curso;
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            this.subjectStoreService.updateTeacherInSubjectStore(teacher);
         }
     }
-
 
     //one to many
     updateChiefTeacherInCourseStoreOneToMany(teacher: User) {
@@ -129,7 +126,6 @@ export class CourseStoreService {
                 }
             });
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            this.subjectStoreService.updateTeacherInSubjectStore(teacher);
         }
     }
 
@@ -138,7 +134,7 @@ export class CourseStoreService {
 
     //one to one **********************
     updateStudentInCourseStoreOneToOne(student: User) {
-        let curso = this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf(student.id) === 0);
+        let curso = this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf(student.id) !== -1);
         if (curso) {
             let indexS = curso.students.findIndex(s => s.id === student.id);
             curso.students[indexS] = student;
@@ -148,10 +144,11 @@ export class CourseStoreService {
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
             this.subjectStoreService.updateCourseInSubjectStore(curso);
         }
+
     }
 
     deleteStudentInCourseStoreOneToOne(student: User | string) {
-        let curso = this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) === 0);
+        let curso = this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) !== -1);
         if (curso) {
             let indexS = curso.students.findIndex((s) => s.id === ((typeof student === 'string') ? student : student.id));
             curso.students.splice(indexS, 1);
@@ -166,9 +163,9 @@ export class CourseStoreService {
 
     //one to many*******************
     updateStudentInCourseStoreOneToMany(student: User) {
-        if (this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf(student.id) === 0)) {
+        if (this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf(student.id) !== -1)) {
             this.dataStore.courses.forEach((c, index) => {
-                if (c.students.map(s => s.id).indexOf(student.id) === 0) {
+                if (c.students.map(s => s.id).indexOf(student.id) !== -1) {
                     let indexS = c.students.findIndex((s) => s.id === student.id);
                     c.students[indexS] = student;
                     this.dataStore.courses[index] = c;
@@ -177,15 +174,13 @@ export class CourseStoreService {
             });
 
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            console.log('updateStudentInCourseStoreOneToMany ******* this.coursesSource.next emited');
         }
     }
 
-
     deleteStudentInCourseStoreOneToMany(student: User | string) {
-        if (this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) === 0)) {
+        if (this.dataStore.courses.find(c => c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) !== -1)) {
             this.dataStore.courses.forEach((c, index) => {
-                if (c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) === 0) {
+                if (c.students.map(s => s.id).indexOf((typeof student === 'string') ? student : student.id) !== -1) {
                     let indexS = c.students.findIndex((s) => s.id === ((typeof student === 'string') ? student : student.id));
                     c.students.splice(indexS, 1);
                     this.dataStore.courses[index] = c;
@@ -194,7 +189,6 @@ export class CourseStoreService {
             });
 
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-            console.log('deleteStudentInCourseStoreOneToMany ******* this.coursesSource.next emited');
         }
     }
 

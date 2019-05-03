@@ -11,12 +11,14 @@ import { deepCopy } from '../shared/functions/deepCopy';
 import { CourseStoreService } from './course-store.service';
 import { GENDERS } from '../models/genders';
 import { GradeStoreService } from './grade-store.service';
-import { GradeBackendService } from './grade-backend.service';
+import { SubjectStoreService } from './subject-store.service';
+
 
 
 describe('User Store Service', () => {
   let userStoreService: UserStoreService;
   let courseStoreService: CourseStoreService;
+  let subjectStoreService: SubjectStoreService;
   let gradeStoreService: GradeStoreService;
   let userBackendServiceSpy: jasmine.SpyObj<UserBackendService>;
 
@@ -42,6 +44,7 @@ describe('User Store Service', () => {
     userStoreService = TestBed.get(UserStoreService);
     courseStoreService = TestBed.get(CourseStoreService);
     gradeStoreService = TestBed.get(GradeStoreService);
+    subjectStoreService = TestBed.get(SubjectStoreService);
     userBackendServiceSpy = TestBed.get(UserBackendService);
   });
 
@@ -446,6 +449,7 @@ describe('User Store Service', () => {
     tick();
 
     spyOn(courseStoreService, 'updateChiefTeacherInCourseStoreOneToOne');
+    spyOn(subjectStoreService, 'updateTeacherInSubjectStore');
                      
     //found && includes teacherRole (updates it)
     let userModif = deepCopy(teacherTest);
@@ -456,6 +460,7 @@ describe('User Store Service', () => {
     expect(users.length).toEqual(1);
     expect(users[0].roles).toContain(ROLE_MANAGER);
     expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledWith(userModif);
 
     //found && not includes teacherRole (splices it)
     userModif.roles = [ROLE_MANAGER];
@@ -464,6 +469,7 @@ describe('User Store Service', () => {
     expect(users).toEqual([]);
     expect(users.length).toEqual(0);
     expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledWith(userModif);
 
     //not found && includes teacherRole (adds it)
     userStoreService.updateInTeacherDataStore(teacherTest2);
@@ -471,12 +477,14 @@ describe('User Store Service', () => {
     expect(users[0]).toEqual(teacherTest2);
     expect(users.length).toEqual(1);
     expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledWith(userModif);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledWith(userModif);
 
     //not found and not includes teacherRole
     userStoreService.updateInTeacherDataStore(studentTest);
 
     expect(users.length).toEqual(1);
     expect(courseStoreService.updateChiefTeacherInCourseStoreOneToOne).toHaveBeenCalledTimes(3);
+    expect(subjectStoreService.updateTeacherInSubjectStore).toHaveBeenCalledTimes(3);
   }));
 
   it('should delete In TeacherDataStore', fakeAsync(() => {

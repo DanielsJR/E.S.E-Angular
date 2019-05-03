@@ -9,6 +9,7 @@ import { finalize } from "rxjs/internal/operators/finalize";
 import { CourseStoreService } from "./course-store.service";
 import { GradeStoreService } from "./grade-store.service";
 import { map } from "rxjs/internal/operators/map";
+import { SubjectStoreService } from "./subject-store.service";
 
 
 @Injectable({
@@ -32,7 +33,10 @@ export class UserStoreService {
     private studentRole: string = ROLE_STUDENT;
     private isLoadingGetStudents = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private userBackendService: UserBackendService, private courseStoreService: CourseStoreService, private gradeStoreService: GradeStoreService) {
+    constructor(private userBackendService: UserBackendService,
+        private courseStoreService: CourseStoreService,
+        private subjectStoreService: SubjectStoreService,
+        private gradeStoreService: GradeStoreService) {
         this.dataStore = { managers: [], teachers: [], students: [] }
     }
 
@@ -234,18 +238,21 @@ export class UserStoreService {
             this.dataStore.teachers[index] = user;
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
             this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
+            this.subjectStoreService.updateTeacherInSubjectStore(user);
 
         } else if (index != -1) {
             console.log('found and not includes role (it deletes)');
             this.dataStore.teachers.splice(index, 1);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
             this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
+            this.subjectStoreService.updateTeacherInSubjectStore(user);
 
         } else if ((index = -1) && user.roles.includes(this.teacherRole)) {
             console.log('not found and includes role (it adds)');
             this.dataStore.teachers.push(user);
             this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
             this.courseStoreService.updateChiefTeacherInCourseStoreOneToOne(user);
+            this.subjectStoreService.updateTeacherInSubjectStore(user);
 
         } else {
             console.log('not found and not includes role (it does nothing)');
