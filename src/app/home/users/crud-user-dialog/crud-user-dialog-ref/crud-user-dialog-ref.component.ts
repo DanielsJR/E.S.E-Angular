@@ -64,24 +64,18 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.userLoggedRoles.push(data.areaRole);
         this.onlyRead = (data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
 
-        console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: '
-            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead + ' usersRole ' + this.usersRole);
+        /*console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: '
+            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead + ' usersRole ' + this.usersRole); */
     }
 
     ngOnInit(): void {
         this.buildForm();
-        if (this.data.type === 'create') this.setAvatarCreateDefault();
-
+        if (this.data.type === 'create')
+            this.setAvatarCreateDefault();
         this.isAdmin = this.userLoggedService.isAdmin();
-
-    }
-
-    convertDate(birthDay: any) {
-        return (this.user.birthday != null) ? birthDay = moment(this.user.birthday, DD_MM_YYYY) : null;
     }
 
     compareByViewValue(a1: any, a2: any) {
-        // console.log('a1: ' + a1 + '    '+'a2: ' + a2);
         return a1 && a2 && a1 === a2;
     }
 
@@ -142,10 +136,8 @@ export class CrudUserDialogRefComponent implements OnInit {
 
         });
 
-
     }
 
-    // getters create
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
     get cDni() { return this.createForm.get('dni'); }
@@ -156,9 +148,6 @@ export class CrudUserDialogRefComponent implements OnInit {
     get cEmail() { return this.createForm.get('email'); }
     get cAddress() { return this.createForm.get('address'); }
 
-
-
-    // getters edit
     get eUsername() { return this.editForm.get('username'); }
     get eFirstName() { return this.editForm.get('firstName'); }
     get eLastName() { return this.editForm.get('lastName'); }
@@ -183,11 +172,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 file.name = `default-${this.cGender.value.toLowerCase()}-${this.usersRole}.png`;
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                    this.cAvatar.setValue({
-                        name: file.name,
-                        type: file.type,
-                        data: (reader.result as string).split(',')[1]
-                    })
+                    this.cAvatar.setValue(new Avatar(
+                        file.name,
+                        file.type,
+                        (reader.result as string).split(',')[1])
+                    )
                     //console.log('file.name: ' + file.name)
                 };
             };
@@ -195,15 +184,15 @@ export class CrudUserDialogRefComponent implements OnInit {
         }
     }
 
-    selectEventCreate(files: File): void {
+    selectEventCreate(file: File): void {
         let reader = new FileReader();
-        reader.readAsDataURL(files);
+        reader.readAsDataURL(file);
         reader.onload = () => {
-            this.cAvatar.setValue({
-                name: files.name,
-                type: files.type,
-                data: (reader.result as string).split(',')[1]
-            })
+            this.cAvatar.setValue(new Avatar(
+                file.name,
+                file.type,
+                (reader.result as string).split(',')[1])
+            )
         };
 
         this.cAvatar.markAsDirty();
@@ -228,12 +217,12 @@ export class CrudUserDialogRefComponent implements OnInit {
                 file.name = `default-${this.eGender.value.toLowerCase()}-${userHightPrivilege}.png`;
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                    this.eAvatar.setValue({
-                        name: file.name,
-                        type: file.type,
-                        data: (reader.result as string).split(',')[1]
-                    })
-                    console.log('setAvatarEditDefault: ' + file.name)
+                    this.eAvatar.setValue(new Avatar(
+                        file.name,
+                        file.type,
+                        (reader.result as string).split(',')[1])
+                    )
+                    //console.log('setAvatarEditDefault: ' + file.name)
                 };
             };
             xhr.send()
@@ -255,11 +244,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 file.name = `default-${this.eGender.value.toLowerCase()}-${userHightPrivilege}.png`;
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                    this.eAvatar.setValue({
-                        name: file.name,
-                        type: file.type,
-                        data: (reader.result as string).split(',')[1]
-                    })
+                    this.eAvatar.setValue(new Avatar(
+                        file.name,
+                        file.type,
+                        (reader.result as string).split(',')[1])
+                    )
                     console.log('setAvatarEditDefaultMenu: ' + file.name)
                 };
             };
@@ -268,37 +257,24 @@ export class CrudUserDialogRefComponent implements OnInit {
         }
     }
 
-    selectEventEdit(files: File): void {
-        this.oldAvatar = {
-            name: this.eAvatar.value.name,
-            type: this.eAvatar.value.type,
-            data: this.eAvatar.value.data
-        };
-
+    selectEventEdit(file: File): void {
+        this.oldAvatar = Object.assign({}, this.eAvatar.value);
 
         let reader = new FileReader();
-        reader.readAsDataURL(files);
+        reader.readAsDataURL(file);
         reader.onload = () => {
-            this.eAvatar.setValue({
-                name: files.name,
-                type: files.type,
-                data: (reader.result as string).split(',')[1]
-            })
+            this.eAvatar.setValue(new Avatar(
+                file.name,
+                file.type,
+                (reader.result as string).split(',')[1])
+            )
         };
 
         this.eAvatar.markAsDirty();
     }
 
-    restoreEditAvatar() {
-        this.eAvatar.setValue({
-            name: this.oldAvatar.name,
-            type: this.oldAvatar.type,
-            data: this.oldAvatar.data
-        })
-    }
-
     resetEditAvatar() {
-        this.restoreEditAvatar();
+        this.eAvatar.setValue(this.oldAvatar);
         this.eAvatar.markAsPristine();
     }
 
@@ -361,7 +337,6 @@ export class CrudUserDialogRefComponent implements OnInit {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
         this.createForm.value.birthday = this.createBirthday();
-        //if (this.createForm.value.avatar === null) this.setAvatarCreateDefault();
         this.createForm.value.dni = (this.cDni.value === "") ? null : this.cDni.value;
         this.createForm.value.mobile = (this.cMobile.value === "") ? null : this.cMobile.value;
         this.createForm.value.email = (this.cEmail.value === "") ? null : this.cEmail.value;

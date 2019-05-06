@@ -58,7 +58,9 @@ export class SetPassDialogRefComponent implements OnInit {
 
   comparePass() {
 
-    if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required')) && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength'))) {
+    if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required'))
+      && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength'))
+    ) {
 
       if (this.newPass1.value !== this.newPass2.value) {
         console.log('no match');

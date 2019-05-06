@@ -68,14 +68,11 @@ export class SetRolesDialogRefComponent implements OnInit {
   }
 
   setRoles(): void {
-    let rolesOrdained: string[] = [];
-    if (this.slideToggleManager.value) rolesOrdained.push(ROLE_MANAGER);
-    if (this.slideToggleTeacher.value) rolesOrdained.push(ROLE_TEACHER);
+    let rolesSorted: string[] = [];
+    if (this.slideToggleManager.value) rolesSorted.push(ROLE_MANAGER);
+    if (this.slideToggleTeacher.value) rolesSorted.push(ROLE_TEACHER);
 
-    // if (this.setRolesForm.value.slideToggleManager) rolesOrdained.push(ROLE_MANAGER);
-    // if (this.setRolesForm.value.slideToggleTeacher) rolesOrdained.push(ROLE_TEACHER);
-
-    if (this.roles.length > 0) this.user.roles = rolesOrdained;
+    if (this.roles.length > 0) this.user.roles = rolesSorted;
 
     if (this.uriRole === URI_MANAGERS) {
       this.isLoading = true;

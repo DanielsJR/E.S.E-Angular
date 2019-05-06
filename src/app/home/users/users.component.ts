@@ -68,15 +68,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       this.userRole = ROLE_MANAGER_SPANISH;
       this.usersRole = ROLE_MANAGER_SPANISH + 'res';
 
-      //this.userStoreService.loadAllManagers();
-
     } else if (this.uriRole === URI_TEACHERS) {
       this.isLoadingGetSubscription = this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
       this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
-
-      //this.userStoreService.loadAllTeachers();
 
     } else if (this.uriRole === URI_STUDENTS) {
       this.isLoadingGetSubscription = this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
@@ -84,7 +80,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       this.userRole = ROLE_STUDENT_SPANISH;
       this.usersRole = ROLE_STUDENT_SPANISH + 's';
 
-      //this.userStoreService.loadAllStudents();
     } else {
       console.error('NO uriRole');
     }

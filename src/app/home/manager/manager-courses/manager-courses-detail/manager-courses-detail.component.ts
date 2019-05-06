@@ -73,9 +73,8 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
     // paramMap re-uses the component
     this.coursesSubscription = this.route.paramMap
-      .pipe(switchMap(params => {
-        return this.courseStoreService.loadOneCourse(params.get('name'));
-      }))
+      .pipe(
+        switchMap(params => this.courseStoreService.loadOneCourse(params.get('name'))))
       .subscribe(c => {
         if (c) {
           this.course = c;

@@ -9,7 +9,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { RESULT_CANCELED, RESULT_ACCEPT, ROLE_TEACHER, ROLE_STUDENT, ROLE_MANAGER } from '../../../../app.config';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
-import { tap } from 'rxjs/internal/operators/tap';
 
 
 @Component({
@@ -32,11 +31,14 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
     private userStoreService: UserStoreService
   ) {
-    //this.user = data.user;
-    console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);
+
+    //console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);
     if (data.user !== null) this.user = this.data.user;
     this.stateCtrl.setValidators(Validators.required);
-    this.stateCtrl.statusChanges.subscribe(status => { if (status === "INVALID") this.user = null });
+    this.stateCtrl.statusChanges.subscribe(status => {
+      if (status === "INVALID")
+        this.user = null;
+    });
     this.actionButton = (data.actionButton) ? data.actionButton : 'Aceptar';
     this.filteredUsers$ = this.stateCtrl.valueChanges
       .pipe(
