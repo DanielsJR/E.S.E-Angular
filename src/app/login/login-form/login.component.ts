@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LoginService } from './login.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,6 +9,7 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
 import { RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';
+import { IsLoadingService } from '../../services/isLoadingService.service';
 
 
 @Component({
@@ -20,12 +21,12 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
-  isLoading = false;
 
   constructor(private formBuilder: FormBuilder, private loginService: LoginService,
     private userLoggedService: UserLoggedService,
     private localStorageService: LocalStorageService, private snackbarService: SnackbarService,
-    private router: Router
+    private router: Router,
+    private isLoadingService: IsLoadingService
   ) { }
 
 
@@ -44,10 +45,9 @@ export class LoginComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   login(): void {
-    this.isLoading = true;
+    this.isLoadingService.isLoadingTrue();
 
     this.loginService.login(this.username.value, this.password.value)
-      .pipe(finalize(() => this.isLoading = false))
       .subscribe(token => {
         this.localStorageService.setToken(token.token);
         const endPoint = '/' + this.userLoggedService.getPrivilege().toLowerCase();
@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
 
       }, error => {
         console.error('message: ' + error.message + '   status: ' + error.status);
+        this.isLoadingService.isLoadingFalse();
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
             this.loginForm.reset();

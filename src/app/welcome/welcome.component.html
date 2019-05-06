@@ -1,6 +1,8 @@
 <mat-sidenav-container [class]="theme.themeName">
-
   <mat-sidenav-content>
+
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
     <div id="head" class="primaryColorBG">
       <nx-theme-picker #theme></nx-theme-picker>
@@ -21,12 +23,12 @@
     <mat-card id="content" class="mat-elevation-z8">
       <nx-login></nx-login>
 
-     <!-- <div class="logo">
+      <!-- <div class="logo">
         <h2>Bienvenido a</h2>
         <nx-logo></nx-logo>
         <img width="180" src="assets/images/logos/ese-logo-big2.png">
       </div>-->
-    </mat-card> 
+    </mat-card>
 
   </mat-sidenav-content>
 

@@ -1,9 +1,9 @@
 <mat-sidenav-container [class]="theme.themeName">
 
-  <div class="grid-container">
+  <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
-    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+  <div class="grid-container">
 
     <span class="theme-picker">
       <nx-theme-picker #theme></nx-theme-picker>

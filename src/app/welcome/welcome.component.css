@@ -1,10 +1,17 @@
+.p-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
 mat-sidenav-content {
     overflow: hidden;
 }
 
 #head {
     position: absolute;
-    top:0;
+    top: 0;
     width: 100%;
     height: 30%;
     z-index: 0;
@@ -99,7 +106,7 @@ img {
     width: 50px;
     top: 50%;
     left: 2%;
-    -ms-transform: translate( -2%, -50%);
+    -ms-transform: translate(-2%, -50%);
     transform: translate(-2%, -50%);
     z-index: 4;
 }
@@ -112,7 +119,7 @@ h6 {
     z-index: 4;
     top: 50%;
     right: 2%;
-    -ms-transform: translate( -2%, -50%);
+    -ms-transform: translate(-2%, -50%);
     transform: translate(-2%, -50%);
 }
 
@@ -127,6 +134,4 @@ mat-card {
     padding: 0;
 }
 
-.logo{
-
-}
+.logo {}
