@@ -23,16 +23,16 @@ export class AdminComponent implements OnInit, OnDestroy {
         console.log("AdminComponent ngOnInit() called!!!");
 
         this.userStoreService.loadAllManagers();
+        this.userStoreService.loadAllTeachers();
 
         if (this.userLoggedService.isManager()) {
-            
-            this.userStoreService.loadAllTeachers();
+
             this.userStoreService.loadAllStudents();
-    
-            this.courseStoreService.loadAllCourses('2018'); 
-            
+
+            this.courseStoreService.loadAllCourses('2018');
+
             this.subjectStoreService.loadAllSubjects();
- 
+
             this.gradeStoreService.loadAllGrades();
         }
 

@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
 import { AdminComponent } from './admin.component';
 import { UsersModule } from '../users/users.module';
+import { AdminGetTeachersComponent } from './admin-get-users/admin-get-teachers.component';
 
 
 
@@ -20,6 +21,7 @@ import { UsersModule } from '../users/users.module';
     AdminComponent,
     AdminHomeComponent,
     AdminGetManagersComponent,
+    AdminGetTeachersComponent,
   
    ],
 

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.component';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from '../../guards/admin-guard.service';
+import { AdminGetTeachersComponent } from './admin-get-users/admin-get-teachers.component';
 
 
 
@@ -22,6 +23,12 @@ const adminRoutes: Routes = [
                         path: 'managers',
                         component: AdminGetManagersComponent,
                     },
+
+                    {
+                        path: 'teachers',
+                        component: AdminGetTeachersComponent,
+                    },
+
 
                     {
                         path: '',

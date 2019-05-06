@@ -89,8 +89,10 @@ export class CourseStoreService {
     }
 
     delete(course: Course | string): Observable<Course> {
+        this.isLoadingService.isLoadingTrue();
         return this.courseBackendService.delete(course)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(_ => {
                     let index = this.dataStore.courses.findIndex((c: Course) => c.id === ((typeof course === 'string') ? course : course.id));
                     if (index != -1) {

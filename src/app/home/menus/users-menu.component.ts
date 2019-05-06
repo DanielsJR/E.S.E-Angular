@@ -20,6 +20,11 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
     <h3 matLine>Administradores</h3>
 </mat-list-item>
 
+<mat-list-item *ngIf = "roles?.includes(roleAdmin)" [routerLink]="['./admin/teachers']">
+  <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
+    <h3 matLine>Docentes</h3>
+</mat-list-item>
+
 <mat-list-item *ngIf = "roles?.includes(roleManager)" [routerLink]="['./manager/teachers']">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
     <h3 matLine>Docentes</h3>

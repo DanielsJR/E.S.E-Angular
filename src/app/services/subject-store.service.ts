@@ -92,8 +92,10 @@ export class SubjectStoreService {
     }
 
     delete(subject: Subject | string): Observable<Subject> {
+        this.isLoadingService.isLoadingTrue();
         return this.subjectBackendService.delete(subject)
             .pipe(
+                finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(_ => {
                     let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === ((typeof subject === 'string') ? subject : subject.id));
                     if (index != -1) {
@@ -129,7 +131,7 @@ export class SubjectStoreService {
                 }
             });
             this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-         }
+        }
     }
 }
 
