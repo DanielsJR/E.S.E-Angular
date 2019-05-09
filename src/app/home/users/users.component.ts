@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialogRef } from '@angular/material';
-import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL } from '../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN, RESULT_SUCCESS, RESULT_ERROR } from '../../app.config';
 import { User } from '../../models/user';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
@@ -9,6 +9,8 @@ import { UserStoreService } from '../../services/user-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { shortNameSecondName } from '../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
+import { SnackbarService } from '../../services/snackbar.service';
 
 
 
@@ -46,7 +48,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingGetSubscription: Subscription;
 
   constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer, private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -119,9 +121,22 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
   checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
     return userLoggedRoles.every(role => userDbRoles.includes(role));
   }
+
+  isAdminEditingTeacher(userLoggedRoles: string[]) {
+    if (userLoggedRoles.includes(ROLE_ADMIN) && this.uriRole === URI_TEACHERS)
+      return true;
+    return false;
+
+  }
+
+  isAdmin(userLoggedRoles: string[]) {
+    return userLoggedRoles.includes(ROLE_ADMIN);
+  }
+
 
 }
 

@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
             this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
             this.router.navigate([URI_LOGIN]);
           } else {
-            this.snackbarService.openSnackBar('al Logearse, intente nuevamente', RESULT_ERROR);
+            this.snackbarService.openSnackBar('Login fallido, intente nuevamente', RESULT_ERROR);
             this.router.navigate([URI_LOGIN]);
           }
 

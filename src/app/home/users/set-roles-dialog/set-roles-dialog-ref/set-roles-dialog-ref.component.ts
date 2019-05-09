@@ -4,10 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
-import { Subscription } from 'rxjs';
+import { Subscription, of, Observable } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { Avatar } from '../../../../models/avatar';
+import { load } from '@angular/core/src/render3/instructions';
+import { SnackbarService } from '../../../../services/snackbar.service';
 
 
 @Component({
@@ -33,10 +36,10 @@ export class SetRolesDialogRefComponent implements OnInit {
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userStoreService: UserStoreService, private formBuilder: FormBuilder,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer, private snackbarService: SnackbarService
   ) {
 
-    this.user = data.user;
+    this.user = Object.assign({},data.user);
     this.uriRole = data.uriRole;
 
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
@@ -67,13 +70,19 @@ export class SetRolesDialogRefComponent implements OnInit {
     (this.slideToggleTeacher.value) ? this.roles.push(ROLE_TEACHER) : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
   }
 
-  setRoles(): void {
+
+  private sortRoles(): string[] {
     let rolesSorted: string[] = [];
     if (this.slideToggleManager.value) rolesSorted.push(ROLE_MANAGER);
     if (this.slideToggleTeacher.value) rolesSorted.push(ROLE_TEACHER);
 
     if (this.roles.length > 0) this.user.roles = rolesSorted;
+    return rolesSorted;
 
+  }
+
+  private setRoles(): void {
+    this.sortRoles();
     if (this.uriRole === URI_MANAGERS) {
       this.isLoading = true;
       this.userStoreService.setManagerRoles(this.user)
@@ -81,9 +90,11 @@ export class SetRolesDialogRefComponent implements OnInit {
         .subscribe(user => {
           this.user = user;
           this.dialogRef.close(RESULT_SUCCESS);
+          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
         }, err => {
-          console.error("Error creating manager: " + err);
+          console.error("Error editing roles manager: " + err.message);
           this.dialogRef.close(RESULT_ERROR);
+          this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
         });
 
     } else if (this.uriRole === URI_TEACHERS) {
@@ -93,13 +104,48 @@ export class SetRolesDialogRefComponent implements OnInit {
         .subscribe(user => {
           this.user = user;
           this.dialogRef.close(RESULT_SUCCESS);
+          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
         }, err => {
-          console.error("Error creating manager: " + err);
+          console.error("Error editing roles teacher: " + err.message);
           this.dialogRef.close(RESULT_ERROR);
+          this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
         });
 
     } else {
       console.error('NO uriRole');
+    }
+
+  }
+
+  setUserRoles() {
+    let prevAvatarName: string = this.user.avatar.name;
+    console.log('setAvatarDefault*****prevAvatarName: ' + prevAvatarName);
+    if (prevAvatarName.startsWith('default-')) {
+      let userHightPrivilege = this.sortRoles()[0].toLowerCase();
+
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", `../assets/images/users/default-${this.user.gender.toLowerCase()}-${userHightPrivilege}.png`, true);
+      xhr.responseType = "blob";
+      xhr.onload = () => {
+        let reader = new FileReader();
+        let file = xhr.response;
+        file.name = `default-${this.user.gender.toLowerCase()}-${userHightPrivilege}.png`;
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.user.avatar = new Avatar(
+            file.name,
+            file.type,
+            (reader.result as string).split(',')[1]
+          )
+          console.log('setAvatarDefault*********: ' + file.name)
+          this.setRoles();
+        };
+      };
+
+      xhr.send();
+
+    } else {
+      this.setRoles();
     }
   }
 

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { API_SERVER, URI_USERS, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
+import { Avatar } from '../models/avatar';
 
 
 @Injectable({
@@ -88,10 +89,10 @@ export class UserBackendService {
 
     }
 
-    setRoles(username: string, roles: string[], uriRole: string): Observable<User> {
-        const url = `${this.userURL}${uriRole}${URI_ROLE}/${username}`;
+    setRoles(user: User, uriRole: string): Observable<User> {
+        const url = `${this.userURL}${uriRole}${URI_ROLE}/${user.username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.patch<User>(url, roles).pipe(
+        return this.httpCli.patch<User>(url, user).pipe(
             tap(user => console.log(`fetched user username=${user.username} new roles=${user.roles}`))
         );
     }

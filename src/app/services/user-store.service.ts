@@ -111,7 +111,7 @@ export class UserStoreService {
     }
 
     setManagerRoles(user: User): Observable<User> {
-        return this.userBackendService.setRoles(user.username, user.roles, this.managerUriRole).pipe(
+        return this.userBackendService.setRoles(user, this.managerUriRole).pipe(
             tap(data => {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);
@@ -221,7 +221,7 @@ export class UserStoreService {
     }
 
     setTeacherRoles(user: User): Observable<User> {
-        return this.userBackendService.setRoles(user.username, user.roles, this.teacherUriRole).pipe(
+        return this.userBackendService.setRoles(user, this.teacherUriRole).pipe(
             tap(data => {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);

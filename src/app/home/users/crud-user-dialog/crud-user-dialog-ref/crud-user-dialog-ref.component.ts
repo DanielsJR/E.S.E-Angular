@@ -52,13 +52,13 @@ export class CrudUserDialogRefComponent implements OnInit {
     isLoading = false;
     onlyRead: boolean;
 
-    constructor(public dialogRef: MatDialogRef<CrudUserDialogRefComponent>,
+    constructor(public dialogRefCrudUser: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private userStoreService: UserStoreService, private userLoggedService: UserLoggedService,
         private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
 
     ) {
-        this.user = data.user;
+        this.user = Object.assign({},data.user);
         this.uriRole = data.uriRole;
         this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
         this.userLoggedRoles.push(data.areaRole);
@@ -177,7 +177,7 @@ export class CrudUserDialogRefComponent implements OnInit {
                         file.type,
                         (reader.result as string).split(',')[1])
                     )
-                    //console.log('file.name: ' + file.name)
+                    console.log('setAvatarCreateDefault: ' + file.name)
                 };
             };
             xhr.send()
@@ -193,6 +193,7 @@ export class CrudUserDialogRefComponent implements OnInit {
                 file.type,
                 (reader.result as string).split(',')[1])
             )
+            console.log('selectEventCreate: ' + file.name)
         };
 
         this.cAvatar.markAsDirty();
@@ -204,9 +205,9 @@ export class CrudUserDialogRefComponent implements OnInit {
     }
 
     setAvatarEditDefault(): void {
-        let imageName: string = this.eAvatar.value.name;
-        console.log('imageName: ' + imageName);
-        if (!this.files && (imageName.startsWith('default-'))) {
+        let prevImageName: string = this.eAvatar.value.name;
+        console.log('prevImageName: ' + prevImageName);
+        if (!this.files && (prevImageName.startsWith('default-'))) {
             let userHightPrivilege = this.user.roles[0].toLowerCase();
             let xhr = new XMLHttpRequest();
             xhr.open("GET", `../assets/images/users/default-${this.eGender.value.toLowerCase()}-${userHightPrivilege}.png`, true);
@@ -222,7 +223,7 @@ export class CrudUserDialogRefComponent implements OnInit {
                         file.type,
                         (reader.result as string).split(',')[1])
                     )
-                    //console.log('setAvatarEditDefault: ' + file.name)
+                    console.log('setAvatarEditDefault: ' + file.name)
                 };
             };
             xhr.send()
@@ -268,6 +269,7 @@ export class CrudUserDialogRefComponent implements OnInit {
                 file.type,
                 (reader.result as string).split(',')[1])
             )
+            console.log('selectEventEdit: ' + file.name)
         };
 
         this.eAvatar.markAsDirty();
@@ -296,24 +298,23 @@ export class CrudUserDialogRefComponent implements OnInit {
         return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format(DD_MM_YYYY) : null;
     }
 
-    editRolesSubs(dialogRef: MatDialogRef<SetRolesDialogRefComponent>) {
-        console.log('editRolesSubs called!!');
-        dialogRef.afterClosed().subscribe(result => {
+    editRolesSubscription(dialogRefSetRoles: MatDialogRef<SetRolesDialogRefComponent>) {
+        dialogRefSetRoles.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_SUCCESS) {
-                this.user = dialogRef.componentInstance.user;
-                this.setAvatarEditDefault();
+                this.user = dialogRefSetRoles.componentInstance.user;
+                this.eAvatar.setValue(this.user.avatar);
                 if (this.uriRole === URI_MANAGERS) {
-                    if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRef.close();
+                    if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRefCrudUser.close();
                 } else if (this.uriRole === URI_TEACHERS) {
-                    if (!this.user.roles.includes(ROLE_TEACHER)) this.dialogRef.close();
+                    if (!this.user.roles.includes(ROLE_TEACHER)) this.dialogRefCrudUser.close();
                 } else {
                     console.error('NO uriRole');
                 }
-                this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
+           
             } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Actualizar Roles", RESULT_ERROR);
+           
             }
         });
 
@@ -322,15 +323,15 @@ export class CrudUserDialogRefComponent implements OnInit {
 
 
     cancel(): void {
-        this.dialogRef.close(RESULT_CANCELED);
+        this.dialogRefCrudUser.close(RESULT_CANCELED);
     }
 
     detailEdit(): void {
-        this.dialogRef.close(RESULT_EDIT);
+        this.dialogRefCrudUser.close(RESULT_EDIT);
     }
 
     detailDelete(): void {
-        this.dialogRef.close(RESULT_DELETE);
+        this.dialogRefCrudUser.close(RESULT_DELETE);
     }
 
     create(): void {
@@ -349,9 +350,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.createManager(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error creating manager: " + err);
                 });
 
@@ -361,9 +362,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.createTeacher(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error creating teacher: " + err);
                 });
 
@@ -372,9 +373,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.createStudent(userCreate)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error creating student: " + err);
                 });
 
@@ -401,9 +402,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.updateManager(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error editing manager: " + err);
                 });
 
@@ -412,9 +413,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.updateTeacher(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error editing teacher: " + err);
                 });
 
@@ -423,10 +424,10 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.updateStudent(userEdit)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
                     console.error("Error editing student: " + err);
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                 });
 
         } else {
@@ -441,9 +442,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.deleteManager(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting manager: " + err);
                 });
 
@@ -452,9 +453,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.deleteTeacher(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting teacher: " + err);
                 });
 
@@ -463,9 +464,9 @@ export class CrudUserDialogRefComponent implements OnInit {
             this.userStoreService.deleteStudent(this.user)
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
-                    this.dialogRef.close(RESULT_SUCCESS);
+                    this.dialogRefCrudUser.close(RESULT_SUCCESS);
                 }, err => {
-                    this.dialogRef.close(RESULT_ERROR);
+                    this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting student: " + err);
                 });
 

@@ -17,6 +17,7 @@ import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../services/snackbar.service';
 import { httpError401, httpError500 } from '../../testing/models';
+import { IsLoadingService } from '../../services/isLoadingService.service';
 
 
 let component: LoginComponent;
@@ -27,6 +28,8 @@ let localStorageServiceSpy: jasmine.SpyObj<LocalStorageService>;
 let routerSpy: jasmine.SpyObj<Router>;
 let userLoggedServiceSpy: jasmine.SpyObj<UserLoggedService>;
 let snackbarServiceSpy: jasmine.SpyObj<SnackbarService>;
+
+let isLoadingService: IsLoadingService;
 
 describe('LoginComponent', () => {
   beforeEach(async(() => {
@@ -62,6 +65,8 @@ describe('LoginComponent', () => {
     userLoggedServiceSpy = TestBed.get(UserLoggedService);
     snackbarServiceSpy = TestBed.get(SnackbarService);
 
+    isLoadingService = TestBed.get(IsLoadingService);
+
   });
 
   it('should be created', () => {
@@ -71,7 +76,7 @@ describe('LoginComponent', () => {
   it('should validate username', () => {
     expect(component.username.valid).toBeFalsy();
     let errors = {};
-  
+
     component.username.setValue('');
     errors = component.username.errors || {};
     expect(errors['required']).toBeTruthy('required error');
@@ -141,13 +146,15 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     expect(btnSend.disabled).toBeFalsy('btn enabled');
 
+    let isLoading: boolean;
+    isLoadingService.isLoading$.subscribe(data => isLoading = data);
+
     btnSend.click();
     //form.triggerEventHandler('ngSubmit', null);
     //component.login();
 
-    expect(component.isLoading).toBeTruthy('is loading');
+    expect(isLoading).toBeTruthy('is loading');
     tick();
-    expect(component.isLoading).toBeFalsy('is not loading');
     expect(localStorageServiceSpy.setToken).toHaveBeenCalledWith(testToken.token);
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/home/' + ROLE_ADMIN.toLowerCase()]);
@@ -161,17 +168,20 @@ describe('LoginComponent', () => {
   }));
 
   it('should show http error 401', fakeAsync(() => {
+    let isLoading: boolean;
+    isLoadingService.isLoading$.subscribe(data => isLoading = data);
+
     loginServiceSpy.login.and.returnValue(asyncError(httpError401));
 
     component.username.setValue('admin');
     component.password.setValue('admin');
     component.login();
 
-    expect(component.isLoading).toBeTruthy('is loading');
+    expect(isLoading).toBeTruthy('is loading');
     tick();
-    expect(component.isLoading).toBeFalsy('is not loading');
+    expect(isLoading).toBeFalsy('is not loading');
 
-    expect(component.username.value).toEqual(null,'username empty');
+    expect(component.username.value).toEqual(null, 'username empty');
     expect(component.password.value).toEqual(null, 'password empty');
 
     let usernameErrors = {};
@@ -193,15 +203,18 @@ describe('LoginComponent', () => {
   }));
 
   it('should show http error', fakeAsync(() => {
+    let isLoading: boolean;
+    isLoadingService.isLoading$.subscribe(data => isLoading = data);
+
     loginServiceSpy.login.and.returnValue(asyncError(httpError500));
 
     component.username.setValue('admin');
     component.password.setValue('admin');
     component.login();
 
-    expect(component.isLoading).toBeTruthy('is loading');
+    expect(isLoading).toBeTruthy('is loading');
     tick();
-    expect(component.isLoading).toBeFalsy('is not loading');
+    expect(isLoading).toBeFalsy('is not loading');
 
     expect(component.username.value).toEqual('admin');
     expect(component.password.value).toEqual('admin');

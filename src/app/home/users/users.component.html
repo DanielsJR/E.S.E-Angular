@@ -21,10 +21,10 @@
     </mat-toolbar>
 
     <mat-divider></mat-divider>
-    
+
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-   
+
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
@@ -33,7 +33,8 @@
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+              <img matListAvatar
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                 alt="{{user?.username}}">
               <h3 matLine> {{user | shortNameLastname}} </h3>
               <p matLine>
@@ -47,7 +48,8 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
-          <button mat-mini-fab (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{userRole}}" style="margin-bottom:5px">
+          <button mat-mini-fab *ngIf="!isAdminEditingTeacher(userLoggedRoles)"
+            (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{userRole}}" style="margin-bottom:5px">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
         </mat-header-cell>
@@ -58,29 +60,43 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" mat-icon-button color="accent"
-            (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
+          <ng-container
+            *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !isAdminEditingTeacher(userLoggedRoles)">
+            <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
+              <mat-icon svgIcon="pencil"></mat-icon>
+            </button>
+
+            <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
+              <mat-icon svgIcon="delete"></mat-icon>
+            </button>
+
+          </ng-container>
+
+          <button *ngIf="isAdmin(userLoggedRoles)" mat-icon-button color="warn"
+            (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()">
+            <mat-icon svgIcon="security-account"></mat-icon>
           </button>
 
-          <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles)" mat-icon-button color="warn"
-            (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
-            <mat-icon svgIcon="delete"></mat-icon>
-          </button>
+          <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
 
-          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"></nx-crud-user-dialog>
+          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"
+            [onlyRead]="isAdminEditingTeacher(userLoggedRoles)">
+          </nx-crud-user-dialog>
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "(click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
-        <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"></nx-card-user-dialog>
+      <mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+        (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
+        <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"
+          [onlyRead]="isAdminEditingTeacher(userLoggedRoles)"></nx-card-user-dialog>
       </mat-row>
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
 
   </mat-card>
 

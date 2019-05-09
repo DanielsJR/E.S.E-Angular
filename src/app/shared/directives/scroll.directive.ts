@@ -15,10 +15,10 @@ export class ScrollerDirective {
         const nPixels = this.el.nativeElement.scrollTop || 0;
         if (nPixels > 64) {
             this.scrollEvent.emit(this.scrolled = true);
-         console.log('true');
+         //console.log('true');
         } else if (this.scrolled && nPixels < 10) {
             this.scrollEvent.emit(this.scrolled = false);
-         console.log('false');
+         //console.log('false');
         }
 
     }
