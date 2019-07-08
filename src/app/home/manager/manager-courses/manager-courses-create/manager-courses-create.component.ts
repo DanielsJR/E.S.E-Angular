@@ -11,7 +11,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { COURSES_NAMES_GROUPS } from '../../../../models/courses-names';
+import { COURSE_NAMES_GROUPS } from '../../../../models/course-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,7 +33,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
   course: Course;
-  coursesNamesGroups = COURSES_NAMES_GROUPS;
+  coursesNamesGroups = COURSE_NAMES_GROUPS;
 
   createForm: FormGroup;
 

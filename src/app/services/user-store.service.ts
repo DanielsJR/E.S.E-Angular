@@ -326,7 +326,7 @@ export class UserStoreService {
             ));
     }
 
-    deleteStudent(user: User | string): Observable<boolean> {
+    deleteStudent(user: User): Observable<boolean> {
         return this.userBackendService.delete(user, this.studentUriRole).pipe(
             tap(_ => {
                 this.deleteInStudentDataStore(user);

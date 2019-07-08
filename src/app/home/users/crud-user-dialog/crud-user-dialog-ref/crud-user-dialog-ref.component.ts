@@ -443,9 +443,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRefCrudUser.close(RESULT_SUCCESS);
+                    this.snackbarService.openSnackBar("Usuario Eliminado", RESULT_SUCCESS);
                 }, err => {
                     this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting manager: " + err);
+                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
                 });
 
         } else if (this.uriRole === URI_TEACHERS) {
@@ -454,9 +456,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRefCrudUser.close(RESULT_SUCCESS);
+                    this.snackbarService.openSnackBar("Usuario Eliminado", RESULT_SUCCESS);
                 }, err => {
                     this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting teacher: " + err);
+                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
                 });
 
         } else if (this.uriRole === URI_STUDENTS) {
@@ -465,9 +469,11 @@ export class CrudUserDialogRefComponent implements OnInit {
                 .pipe(finalize(() => this.isLoading = false))
                 .subscribe(_ => {
                     this.dialogRefCrudUser.close(RESULT_SUCCESS);
+                    this.snackbarService.openSnackBar("Usuario Eliminado", RESULT_SUCCESS);
                 }, err => {
                     this.dialogRefCrudUser.close(RESULT_ERROR);
                     console.error("Error deleting student: " + err);
+                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
                 });
 
         } else {

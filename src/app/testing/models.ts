@@ -5,6 +5,7 @@ import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN } from "../app.con
 import { Grade } from "../models/grade";
 import { Theme } from "../shared/theme-picker/theme";
 import { HttpErrorResponse } from "@angular/common/http";
+import { Quiz } from "../models/quiz";
 
 
 
@@ -134,6 +135,24 @@ export const gradeTest2: Grade = {
     date: '20/05/2019',
 }
 
+export const quizTest: Quiz = {
+    id: 'q01',
+    title: 'quiz-01',
+    author: teacherTest,
+    subjectName: subjectTest.name,
+    quizLevel: 'Primero Básico'
+}
+
+export const quizTest2: Quiz = {
+    id: 'q02',
+    title: 'quiz-02',
+    author: teacherTest2,
+    subjectName: subjectTest2.name,
+    quizLevel: 'Primero Básico'
+}
+
+
+
 export const themeLightTest: Theme = {
     name: 'red-indigo',
     color: '#F44336',
@@ -145,6 +164,9 @@ export const themeDarkTest: Theme = {
     color: '#F44336',
     isDark: true
 }
+
+
+
 
 
 export const httpError400 = new HttpErrorResponse({

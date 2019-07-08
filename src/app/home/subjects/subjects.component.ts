@@ -212,17 +212,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  deleteSubject2(subject: Subject) {
-    this.isLoading = true;
-    this.subjectStoreService.delete(subject)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.snackbarService.openSnackBar('Asignatura Eliminada', RESULT_SUCCESS)
-        , err => {
-          this.snackbarService.openSnackBar('Error al eliminar Asignatura', RESULT_ERROR);
-          console.error("Error deleting subject: " + err);
-        });
-  }
-
 
 }
 

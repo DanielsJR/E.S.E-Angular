@@ -59,10 +59,6 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button *ngIf="areaRole === roleManager" mat-icon-button color="accent" (click)="openDialogEdit(subject) ;$event.stopPropagation()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-          </button>
-
           <button *ngIf="areaRole === roleManager" mat-icon-button color="warn" (click)="deleteSubject(deleteSubjectDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>

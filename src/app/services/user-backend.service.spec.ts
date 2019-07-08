@@ -152,8 +152,8 @@ describe('User Backend Service', () => {
       username: 'manager01',
       roles: ['MANAGER', 'TEACHER']
     };
-    const newRoles = ['MANAGER', 'TEACHER'];
-    userBackendService.setRoles('manager01', newRoles, uriRole)
+
+    userBackendService.setRoles(userRolesTest, uriRole)
       .subscribe(data => {
         expect(data).toEqual(userRolesTest);
         expect(data.roles.length).toEqual(2);

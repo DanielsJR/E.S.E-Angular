@@ -8,6 +8,8 @@ import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subje
 import { TeacherSubjectsCoursesComponent } from './teacher-subjects/teacher-subjects-courses.component';
 import { TeacherSubjectsCoursesSubjectsComponent } from './teacher-subjects/teacher-subjects-courses-subjects.component';
 import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
+import { TeacherQuizesDetailComponent } from './teacher-quizes/teacher-quizes-detail/teacher-quizes-detail.component';
+import { TeacherQuizesCreateComponent } from './teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
 
 
 const teacherRoutes: Routes = [
@@ -48,8 +50,13 @@ const teacherRoutes: Routes = [
                     },
 
                     {
-                        path: 'quizes/create-quiz',
-                        component: TeacherQuizesComponent
+                        path: 'quizes/detail/:id',
+                        component: TeacherQuizesDetailComponent
+                    },
+
+                    {
+                        path: 'quizes/create',
+                        component: TeacherQuizesCreateComponent
                     },
 
                     {

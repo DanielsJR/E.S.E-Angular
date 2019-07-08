@@ -44,8 +44,8 @@ export class UserBackendService {
         );
     }
 
-    delete(user: User | string, uriRole: string): Observable<boolean> {
-        const username = (typeof user === 'string') ? user : user.username;
+    delete(user: User, uriRole: string): Observable<boolean> {
+        const username = user.username;
         const url = `${this.userURL}${uriRole}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<boolean>(url).pipe(

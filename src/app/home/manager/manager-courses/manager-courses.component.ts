@@ -23,13 +23,12 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
 
   // mat table
   displayedColumns = ['name', 'crud'];
-  dataSource;
+  dataSource:MatTableDataSource<Course>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 20;
   pageSizeOptions = [5, 10, 20];
-  rowClasses: {};
-  isDark;
+  isDark: boolean;
   isLoading: boolean = false;
   courseYear;
 

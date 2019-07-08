@@ -1,4 +1,4 @@
-export  const COURSES_NAMES_GROUPS =  [
+export  const COURSE_NAMES_GROUPS =  [
     {
       name: 'Primero',
       course: [

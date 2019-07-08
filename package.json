@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open --proxy-config proxy.config.json",
+    "start": "ng serve --host 0.0.0.0 --open --proxy-config proxy.config.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -27,8 +27,8 @@
     "@angular/router": "6.0.0",
     "@angular/upgrade": "6.0.0",
     "@covalent/core": "2.0.0-beta.1",
-    "@mdi/angular-material": "^3.0.39",
-    "@mdi/font": "^3.0.39",
+    "@mdi/angular-material": "^3.6.95",
+    "@mdi/font": "^3.6.95",
     "core-js": "^2.5.3",
     "hammerjs": "^2.0.8",
     "immutable": "^3.8.2",
@@ -38,6 +38,8 @@
     "node-sass": "^4.7.2",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^6.1.0",
+    "sockjs-client": "^1.3.0",
+    "stompjs": "^2.3.3",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

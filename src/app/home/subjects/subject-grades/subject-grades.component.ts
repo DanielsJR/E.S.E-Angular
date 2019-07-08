@@ -39,7 +39,6 @@ export class SubjectGradesComponent implements OnInit, AfterViewInit, OnDestroy 
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isDark;
-  rowClasses: {};
   isLoading: boolean = false;
 
 

@@ -10,6 +10,8 @@ import { TeacherSubjectsCoursesSubjectsComponent } from './teacher-subjects/teac
 import { UsersModule } from '../users/users.module';
 import { SubjectsModule } from '../subjects/subejcts.module';
 import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
+import { TeacherQuizesDetailComponent } from './teacher-quizes/teacher-quizes-detail/teacher-quizes-detail.component';
+import { TeacherQuizesCreateComponent } from './teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.componen
     TeacherSubjectsDetailComponent,
     TeacherSubjectsGradesComponent,
     TeacherQuizesComponent,
+    TeacherQuizesDetailComponent,
+    TeacherQuizesCreateComponent,
   ],
 
   providers: [

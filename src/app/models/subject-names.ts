@@ -3,7 +3,7 @@ export interface SubjectName {
   viewValue: string;
 }
 
-export const SUBJECTS_NAMES: SubjectName[] = [
+export const SUBJECT_NAMES: SubjectName[] = [
   { value: 'MATEMATICAS', viewValue: 'Matemáticas' },
   { value: 'HISTORIA', viewValue: 'Historia' },
   { value: 'LENGUAJE', viewValue: 'Lenguaje' },

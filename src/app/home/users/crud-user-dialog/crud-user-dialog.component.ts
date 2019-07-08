@@ -89,18 +89,19 @@ export class CrudUserDialogComponent implements OnInit {
         config.width = '500px';
         config.disableClose = true;
 
-        let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
+        this.dialog.open(CrudUserDialogRefComponent, config);
+       
+       /* let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
-                this.snackbarService.openSnackBar("Error al Eliminar Usuario", RESULT_ERROR);
                 console.error(RESULT_ERROR);
             } else if (result === RESULT_SUCCESS) {
-                this.snackbarService.openSnackBar("Usuario Eliminado", RESULT_SUCCESS);
                 console.log(RESULT_SUCCESS);
             }
         });
+        */
     }
 
     openDialogCreate(): void {

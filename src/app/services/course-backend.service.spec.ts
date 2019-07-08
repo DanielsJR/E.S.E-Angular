@@ -117,5 +117,3 @@ describe('Course Backend Service', () => {
 
 
 });
-
-

@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../models/subject';
 import { User } from '../../../models/user';
 import { Course } from '../../../models/course';
-import { SubjectName, SUBJECTS_NAMES } from '../../../models/subjects-name';
+import { SubjectName, SUBJECT_NAMES } from '../../../models/subject-names';
 import { Avatar } from '../../../models/avatar';
 import { UserStoreService } from '../../../services/user-store.service';
 import { CourseStoreService } from '../../../services/course-store.service';
@@ -30,7 +30,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   teacher: User;
 
   filteredSubjectNames$: Observable<SubjectName[]>;
-  subjectsNames = SUBJECTS_NAMES;
+  subjectsNames = SUBJECT_NAMES;
   subjectName: SubjectName;
 
   subject: Subject;

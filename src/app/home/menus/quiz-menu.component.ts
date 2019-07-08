@@ -19,11 +19,6 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
     <h3 matLine>Mis Pruebas</h3>
 </mat-list-item>
 
-<mat-list-item [routerLink]="['./teacher/quizes/create-quiz']">
-  <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box-outline"></mat-icon>
-    <h3 matLine>Crear Prueba</h3>
-</mat-list-item>
-
 <mat-list-item [routerLink]="['./teacher/quizes/take-quiz']">
   <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="file-document-box"></mat-icon>
     <h3 matLine>Tomar Prueba</h3>

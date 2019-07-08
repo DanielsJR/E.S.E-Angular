@@ -1,0 +1,87 @@
+<div class="container">
+  <mat-card class="mat-elevation-z8">
+    <form [formGroup]="createQuizForm" (ngSubmit)="createQuiz()">
+
+      <mat-toolbar color="primary">
+        <h1>Crear Pueba</h1>
+        <span class="spacer-r"></span>
+
+        <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+
+      </mat-toolbar>
+
+      <mat-list class="listContainer">
+
+        <mat-list-item>
+          <mat-form-field appearance="standard" class="fullWith">
+            <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Titulo</mat-label>
+            <input matInput formControlName="title" required id="idTitle">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard" class="fullWith">
+            <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Descripción</mat-label>
+            <textarea matInput formControlName="description" id="idDescription"></textarea>
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <img matListAvatar
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data)"
+            alt="author" (click)="imageZoom.openDialogImage()">
+          <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
+          <p matLine>
+            <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
+            <span class="role-style">Autor</span>
+          </p>
+
+          <div class="data">
+
+            <mat-form-field appearance="standard">
+              <mat-select formControlName="subjectName" required #idSubjectName>
+                <mat-option *ngFor="let sn of subjectNames" [value]="sn.viewValue">
+                  {{ sn.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-label>
+                <i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura
+              </mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="standard">
+              <mat-select formControlName="quizLevel" required #idQuizLevel>
+                <mat-option *ngFor="let ql of quizLevels" [value]="ql.viewValue">
+                  {{ ql.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-label>
+                <i class="mdi mdi-chart-bar app-input-icon">&nbsp;</i>Nivel
+              </mat-label>
+            </mat-form-field>
+
+          </div>
+
+        </mat-list-item>
+
+      </mat-list>
+
+      <mat-divider></mat-divider>
+
+      <mat-toolbar>
+        <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoQuizes()" cdkFocusRegionstart>
+          <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
+        </button>
+        <span class="spacer-r"></span>
+        <button type="submit" mat-raised-button color="accent" tabindex="2"
+          [disabled]="createQuizForm.invalid || createQuizForm.pristine">
+          <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
+        </button>
+      </mat-toolbar>
+
+
+
+    </form>
+  </mat-card>
+
+</div>
