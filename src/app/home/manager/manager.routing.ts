@@ -8,10 +8,12 @@ import { ManagerGuard } from '../../guards/manager-guard.service';
 import { ManagerCoursesComponent } from './manager-courses/manager-courses.component';
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
-import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
-import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
-import { ManagerSubjectsCoursesComponent } from './manager-subjects/manager-subjects-courses.component';
-import { ManagerSubjectsCoursesSubjectsComponent } from './manager-subjects/manager-subjects-courses-subjects.component';
+import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subject-detail/manager-subjects-grades.component';
+import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subject-detail/manager-subjects-detail.component';
+import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subject-detail/manager-subject-course.component';
+import { ManagerSubjectQuizComponent } from './manager-subjects/manager-subject-detail/manager-subject-quiz.component';
+import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
+import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 
 
 
@@ -43,6 +45,9 @@ const adminRoutes: Routes = [
 
                     },
 
+
+
+
                     {
                         path: 'courses/create',
                         component: ManagerCoursesCreateComponent,
@@ -54,27 +59,44 @@ const adminRoutes: Routes = [
                     },
 
 
-
-
                     {
-                        path: 'subjects/courses',
-                        component: ManagerSubjectsCoursesComponent
-                    },
-
-                    {
-                        path: 'subjects/courses/:name',
-                        component: ManagerSubjectsCoursesSubjectsComponent
+                        path: 'subjects',
+                        component: ManagerSubjectsComponent
                     },
 
                     {
                         path: 'subjects/detail/:id',
-                        component: ManagerSubjectsDetailComponent
+                        component: ManagerSubjectsDetailComponent,
+                        children: [
+
+
+                            {
+                                path: 'course/:id',
+                                component: ManagerSubjectCourseComponent
+                            },
+
+                            {
+                                path: 'evaluations/:id',
+                                component: ManagerSubjectEvaluationsComponent
+                            },
+
+                            {
+                                path: 'quiz/:id',
+                                component: ManagerSubjectQuizComponent
+                            },
+
+                            {
+                                path: 'grades/:username',
+                                component: ManagerSubjectsGradesComponent
+                            },
+
+
+                        ]
                     },
 
-                    {
-                        path: 'subjects/grades/:username',
-                        component: ManagerSubjectsGradesComponent
-                    },
+
+
+
 
 
 

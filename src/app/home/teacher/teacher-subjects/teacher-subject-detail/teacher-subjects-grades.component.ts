@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ROLE_TEACHER } from '../../../app.config';
+import { ROLE_TEACHER } from '../../../../app.config';
 
 
 @Component({

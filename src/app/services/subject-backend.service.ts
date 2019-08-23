@@ -18,7 +18,7 @@ export class SubjectBackendService {
     constructor(private httpCli: HttpClient) { }
 
 
-    getSubjects(): Observable<Subject[]> {
+    getAllSubjects(): Observable<Subject[]> {
         const url = `${this.subjectURL}`;
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Subject[]>(url)

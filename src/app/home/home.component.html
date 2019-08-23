@@ -198,7 +198,7 @@
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
 
-            <div class="contenido" (nxScroller)="isScrolled=$event">
+            <div class="contenido" (nxScroller)="isScrolled=$event" [ngStyle]="dinamicStyles">
                 <router-outlet></router-outlet>
             </div>
 

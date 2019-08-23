@@ -16,12 +16,12 @@ import { map } from "rxjs/internal/operators/map";
     providedIn: 'root',
 })
 export class GradeStoreService {
-    private dataStore: { grades: Grade[], grade: Grade };
+    private dataStore: { grades: Grade[]};
     private gradesSource = <BehaviorSubject<Grade[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     constructor(private gradeBackendService: GradeBackendService, private isLoadingService: IsLoadingService) {
-        this.dataStore = { grades: [], grade: null };
+        this.dataStore = { grades: []};
     }
 
     get grades$() {
@@ -107,7 +107,7 @@ export class GradeStoreService {
     //*****subjectStore******** */
 
     updateSubjectInGradeStore(subject: Subject) {
-        if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
+       /* if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
             this.dataStore.grades.forEach((item, index) => {
                 if (item.subject.id === subject.id) {
                     item.subject = subject;
@@ -116,6 +116,8 @@ export class GradeStoreService {
             });
             this.gradesSource.next(Object.assign({}, this.dataStore).grades);
         }
+    */
+   
     }
 
     updateStudentInGradeStore(student: User) {

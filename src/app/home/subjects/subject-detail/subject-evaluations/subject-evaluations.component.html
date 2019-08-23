@@ -1,0 +1,79 @@
+<mat-card class="mat-elevation-z8">
+
+  <mat-toolbar color="primary">
+    
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)">
+      <mat-placeholder>
+        <i class="mdi mdi-magnify"></i>Buscar Evaluación
+      </mat-placeholder>
+    </mat-form-field>
+
+    <span class="spacer-r"></span>
+    <mat-chip-list>
+      <mat-chip color="accent" selected="true">
+        <mat-icon svgIcon="school"></mat-icon>
+        &nbsp; {{subject?.name}} {{subject?.course?.name}}
+      </mat-chip>
+    </mat-chip-list>
+
+  </mat-toolbar>
+
+
+  <mat-divider></mat-divider>
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Evaluación </mat-header-cell>
+      <mat-cell *matCellDef="let evaluation">
+
+        <mat-list>
+          <mat-list-item>
+            <h3 matLine *ngIf="evaluation"> {{evaluation?.title}} </h3>
+            <p matLine>
+              <span class="role-style">{{evaluation?.type}}</span>
+            </p>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="crud">
+      <mat-header-cell *matHeaderCellDef class="add">
+
+        <button mat-mini-fab matTooltip="Agregar Evaluación" style="margin-bottom:5px">
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let evaluation" class="crud">
+
+        <button mat-icon-button color="primary">
+          <mat-icon svgIcon="eye"></mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent">
+          <mat-icon svgIcon="folder-star"></mat-icon>
+        </button>
+
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+
+    </mat-row>
+
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+
+  <mat-divider></mat-divider>
+
+
+</mat-card>

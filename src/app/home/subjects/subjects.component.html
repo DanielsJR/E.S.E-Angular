@@ -4,11 +4,13 @@
 
     <mat-toolbar color="primary">
 
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
-        <mat-placeholder>
-          <i class="mdi mdi-magnify"></i>Buscar
-        </mat-placeholder>
+      <mat-form-field [floatLabel]=" 'never' ">
+        <mat-select #matSelect>
+          <mat-option *ngFor="let c of courses" [value]="c.name">
+            {{c.name}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Seleccione un Curso</mat-label>
       </mat-form-field>
 
       <span class="spacer-r"></span>
@@ -21,10 +23,22 @@
       </mat-chip-list>
     </mat-toolbar>
 
+    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <mat-toolbar class="toolbar2">
+
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar Asignatura
+        </mat-placeholder>
+      </mat-form-field>
+
+    </mat-toolbar>
     <mat-divider></mat-divider>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -34,7 +48,8 @@
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
+              <img matListAvatar
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
                 alt="{{subject?.teacher?.username}}">
               <h3 matLine>{{subject?.name}} </h3>
               <p matLine>
@@ -48,29 +63,27 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="add">
-          <button *ngIf="areaRole === roleManager" mat-mini-fab matTooltip="Agregar Asignatura" style="margin-bottom:5px" (click)="openDialogCreate()">
+          <button *ngIf="areaRole === roleManager" mat-mini-fab matTooltip="Agregar Asignatura"
+            style="margin-bottom:5px" (click)="openDialogCreate()">
             <mat-icon svgIcon="plus"></mat-icon>
           </button>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let subject" class="crud">
 
-          <button mat-icon-button color="primary" [routerLink]="['../../detail',subject.id]">
+          <button mat-icon-button color="primary"
+            [routerLink]="['./detail/' + subject.id + '/course', subject.id ]">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <button *ngIf="areaRole === roleManager" mat-icon-button color="warn" (click)="deleteSubject(deleteSubjectDialog.openSimpleDialog()); $event.stopPropagation()">
+          <button *ngIf="areaRole === roleManager" mat-icon-button color="warn"
+            (click)="deleteSubject(deleteSubjectDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteSubjectDialog
-            [obj]="subject"
-            [icon]="'school'"
-            [dialogTitle]="'Eliminar Asignatura'"
-            [message]="'Eliminar esta Asignatura?'"
-            [title]="subject.name + '/' + subject.course.name"
-            [subtitle]="(subject.teacher | shortName) + ', Profesor' "
-            [avatar]="subject.teacher.avatar"
+          <nx-simple-dialog #deleteSubjectDialog [obj]="subject" [icon]="'school'" [dialogTitle]="'Eliminar Asignatura'"
+            [message]="'Eliminar esta Asignatura?'" [title]="subject.name + '/' + subject.course.name"
+            [subtitle]="(subject.teacher | shortName) + ', Profesor' " [avatar]="subject.teacher.avatar"
             [type]="'delete-classic'">
           </nx-simple-dialog>
 
@@ -78,21 +91,15 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " [routerLink]="['../../detail',subject.id]">
+      <mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+        [routerLink]="['./detail/' + subject.id + '/course', subject.id ]">
 
       </mat-row>
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
-    <mat-divider></mat-divider>
-    <mat-toolbar>
-      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="goBack()" cdkFocusRegionstart>
-        Volver
-      </button>
-      <span class="spacer-r"></span>
-
-    </mat-toolbar>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
 
   </mat-card>
 

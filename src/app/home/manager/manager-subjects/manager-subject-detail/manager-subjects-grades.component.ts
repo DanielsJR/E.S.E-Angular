@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { ROLE_MANAGER } from '../../../app.config';
+import { ROLE_MANAGER } from '../../../../app.config';
 
 
 @Component({

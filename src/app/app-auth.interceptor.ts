@@ -20,6 +20,8 @@ export class AppAuthInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const loginUrl = API_SERVER + URI_TOKEN_AUTH;
+        const csrfUrl = API_SERVER + '/csrf';
+
         if (!req.headers.has('Authorization') && (req.url.search(loginUrl) === -1)) {
             if ((!this.localStorageService.isTokenExpired())) {
                 const authReq = req.clone({

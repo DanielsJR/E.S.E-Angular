@@ -30,9 +30,9 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
         this.courseStoreService.loadAllCourses('2018');
 
-        this.subjectStoreService.loadAllSubjects();
+        this.subjectStoreService.loadSubjects();
 
-        this.gradeStoreService.loadAllGrades();
+        //this.gradeStoreService.loadAllGrades();
     }
 
     ngOnDestroy() {

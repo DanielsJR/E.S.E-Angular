@@ -1,15 +1,15 @@
 import { User } from "./user";
-import { Subject } from "./subject";
+import { Evaluation } from "./evaluation";
+import { QuizStudent } from "./quiz-student";
 
 export class Grade {
     constructor(
         public id?: string,
-        public subject?: Subject,
         public student?: User,
         public grade?: number,
-        public type?: string,
-        public title?: string,
-        public date?: string,
+
+        public evaluation?: Evaluation,
+        public quizStudent?: QuizStudent,
        
         public createdBy?:string,
         public createdDate?:string,

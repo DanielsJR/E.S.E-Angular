@@ -24,12 +24,15 @@
     <mat-toolbar class="toolbar2">
       <mat-list style="flex-grow: 8">
         <mat-list-item>
+          
           <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
             alt="{{t?.username}}" (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
           <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortNameLastname}}</h3>
+
           <p matLine>
             <span class="role-style">Profesor Jefe</span>
           </p>
+
           <nx-card-user-dialog #cardTeacherDialog [user]="chiefTeacher" [areaRole]="areaRole"></nx-card-user-dialog>
          <!-- (click)="userDetail(teacherDetailDialog.openSimpleDialog()); $event.stopPropagation()"
           <nx-simple-dialog #teacherDetailDialog
@@ -42,13 +45,15 @@
         </nx-simple-dialog>
           <nx-image-zoom-user #imageZoomT [avatar]="chiefTeacher?.avatar"></nx-image-zoom-user>-->
 
-          <span class="spacer-r"></span>
+          
           <button mat-icon-button color="primary" (click)="crudTeacherDialog.openDialogDetail()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
+
           <button mat-icon-button color="accent" matTooltip="Cambiar Profesor" (click)="changeTeacherDialog.openDialogSearchUser()">
             <mat-icon svgIcon="account-edit"></mat-icon>
           </button>
+
         </mat-list-item>
       </mat-list>
       <!--@ViewChild--><nx-crud-user-dialog></nx-crud-user-dialog>

@@ -6,8 +6,7 @@ import { ROLE_TEACHER, ROLE_ADMIN, ROLE_MANAGER } from '../../app.config';
   template: `
 
 
-<mat-list-item *ngIf = "roles?.includes(roleTeacher)"
- [routerLink]="['./teacher/subjects/courses']">
+<mat-list-item *ngIf = "roles?.includes(roleTeacher)" [routerLink]="['./teacher/subjects']">
   <mat-icon matListIcon svgIcon="school"></mat-icon>
     <h3 matLine>Asignaturas Impartidas</h3>
 </mat-list-item>

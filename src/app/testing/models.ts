@@ -117,22 +117,22 @@ export const subjectTest2: Subject = {
 
 export const gradeTest: Grade = {
     id: 'g01',
-    subject: subjectTest,
+    //subject: subjectTest,
     student: studentTest,
     grade: 7.0,
-    type: 'examen',
-    title: 'examen01',
-    date: '28/03/2019',
+    //type: 'examen',
+    //title: 'examen01',
+    //date: '28/03/2019',
 }
 
 export const gradeTest2: Grade = {
     id: 'g02',
-    subject: subjectTest2,
+    //subject: subjectTest2,
     student: studentTest2,
     grade: 4.0,
-    type: 'examen',
-    title: 'examen01',
-    date: '20/05/2019',
+    //type: 'examen',
+    //title: 'examen01',
+    //date: '20/05/2019',
 }
 
 export const quizTest: Quiz = {

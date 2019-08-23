@@ -5,12 +5,15 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, UrlSegment, NavigationEnd } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
+import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs/internal/observable/of';
 
 
 @Component({
@@ -42,6 +45,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
 
+  btnRoute = false;
+
   //profile
   profileAction = '';
   profileTitle = '';
@@ -57,28 +62,41 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("settings") menu: MatMenu;
   @ViewChild("btnSettingsBack") btnSettingsBack: MatButton;
 
+  currentUrl: string = '';
+  dinamicStyles = {};
+
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private route: ActivatedRoute,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService,
 
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
-    }
-    );
+    });
 
-    this.route.data
-      .subscribe((data: { theme: Theme }) => {
-        if (data.theme) this.themePicker.installTheme(data.theme);
-        if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
-          this.router.navigate([this.userLoggedService.redirectUrl]);
-      });
+    this.route.data.subscribe((data: { theme: Theme }) => {
+      if (data.theme) this.themePicker.installTheme(data.theme);
+      if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
+        this.router.navigate([this.userLoggedService.redirectUrl]);
+    });
+
+    this.currentUrl = this.router.url;
+    this.setStyles();
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.currentUrl = event.url;
+        this.setStyles();
+      }
+    });
 
 
 
@@ -94,6 +112,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   }
+
+  setStyles() {
+    //console.log('setOverflow currentUrl: ', this.currentUrl);
+    let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
+    if (url === '/home/manager/subjects/detail' || url === '/home/teacher/subjects/detail') {
+      this.dinamicStyles = { 'overflow-y': 'hidden' };
+    } else {
+      this.dinamicStyles = { 'overflow-y': 'auto' };
+    }
+
+  }
+
+
 
   ngAfterViewInit() {
     this.sidenavMenuProfile.openedChange.subscribe(() => {

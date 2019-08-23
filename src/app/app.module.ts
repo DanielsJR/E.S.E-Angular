@@ -5,7 +5,7 @@ import { PageNotFoundComponent } from './error-pages/page-not-found.component';
 import { AppRoutingModule } from './app.routing';
 import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule } from '@angular/common/http';
 import { AppAuthInterceptor } from './app-auth.interceptor';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
@@ -18,6 +18,9 @@ import { AdminGuard } from './guards/admin-guard.service';
 import { ManagerGuard } from './guards/manager-guard.service';
 import { TeacherGuard } from './guards/teacher-guard.service';
 import { StudentGuard } from './guards/student-guard.service';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { LocalStorageService } from './services/local-storage.service';
+import { MyStomp } from './my-rx-stomp.config';
 
 
 
@@ -28,12 +31,13 @@ import { StudentGuard } from './guards/student-guard.service';
     BrowserAnimationsModule,
 
     SharedModule,
-    
+
     WelcomeModule,
     LoginHostModule,
 
     AppRoutingModule, // after the other modules with routes
     HttpClientModule,
+    HttpClientXsrfModule,
     MatMomentDateModule,
 
   ],
@@ -45,15 +49,45 @@ import { StudentGuard } from './guards/student-guard.service';
   ],
 
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AppAuthInterceptor, multi: true, },
-    { provide: MAT_DATE_LOCALE, useValue: 'es' },
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppAuthInterceptor,
+      multi: true,
+    },
+
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'es'
+    },
+
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MAT_MOMENT_DATE_FORMATS
+    },
+
     AuthGuard,
     AdminGuard,
     ManagerGuard,
     TeacherGuard,
     StudentGuard,
+
+    {
+      provide: InjectableRxStompConfig,
+      useClass: MyStomp,
+      deps: [LocalStorageService]
+    },
+
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
+    }
   ],
 
 

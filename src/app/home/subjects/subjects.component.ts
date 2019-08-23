@@ -4,9 +4,9 @@ import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dial
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectsCrudDialogRefComponent } from './subjects-crud-dialog-ref/subjects-crud-dialog-ref.component';
-import { MatSort, MatPaginator } from '@angular/material';
+import { MatSort, MatPaginator, MatSelect } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../models/subject';
 import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../app.config';
@@ -28,11 +28,15 @@ import { SimpleDialogRefComponent } from '../../shared/dialogs/simple-dialog/sim
 export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
-  @Input() areaRole;
+  @Input() areaRole: string;
   roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
 
   user: User;
+  courseName: string;
+  course: Course;
+
+  courses: Course[];
 
   // mat table
   displayedColumns = ['name', 'crud'];
@@ -42,14 +46,16 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark;
+  isDark: boolean;
   isLoading: boolean = false;
 
   subjectsSubscription: Subscription;
   isLoadingGetSubjectsSubscription: Subscription;
   isThemeDarkSubscription: Subscription;
-  courseName: string;
-  course: Course;
+  coursesSubscription: Subscription;
+
+  @ViewChild('matSelect') matSelect: MatSelect;
+
 
   constructor(private sessionStorage: SessionStorageService,
     private subjectStoreService: SubjectStoreService, private courseStoreService: CourseStoreService,
@@ -61,44 +67,80 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
 
+
+
     if (this.areaRole === this.roleManager) {
-      this.subjectsSubscription = this.route.paramMap
-        .pipe(switchMap(params => {
-          this.courseName = params.get('name');
-          return this.subjectStoreService.subjects$
-        }))
+
+      this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => this.courses = data);
+
+      this.subjectsSubscription = this.matSelect.valueChange
+        .pipe(
+          switchMap(value => {
+            this.courseName = value;
+            return this.courseStoreService.courses$;
+          }), switchMap(cs => {
+            this.course = cs.find(c => c.name.indexOf(this.courseName) === 0);
+            return this.subjectStoreService.subjects$;
+          })
+        )
         .subscribe(subjects => {
           let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
           this.dataSource.data = filteredSubjects;
-          let subject: Subject = subjects.find(sj => sj.course.name.indexOf(this.courseName) === 0);
-          if (subject) {
-            this.course = subject.course;
-          } else {
-            this.courseStoreService.courses$.subscribe(cs => {
-              this.course = cs.find(c => c.name.indexOf(this.courseName) === 0)
-            }
-            )
-          }
-
         });
+
 
     } else if (this.areaRole === this.roleTeacher) {
-      this.subjectsSubscription = this.userLoggedService.userLogged$
-        .pipe(
-          switchMap(user => {
-            this.user = user;
-            return this.route.paramMap;
-          }),
-          switchMap(params => {
-            this.courseName = params.get('name');
-            return this.subjectStoreService.subjects$
-          })
 
-        )
-        .subscribe(subjects => {
-          let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
-          this.dataSource.data = filteredSubjects;
-        });
+      if (this.userLoggedService.isManager) {
+
+        this.coursesSubscription = this.userLoggedService.userLogged$
+          .pipe(
+            switchMap(user => {
+              this.user = user;
+              return this.subjectStoreService.subjects$
+            }))
+          .subscribe(subjects => {
+            if (subjects) {
+              let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
+              this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+            }
+          });
+
+        this.subjectsSubscription = this.userLoggedService.userLogged$
+          .pipe(
+            switchMap(user => {
+              this.user = user;
+              return this.matSelect.valueChange;
+            }),
+            switchMap((value: any) => {
+              this.courseName = value;
+              return this.subjectStoreService.subjects$
+            })
+
+          )
+          .subscribe(subjects => {
+            let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
+            this.dataSource.data = filteredSubjects;
+          });
+
+      } else {
+
+        this.coursesSubscription = this.subjectStoreService.subjects$
+          .subscribe(subjects => this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i));
+
+
+        this.subjectsSubscription = this.matSelect.valueChange
+          .pipe(switchMap(value => {
+            this.courseName = value;
+            return this.subjectStoreService.subjects$;
+          }
+          ))
+          .subscribe(subjects => {
+            let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
+            this.dataSource.data = filteredSubjects;
+          });
+
+      }
 
     } else {
       console.error('Area role: ', this.areaRole);
@@ -113,22 +155,21 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
+
   }
 
   ngOnDestroy(): void {
     this.subjectsSubscription.unsubscribe();
     this.isLoadingGetSubjectsSubscription.unsubscribe();
     this.isThemeDarkSubscription.unsubscribe();
+    this.coursesSubscription.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
-
-  goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
 

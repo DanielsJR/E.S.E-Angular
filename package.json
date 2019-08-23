@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --open --proxy-config proxy.config.json",
+    "start": "ng serve --host 192.168.1.90 --open --proxy-config proxy.config.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -29,6 +29,7 @@
     "@covalent/core": "2.0.0-beta.1",
     "@mdi/angular-material": "^3.6.95",
     "@mdi/font": "^3.6.95",
+    "@stomp/ng2-stompjs": "^7.2.0",
     "core-js": "^2.5.3",
     "hammerjs": "^2.0.8",
     "immutable": "^3.8.2",
@@ -38,8 +39,6 @@
     "node-sass": "^4.7.2",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^6.1.0",
-    "sockjs-client": "^1.3.0",
-    "stompjs": "^2.3.3",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
@@ -49,7 +48,7 @@
     "@angular/language-service": "6.0.0",
     "@types/jasmine": "~2.8.2",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.0.58",
+    "@types/node": "^8.0.58",
     "codelyzer": "4.3.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",

@@ -9,6 +9,9 @@ import { Course } from "../models/course";
 import { User } from "../models/user";
 import { GradeStoreService } from "./grade-store.service";
 import { map } from "rxjs/internal/operators/map";
+import { UserLoggedService } from "./user-logged.service";
+import { switchMap } from "rxjs/internal/operators/switchMap";
+import { take } from "rxjs/internal/operators/take";
 
 
 
@@ -17,11 +20,12 @@ import { map } from "rxjs/internal/operators/map";
 })
 export class SubjectStoreService {
     private dataStore: { subjects: Subject[] };
+
     private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     constructor(private subjectBackendService: SubjectBackendService, private isLoadingService: IsLoadingService,
-        private gradeStoreService: GradeStoreService) {
+        private gradeStoreService: GradeStoreService, private userLoggedService: UserLoggedService) {
         this.dataStore = { subjects: [] };
     }
 
@@ -33,25 +37,47 @@ export class SubjectStoreService {
         return this.isLoadingGet.asObservable();
     }
 
-    loadAllSubjects() {
+    loadSubjects() {
         if (this.subjectsSource.getValue().length) {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
             console.log(`********GET-Subjects-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
-            this.subjectBackendService.getSubjects()
-                .pipe(finalize(() => this.isLoadingGet.next(false)))
-                .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.subjects = data;
-                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        data = null;
-                        console.error('Lista de subject vacia');
-                    }
-                }, error => console.error('error retrieving subjects, ' + error.message)
-                );
+
+            if (this.userLoggedService.isManager()) {
+                this.subjectBackendService.getAllSubjects()
+                    .pipe(finalize(() => this.isLoadingGet.next(false)))
+                    .subscribe(data => {
+                        if (data.length) {
+                            this.dataStore.subjects = data;
+                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                        } else {
+                            data = null;
+                            console.error('Lista de subjects vacia');
+                        }
+                    }, error => console.error('error retrieving all subjects, ' + error.message));
+
+            } else {
+                let teacherId: string;
+                this.userLoggedService.userLogged$
+                    .pipe(
+                        switchMap(teacher => {
+                            teacherId = teacher.id;
+                            return this.subjectBackendService.getSubjectsByTeacher(teacherId);
+                        })
+                    )
+                    .pipe(take(1),finalize(() => this.isLoadingGet.next(false)))
+                    .subscribe(data => {
+                        if (data.length) {
+                            this.dataStore.subjects = data;
+                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                        } else {
+                            data = null;
+                            console.error('Lista de subjects vacia');
+                        }
+                    }, error => console.error('error retrieving subjects by teacher, ' + error.message));
+            }
         }
 
     }
@@ -109,7 +135,7 @@ export class SubjectStoreService {
 
 
 
-    //************courseStore
+    //************courseStore************
     updateTeacherInSubjectStore(teacher: User) {
         if (this.dataStore.subjects.find(s => s.teacher.id === teacher.id)) {
             this.dataStore.subjects.forEach((subject, index) => {

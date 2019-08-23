@@ -9,12 +9,14 @@ import { ManagerCoursesComponent } from './manager-courses/manager-courses.compo
 import { ManagerCoursesDetailComponent } from './manager-courses/manager-courses-detail/manager-courses-detail.component';
 import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses-create/manager-courses-create.component';
 
-import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subjects-detail.component';
-import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subjects-grades.component';
-import { ManagerSubjectsCoursesComponent } from './manager-subjects/manager-subjects-courses.component';
-import { ManagerSubjectsCoursesSubjectsComponent } from './manager-subjects/manager-subjects-courses-subjects.component';
+import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subject-detail/manager-subjects-detail.component';
+import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subject-detail/manager-subjects-grades.component';
 import { UsersModule } from '../users/users.module';
 import { SubjectsModule } from '../subjects/subejcts.module';
+import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subject-detail/manager-subject-course.component';
+import { ManagerSubjectQuizComponent } from './manager-subjects/manager-subject-detail/manager-subject-quiz.component';
+import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
+import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 
 
 @NgModule({
@@ -37,10 +39,14 @@ import { SubjectsModule } from '../subjects/subejcts.module';
     ManagerCoursesDetailComponent,
     ManagerCoursesCreateComponent,
 
+    ManagerSubjectsComponent,
+        
     ManagerSubjectsDetailComponent,
+    ManagerSubjectCourseComponent,
+    ManagerSubjectQuizComponent,
+    ManagerSubjectEvaluationsComponent,
     ManagerSubjectsGradesComponent,
-    ManagerSubjectsCoursesComponent,
-    ManagerSubjectsCoursesSubjectsComponent,
+
     
 
   ],

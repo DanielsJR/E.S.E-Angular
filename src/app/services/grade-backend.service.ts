@@ -34,7 +34,7 @@ export class GradeBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Grade>(url, grade)
             .pipe(
-                tap(resp => console.log(`created Grade title=${resp.title}`))
+                tap(resp => console.log(`created Grade title=${resp.evaluation.title}`))
             );
     }
 
@@ -44,7 +44,7 @@ export class GradeBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Grade>(url, grade)
             .pipe(
-                tap(resp => console.log(`edited Grade Grade title=${resp.title}`))
+                tap(resp => console.log(`edited Grade Grade title=${resp.evaluation.title}`))
             );
     }
 

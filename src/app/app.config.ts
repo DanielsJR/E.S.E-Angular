@@ -8,12 +8,17 @@ export const SESSION_STORAGE_THEME_KEY = 'theme';
 
 export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
+//*******************WEB-SOCKET*************************/
+export const BROKER_URL = 'ws://192.168.1.30:8080/api/v0/socket';
+
 
 //*******************REST*************************/
 export const API_SERVER = 'http://192.168.1.30:8080/api/v0';
 export const API_GENERIC_URI = '/api/v0';
 
 export const URI_TOKEN_AUTH = '/token/generate-token';
+
+export const URI_SOCKET = 'socket';
 
 export const URI_WELCOME = '/welcome';
 export const URI_HOME = '/home';
@@ -42,6 +47,8 @@ export const URI_TEACHER = '/teacher';
 export const URI_GRADES = '/grades';
 export const URI_TITLE = '/title';
 export const URI_STUDENT = '/student';
+
+export const URI_EVALUATIONS = '/evaluations';
 
 export const URI_QUIZES = '/quizes';
 export const URI_QUIZES_STUDENT = '/quizes-student';

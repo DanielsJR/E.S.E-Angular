@@ -8,7 +8,7 @@ import { ROLE_TEACHER } from '../../../app.config';
   `,
   styles:['']
 })
-export class TeacherSubjectsCoursesSubjectsComponent implements OnInit {
+export class TeacherSubjectsComponent implements OnInit {
   areaRole = ROLE_TEACHER;
 
   constructor() { }
