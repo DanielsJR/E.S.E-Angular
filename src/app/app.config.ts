@@ -69,7 +69,7 @@ export const ROLE_STUDENT_SPANISH = 'Estudiante';
 
 
 //*******************SNACKBAR---DIALOG_REF*************************/
-export const RESULT_SUCCESS = 'success';
+export const RESULT_SUCCEED = 'succeed';
 export const RESULT_CANCELED = 'canceled';
 export const RESULT_ERROR = 'error';
 export const RESULT_EDIT = 'edit';
@@ -79,10 +79,52 @@ export const RESULT_ACCEPT = 'accept';
 export const RESULT_ACTION1 = 'action1';
 export const RESULT_ACTION2 = 'action2';
 export const RESULT_ACTION3 = 'action3';
+export const RESULT_WARN = 'warn';
 
-export const USER_UPDATE_ERROR = 'Error al actualizar usuario';
-export const USER_UPDATE_SUCCESS = 'Datos Actualizados';
+export const USER_CREATE_ERROR = 'Error al Crear Usuario';
+export const USER_CREATE_SUCCEED = 'Usuario Creado';
+export const USER_UPDATE_ERROR = 'Error al Actualizar Usuario';
+export const USER_UPDATE_SUCCEED = 'Usuario Actualizado';
+export const USER_DELETE_ERROR = 'Error al Eliminar Usuario';
+export const USER_DELETE_SUCCEED = 'Usuario Eliminado';
 
+export const COURSE_CREATE_ERROR = 'Error al Crear Curso';
+export const COURSE_CREATE_SUCCEED = 'Curso Creado'
+export const COURSE_UPDATE_ERROR = 'Error al Actualizar Curso';
+export const COURSE_UPDATE_SUCCEED = 'Curso Actualizado';
+export const COURSE_DELETE_ERROR = 'Error al Eliminar Curso';
+export const COURSE_DELETE_SUCCEED = 'Curso Eliminado';
+
+export const SUBJECT_CREATE_ERROR = 'Error al Crear Asignatura';
+export const SUBJECT_CREATE_SUCCEED = 'Asignatura Creada';
+export const SUBJECT_UPDATE_ERROR = 'Error al Actualizar Asignatura';
+export const SUBJECT_UPDATE_SUCCEED = 'Asignatura Actualizada';
+export const SUBJECT_DELETE_ERROR = 'Error al Eliminar Asignatura';
+export const SUBJECT_DELETE_SUCCEED = 'Asignatura Eliminada';
+
+export const EVALUATION_CREATE_ERROR = 'Error al Crear Evaluación';
+export const EVALUATION_CREATE_SUCCEED = 'Evaluación Creada';
+export const EVALUATION_UPDATE_ERROR = 'Error al Actualizar Evaluación';
+export const EVALUATION_UPDATE_SUCCEED = 'Evaluación Actualizada';
+export const EVALUATION_DELETE_ERROR = 'Error al Eliminar Evaluación';
+export const EVALUATION_DELETE_SUCCEED = 'Evaluación Eliminada';
+
+export const GRADE_CREATE_ERROR = 'Error al Crear Calificación';
+export const GRADE_CREATE_SUCCEED = 'Calificación Creada';
+export const GRADE_UPDATE_ERROR = 'Error al Actualizar Calificación';
+export const GRADE_UPDATE_SUCCEED = 'Calificación Actualizada';
+export const GRADE_DELETE_ERROR = 'Error al Eliminar Calificación';
+export const GRADE_DELETE_SUCCEED = 'Calificación Eliminada';
+
+export const QUIZ_CREATE_ERROR = 'Error al Crear Prueba';
+export const QUIZ_CREATE_SUCCEED = 'Prueba Creada';
+export const QUIZ_UPDATE_ERROR = 'Error al Actualizar Prueba';
+export const QUIZ_UPDATE_SUCCEED = 'Prueban Actualizada';
+export const QUIZ_DELETE_ERROR = 'Error al Eliminar Prueba';
+export const QUIZ_DELETE_SUCCEED = 'Prueba Eliminada';
+
+
+export const CANCEL_MESSAGE = 'Operación Cancelada';
 
 //*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';
@@ -92,7 +134,10 @@ export const WELCOME_ADMIN = 'Bienvenido Sr. ';
 export const DD_MM_YYYY ='DD/MM/YYYY';
 
 
-
-
+//*******************CRUD_TYPE*************************/
+export const CRUD_TYPE_DETAIL = 'detail';
+export const CRUD_TYPE_EDIT = 'edit';
+export const CRUD_TYPE_CREATE = 'create';
+export const CRUD_TYPE_DELETE = 'delete';
 
 

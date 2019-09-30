@@ -10,9 +10,8 @@ import { Avatar } from '../../../../models/avatar';
 })
 export class SimpleDialogRefComponent implements OnInit {
 
-
   obj: any;
-  
+
   dialogTitle;
   title;
   subtitle;
@@ -20,15 +19,19 @@ export class SimpleDialogRefComponent implements OnInit {
   avatar: Avatar;
   icon;
   type;
-  actionButton1 ='Aceptar';
+  actionButton1: any;
   actionButton2: any;
   actionButton3: any;
   cancelButton: any;
 
-  constructor(
-    public dialogRef: MatDialogRef<SimpleDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
-  ) {
+  guiTypeClassic: string = 'classic';
+  guiTypeCard: string = 'card';
+
+  constructor(public dialogRef: MatDialogRef<SimpleDialogRefComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer) {
+
+    console.log('***SimpleDialog*** type: ' + data.type);
+
     this.obj = this.data.obj;
     this.icon = this.data.icon;
     this.dialogTitle = this.data.dialogTitle;
@@ -36,14 +39,12 @@ export class SimpleDialogRefComponent implements OnInit {
     this.subtitle = this.data.subtitle;
     this.message = this.data.message;
     this.avatar = this.data.avatar;
-    this.actionButton1 = this.data.actionButton1 ? this.data.actionButton1 : this.actionButton1;
+    this.actionButton1 = this.data.actionButton1 ? this.data.actionButton1 : 'Aceptar';
     this.actionButton2 = this.data.actionButton2;
     this.actionButton3 = this.data.actionButton3;
-    this.cancelButton = this.data.cancelButton;
+    this.cancelButton = (this.data.cancelButton) ? this.data.cancelButton : 'Cancelar';
     this.type = this.data.type;
-    console.log('Dialog*** type: ' + data.type);
-    //if (data.user !== null) this.user = this.data.user;
-    
+
   }
 
   ngOnInit() {

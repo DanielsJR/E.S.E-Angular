@@ -16,24 +16,24 @@
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="book-multiple"></mat-icon>
-           &nbsp; Cursos / <span>{{courseYear?.year}}</span>
+          &nbsp; Cursos / <span>{{courseYear?.year}}</span>
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Curso </mat-header-cell>
-        <mat-cell *matCellDef="let course">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Curso </mat-header-cell>
+        <mat-cell *matCellDef="let course" style="flex-grow: 2">
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
-              <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ course?.chiefTeacher?.avatar?.type+';base64,' + course?.chiefTeacher?.avatar?.data)"
+              <img matListAvatar
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ course?.chiefTeacher?.avatar?.type+';base64,' + course?.chiefTeacher?.avatar?.data)"
                 alt="{{course?.chiefTeacher?.username}}">
               <h3 matLine> {{course?.name}} </h3>
               <p matLine>
@@ -46,7 +46,7 @@
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="add">
+        <mat-header-cell *matHeaderCellDef class="crud">
           <button mat-mini-fab matTooltip="Agregar Curso" [routerLink]="['./create']" style="margin-bottom:5px">
             <mat-icon svgIcon="book-plus"></mat-icon>
           </button>
@@ -59,33 +59,30 @@
           </button>
 
 
-          <button mat-icon-button color="warn" (click)="dialogAction(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
+          <button mat-icon-button color="warn"
+            (click)="dialogAction(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteDialog
-            [obj]="course" 
-            [icon]="'book'"
-            [dialogTitle]="'Eliminar Curso'"
-            [title]="course.name"
-            [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
-            [message]="'¿Eliminar este Curso?'" 
-            [avatar]="course?.chiefTeacher?.avatar"
-            [type]="'delete-classic'">
+          <nx-simple-dialog #deleteDialog [obj]="course" [icon]=" 'book' " [dialogTitle]=" 'Eliminar Curso' "
+            [title]="course.name" [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
+            [message]=" '¿Eliminar este Curso?' " [avatar]="course?.chiefTeacher?.avatar" [type]=" 'classic' ">
           </nx-simple-dialog>
-          
+
 
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]"
+        [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
 
       </mat-row>
 
     </mat-table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
 
   </mat-card>
 

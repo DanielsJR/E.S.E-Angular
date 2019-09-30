@@ -6,7 +6,7 @@ import { TeacherComponent } from './teacher.component';
 import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-detail.component';
 import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-grades.component';
 import { UsersModule } from '../users/users.module';
-import { SubjectsModule } from '../subjects/subejcts.module';
+import { SubjectsModule } from '../subjects/subjects.module';
 import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
 import { TeacherQuizesDetailComponent } from './teacher-quizes/teacher-quizes-detail/teacher-quizes-detail.component';
 import { TeacherQuizesCreateComponent } from './teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
@@ -15,6 +15,8 @@ import { TeacherSubjectCourseComponent } from './teacher-subjects/teacher-subjec
 import { TeacherSubjectQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-quiz.component';
 import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
+import { QuizModule } from '../quiz/quiz.module';
+import { QuizStudentModule } from '../quiz-student/quizStudent.module';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.co
     TeacherRoutingModule,
     UsersModule,
     SubjectsModule,
+    QuizStudentModule,
     
   ],
 

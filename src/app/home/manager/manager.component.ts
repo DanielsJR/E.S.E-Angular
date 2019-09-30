@@ -1,22 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
-
 import { SubjectStoreService } from '../../services/subject-store.service';
-import { GradeStoreService } from '../../services/grade-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 
 @Component({
-    template: `
-        <router-outlet></router-outlet>
-  `
+    template: `<router-outlet></router-outlet>`
 })
+
 export class ManagerComponent implements OnInit, OnDestroy {
 
-    constructor(
-        private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService, private userLoggedService: UserLoggedService,
-        private gradeStoreService: GradeStoreService
+    constructor(private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
+        private subjectStoreService: SubjectStoreService, private userLoggedService: UserLoggedService
     ) { }
 
     ngOnInit(): void {
@@ -32,7 +27,6 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
         this.subjectStoreService.loadSubjects();
 
-        //this.gradeStoreService.loadAllGrades();
     }
 
     ngOnDestroy() {

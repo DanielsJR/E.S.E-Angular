@@ -40,7 +40,11 @@ mat-dialog-actions {
 .listContainer {
     display: flex;
     justify-content: flex-start;
-    padding-top: 0;
+    padding: 0 8px;
+}
+
+.listContainer .mat-list {
+    padding: 0 0 5px 0;
 }
 
 .listContainer .mat-list-item {
@@ -52,21 +56,21 @@ mat-dialog-actions {
     width: 65px;
 }
 
-.listContainer2 {
+.listContainerDelete {
     display: flex;
     justify-content: center;
+    padding: 0;
 }
 
-.listContainer2 mat-list {
-    padding-top: 0 !important;
-    margin-bottom: 5px !important;
+.listContainerDelete .mat-list {
+    padding: 0 0 5px 0;
 }
 
-.listContainer2 .mat-list-item {
+.listContainerDelete .mat-list-item {
     height: 90px;
 }
 
-.listContainer2 .mat-list-avatar {
+.listContainerDelete .mat-list-avatar {
     height: 65px;
     width: 65px;
 }

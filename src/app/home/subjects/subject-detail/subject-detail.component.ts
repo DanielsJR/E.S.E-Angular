@@ -1,6 +1,6 @@
 
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
@@ -10,6 +10,7 @@ import { ROLE_MANAGER, ROLE_TEACHER } from '../../../app.config';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { EvaluationStoreService } from '../../../services/evaluation-store.service';
 import { Course } from '../../../models/course';
+import { GradeStoreService } from '../../../services/grade-store.service';
 
 
 
@@ -35,20 +36,22 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   subjects: Subject[];
   coursesSubjects: Course[];
 
+  toolbarMenus: any[] = [];
 
   isThemeDarkSubscription: Subscription;
   isLoadingGetSubjectsSubscription: Subscription;
   subjectSubscription: Subscription;
 
+  enableToolbar: boolean;
+  currentUrl: string;
+  dinamicStyles = {};
 
-  constructor(
-    private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
+
+  constructor(private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
-    private evaluationStoreService: EvaluationStoreService,
-    private router: Router,
-  ) {
-
-  }
+    private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
 
@@ -56,8 +59,15 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
+          this.currentUrl = this.router.url;
+          this.setEnableToolbar();
+
           this.evaluationStoreService.clearStore();
           this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
+
+          this.gradeStoreService.clearStore();
+          this.gradeStoreService.getGradesBySubject(this.subjectId);
+
           return this.subjectStoreService.loadOneSubject(this.subjectId);
         }), switchMap(s => {
           this.subject = s;
@@ -67,9 +77,25 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
       .subscribe(sbjs => {
         this.subjects = sbjs;
         this.coursesSubjects = this.subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-        
+
         this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
         this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+
+        if (this.areaRole === this.roleTeacher) {
+          this.toolbarMenus = [
+            { name: 'Curso', route: ['./course', this.subjectId] },
+            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
+            { name: 'Tomar Prueba', route: ['./quiz', this.subjectId] },
+            { name: 'Pasar Lista', route: ['./list', this.subjectId] },
+            { name: 'Libro de Clases', route: ['./book', this.subjectId] }
+          ];
+        } else {
+          this.toolbarMenus = [
+            { name: 'Curso', route: ['./course', this.subjectId] },
+            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
+          ];
+        }
+
 
       });
 
@@ -77,6 +103,27 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
 
+
+
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.currentUrl = event.url;
+        this.setEnableToolbar();
+      }
+    });
+
+
+  }
+  setEnableToolbar() {
+    let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
+    if (url === `/home/manager/subjects/detail/${this.subjectId}/grades` || url === `/home/teacher/subjects/detail/${this.subjectId}/grades`) {
+      this.enableToolbar = false;
+      this.dinamicStyles = { 'top': '0' };
+    } else {
+      this.enableToolbar = true;
+      this.dinamicStyles = { 'top': '64px' };
+    }
   }
 
   ngOnDestroy(): void {

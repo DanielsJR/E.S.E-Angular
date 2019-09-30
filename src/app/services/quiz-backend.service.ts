@@ -47,7 +47,7 @@ export class QuizBackendService {
     }
 
     delete(quiz: Quiz | string): Observable<Quiz> {
-        const id= (typeof quiz === 'string') ? quiz : quiz.id;
+        const id = (typeof quiz === 'string') ? quiz : quiz.id;
         const url = `${this.quizURL}/${id}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Quiz>(url)
@@ -62,6 +62,15 @@ export class QuizBackendService {
         return this.httpCli.get<Quiz>(url)
             .pipe(retry(3),
                 tap(_ => console.log(`fetched quiz id=${id}`))
+            );
+    }
+
+    getQuizByUserId(id: string): Observable<Quiz[]> {
+        const url = `${this.quizURL}/user/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Quiz[]>(url)
+            .pipe(retry(3),
+                tap(quizes => console.log(`N° Quizes: ${quizes.length}`))
             );
     }
 

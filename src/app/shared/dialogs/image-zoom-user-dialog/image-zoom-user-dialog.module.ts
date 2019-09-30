@@ -23,7 +23,7 @@ import { MaterialModule } from '../../material.module';
 
     exports: [
         ImageZoomUserDialogComponent,
-        ImageZoomUserDialogRefComponent,
+        //ImageZoomUserDialogRefComponent,
     ]
 })
 export class ImageZoomUserDialogModule { }

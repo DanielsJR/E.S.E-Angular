@@ -15,7 +15,6 @@ import { QuizMenuComponent } from './menus/quiz-menu.component';
 import { ManagerSubjectsMenuComponent } from './menus/manager-subjects-menu.component';
 
 
-
 @NgModule({
   imports: [
     SharedModule,
@@ -39,6 +38,7 @@ import { ManagerSubjectsMenuComponent } from './menus/manager-subjects-menu.comp
 
     SetPassDialogComponent,
     SetPassDialogRefComponent,
+
 
   ],
   

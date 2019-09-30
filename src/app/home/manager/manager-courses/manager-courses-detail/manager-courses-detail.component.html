@@ -22,42 +22,36 @@
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
-      <mat-list style="flex-grow: 8">
+      <mat-list style="flex-grow: 1">
         <mat-list-item>
-          
-          <img matListAvatar *ngIf="(chiefTeacher) as t" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
-            alt="{{t?.username}}" (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
+
+          <img matListAvatar *ngIf="(chiefTeacher) as t"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
+            alt="{{t?.username}}"
+            (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
+          <nx-card-user-dialog #cardTeacherDialog [user]="chiefTeacher" [areaRole]="areaRole"></nx-card-user-dialog>
+
           <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortNameLastname}}</h3>
 
           <p matLine>
             <span class="role-style">Profesor Jefe</span>
           </p>
 
-          <nx-card-user-dialog #cardTeacherDialog [user]="chiefTeacher" [areaRole]="areaRole"></nx-card-user-dialog>
-         <!-- (click)="userDetail(teacherDetailDialog.openSimpleDialog()); $event.stopPropagation()"
-          <nx-simple-dialog #teacherDetailDialog
-          [obj]="chiefTeacher" 
-          [title]="chiefTeacher | shortNameLastname"
-          [subtitle]="chiefTeacher.roles | rolesToSpanish"
-          [avatar]="chiefTeacher?.avatar"
-          [actionButton1]="'Detalles'"
-          [type]="'card'">
-        </nx-simple-dialog>
-          <nx-image-zoom-user #imageZoomT [avatar]="chiefTeacher?.avatar"></nx-image-zoom-user>-->
-
-          
           <button mat-icon-button color="primary" (click)="crudTeacherDialog.openDialogDetail()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
+          <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriRole]="uriTeachers" [areaRole]="areaRole">
+          </nx-crud-user-dialog>
 
-          <button mat-icon-button color="accent" matTooltip="Cambiar Profesor" (click)="changeTeacherDialog.openDialogSearchUser()">
+          <button mat-icon-button color="accent" matTooltip="Cambiar Profesor"
+            (click)="changeTeacherDialog.openDialogSearchUser()">
             <mat-icon svgIcon="account-edit"></mat-icon>
           </button>
 
         </mat-list-item>
       </mat-list>
-      <!--@ViewChild--><nx-crud-user-dialog></nx-crud-user-dialog>
-      <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriRole]="'/teachers'" [areaRole]="areaRole"></nx-crud-user-dialog>
+
+
       <nx-search-user-dialog #changeTeacherDialog [userRole]="roleTeacher" (userSelected)="changeTeacher($event)">
       </nx-search-user-dialog>
 
@@ -69,28 +63,30 @@
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let student">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let student" style="flex-grow: 2">
 
-          <mat-list style="flex-grow: 8">
+          <mat-list>
             <mat-list-item>
               <img matListAvatar
                 [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar?.type+';base64,' + student?.avatar?.data)"
                 alt="{{student?.username}}"
                 (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+              <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"></nx-card-user-dialog>
+              <!--<nx-image-zoom-user #imageZoomS [avatar]="student?.avatar"></nx-image-zoom-user>-->
+
               <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
-          <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"></nx-card-user-dialog>
-         <!--<nx-image-zoom-user #imageZoomS [avatar]="student?.avatar"></nx-image-zoom-user>-->
+
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="add">
+        <mat-header-cell *matHeaderCellDef class="crud">
           <button mat-mini-fab matTooltip="Agregar Estudiante" (click)="addStudentDialog.openDialogSearchUser()">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
@@ -100,26 +96,21 @@
 
         <mat-cell *matCellDef="let student" class="crud">
 
-          <button mat-icon-button color="primary" (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
+          <button mat-icon-button color="primary"
+            (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
+          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole">
+          </nx-crud-user-dialog>
 
-          <button mat-icon-button color="warn" (click)="deleteStudent(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
+          <button mat-icon-button color="warn"
+            (click)="deleteStudent(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="account-minus"></mat-icon>
           </button>
-
-         <!--<nx-search-user-dialog #deleteStudentDialog [userRole]="roleStudent" [user]="student" (userSelected)="deleteStudent($event)"> 
-          </nx-search-user-dialog>-->
-
-          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="'/students'" [areaRole]="areaRole"></nx-crud-user-dialog>
-          <nx-simple-dialog #deleteDialog
-            [obj]="student" 
-            [title]="student | shortNameLastname"
+          <nx-simple-dialog #deleteDialog [obj]="student" [title]="student | shortNameLastname"
             [subtitle]="student?.roles | rolesToSpanish"
-            [message]=" '¿Eliminar del ' + course?.name + '/' + course?.year + '?' " 
-            [avatar]="student?.avatar"
-            [cancelButton]=" 'Descartar' "
-            [type]=" 'card' ">
+            [message]=" '¿Eliminar del ' + course?.name + '/' + course?.year + '?' " [avatar]="student?.avatar"
+            [cancelButton]=" 'Descartar' " [type]=" 'card' ">
           </nx-simple-dialog>
 
         </mat-cell>
@@ -129,7 +120,8 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "></mat-row>
 
     </mat-table>
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
 
     <mat-divider></mat-divider>
     <mat-toolbar>

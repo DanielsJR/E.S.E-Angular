@@ -1,11 +1,15 @@
-<mat-card>
-  <h2>Welcome to Teacher Home</h2>
-  <img width="180" src="assets/images/logos/ese-logo-big2.png">
-  <br>
-</mat-card>
+<div class="container">
 
-<span class="done">
-  <button mat-fab routerLink="/login">
-    <mat-icon>mood</mat-icon>
-  </button>
-</span>
+  <mat-card *ngFor="let c of nCards">
+    <h2>Welcome to Teacher Home</h2>
+    <img width="180" src="assets/images/logos/ese-logo-big2.png">
+    <br>
+  </mat-card>
+
+  <span class="done">
+    <button mat-fab>
+      <mat-icon>mood</mat-icon>
+    </button>
+  </span>
+
+</div>

@@ -5,7 +5,7 @@ import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { finalize } from 'rxjs/operators';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_SUCCEED } from '../../../../app.config';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class ResetPassDialogRefComponent implements OnInit {
 
     this.user = data.user;
     this.uriRole = this.data.uriRole;
-    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    console.log('***DialogResetPass*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
   ngOnInit() { }
@@ -46,7 +46,7 @@ export class ResetPassDialogRefComponent implements OnInit {
       .subscribe(response => {
         if (response) {
           this.dialogRef.close();
-          setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCESS));
+          setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCEED));
         } else {
           this.dialogRef.close();
           setTimeout(() => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR));

@@ -1,18 +1,16 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer, Renderer2 } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
-import { Quiz, CorrespondItem, TRUE_FALSES, QUIZ_LEVELS } from '../../../../models/quiz';
-import { Observable } from 'rxjs/internal/Observable';
+import { Quiz, TRUE_FALSES, QUIZ_LEVELS } from '../../../../models/quiz';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, Validators, FormGroup, FormArray, FormControl, FormGroupName } from '@angular/forms';
-import { NAME_PATTERN } from '../../../../shared/validators/patterns';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1 } from '../../../../app.config';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_SUCCEED, QUIZ_UPDATE_SUCCEED, QUIZ_UPDATE_ERROR } from '../../../../app.config';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize, take } from 'rxjs/operators';
 import { IsLoadingService } from '../../../../services/isLoadingService.service';
-import { MatDialogRef, MatSelect, MatAccordion, MatExpansionPanel } from '@angular/material';
+import { MatDialogRef, MatSelect } from '@angular/material';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { SUBJECT_NAMES } from '../../../../models/subject-names';
 
@@ -314,13 +312,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
         this.quitFocus();
         //this.editDataQuizForm.reset();
         this.buildForm();
-        this.snackbarService.openSnackBar('Quiz updated', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
         } else {
-          this.snackbarService.openSnackBar('Error al editar Quiz', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
       });
@@ -351,13 +349,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
       .subscribe(q => {
         this.quiz = q;
         this.buildForm();
-        this.snackbarService.openSnackBar('Quiz updated', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
         } else {
-          this.snackbarService.openSnackBar('Error al editar Quiz', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
       });
@@ -382,13 +380,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
       .subscribe(q => {
         this.quiz = q;
         this.buildForm();
-        this.snackbarService.openSnackBar('Quiz updated', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
         } else {
-          this.snackbarService.openSnackBar('Error al editar Quiz', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
       });
@@ -416,13 +414,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
       .subscribe(q => {
         this.quiz = q;
         this.buildForm();
-        this.snackbarService.openSnackBar('Quiz updated', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
         } else {
-          this.snackbarService.openSnackBar('Error al editar Quiz', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
       });
@@ -446,13 +444,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
       .subscribe(q => {
         this.quiz = q;
         this.buildForm();
-        this.snackbarService.openSnackBar('Quiz updated', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
         } else {
-          this.snackbarService.openSnackBar('Error al editar Quiz', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
       });

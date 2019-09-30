@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
-import { startWith, map, finalize } from 'rxjs/operators';
+import { startWith, map, finalize, filter } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../models/subject';
@@ -10,10 +10,9 @@ import { Course } from '../../../models/course';
 import { SubjectName, SUBJECT_NAMES } from '../../../models/subject-names';
 import { Avatar } from '../../../models/avatar';
 import { UserStoreService } from '../../../services/user-store.service';
-import { CourseStoreService } from '../../../services/course-store.service';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { shortNameSecondName } from '../../../shared/functions/shortName';
-import { RESULT_CANCELED, RESULT_SUCCESS, RESULT_ERROR } from '../../../app.config';
+import { RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_EDIT, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_UPDATE_ERROR, SUBJECT_DELETE_ERROR } from '../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from '../../../services/snackbar.service';
 
@@ -25,122 +24,63 @@ import { SnackbarService } from '../../../services/snackbar.service';
 })
 export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
 
-  filteredTeachers$: Observable<User[]>;
-  teachers: User[];
-  teacher: User;
 
-  filteredSubjectNames$: Observable<SubjectName[]>;
-  subjectsNames = SUBJECT_NAMES;
+  teachers$: Observable<User[]>;
+  subjectsNames: SubjectName[]; //= SUBJECT_NAMES;
   subjectName: SubjectName;
-
   subject: Subject;
-
+  teacher: User;
   course: Course;
-
-  isLoading: boolean = false;
-
   avatar: Avatar;
+
   subjectGroup: FormGroup;
   teacherGroup: FormGroup;
 
   subjectEditGroup: FormGroup;
   teacherEditGroup: FormGroup;
 
-  usersSubscription: Subscription;
+  subjectsSubscription: Subscription;
 
+  isLoading: boolean = false;
+
+  compareTeacherFn: ((a1: any, a2: any) => boolean) | null = this.compareById;
 
   constructor(public dialogRef: MatDialogRef<SubjectsCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
     public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
     private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
     private snackbarService: SnackbarService,
   ) {
-
-    console.log('type: ' + data.type);
+    console.log('***DialogSubject*** type: ' + data.type);
     this.subject = this.data.subject;
-    if (data.type === 'edit') {
+
+    this.subjectsSubscription = subjectStoreService.subjects$.subscribe(subjects => {
+      let courseSubjectNames = subjects.filter(sj => sj.course.name.indexOf(this.subject.course.name) === 0).map(v => v.name);
+      this.subjectsNames = SUBJECT_NAMES.filter(e => courseSubjectNames.indexOf(e.viewValue) < 0);
+    });
+
+    this.teachers$ = this.userStoreService.teachers$;
+  }
+
+  ngOnInit() {
+    if (this.data.type === CRUD_TYPE_CREATE) {
+      this.buildCreateForm();
+      this.setAvatarCreateDefault();
+
+    } else if (this.data.type === CRUD_TYPE_EDIT) {
+      this.subjectName = SUBJECT_NAMES.find(sn => sn.viewValue.indexOf(this.data.subject.name) === 0);
       this.course = this.data.subject.course;
-      this.subjectName = this.subjectsNames.find(sn => sn.viewValue === this.data.subject.name);
       this.teacher = this.data.subject.teacher;
+
+      this.buildEditForm();
     }
 
   }
 
-  ngOnInit() {
-    this.buildForm();
-    if (this.data.type === 'create') this.setAvatarCreateDefault();
-
-    this.filteredSubjectNames$ = this.cName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.value),
-        map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
-      );
-
-    this.filteredTeachers$ = this.cTeacher.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.firstName),
-        map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
-      );
-
-    /* this.filteredSubjectNames$ = this.eName.valueChanges
-       .pipe(
-         startWith(''),
-         map(value => typeof value === 'string' ? value : value.value),
-         map(value => value ? this._filterSubjectNames(value) : this.subjectsNames.slice()),
-       ); */
-
-    this.filteredTeachers$ = this.eTeacher.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.firstName),
-        map(value => value ? this._filterTeachers(value) : this.teachers.slice()),
-      );
-
-
-    this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.teachers = data);
-
-  }
-
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
+    this.subjectsSubscription.unsubscribe();
   }
 
-  private _filterSubjectNames(value: string): SubjectName[] {
-    const filterValue = value.toLowerCase();
-    return this.subjectsNames.filter(sn =>
-      sn.value.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  private _filterTeachers(value: string): User[] {
-    const filterValue = value.toLowerCase();
-    return this.teachers.filter(user =>
-      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
-      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
-      || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0);
-  }
-
-
-  selectedSubjectName(value: SubjectName) {
-    this.subjectName = value;
-  }
-
-  selectedUser(value: User) {
-    this.teacher = value;
-  }
-
-
-  displayTeacher(user?: User): string | undefined {
-    return user ? user.firstName + ' ' + user.lastName : undefined;
-  }
-
-  displaySubject(subject?: SubjectName): string | undefined {
-    return subject ? subject.viewValue : undefined;
-  }
-
-
-  buildForm() {
-
+  buildCreateForm() {
     this.subjectGroup = this.formBuilder.group({
       name: ['', [Validators.required]]
     });
@@ -149,20 +89,32 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
       teacher: ['', [Validators.required]]
     });
 
+  }
+  get cName() { return this.subjectGroup.get('name'); }
+  get cTeacher() { return this.teacherGroup.get('teacher'); }
 
-
-    /*
-    this.subjectEditGroup = this.formBuilder.group({
-      name: [this.subjectName, [Validators.required]]
-    });
-
-  */
-
+  buildEditForm() {
     this.teacherEditGroup = this.formBuilder.group({
-      teacher: [this.teacher, [Validators.required]]
+      teacher: [this.teacher]
     });
 
   }
+  get eTeacher() { return this.teacherEditGroup.get('teacher'); }
+
+
+  selectedSubjectName(value: SubjectName) {
+    this.subjectName = value;
+    console.error('*********this.subjectName.viewValue: ' , this.subjectName);
+  }
+
+  selectedUser(value: User) {
+    this.teacher = value;
+  }
+
+  compareById(option: User, selection: User) {
+    return (option && selection) && (option.id === selection.id);
+  }
+
 
   setAvatarCreateDefault(): void {
     if (!this.teacher) {
@@ -187,31 +139,23 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  get cName() { return this.subjectGroup.get('name'); }
-  get cTeacher() { return this.teacherGroup.get('teacher'); }
-
-  // get eName() { return this.subjectEditGroup.get('name'); }
-  get eTeacher() { return this.teacherEditGroup.get('teacher'); }
-
-
   cancel(): void {
     this.dialogRef.close(RESULT_CANCELED);
   }
 
   create() {
     let subject: Subject = Object.assign({}, this.subject);
-    subject.name = this.subjectName.value;
-    subject.teacher = this.teacher;
+    subject.name = this.cName.value.viewValue; //this.subjectName.value;
+    subject.teacher = this.cTeacher.value; //this.teacher;
     this.isLoading = true;
     this.subjectStoreService.create(subject)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
+      .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
         , error => {
           if (error instanceof HttpErrorResponse) {
             this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
           } else {
-            this.snackbarService.openSnackBar('Error al Crear Asignatura', RESULT_ERROR);
+            this.snackbarService.openSnackBar(SUBJECT_CREATE_ERROR, RESULT_ERROR);
           }
         }
 
@@ -222,16 +166,32 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     let subject: Subject = Object.assign({}, this.subject);
     subject.name = this.subjectName.value;
     subject.course = this.course;
-    subject.teacher = this.teacher;
+    subject.teacher = this.eTeacher.value; //this.teacher;
     this.isLoading = true;
     this.subjectStoreService.update(subject)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ => this.dialogRef.close(RESULT_SUCCESS)
+      .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
         , error => {
           if (error instanceof HttpErrorResponse) {
             this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
           } else {
-            this.snackbarService.openSnackBar('Error al Editar Asignatura', RESULT_ERROR);
+            this.snackbarService.openSnackBar(SUBJECT_UPDATE_ERROR, RESULT_ERROR);
+          }
+        }
+
+      );
+  }
+
+  delete() {
+    this.isLoading = true;
+    this.subjectStoreService.delete(this.subject)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
+        , error => {
+          if (error instanceof HttpErrorResponse) {
+            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
+          } else {
+            this.snackbarService.openSnackBar(SUBJECT_DELETE_ERROR, RESULT_ERROR);
           }
         }
 

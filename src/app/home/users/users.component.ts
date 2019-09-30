@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator, MatDialogRef } from '@angular/material';
-import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN, RESULT_SUCCESS, RESULT_ERROR } from '../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN } from '../../app.config';
 import { User } from '../../models/user';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
@@ -9,7 +9,6 @@ import { UserStoreService } from '../../services/user-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { shortNameSecondName } from '../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SnackbarService } from '../../services/snackbar.service';
 
 
@@ -24,7 +23,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userRole: string;
   usersRole: string;
-  userLoggedRoles: String[] = [];
+  userLoggedRoles: string[] = [];
   @Input() areaRole;
 
   // mat table
@@ -41,7 +40,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   // mat dialog
   user: User;
   @Input() uriRole;
-  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
+  @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
 
   isThemeDarkSubscription: Subscription;
   usersSubscription: Subscription;
@@ -108,15 +107,16 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dialogCardUserSubs(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.openDialogDetail(dialogRef.componentInstance.user);
+        this.crudUserDialog.openDialogDetail(user);
       } else if (result === RESULT_EDIT) {
-        this.crudUserDialog.openDialogEdit(dialogRef.componentInstance.user);
+        this.crudUserDialog.openDialogEdit(user);
       } else if (result === RESULT_DELETE) {
-        this.crudUserDialog.openDialogDelete(dialogRef.componentInstance.user);
+        this.crudUserDialog.openDialogDelete(user);
       }
     });
   }
@@ -135,6 +135,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAdmin(userLoggedRoles: string[]) {
     return userLoggedRoles.includes(ROLE_ADMIN);
+  }
+
+
+  crudVisibility(user: User){
+    return (!this.checkEqualOrGreaterPrivileges(this.userLoggedRoles, user.roles) && !this.isAdminEditingTeacher(this.userLoggedRoles)) ? 'visible' : 'hidden';
   }
 
 

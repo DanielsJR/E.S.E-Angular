@@ -50,7 +50,7 @@ export class SimpleDialogComponent {
         let config = new MatDialogConfig();
         config.data = data;
         config.panelClass = 'dialogService';
-        config.width = this.type === 'delete-classic' ? '500px' : '320px';
+        config.width = this.type === 'classic' ? '500px' : '320px';
         config.height = 'auto';
 
         return this.dialog.open(SimpleDialogRefComponent, config);

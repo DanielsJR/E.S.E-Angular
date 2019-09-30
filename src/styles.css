@@ -13,9 +13,9 @@ mat-sidenav-container {
     padding: 0;
     width: 100%;
     height: 100%;
-   
+
     font-family: 'Roboto', sans-serif;
-  }
+}
 
 /*mat-toolbar */
 
@@ -43,9 +43,10 @@ mat-sidenav-container {
 }
 
 .dialogService .mat-dialog-container {
-    padding: 0;
-    overflow: hidden;
+    padding: 0 !important;
+    overflow: hidden !important;
 }
+
 /*MATERIAL dialog*/
 
 
@@ -55,12 +56,14 @@ mat-sidenav-container {
     margin: 0 !important;
     padding: 0 !important;
 }
+
 /*MATERIAL snackBar*/
 
 /*MATERIAL table.... mat-list in tables*/
 mat-cell mat-list mat-list-item .mat-list-item-content {
     padding: 0 !important;
 }
+
 /*MATERIAL snackBar*/
 
 /*MAT icons*/
@@ -76,6 +79,7 @@ a.mat-menu-item>mat-icon {
     height: 24px;
     width: 24px;
 }
+
 /*MAT icons*/
 
 
@@ -104,4 +108,5 @@ a.mat-menu-item>mat-icon {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
 }
+
 /*scrollbar */

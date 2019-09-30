@@ -1,5 +1,6 @@
 import { User } from "./user";
 import { Subject } from "./subject";
+import { CorrespondItem, IncompleteTextItem, TrueFalseItem, MultipleSeletionItem } from "./quiz";
 
 
 export class QuizStudent {
@@ -10,10 +11,10 @@ export class QuizStudent {
         public subject?: Subject,
         public date?: string,
 
-        public correspondItemAnswers?: string[],
-        public trueFalseItemAnswers?: boolean[],
-        public multipleSelectionItemAnswers?: string[],
-        public incompleteTextItemAnswers?: string[],
+        public correspondItems?: CorrespondItem[],
+        public incompleteTextItems?: IncompleteTextItem[],
+        public trueFalseItems?: TrueFalseItem[],
+        public multipleSelectionItems?: MultipleSeletionItem[],
    
         public createdBy?: string,
         public createdDate?: string,

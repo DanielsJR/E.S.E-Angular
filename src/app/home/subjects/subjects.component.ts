@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { finalize } from 'rxjs/internal/operators/finalize';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectsCrudDialogRefComponent } from './subjects-crud-dialog-ref/subjects-crud-dialog-ref.component';
 import { MatSort, MatPaginator, MatSelect } from '@angular/material';
@@ -9,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../models/subject';
-import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCESS, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_CREATE_SUCCEED, CRUD_TYPE_EDIT, SUBJECT_UPDATE_ERROR, SUBJECT_UPDATE_SUCCEED, SUBJECT_DELETE_SUCCEED, SUBJECT_DELETE_ERROR, CANCEL_MESSAGE, RESULT_WARN, CRUD_TYPE_DELETE } from '../../app.config';
 import { User } from '../../models/user';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
@@ -17,7 +16,6 @@ import { UserLoggedService } from '../../services/user-logged.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { Course } from '../../models/course';
 import { CourseStoreService } from '../../services/course-store.service';
-import { SimpleDialogRefComponent } from '../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 
 
 @Component({
@@ -53,6 +51,9 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingGetSubjectsSubscription: Subscription;
   isThemeDarkSubscription: Subscription;
   coursesSubscription: Subscription;
+  isBtnAddDisabled: boolean = true;
+  isStlDisabled: boolean = true;
+  isSeachDisabled: boolean = true;
 
   @ViewChild('matSelect') matSelect: MatSelect;
 
@@ -66,12 +67,11 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource = new MatTableDataSource<Subject>();
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
-
-
-
     if (this.areaRole === this.roleManager) {
-
-      this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => this.courses = data);
+      this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => {
+        this.courses = data;
+        if (this.courses.length) this.isStlDisabled = false;
+      });
 
       this.subjectsSubscription = this.matSelect.valueChange
         .pipe(
@@ -86,6 +86,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(subjects => {
           let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
           this.dataSource.data = filteredSubjects;
+          if (filteredSubjects.length) {
+            this.isSeachDisabled = false;
+            this.isBtnAddDisabled = false;
+          }
         });
 
 
@@ -103,6 +107,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
             if (subjects) {
               let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
               this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+              if (this.courses.length) this.isStlDisabled = false;
             }
           });
 
@@ -121,12 +126,19 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           .subscribe(subjects => {
             let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
             this.dataSource.data = filteredSubjects;
+            if (filteredSubjects.length) {
+              this.isSeachDisabled = false;
+              this.isBtnAddDisabled = false;
+            }
           });
 
       } else {
 
         this.coursesSubscription = this.subjectStoreService.subjects$
-          .subscribe(subjects => this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i));
+          .subscribe(subjects => {
+            this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+            if (this.courses.length) this.isStlDisabled = false;
+          });
 
 
         this.subjectsSubscription = this.matSelect.valueChange
@@ -138,6 +150,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           .subscribe(subjects => {
             let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
             this.dataSource.data = filteredSubjects;
+            if (filteredSubjects.length) {
+              this.isSeachDisabled = false;
+              this.isBtnAddDisabled = false;
+            }
           });
 
       }
@@ -150,6 +166,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+
   }
 
   ngAfterViewInit() {
@@ -178,8 +195,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     subject.course = this.course;
     let data = {
       subject: subject,
-      type: 'create',
-
+      type: CRUD_TYPE_CREATE,
     };
 
     let config = new MatDialogConfig();
@@ -191,13 +207,16 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
     dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
+        this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ERROR) {
-        this.snackbarService.openSnackBar("Error al Crear Asignatura", RESULT_ERROR);
+        this.snackbarService.openSnackBar(SUBJECT_CREATE_ERROR, RESULT_ERROR);
         console.error(RESULT_ERROR);
-      } else if (result === RESULT_SUCCESS) {
-        this.snackbarService.openSnackBar("Asignatura Creada", RESULT_SUCCESS);
-        console.log(RESULT_SUCCESS);
+
+      } else if (result === RESULT_SUCCEED) {
+        this.snackbarService.openSnackBar(SUBJECT_CREATE_SUCCEED, RESULT_SUCCEED);
+        console.log(RESULT_SUCCEED);
       }
     });
   }
@@ -205,8 +224,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   openDialogEdit(subject: Subject): void {
     let data = {
       subject: subject,
-      type: 'edit',
-
+      type: CRUD_TYPE_EDIT,
     };
 
     let config = new MatDialogConfig();
@@ -218,37 +236,46 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
     dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
+        this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ERROR) {
-        this.snackbarService.openSnackBar("Error al Editar Asignatura", RESULT_ERROR);
+        this.snackbarService.openSnackBar(SUBJECT_UPDATE_ERROR, RESULT_ERROR);
         console.error(RESULT_ERROR);
-      } else if (result === RESULT_SUCCESS) {
-        this.snackbarService.openSnackBar("Asignatura Editada", RESULT_SUCCESS);
-        console.log(RESULT_SUCCESS);
+
+      } else if (result === RESULT_SUCCEED) {
+        this.snackbarService.openSnackBar(SUBJECT_UPDATE_SUCCEED, RESULT_SUCCEED);
+        console.log(RESULT_SUCCEED);
       }
     });
   }
 
-  deleteSubject(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
+  openDialogDelete(subject: Subject): void {
+    let data = {
+      subject: subject,
+      type: CRUD_TYPE_DELETE,
+
+    };
+
+    let config = new MatDialogConfig();
+    config.data = data;
+    config.panelClass = 'dialogService';
+    config.width = '500px';
+    config.disableClose = true;
+
+    let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
     dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
+        this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
-      } else if (result === RESULT_ACTION1) {
-        console.log(RESULT_ACTION1);
 
-        this.isLoading = true;
-        this.subjectStoreService.delete(dialogRef.componentInstance.obj)
-          .pipe(finalize(() => this.isLoading = false))
-          .subscribe(_ => this.snackbarService.openSnackBar('Asignatura Eliminada', RESULT_SUCCESS)
-            , err => {
-              this.snackbarService.openSnackBar('Error al eliminar Asignatura', RESULT_ERROR);
-              console.error("Error deleting subject: " + err);
-            });
+      } else if (result === RESULT_ERROR) {
+        this.snackbarService.openSnackBar(SUBJECT_DELETE_ERROR, RESULT_ERROR);
+        console.error(RESULT_ERROR);
 
-      } else if (result === RESULT_ACTION2) {
-        console.log(RESULT_ACTION2);
-      } else if (result === RESULT_ACTION3) {
-        console.log(RESULT_ACTION3);
+      } else if (result === RESULT_SUCCEED) {
+        this.snackbarService.openSnackBar(SUBJECT_DELETE_SUCCEED, RESULT_SUCCEED);
+        console.log(RESULT_SUCCEED);
       }
     });
   }

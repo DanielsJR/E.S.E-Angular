@@ -65,7 +65,7 @@ const teacherRoutes: Routes = [
 
 
                             {
-                                path: 'grades/:username',
+                                path: 'grades/:id',
                                 component: TeacherSubjectsGradesComponent
                             },
 

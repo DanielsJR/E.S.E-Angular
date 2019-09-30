@@ -5,7 +5,7 @@
     <mat-toolbar color="primary">
 
       <mat-form-field [floatLabel]=" 'never' ">
-        <mat-select #matSelect>
+        <mat-select #matSelect [disabled]= "isStlDisabled">
           <mat-option *ngFor="let c of courses" [value]="c.name">
             {{c.name}}
           </mat-option>
@@ -29,7 +29,7 @@
     <mat-toolbar class="toolbar2">
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput (keyup)="applyFilter($event.target.value)" [disabled]= "isSeachDisabled">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar Asignatura
         </mat-placeholder>
@@ -38,22 +38,20 @@
     </mat-toolbar>
     <mat-divider></mat-divider>
 
-
-
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Asignatura </mat-header-cell>
-        <mat-cell *matCellDef="let subject">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Asignatura </mat-header-cell>
+        <mat-cell *matCellDef="let subject" style="flex-grow: 2">
 
-          <mat-list style="flex-grow: 8">
+          <mat-list>
             <mat-list-item>
               <img matListAvatar
                 [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
                 alt="{{subject?.teacher?.username}}">
               <h3 matLine>{{subject?.name}} </h3>
               <p matLine>
-                <span class="role-style">{{subject?.course?.name}} - {{subject?.teacher | shortName}}</span>
+                <span class="role-style">{{subject?.course?.name}} / {{subject?.teacher | shortName}}</span>
               </p>
             </mat-list-item>
           </mat-list>
@@ -62,30 +60,39 @@
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="add">
+        <mat-header-cell *matHeaderCellDef class="crud">
           <button *ngIf="areaRole === roleManager" mat-mini-fab matTooltip="Agregar Asignatura"
-            style="margin-bottom:5px" (click)="openDialogCreate()">
+            (click)="openDialogCreate()" [disabled]= "isBtnAddDisabled">
             <mat-icon svgIcon="plus"></mat-icon>
           </button>
         </mat-header-cell>
 
         <mat-cell *matCellDef="let subject" class="crud">
 
-          <button mat-icon-button color="primary"
-            [routerLink]="['./detail/' + subject.id + '/course', subject.id ]">
+          <button mat-icon-button color="primary" [routerLink]="['./detail/' + subject.id + '/course', subject.id ]">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
+          <button *ngIf="areaRole === roleManager" mat-icon-button color="accent"
+            (click)="openDialogEdit(subject); $event.stopPropagation()">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+
           <button *ngIf="areaRole === roleManager" mat-icon-button color="warn"
-            (click)="deleteSubject(deleteSubjectDialog.openSimpleDialog()); $event.stopPropagation()">
+            (click)="openDialogDelete(subject); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteSubjectDialog [obj]="subject" [icon]="'school'" [dialogTitle]="'Eliminar Asignatura'"
-            [message]="'Eliminar esta Asignatura?'" [title]="subject.name + '/' + subject.course.name"
-            [subtitle]="(subject.teacher | shortName) + ', Profesor' " [avatar]="subject.teacher.avatar"
-            [type]="'delete-classic'">
-          </nx-simple-dialog>
+          <!--  <nx-simple-dialog #deleteSubjectDialog
+            [obj]="subject"
+            [icon]=" 'school' "
+            [dialogTitle]=" 'Eliminar Asignatura' "
+            [message]=" 'Eliminar esta Asignatura?' "
+            [title]="subject?.name + '/' + subject?.course?.name"
+            [subtitle]="(subject?.teacher | shortName) + ', Profesor' "
+            [avatar]="subject?.teacher?.avatar"
+            [type]=" 'classic' ">
+          </nx-simple-dialog> -->
 
         </mat-cell>
       </ng-container>

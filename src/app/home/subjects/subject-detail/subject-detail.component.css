@@ -3,7 +3,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .toolbarMenu {
@@ -12,14 +12,14 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
 
-.container2 {
+.content {
     position: absolute;
     top: 64px;
     bottom: 0;
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 

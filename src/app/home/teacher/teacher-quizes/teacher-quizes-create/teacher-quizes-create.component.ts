@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { IsLoadingService } from '../../../../services/isLoadingService.service';
 import { Quiz, QUIZ_LEVELS, TRUE_FALSES } from '../../../../models/quiz';
-import { MatDialogRef } from '@angular/material';
-import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
-import { RESULT_CANCELED, RESULT_ACTION1, RESULT_SUCCESS, RESULT_ERROR } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_SUCCEED, QUIZ_CREATE_SUCCEED, QUIZ_CREATE_ERROR } from '../../../../app.config';
 import { UserLoggedService } from '../../../../services/user-logged.service';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -89,12 +87,12 @@ export class TeacherQuizesCreateComponent implements OnInit {
       .subscribe(q => {
         this.quiz = q;
         this.router.navigate(['../detail',q.id], { relativeTo: this.route });
-        this.snackbarService.openSnackBar('Prueba Creada', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_CREATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
         } else {
-          this.snackbarService.openSnackBar('Error al crear Prueba', RESULT_ERROR);
+          this.snackbarService.openSnackBar(QUIZ_CREATE_ERROR, RESULT_ERROR);
         }
       });
   }

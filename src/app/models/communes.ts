@@ -1,5 +1,9 @@
+export interface Commune {
+    value: string;
+    viewValue: string;
+}
 
-export const COMMUNNES = [
+export const COMMUNNES: Commune[] = [
     { value: 'ALHUÉ', viewValue: 'Alhué' },
     { value: 'BUIN', viewValue: 'Buin' },
     { value: 'CALERA_DE_TANGO', viewValue: 'Calera De Tango' },

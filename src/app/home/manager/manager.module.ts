@@ -12,11 +12,13 @@ import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses
 import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subject-detail/manager-subjects-detail.component';
 import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subject-detail/manager-subjects-grades.component';
 import { UsersModule } from '../users/users.module';
-import { SubjectsModule } from '../subjects/subejcts.module';
+import { SubjectsModule } from '../subjects/subjects.module';
 import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subject-detail/manager-subject-course.component';
 import { ManagerSubjectQuizComponent } from './manager-subjects/manager-subject-detail/manager-subject-quiz.component';
 import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
+import { QuizModule } from '../quiz/quiz.module';
+import { QuizStudentModule } from '../quiz-student/quizStudent.module';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.co
     ManagerRoutingModule,
     SubjectsModule,
     UsersModule,
+    QuizStudentModule,
     
   ],
 

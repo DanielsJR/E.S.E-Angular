@@ -13,7 +13,7 @@ import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { COURSE_NAMES_GROUPS } from '../../../../models/course-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_CREATE_SUCCEED, COURSE_CREATE_ERROR } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -25,12 +25,15 @@ import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dial
   styleUrls: ['./manager-courses-create.component.css']
 })
 export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
-  areaRole = ROLE_MANAGER;
-  roleManager = ROLE_MANAGER;
-  roleStudent = ROLE_STUDENT;
-  roleTeacher = ROLE_TEACHER;
 
-  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
+  areaRole = ROLE_MANAGER;
+  uriStudents = URI_STUDENTS
+  uriTeachers = URI_TEACHERS;
+
+  @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
+  @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
+  crudUserOnlyRead: boolean = true;
+
 
   course: Course;
   coursesNamesGroups = COURSE_NAMES_GROUPS;
@@ -105,34 +108,41 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     this.setCourse();
     this.courseStoreService.create(this.course)
       .subscribe(_ => {
-        this.snackbarService.openSnackBar('Curso Creado', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(COURSE_CREATE_SUCCEED, RESULT_SUCCEED);
         this.gotoCourses();
       }, error => {
         if (error instanceof HttpErrorResponse) {
           this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
         } else {
-          this.snackbarService.openSnackBar('Error al Crear curso', RESULT_ERROR);
+          this.snackbarService.openSnackBar(COURSE_CREATE_ERROR, RESULT_ERROR);
         }
       });
 
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
-      let user = dialogRef.componentInstance.user;
-      this.crudUserDialog.onlyRead = true;
-      this.crudUserDialog.areaRole = this.areaRole;
-      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.openDialogDetail(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDetail(user);
+        } else {
+          this.crudTeacherDialog.openDialogDetail();
+        }
       } else if (result === RESULT_EDIT) {
-        this.crudUserDialog.openDialogEdit(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogEdit(user);
+        } else {
+          this.crudTeacherDialog.openDialogEdit();
+        }
       } else if (result === RESULT_DELETE) {
-        this.crudUserDialog.openDialogDelete(user);
-      } else {
-        console.error('no result');
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDelete(user);
+        } else {
+          this.crudTeacherDialog.openDialogDelete();
+        }
       }
     });
   }

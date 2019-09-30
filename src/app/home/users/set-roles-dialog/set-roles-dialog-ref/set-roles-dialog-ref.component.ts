@@ -1,15 +1,14 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED } from '../../../../app.config';
+import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
-import { Subscription, of, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { Avatar } from '../../../../models/avatar';
-import { load } from '@angular/core/src/render3/instructions';
 import { SnackbarService } from '../../../../services/snackbar.service';
 
 
@@ -45,7 +44,7 @@ export class SetRolesDialogRefComponent implements OnInit {
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
     if (this.user.roles.includes(ROLE_TEACHER)) this.roles.push(ROLE_TEACHER);
 
-    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    console.log('***DialogSetRoles*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
   ngOnInit() {
@@ -89,8 +88,8 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.dialogRef.close(RESULT_SUCCESS);
-          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
+          this.dialogRef.close(RESULT_SUCCEED);
+          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCEED);
         }, err => {
           console.error("Error editing roles manager: " + err.message);
           this.dialogRef.close(RESULT_ERROR);
@@ -103,8 +102,8 @@ export class SetRolesDialogRefComponent implements OnInit {
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(user => {
           this.user = user;
-          this.dialogRef.close(RESULT_SUCCESS);
-          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCESS);
+          this.dialogRef.close(RESULT_SUCCEED);
+          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCEED);
         }, err => {
           console.error("Error editing roles teacher: " + err.message);
           this.dialogRef.close(RESULT_ERROR);

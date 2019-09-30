@@ -9,6 +9,7 @@ export class Evaluation {
         public subject?: Subject,
         public date?: string,
         public quiz?: Quiz,
+        public isOpen?: boolean,
        
         public createdBy?:string,
         public createdDate?:string,

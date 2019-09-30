@@ -5,15 +5,12 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 import { MatSidenav, MatMenu, MatButton } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router, ActivatedRoute, NavigationStart, UrlSegment, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { RESULT_SUCCESS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN } from '../app.config';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
-import { map } from 'rxjs/internal/operators/map';
-import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs/internal/observable/of';
 
 
 @Component({
@@ -70,10 +67,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router, private route: ActivatedRoute,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService,
-
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
@@ -107,7 +101,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       }
 
-      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCESS));
+      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCEED));
 
     }
 
@@ -117,9 +111,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     //console.log('setOverflow currentUrl: ', this.currentUrl);
     let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
     if (url === '/home/manager/subjects/detail' || url === '/home/teacher/subjects/detail') {
-      this.dinamicStyles = { 'overflow-y': 'hidden' };
+      this.dinamicStyles = { 'overflow': 'hidden' };
     } else {
-      this.dinamicStyles = { 'overflow-y': 'auto' };
+      this.dinamicStyles = { 'overflow': 'auto' };
     }
 
   }

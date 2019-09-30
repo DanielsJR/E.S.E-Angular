@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_TEACHERS, URI_STUDENTS, URI_MANAGERS } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_TEACHERS, URI_STUDENTS, URI_MANAGERS, RESULT_SUCCEED, COURSE_UPDATE_SUCCEED, COURSE_UPDATE_ERROR } from '../../../../app.config';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -33,12 +33,15 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   listStudents: User[] = [];
 
   areaRole = ROLE_MANAGER;
-  roleManager = ROLE_MANAGER;
-  roleStudent = ROLE_STUDENT;
-  roleTeacher = ROLE_TEACHER;
-  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
+  uriStudents = URI_STUDENTS
+  uriTeachers = URI_TEACHERS;
+  @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
+  @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 
   btnDisabled = true;
+
+  roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
 
   // mat table
   displayedColumns = ['firstName', 'crud'];
@@ -65,8 +68,9 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Course>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
-      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
-      user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
+      (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0
+      || user.firstName.toLowerCase().indexOf(filterValue) === 0
+      || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -74,7 +78,8 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     // paramMap re-uses the component
     this.coursesSubscription = this.route.paramMap
       .pipe(
-        switchMap(params => this.courseStoreService.loadOneCourse(params.get('name'))))
+        switchMap(params => this.courseStoreService.loadOneCourse(params.get('name')))
+      )
       .subscribe(c => {
         if (c) {
           this.course = c;
@@ -82,20 +87,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
           this.dataSource.data = c.students;
           this.listStudents = this.dataSource.data;
         }
-      }
-      );
-
-    // snapshot doesn't re-use the component
-    /*let courseName = this.route.snapshot.paramMap.get('name');
-    this.courseStoreService.loadOneCourse(courseName)
-    .subscribe(c=> {
-      if (c) {
-        this.course = c;
-        this.chiefTeacher = c.chiefTeacher;
-        this.dataSource.data = c.students;
-        this.listStudents = this.dataSource.data;
-      }
-    }); */
+      });
 
     this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => setTimeout(() => this.isLoading = isLoading));
 
@@ -125,20 +117,28 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
-      let user = dialogRef.componentInstance.user;
-      this.crudUserDialog.areaRole = this.areaRole;
-      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.openDialogDetail(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDetail(user);
+        } else {
+          this.crudTeacherDialog.openDialogDetail();
+        }
       } else if (result === RESULT_EDIT) {
-        this.crudUserDialog.openDialogEdit(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogEdit(user);
+        } else {
+          this.crudTeacherDialog.openDialogEdit();
+        }
       } else if (result === RESULT_DELETE) {
-        this.crudUserDialog.openDialogDelete(user);
-      } else {
-        console.error('no result');
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDelete(user);
+        } else {
+          this.crudTeacherDialog.openDialogDelete();
+        }
       }
     });
   }
@@ -184,12 +184,12 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
     this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
-      .subscribe(_ => this.snackbarService.openSnackBar('Curso Actualizado', RESULT_SUCCESS)
+      .subscribe(_ => this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED)
         , error => {
           if (error instanceof HttpErrorResponse) {
             this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
           } else {
-            this.snackbarService.openSnackBar('Error al Actualizar curso', RESULT_ERROR);
+            this.snackbarService.openSnackBar(COURSE_UPDATE_ERROR, RESULT_ERROR);
           }
         });
 

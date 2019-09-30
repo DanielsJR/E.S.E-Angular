@@ -16,12 +16,12 @@ import { map } from "rxjs/internal/operators/map";
     providedIn: 'root',
 })
 export class GradeStoreService {
-    private dataStore: { grades: Grade[]};
+    private dataStore: { grades: Grade[] };
     private gradesSource = <BehaviorSubject<Grade[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     constructor(private gradeBackendService: GradeBackendService, private isLoadingService: IsLoadingService) {
-        this.dataStore = { grades: []};
+        this.dataStore = { grades: [] };
     }
 
     get grades$() {
@@ -40,6 +40,29 @@ export class GradeStoreService {
             console.log(`********GET-Grades-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
             this.gradeBackendService.getGrades()
+                .pipe(finalize(() => this.isLoadingGet.next(false)))
+                .subscribe(data => {
+                    if (data.length) {
+                        this.dataStore.grades = data;
+                        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+                    } else {
+                        data = null;
+                        console.error('Lista de Notas vacia');
+                    }
+                }, error => console.error('error retrieving Grades, ' + error.message)
+                );
+        }
+
+    }
+
+    getGradesBySubject(id: string) {
+        if (this.gradesSource.getValue().length) {
+            console.log(`********GET-Grades-FROM-CACHE********`);
+            this.gradesSource.next(this.dataStore.grades);
+        } else {
+            console.log(`********GET-Grades-FROM-BACKEND********`);
+            this.isLoadingGet.next(true);
+            this.gradeBackendService.getGradesBySubject(id)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
                     if (data.length) {
@@ -101,23 +124,29 @@ export class GradeStoreService {
                 ));
     }
 
+    clearStore(){
+        console.log("****************Clearing the store******************");
+        this.dataStore.grades = [];
+        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+    }
+
 
 
 
     //*****subjectStore******** */
 
     updateSubjectInGradeStore(subject: Subject) {
-       /* if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
-            this.dataStore.grades.forEach((item, index) => {
-                if (item.subject.id === subject.id) {
-                    item.subject = subject;
-                    this.dataStore.grades[index] = item;
-                }
-            });
-            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-        }
-    */
-   
+        /* if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
+             this.dataStore.grades.forEach((item, index) => {
+                 if (item.subject.id === subject.id) {
+                     item.subject = subject;
+                     this.dataStore.grades[index] = item;
+                 }
+             });
+             this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+         }
+     */
+
     }
 
     updateStudentInGradeStore(student: User) {

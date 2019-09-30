@@ -1,0 +1,307 @@
+<div *ngIf="data.type === 'create'">
+
+
+  <mat-toolbar color="primary">
+    <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="school"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Agregar Evaluación</h1>
+  </mat-toolbar>
+
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <div class="listContainer">
+    <mat-list>
+      <mat-list-item>
+        <h3 matLine> {{subject?.name}} </h3>
+        <p matLine>
+          <span class="role-style">{{subject?.course?.name}}</span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-content>
+
+    <mat-horizontal-stepper [linear]="'true'" #stepper>
+
+      <mat-step [stepControl]="typeGroup">
+        <form [formGroup]="typeGroup">
+          <ng-template matStepLabel>Tipo</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput formControlName="type">
+            <mat-label>
+              <i class="mdi mdi-file-document"></i>&nbsp;Tipo
+            </mat-label>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="titleGroup">
+        <form [formGroup]="titleGroup">
+          <ng-template matStepLabel>Título</ng-template>
+          <mat-form-field appearance="standard">
+            <input matInput formControlName="title">
+            <mat-label>
+              <i class="mdi mdi-format-title"></i>&nbsp;Título
+            </mat-label>
+          </mat-form-field>
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious style="margin-right:30px">Atras</button>
+            <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="dateGroup">
+        <form [formGroup]="dateGroup">
+          <ng-template matStepLabel>Fecha</ng-template>
+
+          <mat-form-field appearance="standard">
+            <input matInput [matDatepicker]="picker" formControlName="date" placeholder="1/11/1990">
+            <mat-label>
+              <i class="mdi mdi-calendar-star app-input-icon">&nbsp;</i>Fecha
+            </mat-label>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="!cDate.valid">ingrese un Formato de Fecha
+              <strong>válido</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <div>
+            <button type="button" mat-button color="primary" matStepperPrevious style="margin-right:30px">Atras</button>
+          </div>
+        </form>
+      </mat-step>
+
+
+
+
+    </mat-horizontal-stepper>
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+        cdkFocusRegionstart>
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <span class="spacer-r"></span>
+      <button type="button" mat-raised-button color="accent" tabindex="2" [disabled]="(typeGroup.invalid || typeGroup.pristine)
+        || (titleGroup.invalid || titleGroup.pristine) || (dateGroup.invalid || dateGroup.pristine)"
+        (click)="create()">Agregar</button>
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</div>
+
+<div *ngIf="data.type === 'detail'">
+  <mat-toolbar color="primary">
+    <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="folder-star"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Detalles de Calificación</h1>
+  </mat-toolbar>
+
+
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <div class="listContainer">
+    <mat-list>
+      <mat-list-item>
+        <img matListAvatar
+          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+          alt="studiante" (click)="imageZoom.openDialogImage()">
+        <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
+        <p matLine>
+          <span class="role-style">{{grade?.student?.roles | rolesToSpanish}}</span>
+        </p>
+        <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+      </mat-list-item>
+
+    </mat-list>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-content>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.evaluation.title" readonly>
+      <mat-label>
+        <i class="mdi mdi-format-title">&nbsp;</i>Título
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.evaluation.type" readonly>
+      <mat-label>
+        <i class="mdi mdi-file-document">&nbsp;</i>Tipo
+      </mat-label>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.evaluation.date" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.evaluation.subject.name" readonly>
+      <mat-label>
+        <i class="mdi mdi-school">&nbsp;</i>Asignatura
+      </mat-label>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+      <input matInput [value]="grade.grade | number : '1.1-1'" readonly [ngClass]="dinamicColorGrade(grade)">
+      <mat-label>
+        <i class="mdi mdi-star">&nbsp;</i>Calificación
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="visibility: hidden;">
+      <input matInput readonly hidden>
+    </mat-form-field>
+
+
+    <!--    <mat-form-field appearance="outline" floatLabel="always">
+        <input matInput readonly hidden>
+        <mat-label>
+          <i class="mdi mdi-school">&nbsp;</i>{{grade.evaluation?.type}}
+        </mat-label>
+        <button type="button" mat-raised-button color="warn" class="btnTest">
+          <mat-icon svgIcon="eye"></mat-icon>&nbsp; Ver {{grade.evaluation?.type}}
+        </button>
+      </mat-form-field>
+
+-->
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.createdBy" readonly>
+      <mat-label>
+        <i class="mdi mdi-account">&nbsp;</i>Creada por
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.createdDate" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha de Creación
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.lastModifiedUser" readonly>
+      <mat-label>
+        <i class="mdi mdi-account">&nbsp;</i>Modificada por
+      </mat-label>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="grade.lastModifiedDate" readonly>
+      <mat-label>
+        <i class="mdi mdi-calendar-star">&nbsp;</i>Fecha de Última Modificación
+      </mat-label>
+    </mat-form-field>
+
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+        cdkFocusRegionstart>
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <span class="spacer-r"></span>
+      <button type="button" mat-raised-button color="accent" *ngIf="areaRole === roleTeacher"
+        (click)="openDialogEdit()">Editar</button>
+      <!-- <button type="button" mat-raised-button color="warn" (click)="openDialogDelete()">Borrar</button> -->
+    </mat-toolbar>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data.type === 'edit'">
+
+  <form [formGroup]="gradeEditGroup" (ngSubmit)="edit()">
+    <mat-toolbar color="primary">
+      <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+      <span class="spacer-r"></span>
+      <mat-icon svgIcon="pencil"></mat-icon>
+      <span>&nbsp;&nbsp;</span>
+      <h1 mat-dialog-title>Editar Calificación</h1>
+    </mat-toolbar>
+
+
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <div class="listContainer">
+      <mat-list>
+        <mat-list-item>
+          <img matListAvatar
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+            alt="estudiante" (click)="imageZoom.openDialogImage()">
+          <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
+          <p matLine>
+            <span class="role-style">{{grade?.student?.roles | rolesToSpanish}}</span>
+          </p>
+        </mat-list-item>
+        <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+      </mat-list>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-dialog-content>
+      <mat-form-field appearance="standard">
+        <input matInput formControlName="grade" placeholder="7.0" [ngClass]="dinamicColorGrade(grade)"
+          [value]="eGrade.value | number : '1.1-1'">
+        <mat-label>
+          <i class="mdi mdi-star">&nbsp;</i>Calificación
+        </mat-label>
+        <i class="mdi mdi-pencil" matSuffix></i>
+        <mat-error *ngIf="eGrade.hasError('required')">Este campo es
+          <strong>requerido</strong>.
+        </mat-error>
+      </mat-form-field>
+
+
+    </mat-dialog-content>
+
+
+    <mat-divider></mat-divider>
+
+    <mat-dialog-actions>
+      <mat-toolbar>
+        <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+          cdkFocusRegionstart>
+          <mat-icon svgIcon="arrow-left"></mat-icon>
+        </button>
+        <span class="spacer-r"></span>
+        <button type="submit" mat-raised-button color="accent" tabindex="2"
+          [disabled]="gradeEditGroup.invalid || gradeEditGroup.pristine">Guardar</button>
+      </mat-toolbar>
+    </mat-dialog-actions>
+  </form>
+
+</div>

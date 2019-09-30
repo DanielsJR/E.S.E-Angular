@@ -20,18 +20,16 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
-
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let user">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let user" style="flex-grow: 2">
 
-          <mat-list style="flex-grow: 8">
+          <mat-list>
             <mat-list-item>
               <img matListAvatar
                 [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
@@ -47,7 +45,7 @@
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="add">
+        <mat-header-cell *matHeaderCellDef class="crud">
           <button mat-mini-fab *ngIf="!isAdminEditingTeacher(userLoggedRoles)"
             (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{userRole}}" style="margin-bottom:5px">
             <mat-icon svgIcon="account-plus"></mat-icon>
@@ -60,17 +58,17 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-          <ng-container
-            *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !isAdminEditingTeacher(userLoggedRoles)">
-            <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()">
-              <mat-icon svgIcon="pencil"></mat-icon>
-            </button>
 
-            <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()">
-              <mat-icon svgIcon="delete"></mat-icon>
-            </button>
+          <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()"
+            [style.visibility]="crudVisibility(user)">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
 
-          </ng-container>
+          <button mat-icon-button color="warn" (click)="crudUserDialog.openDialogDelete(); $event.stopPropagation()"
+            [style.visibility]="crudVisibility(user)">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+
 
           <button *ngIf="isAdmin(userLoggedRoles)" mat-icon-button color="warn"
             (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()">
@@ -89,8 +87,11 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
         (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
+
         <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"
-          [onlyRead]="isAdminEditingTeacher(userLoggedRoles)"></nx-card-user-dialog>
+          [onlyRead]="isAdminEditingTeacher(userLoggedRoles)">
+        </nx-card-user-dialog>
+
       </mat-row>
 
     </mat-table>

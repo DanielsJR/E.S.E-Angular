@@ -9,7 +9,7 @@ import { noWhitespaceValidator } from '../../../../shared/validators/no-white-sp
 
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RESULT_ERROR, RESULT_SUCCESS, RESULT_CANCELED } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -35,7 +35,7 @@ export class SetPassDialogRefComponent implements OnInit {
 
     this.user = data.user;
     this.uriRole = this.data.uriRole;
-    console.log('Dialog*** UserName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    console.log('***DialogSetPass*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
   }
 
   ngOnInit() {
@@ -88,7 +88,7 @@ export class SetPassDialogRefComponent implements OnInit {
     this.userBackendService.setUserPasswordSecured(this.user.username, pass)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => {
-        this.snackbarService.openSnackBar('Contraseña cambiada', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar('Contraseña cambiada', RESULT_SUCCEED);
         this.dialogRef.close();
       }, error => {
         if (error instanceof HttpErrorResponse) {

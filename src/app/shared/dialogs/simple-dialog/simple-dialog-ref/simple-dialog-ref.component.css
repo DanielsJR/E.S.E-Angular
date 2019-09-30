@@ -2,11 +2,9 @@ mat-dialog-content {
     margin: 0;
     padding: 0;
     max-height: 100%;
+    --height: fit-content;
 }
 
-mat-card{
-    --padding: 24px 24px 15px;
-}
 
 .imgLogo {
     height: 40px;
@@ -35,8 +33,6 @@ mat-card{
 }
 
 mat-card-actions {
-    --padding: 15px 0 0 !important;
-    --margin: 0 !important;
     display: flex;
     justify-content: space-between;
 }
@@ -44,11 +40,11 @@ mat-card-actions {
 .listContainer {
     display: flex;
     justify-content: center;
+    padding: 0 8px;
 }
 
-.listContainer mat-list {
-    padding-top: 0 !important;
-    margin-bottom: 5px !important;
+.listContainer .mat-list {
+    padding: 0;
 }
 
 .listContainer .mat-list-item {

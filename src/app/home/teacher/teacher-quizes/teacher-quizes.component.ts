@@ -9,10 +9,12 @@ import { SnackbarService } from '../../../services/snackbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
-import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCESS, RESULT_ERROR } from '../../../app.config';
+import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR } from '../../../app.config';
 import { IsLoadingService } from '../../../services/isLoadingService.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { take } from 'rxjs/internal/operators/take';
 
 @Component({
   selector: 'nx-teacher-quizes',
@@ -34,14 +36,19 @@ export class TeacherQuizesComponent implements OnInit {
   constructor(private quizBackendService: QuizBackendService,
     private sessionStorage: SessionStorageService,
     public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
-    private isLoadingService: IsLoadingService, ) { }
+    private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService, ) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Quiz>();
     this.isLoading = true;
-    this.quizBackendService.getQuizes()
-      .pipe(finalize(() => setTimeout(() => this.isLoading = false)))
-      .subscribe(qs => this.dataSource.data = qs);
+
+    this.userLoggedService.userLogged$
+      .pipe(
+        switchMap(user => this.quizBackendService.getQuizByUserId(user.id)),
+        take(1),
+        finalize(() => setTimeout(() => this.isLoading = false))
+      )
+      .subscribe(qs=> this.dataSource.data = qs);
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -91,14 +98,14 @@ export class TeacherQuizesComponent implements OnInit {
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(quiz => {
         this.deleteQuizFromDataSource(quiz.id);
-        this.snackbarService.openSnackBar('Prueba Eliminda', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(QUIZ_DELETE_SUCCEED, RESULT_SUCCEED);
       }
         , error => {
           if (error instanceof HttpErrorResponse) {
             this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
 
           } else {
-            this.snackbarService.openSnackBar('Error al Eliminar Prueba', RESULT_ERROR);
+            this.snackbarService.openSnackBar(QUIZ_DELETE_ERROR, RESULT_ERROR);
 
           }
         });

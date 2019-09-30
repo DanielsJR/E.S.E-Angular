@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_GRADES, URI_TITLE, URI_STUDENT } from "../app.config";
+import { API_SERVER, URI_GRADES, URI_TITLE, URI_STUDENT, URI_EVALUATIONS, URI_SUBJECTS } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -13,6 +13,7 @@ import { Grade } from "../models/grade";
     providedIn: 'root',
 })
 export class GradeBackendService {
+
 
 
     private gradeURL = API_SERVER + URI_GRADES;
@@ -79,6 +80,24 @@ export class GradeBackendService {
 
     getGradesByStudent(id: string): Observable<Grade[]> {
         const url = `${this.gradeURL}${URI_STUDENT}/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Grade[]>(url)
+            .pipe(retry(3),
+                tap(resp => console.log(`N° Grades: ${resp.length}`))
+            );
+    }
+
+    getGradesByEvaluation(id: string): Observable<Grade[]> {
+        const url = `${this.gradeURL}${URI_EVALUATIONS}/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Grade[]>(url)
+            .pipe(retry(3),
+                tap(resp => console.log(`N° Grades: ${resp.length}`))
+            );
+    }
+
+    getGradesBySubject(id: string): Observable<Grade[]> {
+        const url = `${this.gradeURL}${URI_SUBJECTS}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Grade[]>(url)
             .pipe(retry(3),

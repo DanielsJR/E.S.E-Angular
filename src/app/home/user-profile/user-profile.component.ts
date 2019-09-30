@@ -15,7 +15,7 @@ import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStoreService } from '../../services/user-store.service';
-import { RESULT_ERROR, RESULT_SUCCESS, ROLE_MANAGER, ROLE_TEACHER, USER_UPDATE_ERROR, USER_UPDATE_SUCCESS, DD_MM_YYYY } from '../../app.config';
+import { RESULT_ERROR, USER_UPDATE_ERROR,DD_MM_YYYY, USER_UPDATE_SUCCEED, RESULT_SUCCEED } from '../../app.config';
 import { Avatar } from '../../models/avatar';
 
 
@@ -161,7 +161,7 @@ export class UserProfileComponent implements OnInit {
                     this.snackbarService.openSnackBar(USER_UPDATE_ERROR, RESULT_ERROR);
                 }
             }, () => {
-                this.snackbarService.openSnackBar(USER_UPDATE_SUCCESS, RESULT_SUCCESS);
+                this.snackbarService.openSnackBar(USER_UPDATE_SUCCEED, RESULT_SUCCEED);
             }
             );
 

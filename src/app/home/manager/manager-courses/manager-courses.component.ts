@@ -7,7 +7,7 @@ import { MatTableDataSource } from '../../../../../node_modules/@angular/materia
 import { CourseStoreService } from '../../../services/course-store.service';
 import { Course } from '../../../models/course';
 import { finalize } from 'rxjs/operators';
-import { RESULT_SUCCESS, RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../app.config';
+import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_DELETE_ERROR, COURSE_DELETE_SUCCEED, CANCEL_MESSAGE, RESULT_WARN } from '../../../app.config';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { MatDialogRef } from '@angular/material';
@@ -74,6 +74,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result === RESULT_CANCELED) {
+          this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
           console.log(RESULT_CANCELED);
           
         } else if (result === RESULT_ACTION1) {
@@ -89,10 +90,10 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.courseStoreService.delete(dialogRef.componentInstance.obj)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((c: Course) => {
-        this.snackbarService.openSnackBar('Curso: ' + c.name + ' eliminado', RESULT_SUCCESS);
+        this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED);
       }, err => {
-        this.snackbarService.openSnackBar('Error al eliminar Curso', RESULT_ERROR);
-        console.error("Error deleting Course: " + err);
+        this.snackbarService.openSnackBar(COURSE_DELETE_ERROR, RESULT_ERROR);
+        console.error(COURSE_DELETE_ERROR +' '+ err);
       });
   }
 

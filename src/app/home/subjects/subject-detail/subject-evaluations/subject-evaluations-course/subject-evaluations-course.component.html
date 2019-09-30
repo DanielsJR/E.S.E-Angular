@@ -1,0 +1,92 @@
+<div class="container">
+
+  <mat-card class="mat-elevation-z8">
+
+    <mat-toolbar class="toolbar" color="accent">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar
+        </mat-placeholder>
+      </mat-form-field>
+      <span class="spacer-r"></span>
+      <h2>{{evaluation.title}}</h2>
+    </mat-toolbar>
+
+    <mat-divider></mat-divider>
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="student.firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </mat-header-cell>
+        <mat-cell *matCellDef="let grade" style="flex-grow: 2">
+
+          <mat-list>
+            <mat-list-item>
+              <img matListAvatar
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+                alt="{{grade?.student?.username}}"
+                (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+              <h3 matLine *ngIf="grade"> {{grade?.student | shortNameLastname}} </h3>
+              <p matLine>
+                <span class="role-style">{{grade?.student.roles | rolesToSpanish}}</span>
+              </p>
+            </mat-list-item>
+          </mat-list>
+          <!--@ViewChild
+        <nx-crud-user-dialog></nx-crud-user-dialog>
+        <nx-card-user-dialog #cardStudentDialog [user]="grade?.student" [areaRole]="areaRole"></nx-card-user-dialog>
+       <nx-image-zoom-user #imageZoomS [avatar]="grade?.student?.avatar"></nx-image-zoom-user>-->
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="grade">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: .5"> Nota </mat-header-cell>
+        <mat-cell *matCellDef="let grade" style="flex-grow: .5">
+
+          <span [ngClass]="dinamicColorGrade(grade)">
+            {{grade?.grade | number : '1.1-1'}}
+          </span>
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="crud">
+        <mat-header-cell *matHeaderCellDef class="crud"  style="flex-grow: .5">
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let grade" class="crud"  style="flex-grow: .5">
+
+          <button mat-icon-button color="accent" (click)="setQuizStudent(grade);$event.stopPropagation()">
+            <mat-icon svgIcon="book-outline"></mat-icon>
+          </button>
+
+          <!--
+          <button mat-icon-button color="accent" (click)="openDialogEdit(grade);$event.stopPropagation()">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+
+           <button mat-icon-button color="warn" (click)="$event.stopPropagation()">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button> -->
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      </mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
+
+  </mat-card>
+
+  <nx-quiz-student-detail *ngIf="quizStudentGrade" [grade]="quizStudentGrade"></nx-quiz-student-detail>
+
+</div>

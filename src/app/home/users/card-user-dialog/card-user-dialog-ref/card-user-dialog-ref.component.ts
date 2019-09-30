@@ -21,7 +21,7 @@ export class CardUserDialogRefComponent implements OnInit {
     this.user = data.user;
     this.userLoggedRoles.push(data.areaRole);
     this.areaRole = data.areaRole;
-    this.onlyRead = (data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
+    this.onlyRead = data.onlyRead;//(data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
     console.log('Dialog*** UserName: ' + data.user.firstName + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead);
   }
 
@@ -31,6 +31,7 @@ export class CardUserDialogRefComponent implements OnInit {
   cancel(): void {
     this.dialogRef.close(RESULT_CANCELED);
   }
+  
   detail(): void {
     this.dialogRef.close(RESULT_DETAIL);
   }

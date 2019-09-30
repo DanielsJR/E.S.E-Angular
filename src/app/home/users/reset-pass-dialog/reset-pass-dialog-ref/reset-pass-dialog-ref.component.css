@@ -4,6 +4,10 @@ mat-dialog-content {
     margin: 0;
 }
 
+mat-form-field {
+    width: 100%;
+}
+
 mat-dialog-actions {
     margin: 0;
     padding: 0;
@@ -11,9 +15,4 @@ mat-dialog-actions {
 
 .app-input-icon {
     font-size: 16px;
-}
-
-.centerField {
-    width: 100%;
-    margin: 0;
 }

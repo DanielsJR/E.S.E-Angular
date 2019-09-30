@@ -1,15 +1,8 @@
 <div class="container">
 
-    <mat-toolbar color="accent" class="toolbarMenu">
+    <mat-toolbar color="accent" class="toolbarMenu" *ngIf="enableToolbar">
 
-
-
-        <button mat-button [routerLink]="['./course' , subjectId ]">Curso</button>
-        <button mat-button [routerLink]="['./evaluations' , subjectId]">Evaluaciones</button>
-        <button mat-button [routerLink]="['./quiz' , subjectId]" *ngIf="areaRole === roleTeacher">Tomar Prueba</button>
-        <button mat-button [routerLink]="['./list' , subjectId]" *ngIf="areaRole === roleTeacher">Pasar Lista</button>
-        <button mat-button [routerLink]="['./book' , subjectId]" *ngIf="areaRole === roleTeacher">Libro de
-            Clases</button>
+        <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route">{{m.name}}</button>
 
         <span class="spacer-r"></span>
 
@@ -58,7 +51,7 @@
 
     </mat-toolbar>
 
-    <div class="container2">
+    <div class="content" [ngStyle]="dinamicStyles">
         <router-outlet></router-outlet>
     </div>
 

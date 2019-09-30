@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, Input } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatDialogRef, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { Course } from '../../../../models/course';
 import { User } from '../../../../models/user';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -23,14 +22,16 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
 
   subjectId: string;
   subject: Subject;
+  teacher: User;
 
   @Input() areaRole: string;
-  teacher: User;
   roleManager = ROLE_MANAGER;
-  roleTeacher = ROLE_TEACHER;
-  roleStudent = ROLE_STUDENT;
+  uriStudents = URI_STUDENTS
+  uriTeachers = URI_TEACHERS;
+  @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
+  @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 
-  @ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
+  crudUserOnlyRead: boolean = true;
 
   // mat table
   displayedColumns = ['firstName', 'crud'];
@@ -52,39 +53,27 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
     private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService) {
 
-      
-
   }
 
   ngOnInit() {
-
+    //this.crudUserOnlyRead = (this.areaRole === this.roleManager) ? false : true;
     this.dataSource = new MatTableDataSource<User[]>();
 
- /*   this.subjectId = this.route.snapshot.paramMap.get('id');
-    this.subjectSubscription = this.subjectStoreService.loadOneSubject(this.subjectId)
+    this.subjectSubscription = this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          this.subjectId = params.get('id');
+          return this.subjectStoreService.loadOneSubject(this.subjectId);
+        })
+      )
       .subscribe(s => {
         if (s) {
           this.subject = s;
           this.teacher = this.subject.teacher;
           this.dataSource.data = this.subject.course.students;
         }
-      }); */
+      });
 
-       this.subjectSubscription = this.route.paramMap
-         .pipe(
-           switchMap(params => {
-             this.subjectId = params.get('id');
-             return this.subjectStoreService.loadOneSubject(this.subjectId);
-           })
-         )
-         .subscribe(s => {
-           if (s) {
-             this.subject = s;
-             this.teacher = this.subject.teacher;
-             this.dataSource.data = this.subject.course.students;
-           }
-         });
-        
 
 
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
@@ -116,19 +105,29 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
     this.dataSource.filter = filterValue;
   }
 
-  userCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+  openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
-      let user = dialogRef.componentInstance.user;
-      this.crudUserDialog.areaRole = this.areaRole;
-      this.crudUserDialog.uriRole = user.roles.includes(this.roleManager) ? URI_MANAGERS : user.roles.includes(this.roleTeacher) ? URI_TEACHERS : URI_STUDENTS;
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.openDialogDetail(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDetail(user);
+        } else {
+          this.crudTeacherDialog.openDialogDetail();
+        }
       } else if (result === RESULT_EDIT) {
-        this.crudUserDialog.openDialogEdit(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogEdit(user);
+        } else {
+          this.crudTeacherDialog.openDialogEdit();
+        }
       } else if (result === RESULT_DELETE) {
-        this.crudUserDialog.openDialogDelete(user);
+        if (user.roles.includes(ROLE_STUDENT)) {
+          this.crudStudentDialog.openDialogDelete(user);
+        } else {
+          this.crudTeacherDialog.openDialogDelete();
+        }
       }
     });
   }

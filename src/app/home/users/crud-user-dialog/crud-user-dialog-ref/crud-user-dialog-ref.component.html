@@ -7,20 +7,24 @@
         <h1 mat-dialog-title>Detalles de {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
+    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <mat-list class="listContainer">
-        <mat-list-item>
-            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
-                alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{user | shortNameLastname}} </h3>
-            <p matLine>
-                <span class="role-style">{{user.roles | rolesToSpanish}}</span>
-            </p>
-            <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
-        </mat-list-item>
+    <div class="listContainer">
+        <mat-list>
+            <mat-list-item>
+                <img matListAvatar
+                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                    alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
+                <h3 matLine> {{user | shortNameLastname}} </h3>
+                <p matLine>
+                    <span class="role-style">{{user.roles | rolesToSpanish}}</span>
+                </p>
+                <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
+            </mat-list-item>
 
-    </mat-list>
+        </mat-list>
+    </div>
 
     <mat-divider></mat-divider>
 
@@ -127,10 +131,10 @@
                 <mat-icon svgIcon="arrow-left"></mat-icon>
             </button>
             <span class="spacer-r"></span>
-            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-raised-button
-                color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
-            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-raised-button
-                color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
+            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button"
+                mat-raised-button color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
+            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button"
+                mat-raised-button color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
         </mat-toolbar>
     </mat-dialog-actions>
 </div>
@@ -148,17 +152,20 @@
 
         <div *ngIf="!isLoading" style="height: 5px;"></div>
         <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-
-        <mat-list class="listContainer">
-            <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)"
-                    alt="{{usersRole}}" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
-                <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
-                <p matLine>
-                    <span *ngIf="usersRole" class="role-style">{{usersRoleToSpanish(usersRole)}}</span>
-                </p>
-            </mat-list-item>
-        </mat-list>
+        <div class="listContainer">
+            <mat-list>
+                <mat-list-item>
+                    <img matListAvatar
+                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)"
+                        alt="{{usersRole}}" (click)="fileInput.inputElement.click()"
+                        (keyup.enter)="fileInput.inputElement.click()">
+                    <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
+                    <p matLine>
+                        <span *ngIf="usersRole" class="role-style">{{usersRoleToSpanish(usersRole)}}</span>
+                    </p>
+                </mat-list-item>
+            </mat-list>
+        </div>
 
         <mat-divider></mat-divider>
 
@@ -229,17 +236,19 @@
                             </mat-label>
                         </mat-form-field>
 
-                        <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()"
-                            (keyup.enter)="fileInput.inputElement.click()" (keyup.delete)="fileInput.clear(); resetCreateAvatar()"
+                        <mat-form-field appearance="fill" tdFileDrop (fileDrop)="files = $event"
+                            (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+                            (keyup.delete)="fileInput.clear(); resetCreateAvatar()"
                             (keyup.backspace)="fileInput.clear(); resetCreateAvatar()" flex>
 
-                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer"
-                                readonly>
+                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name"
+                                style="cursor:pointer" readonly>
                             <mat-label>
                                 <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Foto de Perfil
                             </mat-label>
 
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetCreateAvatar(); $event.stopPropagation()"
+                            <button mat-icon-button matSuffix *ngIf="files"
+                                (click)="fileInput.clear(); resetCreateAvatar(); $event.stopPropagation()"
                                 (keyup.enter)="fileInput.clear(); resetCreateAvatar()">
                                 <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
                             </button>
@@ -319,12 +328,13 @@
 
         <mat-dialog-actions>
             <mat-toolbar>
-                <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+                <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()"
                     cdkFocusRegionstart>
-                    <mat-icon svgIcon="arrow-left"></mat-icon>
+                    Cancelar
                 </button>
                 <span class="spacer-r"></span>
-                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="createForm.invalid || createForm.pristine">Agregar</button>
+                <button type="submit" mat-raised-button color="accent" tabindex="2"
+                    [disabled]="createForm.invalid || createForm.pristine">Agregar</button>
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
@@ -344,32 +354,37 @@
         <div *ngIf="!isLoading" style="height: 5px;"></div>
         <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-        <mat-list class="listContainer">
-            <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
-                    alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
-                <h3 matLine> {{user | shortNameLastname}} </h3>
-                <p matLine>
-                    <span class="role-style">{{user.roles | rolesToSpanish}}</span>
-                </p>
+        <div class="listContainer">
+            <mat-list>
+                <mat-list-item>
+                    <img matListAvatar
+                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
+                        alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
+                    <h3 matLine> {{user | shortNameLastname}} </h3>
+                    <p matLine>
+                        <span class="role-style">{{user.roles | rolesToSpanish}}</span>
+                    </p>
 
-                <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
-                    <button mat-menu-item (click)="imageZoom.openDialogImage()">
-                        <mat-icon svgIcon="eye"></mat-icon>
-                        <span> Ver Imagen </span>
-                    </button>
-                    <button mat-menu-item (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()">
-                        <mat-icon svgIcon="camera"></mat-icon>
-                        <span> Cambiar Imagen </span>
-                    </button>
-                    <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()" (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
-                        <mat-icon svgIcon="camera"></mat-icon>
-                        <span> Imagen por defecto </span>
-                    </button>
-                </mat-menu>
-            </mat-list-item>
-            <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
-        </mat-list>
+                    <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
+                        <button mat-menu-item (click)="imageZoom.openDialogImage()">
+                            <mat-icon svgIcon="eye"></mat-icon>
+                            <span> Ver Imagen </span>
+                        </button>
+                        <button mat-menu-item (click)="fileInput.inputElement.click()"
+                            (keyup.enter)="fileInput.inputElement.click()">
+                            <mat-icon svgIcon="camera"></mat-icon>
+                            <span> Cambiar Imagen </span>
+                        </button>
+                        <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()"
+                            (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
+                            <mat-icon svgIcon="camera"></mat-icon>
+                            <span> Imagen por defecto </span>
+                        </button>
+                    </mat-menu>
+                </mat-list-item>
+                <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
+            </mat-list>
+        </div>
 
         <mat-divider></mat-divider>
 
@@ -435,7 +450,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <mat-select formControlName="gender" [compareWith]="compareFn" (selectionChange)="setAvatarEditDefault()">
+                            <mat-select formControlName="gender" (selectionChange)="setAvatarEditDefault()">
                                 <mat-option *ngFor="let gender of genders" [value]="gender.viewValue">
                                     {{ gender.viewValue }}
                                 </mat-option>
@@ -499,7 +514,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
-                            <mat-select formControlName="commune" [compareWith]="compareFn">
+                            <mat-select formControlName="commune">
                                 <mat-option *ngFor="let commune of communes" [value]="commune.viewValue">
                                     {{ commune.viewValue }}
                                 </mat-option>
@@ -520,20 +535,22 @@
                             <mat-label>
                                 <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
                             </mat-label>
-                            <input matInput formControlName="username">
+                            <input matInput formControlName="username" [readonly]="true">
                         </mat-form-field>
 
-                        <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()"
-                            (keyup.enter)="fileInput.inputElement.click()" (keyup.delete)="fileInput.clear(); resetEditAvatar()"
+                        <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event"
+                            (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+                            (keyup.delete)="fileInput.clear(); resetEditAvatar()"
                             (keyup.backspace)="fileInput.clear(); resetEditAvatar()" flex>
 
                             <mat-label>
                                 <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Foto de Perfil
                             </mat-label>
-                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer"
-                                readonly>
+                            <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name"
+                                style="cursor:pointer" readonly>
 
-                            <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear(); resetEditAvatar(); $event.stopPropagation()"
+                            <button mat-icon-button matSuffix *ngIf="files"
+                                (click)="fileInput.clear(); resetEditAvatar(); $event.stopPropagation()"
                                 (keyup.enter)="fileInput.clear(); resetEditAvatar()">
                                 <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
                             </button>
@@ -549,20 +566,23 @@
                             <mat-label>
                                 <i class="mdi mdi-lock app-input-icon">&nbsp;</i>Contraseña de Usuario
                             </mat-label>
-                            <input matInput readonly>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="resetPass.openDialogResetPass()">
+                            <input matInput readonly hidden>
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass"
+                                (click)="resetPass.openDialogResetPass()">
                                 <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
                             </button>
                             <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" floatLabel="always" *ngIf="isAdmin && (usersRole!='student')">
+                        <mat-form-field appearance="outline" floatLabel="always"
+                            *ngIf="isAdmin && (usersRole!='student')">
                             <mat-label>
-                                <i class="mdi mdi-security-account app-input-icon">&nbsp;</i>Privilegios de Usuario
+                                <i class="mdi mdi-security app-input-icon">&nbsp;</i>Privilegios de Usuario
                             </mat-label>
-                            <input matInput readonly>
-                            <button type="button" mat-raised-button color="warn" class="buttonResetPass" (click)="editRolesSubscription(setRoles.openDialogSetRoles())">
-                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o remover Privilegios
+                            <input matInput readonly hidden>
+                            <button type="button" mat-raised-button color="warn" class="buttonResetPass"
+                                (click)="editRolesSubscription(setRoles.openDialogSetRoles())">
+                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o Remover Privilegios
                             </button>
                             <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
                         </mat-form-field>
@@ -580,12 +600,13 @@
 
         <mat-dialog-actions>
             <mat-toolbar>
-                <button type="button" mat-mini-fab color="primary" tabindex="1" (click)="cancel()" matTooltip="volver"
+                <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()"
                     cdkFocusRegionstart>
-                    <mat-icon svgIcon="arrow-left"></mat-icon>
+                    Cancelar
                 </button>
                 <span class="spacer-r"></span>
-                <button type="submit" mat-raised-button color="accent" tabindex="2" [disabled]="editForm.invalid || editForm.pristine">Guardar</button>
+                <button type="submit" mat-raised-button color="accent" tabindex="2"
+                    [disabled]="editForm.invalid || editForm.pristine">Guardar</button>
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
@@ -603,10 +624,11 @@
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <div class="listContainer2">
+    <div class="listContainerDelete">
         <mat-list>
             <mat-list-item>
-                <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                <img matListAvatar
+                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
                     alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
                 <h3 matLine> {{user | shortNameLastname}}</h3>
                 <p matLine>

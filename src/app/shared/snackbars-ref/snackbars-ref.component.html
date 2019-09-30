@@ -1,4 +1,4 @@
-<div *ngIf="type==='success'" class="snackBarContainer primaryColorBG">
+<div *ngIf="type === typeSucceed" class="snackBarContainer primaryColorBG">
 
   <div class="logoItem">
     <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -20,7 +20,7 @@
 
 </div>
 
-<div *ngIf="type==='warning'" class="snackBarContainer accentColorBG">
+<div *ngIf="type === typeWarn" class="snackBarContainer accentColorBG">
 
   <div class="logoItem">
     <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -42,7 +42,7 @@
 
 </div>
 
-<div *ngIf="type==='error'" class="snackBarContainer warnColorBG">
+<div *ngIf="type === typeError" class="snackBarContainer warnColorBG">
 
   <div class="logoItem">
     <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">

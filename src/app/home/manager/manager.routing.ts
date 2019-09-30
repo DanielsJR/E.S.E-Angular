@@ -22,8 +22,8 @@ const adminRoutes: Routes = [
         path: '',
         component: ManagerComponent,
         canActivate: [ManagerGuard],
-
         children: [
+
             {
                 path: '',
                 canActivateChild: [ManagerGuard],
@@ -39,14 +39,14 @@ const adminRoutes: Routes = [
                         component: ManagerGetStudentsComponent,
                     },
 
+
+
+
                     {
                         path: 'courses',
                         component: ManagerCoursesComponent,
 
                     },
-
-
-
 
                     {
                         path: 'courses/create',
@@ -59,6 +59,8 @@ const adminRoutes: Routes = [
                     },
 
 
+
+
                     {
                         path: 'subjects',
                         component: ManagerSubjectsComponent
@@ -68,7 +70,6 @@ const adminRoutes: Routes = [
                         path: 'subjects/detail/:id',
                         component: ManagerSubjectsDetailComponent,
                         children: [
-
 
                             {
                                 path: 'course/:id',
@@ -86,20 +87,13 @@ const adminRoutes: Routes = [
                             },
 
                             {
-                                path: 'grades/:username',
+                                path: 'grades/:id',
                                 component: ManagerSubjectsGradesComponent
                             },
 
 
                         ]
                     },
-
-
-
-
-
-
-
 
 
                     {
@@ -116,11 +110,14 @@ const adminRoutes: Routes = [
     imports: [
         RouterModule.forChild(adminRoutes)
     ],
+    
     exports: [
         RouterModule
     ],
+    
     providers: [
 
     ]
 })
+
 export class ManagerRoutingModule { }

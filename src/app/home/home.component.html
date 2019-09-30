@@ -24,7 +24,8 @@
             </button>
         </div>
     </mat-toolbar>
-    <mat-sidenav-container class="container2" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+
+    <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
 
         <!-- sidenav menu -->
@@ -32,10 +33,11 @@
 
             <!-- sidenav toobar -->
             <mat-toolbar class="side-toolbar">
-                <mat-list style="flex-grow: 8">
+                <mat-list>
                     <mat-list-item>
-                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
-                            alt="{{privilege | lowercase}}">
+                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                            alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
+                        <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
                         <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
                         <p matLine>
                             <span *ngIf="user" class="roles">{{user.roles | rolesToSpanish}}</span>
@@ -67,7 +69,6 @@
 
             </mat-nav-list>
 
-
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
 
                 <button mat-menu-item (click)="sidenavMenuProfile.toggle()">
@@ -86,7 +87,6 @@
                 </button>
 
             </mat-menu>
-
 
             <!-- sidenav user-menu-profile -->
             <mat-sidenav mode="side" opened="false" #sidenavMenuProfile class="sidenav">
@@ -173,11 +173,7 @@
             </mat-sidenav>
 
 
-
-
-
         </mat-sidenav>
-
 
         <!-- sidenav chat -->
         <mat-sidenav mode="side" position="end" opened="false" #sidenavChat class="sidenav">
@@ -191,7 +187,6 @@
             </mat-nav-list>
 
         </mat-sidenav>
-
 
         <!-- primary content -->
         <mat-sidenav-content>

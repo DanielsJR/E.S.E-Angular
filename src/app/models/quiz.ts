@@ -9,6 +9,7 @@ export class Quiz {
         public author?: User,
         public subjectName?: string,
         public quizLevel?: string,
+        
         public correspondItems?: CorrespondItem[],
         public incompleteTextItems?: IncompleteTextItem[],
         public trueFalseItems?: TrueFalseItem[],

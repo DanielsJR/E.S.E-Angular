@@ -1,0 +1,111 @@
+mat-card {
+    padding: 0 0 1px 0;
+    margin: 20px;
+    height: fit-content;
+    width: fit-content;
+}
+
+mat-form-field {
+    font-size: 16px;
+}
+
+
+.imgEseToolbar {
+    height: 40px;
+}
+
+
+.role-style {
+    color: darkgray;
+}
+
+.description {
+    font-size: 16px;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.listContainer .mat-list-item {
+    height: 90px;
+}
+
+
+.listContainer mat-form-field {
+    margin-bottom: -1.25em !important;
+}
+
+.listContainer .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}
+
+.mat-list-avatar {
+    cursor: pointer;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.data {
+    display: flex;
+
+}
+
+.data mat-form-field {
+    margin-left: 50px;
+}
+
+
+.level {
+    font-size: 17px;
+    color: darkgray;
+}
+
+.quizContainer {
+    margin: 15px !important;
+}
+
+.quizContainer div div {
+    --margin: 0 0 15px;
+}
+
+
+.fullWith {
+    width: 100%;
+}
+
+.fiftyWith {
+    width: 50%;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}
+
+.size-mdi-icon {
+    font-size: 24px;
+}
+
+.mat-action-row {
+    padding: 16px 8px 0 24px;
+}
+
+mat-accordion mat-toolbar button {
+    margin: 0 5px;
+}
+
+mat-action-row button {
+    margin: 0 5px;
+}
+
+mat-form-field textarea {
+    resize: none;
+}
