@@ -33,7 +33,7 @@
           <ng-template matStepLabel>Tipo</ng-template>
 
           <mat-form-field [floatLabel]=" 'never' ">
-            <mat-select formControlName="type">
+            <mat-select formControlName="type" (selectionChange)="selectedEvaluationType($event.value)">
               <mat-option *ngFor="let et of evaluationTypes" [value]="et.viewValue">
                 <span>{{et.viewValue}}</span>
               </mat-option>
@@ -41,17 +41,31 @@
             <mat-label>Selecione el Tipo de Evaluación</mat-label>
           </mat-form-field>
 
+          <mat-form-field [floatLabel]=" 'never' " *ngIf="quizEnable">
+            <mat-select formControlName="quiz" (selectionChange)="selectedQuiz($event.value)">
+              <mat-option *ngFor="let q of quizes" [value]="q">
+                <span>{{q.title}}</span>
+              </mat-option>
+            </mat-select>
+            <mat-label>Selecione Prueba</mat-label>
+            <mat-spinner *ngIf="isLoadingSpiner" diameter="20" mode="indeterminate" color="accent" matSuffix></mat-spinner>
+          </mat-form-field>
+
+
           <div>
             <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
           </div>
+
         </form>
       </mat-step>
+
+
 
       <mat-step [stepControl]="titleGroup">
         <form [formGroup]="titleGroup">
           <ng-template matStepLabel>Título</ng-template>
           <mat-form-field appearance="standard">
-            <input matInput formControlName="title">
+            <input matInput formControlName="title" [readonly]="quizEnable">
             <mat-label>
               <i class="mdi mdi-format-title"></i>&nbsp;Título
             </mat-label>
@@ -264,7 +278,7 @@
           <ng-template matStepLabel>Tipo</ng-template>
 
           <mat-form-field [floatLabel]=" 'never' ">
-            <mat-select formControlName="type">
+            <mat-select formControlName="type" (selectionChange)="selectedEvaluationTypeEdit($event.value)">
               <mat-option *ngFor="let et of evaluationTypes" [value]="et.viewValue">
                 <span>{{et.viewValue}}</span>
               </mat-option>
@@ -273,6 +287,18 @@
               <i class="mdi mdi-file-document"></i>Selecione el Tipo de Evaluación
             </mat-label>
           </mat-form-field>
+
+          <mat-form-field [floatLabel]=" 'never' " *ngIf="quizEnable">
+            <mat-select formControlName="quiz" (selectionChange)="selectedQuizEdit($event.value)"
+              [compareWith]="compareQuizFn">
+              <mat-option *ngFor="let q of quizes" [value]="q">
+                <span>{{q.title}}</span>
+              </mat-option>
+            </mat-select>
+            <mat-label>Selecione Prueba</mat-label>
+            <mat-spinner *ngIf="isLoadingSpiner" diameter="20" mode="indeterminate" color="accent" matSuffix></mat-spinner>
+          </mat-form-field>
+
 
           <div>
             <button type="button" mat-button color="accent" matStepperNext>Siguiente</button>
@@ -284,7 +310,7 @@
         <form [formGroup]="titleEditGroup">
           <ng-template matStepLabel>Título</ng-template>
           <mat-form-field appearance="standard">
-            <input matInput formControlName="title">
+            <input matInput formControlName="title" [readonly]="quizEnable">
             <mat-label>
               <i class="mdi mdi-format-title"></i>&nbsp;Título
             </mat-label>

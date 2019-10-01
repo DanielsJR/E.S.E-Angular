@@ -101,12 +101,6 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   }
   get eTeacher() { return this.teacherEditGroup.get('teacher'); }
 
-
-  selectedSubjectName(value: SubjectName) {
-    this.subjectName = value;
-    console.error('*********this.subjectName.viewValue: ' , this.subjectName);
-  }
-
   selectedUser(value: User) {
     this.teacher = value;
   }

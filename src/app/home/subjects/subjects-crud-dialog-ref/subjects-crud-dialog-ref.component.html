@@ -41,7 +41,7 @@
           <ng-template matStepLabel>Asignatura</ng-template>
 
           <mat-form-field [floatLabel]=" 'never' ">
-            <mat-select formControlName="name" (selectionChange)="selectedSubjectName($event.value)">
+            <mat-select formControlName="name">
               <mat-option *ngFor="let sn of subjectsNames" [value]="sn">
                 <span>{{sn.viewValue}}</span>
               </mat-option>
