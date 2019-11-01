@@ -21,9 +21,10 @@
 
     <mat-divider></mat-divider>
 
-    <div *ngIf="!isLoading" style="height: 5px;" [class.mat-toolbar]="areaRole === roleManager"></div>
+    <div *ngIf="!isLoading" style="height: 5px;" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-    <mat-toolbar class="toolbar2" *ngIf="areaRole === roleManager">
+    
+    <mat-toolbar class="toolbar2" *ngIf="areaRole !== roleTeacher">
 
 
       <mat-list>
@@ -58,7 +59,7 @@
 
     </mat-toolbar>
 
-    <mat-divider *ngIf="areaRole === roleManager"></mat-divider>
+    <mat-divider *ngIf="areaRole !== roleTeacher"></mat-divider>
 
     <mat-table #table [dataSource]="dataSource" matSort>
 

@@ -32,10 +32,6 @@
       <mat-error *ngIf="password.hasError('bad-credencials')">{{unauthMessage}}</mat-error>
     </mat-form-field>
 
-    <mat-slide-toggle color="primary">
-      <small>Recuerdame!</small>
-    </mat-slide-toggle>
-
     <button mat-raised-button color="accent" type="submit" id="login-submit-button" [disabled]="!loginForm.valid"
       class="login-actions ">
       Ingresa

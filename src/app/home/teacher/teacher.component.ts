@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectStoreService } from '../../services/subject-store.service';
+import { UserLoggedService } from '../../services/user-logged.service';
 
 @Component({
     template: `<router-outlet></router-outlet>`
@@ -7,11 +8,12 @@ import { SubjectStoreService } from '../../services/subject-store.service';
 
 export class TeacherComponent implements OnInit, OnDestroy {
 
-    constructor(private subjectStoreService: SubjectStoreService) { }
+    constructor(private userLoggedService: UserLoggedService, private subjectStoreService: SubjectStoreService) { }
 
     ngOnInit(): void {
         console.log("TeacherComponent ngOnInit() called!!!");
-        this.subjectStoreService.loadSubjects();
+        this.userLoggedService.userLogged$
+            .subscribe(teacher => this.subjectStoreService.loadSubjects(teacher.id));
     }
 
     ngOnDestroy() {

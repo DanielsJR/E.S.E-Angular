@@ -26,6 +26,7 @@ import { QuizStudentDetailComponent } from "./quiz-student-detail/quiz-student-d
   ],
 
   exports: [
+    QuizStudentComponent,
     QuizStudentDetailComponent,
 
   ]

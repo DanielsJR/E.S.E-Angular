@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_SUBJECTS, URI_NAME, URI_TEACHER } from "../app.config";
+import { API_SERVER, URI_SUBJECTS, URI_NAME, URI_TEACHER, URI_YEAR, URI_COURSE } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -76,6 +76,15 @@ export class SubjectBackendService {
 
     getSubjectsByTeacher(id: string): Observable<Subject[]> {
         const url = `${this.subjectURL}${URI_TEACHER}/${id}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Subject[]>(url)
+            .pipe(retry(3),
+                tap(resp => console.log(`N° Subjects: ${resp.length}`))
+            );
+    }
+
+    getSubjectsByCourse(id: string): Observable<Subject[]> {
+        const url = `${this.subjectURL}${URI_COURSE}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Subject[]>(url)
             .pipe(retry(3),

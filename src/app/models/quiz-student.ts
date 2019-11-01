@@ -6,10 +6,6 @@ import { CorrespondItem, IncompleteTextItem, TrueFalseItem, MultipleSeletionItem
 export class QuizStudent {
     constructor(
         public id?: string,
-        public student?: User,
-        public grade?: string,
-        public subject?: Subject,
-        public date?: string,
 
         public correspondItems?: CorrespondItem[],
         public incompleteTextItems?: IncompleteTextItem[],

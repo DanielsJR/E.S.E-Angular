@@ -9,6 +9,7 @@
           <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
+
       <span class="spacer-r"></span>
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
@@ -78,7 +79,7 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="crud">
-          <button *ngIf="student && subject" mat-mini-fab matTooltip="Agregar Calificación">
+          <button *ngIf="(student && subject) && (areaRole !== roleStudent)" mat-mini-fab matTooltip="Agregar Calificación">
             <mat-icon svgIcon="plus"></mat-icon>
           </button>
         </mat-header-cell>
@@ -110,8 +111,8 @@
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
-    <mat-divider></mat-divider>
-    <mat-toolbar>
+    <mat-divider *ngIf="areaRole !== roleStudent"></mat-divider>
+    <mat-toolbar *ngIf="areaRole !== roleStudent">
       <button type="button" mat-flat-button color="primary" tabindex="1" (click)="goBack()" cdkFocusRegionstart>
         <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
       </button>

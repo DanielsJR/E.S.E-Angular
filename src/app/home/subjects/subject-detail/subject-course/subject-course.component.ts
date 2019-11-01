@@ -26,6 +26,9 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
 
   @Input() areaRole: string;
   roleManager = ROLE_MANAGER;
+  roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
+
   uriStudents = URI_STUDENTS
   uriTeachers = URI_TEACHERS;
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;

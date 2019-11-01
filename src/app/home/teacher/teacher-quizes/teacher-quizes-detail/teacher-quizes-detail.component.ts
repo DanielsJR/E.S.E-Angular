@@ -41,6 +41,7 @@ export class TeacherQuizesDetailComponent implements OnInit {
 
   matExpansionExpanded = false;
 
+
   @ViewChild('idTitle') idTitle: ElementRef;
   @ViewChild('idDescription') idDescription: ElementRef;
   @ViewChild('idSubjectName') idSubjectName: MatSelect;
@@ -93,6 +94,8 @@ export class TeacherQuizesDetailComponent implements OnInit {
     this.editIncompleteTextItemsForm = this.formBuilder.group({
       incompleteTextItems: this.formBuilder.array([]),
     });
+
+    
 
     this.setCorrespondItems(this.quiz);
     this.setTrueFalseItems(this.quiz);

@@ -46,6 +46,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
   evaluationsSubscription: Subscription;
   subjectSubscription: Subscription;
   isLoadingSubscription: Subscription;
+
   evaluationQuizDetail: Evaluation;
   evaluationCourse: Evaluation;
 
@@ -231,7 +232,6 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
       }
     });
   }
-
 
 
 }

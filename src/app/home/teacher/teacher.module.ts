@@ -15,8 +15,8 @@ import { TeacherSubjectCourseComponent } from './teacher-subjects/teacher-subjec
 import { TeacherSubjectQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-quiz.component';
 import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
-import { QuizModule } from '../quiz/quiz.module';
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
+import { TeacherSubjectSendQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-send-quiz.component';
 
 
 @NgModule({
@@ -36,14 +36,17 @@ import { QuizStudentModule } from '../quiz-student/quizStudent.module';
     TeacherSubjectsComponent,
     TeacherSubjectsDetailComponent,
     TeacherSubjectsGradesComponent,
+    TeacherSubjectCourseComponent,
+    TeacherSubjectQuizComponent,
+    TeacherSubjectSendQuizComponent,
+    TeacherSubjectEvaluationsComponent,
+
     TeacherQuizesComponent,
     TeacherQuizesDetailComponent,
     TeacherQuizesCreateComponent,
     TeacherQuizesSendQuizComponent,
     
-    TeacherSubjectCourseComponent,
-    TeacherSubjectQuizComponent,
-    TeacherSubjectEvaluationsComponent,
+
 
   ],
 

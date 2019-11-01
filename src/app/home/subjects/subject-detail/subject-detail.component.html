@@ -49,6 +49,19 @@
 
         </ng-container>
 
+        <ng-container *ngIf="areaRole === roleStudent">
+            <button mat-mini-fab color="primary" [matMenuTriggerFor]="menuSubjects">
+                <mat-icon svgIcon="school"></mat-icon>
+            </button>
+
+            <mat-menu #menuSubjects="matMenu">
+                <ng-container *ngFor="let s of subjects">
+                    <button mat-menu-item (click)="navigateSubject(s.id)">{{s.name}}</button>
+                </ng-container>
+            </mat-menu>
+
+        </ng-container>
+
     </mat-toolbar>
 
     <div class="content" [ngStyle]="dinamicStyles">

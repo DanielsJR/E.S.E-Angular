@@ -99,7 +99,7 @@ export class EvaluationStoreService {
     }
 
     clearStore(){
-        console.log("****************Clearing the store******************");
+        console.log("****************Clearing evaluationStore******************");
         this.dataStore.evaluations = [];
         this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
     }

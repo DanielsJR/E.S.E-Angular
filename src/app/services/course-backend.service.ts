@@ -79,4 +79,13 @@ export class CourseBackendService {
                 // ,catchError(this.handleError<course>(`getcourse id=${id}`))
             );
     }
+
+    getCourseIdByStudent(studentName: string, year: string): Observable<string> {
+        const url = `${this.courseURL}/studentName/${studentName}/${year}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get(url, {responseType: 'text'})
+            .pipe(retry(3),
+                tap(id => console.log(`fetched course id=${id}`))
+            );
+    }
 }

@@ -13,9 +13,10 @@ import { TeacherSubjectCourseComponent } from './teacher-subjects/teacher-subjec
 import { TeacherSubjectQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-quiz.component';
 import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
+import { TeacherSubjectSendQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-send-quiz.component';
 
 
-const teacherRoutes: Routes = [
+const routes: Routes = [
     {
         path: '',
         component: TeacherComponent,
@@ -50,7 +51,7 @@ const teacherRoutes: Routes = [
 
                             {
                                 path: 'quiz/:id',
-                                component: TeacherSubjectQuizComponent
+                                component: TeacherSubjectSendQuizComponent
                             },
 
                             {
@@ -115,7 +116,7 @@ const teacherRoutes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forChild(teacherRoutes)
+        RouterModule.forChild(routes)
     ],
     exports: [
         RouterModule

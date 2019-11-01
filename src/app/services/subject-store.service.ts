@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, empty } from "rxjs";
 import { finalize } from "rxjs/internal/operators/finalize";
 import { tap } from "rxjs/internal/operators/tap";
 import { IsLoadingService } from "./isLoadingService.service";
@@ -14,7 +14,6 @@ import { switchMap } from "rxjs/internal/operators/switchMap";
 import { take } from "rxjs/internal/operators/take";
 
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -25,7 +24,8 @@ export class SubjectStoreService {
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     constructor(private subjectBackendService: SubjectBackendService, private isLoadingService: IsLoadingService,
-        private gradeStoreService: GradeStoreService, private userLoggedService: UserLoggedService) {
+        private gradeStoreService: GradeStoreService, private userLoggedService: UserLoggedService,
+    ) {
         this.dataStore = { subjects: [] };
     }
 
@@ -37,7 +37,7 @@ export class SubjectStoreService {
         return this.isLoadingGet.asObservable();
     }
 
-    loadSubjects() {
+    loadSubjects(id?: string) {
         if (this.subjectsSource.getValue().length) {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
@@ -58,16 +58,12 @@ export class SubjectStoreService {
                         }
                     }, error => console.error('error retrieving all subjects, ' + error.message));
 
-            } else {
-                let teacherId: string;
-                this.userLoggedService.userLogged$
+            } else if (this.userLoggedService.isTeacher()) {
+                this.subjectBackendService.getSubjectsByTeacher(id)
                     .pipe(
-                        switchMap(teacher => {
-                            teacherId = teacher.id;
-                            return this.subjectBackendService.getSubjectsByTeacher(teacherId);
-                        })
+                        take(1),
+                        finalize(() => this.isLoadingGet.next(false))
                     )
-                    .pipe(take(1),finalize(() => this.isLoadingGet.next(false)))
                     .subscribe(data => {
                         if (data.length) {
                             this.dataStore.subjects = data;
@@ -77,6 +73,25 @@ export class SubjectStoreService {
                             console.error('Lista de subjects vacia');
                         }
                     }, error => console.error('error retrieving subjects by teacher, ' + error.message));
+
+            } else if (this.userLoggedService.isStudent()) {
+                this.subjectBackendService.getSubjectsByCourse(id)
+                    .pipe(
+                        take(1),
+                        finalize(() => this.isLoadingGet.next(false))
+                    )
+                    .subscribe(data => {
+                        if (data.length) {
+                            this.dataStore.subjects = data;
+                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                        } else {
+                            data = null;
+                            console.error('Lista de subjects vacia');
+                        }
+                    }, error => console.error('error retrieving SubjectsByCourse, ' + error.message));
+
+            } else {
+                console.error('No Role!!')
             }
         }
 

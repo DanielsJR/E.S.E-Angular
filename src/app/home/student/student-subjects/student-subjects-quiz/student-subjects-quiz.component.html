@@ -1,0 +1,17 @@
+<nx-quiz-student *ngIf="quizFromWebSocket" [grade]="quizFromWebSocket" (quizSent)= "didQuizSend($event)" ></nx-quiz-student>
+
+<mat-card *ngIf="!quizFromWebSocket && !processing" >
+  <h2>No hay pruebas para rendir.</h2>
+  <img width="180" src="assets/images/logos/ese-logo-big2.png">
+  <br>
+</mat-card>
+
+<mat-card *ngIf="processing">
+  <div style="display: inline-flex;">
+      <h2>Tu Nota se esta procesando...</h2>
+      <mat-spinner [color]="accent" [diameter]="40">  </mat-spinner>
+  </div>
+  
+  <img width="180" src="assets/images/logos/ese-logo-big2.png">
+  <br>
+</mat-card>

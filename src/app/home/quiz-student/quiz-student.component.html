@@ -1,0 +1,375 @@
+<mat-card class="mat-elevation-z8">
+
+  <mat-toolbar color="primary">
+    <h1 mat-dialog-title>{{grade?.evaluation?.type}} de {{grade?.evaluation?.subject?.name}}</h1>
+    <span class="spacer-r"></span>
+    <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  </mat-toolbar>
+
+  <form [formGroup]="quizStudentDetailForm">
+
+    <mat-divider></mat-divider>
+
+    <mat-list class="listContainer">
+
+      <mat-list-item>
+        <mat-form-field appearance="fill" class="fullWith">
+          <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Título</mat-label>
+          <input matInput formControlName="title" readonly>
+        </mat-form-field>
+      </mat-list-item>
+
+      <div class="data">
+
+        <mat-list-item>
+          <img matListAvatar
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar?.type+';base64,' + grade?.student?.avatar?.data)"
+            alt="student" (click)="imageZoom.openDialogImage()">
+          <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+
+          <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
+
+          <p matLine>
+            <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>
+            <span class="role-style">Estudiante</span>
+          </p>
+
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="outline">
+            <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Curso</mat-label>
+            <input matInput formControlName="courseName" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label><i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura</mat-label>
+            <input matInput formControlName="subjectName" readonly>
+          </mat-form-field>
+        </mat-list-item>
+
+      </div>
+
+    </mat-list>
+
+  </form>
+
+  <mat-divider></mat-divider>
+
+  <div class="mat-elevation-z8 quizContainer">
+    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight>
+      <!-- (selectedTabChange)="panelsClosed()"-->
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+          <span>&nbsp;&nbsp;Correspondencia</span>
+        </ng-template>
+
+        <form [formGroup]="correspondItemsForm">
+          <div formArrayName="correspondItems">
+            <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true">
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="message-outline"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Selecciona los pares</h1>
+                <span class="spacer-r"></span>
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+              </mat-toolbar>
+
+              <mat-expansion-panel (opened)="panelOpenCorrespondItems = true"
+                (closed)="panelOpenCorrespondItems = false" [expanded]="true">
+
+                <mat-expansion-panel-header>
+                  <mat-panel-title></mat-panel-title>
+                  <mat-panel-description></mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="i" *ngFor="let ci of correspondItemsArray; let i=index;"
+                  class="correspondItemsRow">
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>
+                      Item
+                    </mat-label>
+                    <textarea matInput formControlName="item" readonly hidden></textarea>
+                    <button #btnI mat-stroked-button color="primary" style="width: 100%"
+                      (click)="selectItem(i, ci.item, btnI)">{{ci.item}}
+                    </button>
+
+                  </mat-form-field>
+
+                  <br>
+                  <mat-form-field appearance="outline">
+                    <mat-label>
+                      Correspondencia
+                    </mat-label>
+                    <input matInput formControlName="correspond" readonly hidden>
+                    <button #btnC mat-stroked-button color="accent" style="width: 100%"
+                      (click)="selectCorrespond(ci.correspond, btnC)">{{ci.correspond}}</button>
+
+                  </mat-form-field>
+
+                </div>
+
+              </mat-expansion-panel>
+
+            </mat-accordion>
+          </div>
+        </form>
+
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+          <span>&nbsp;&nbsp;Verdadero o Falso</span>
+        </ng-template>
+
+        <form [formGroup]="trueFalseItemsForm">
+          <div formArrayName="trueFalseItems">
+            <mat-accordion #trueFalseItemsAccordion="matAccordion" [multi]="true">
+              <!-- [displayMode]="flat"-->
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="message-outline"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Selecciona verdadero o falso</h1>
+                <span class="spacer-r"></span>
+
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenTrueFalseItems ? trueFalseItemsAccordion.closeAll() : trueFalseItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenTrueFalseItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+
+              </mat-toolbar>
+              <mat-expansion-panel *ngFor="let tf of trueFalseItems.controls ; let i=index;"
+                [expanded]="tf.get('expanded').value" (opened)="panelOpenTrueFalseItems = true"
+                (closed)="panelOpenTrueFalseItems = false">
+
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab color="primary" class="miniFabMini">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" class="fiftyWith">
+                    <mat-select formControlName="answer" required>
+                      <mat-option *ngFor="let trueFalse of trueFalses" [value]="trueFalse.value">
+                        {{ trueFalse.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-label>
+                      Respuesta
+                    </mat-label>
+                  </mat-form-field>
+
+                </div>
+              </mat-expansion-panel>
+
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+          <span>&nbsp;&nbsp;Seleción Múltiple</span>
+        </ng-template>
+
+        <form [formGroup]="multipleSelectionItemsForm">
+          <div formArrayName="multipleSelectionItems">
+            <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true">
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="message-outline"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Seleciona la alternativa correcta</h1>
+                <span class="spacer-r"></span>
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenMultipleSelectionItems ? multipleSelectionItemsAccordion.closeAll() : multipleSelectionItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenMultipleSelectionItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+
+              </mat-toolbar>
+
+
+              <mat-expansion-panel *ngFor="let ms of multipleSelectionItems.controls ; let i=index;"
+                [expanded]="ms.get('expanded').value" (opened)="panelOpenMultipleSelectionItems = true"
+                (closed)="panelOpenMultipleSelectionItems = false">
+
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab color="primary" class="miniFabMini">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
+
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fiftyWith">
+                    <mat-label>
+                      Alternativa A
+                    </mat-label>
+                    <input matInput formControlName="alternativeA" readonly>
+                    <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon"></i>&nbsp;
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fiftyWith">
+                    <mat-label>
+                      Alternativa B
+                    </mat-label>
+                    <input matInput formControlName="alternativeB" readonly>
+                    <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon"></i>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fiftyWith">
+                    <mat-label>
+                      Alternativa C
+                    </mat-label>
+                    <input matInput formControlName="alternativeC" readonly>
+                    <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon"></i>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fiftyWith">
+                    <mat-label>
+                      Alternativa D
+                    </mat-label>
+                    <input matInput formControlName="alternativeD" readonly>
+                    <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon"></i>
+                  </mat-form-field>
+
+                  <br>
+                  <mat-form-field appearance="fill" class="fiftyWith">
+
+                    <mat-select formControlName="answer" required>
+                      <mat-option [value]="ms.get('alternativeA').value"> A </mat-option>
+                      <mat-option [value]="ms.get('alternativeB').value"> B </mat-option>
+                      <mat-option [value]="ms.get('alternativeC').value"> C </mat-option>
+                      <mat-option [value]="ms.get('alternativeD').value"> D </mat-option>
+                    </mat-select>
+
+                    <mat-label>
+                      Respuesta
+                    </mat-label>
+
+                  </mat-form-field>
+
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+          <span>&nbsp;&nbsp;Texto Incompleto</span>
+        </ng-template>
+
+        <form [formGroup]="incompleteTextItemsForm">
+          <div formArrayName="incompleteTextItems">
+            <mat-accordion #incompleteTextItemsAccordion="matAccordion" [multi]="true">
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="message-outline"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1>Completa el texto</h1>
+                <span class="spacer-r"></span>
+
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenIncompleteTextItems ? incompleteTextItemsAccordion.closeAll() : incompleteTextItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenIncompleteTextItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+
+              </mat-toolbar>
+
+              <mat-expansion-panel *ngFor="let it of incompleteTextItems.controls ; let i=index;"
+                [expanded]="it.get('expanded').value" (opened)="panelOpenIncompleteTextItems = true"
+                (closed)="panelOpenIncompleteTextItems = false">
+
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab color="primary" class="miniFabMini">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
+
+                  </mat-form-field>
+
+                  <br>
+
+                  <mat-form-field appearance="fill" class="fiftyWith">
+                    <mat-label>
+                      Respuesta
+                    </mat-label>
+                    <input matInput formControlName="answer" required>
+                  </mat-form-field>
+
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+
+  <mat-divider></mat-divider>
+  <mat-toolbar>
+    <span class="spacer-r"></span>
+    <button type="button" mat-raised-button color="accent" (click)="sendQuiz()"
+    [disabled]="(correspondItemsForm.invalid)
+      || (trueFalseItemsForm.invalid || trueFalseItemsForm.pristine)
+      || (multipleSelectionItemsForm.invalid || multipleSelectionItemsForm.pristine)
+      || (incompleteTextItemsForm.invalid || incompleteTextItemsForm.pristine)">
+      Enviar
+    </button>
+  </mat-toolbar>
+
+</mat-card>

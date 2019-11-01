@@ -40,15 +40,16 @@ export class TeacherQuizesComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Quiz>();
-    this.isLoading = true;
-
     this.userLoggedService.userLogged$
       .pipe(
-        switchMap(user => this.quizBackendService.getQuizByUserId(user.id)),
+        switchMap(user => {
+          this.isLoading = true;
+          return this.quizBackendService.getQuizByUserId(user.id);
+        }),
         take(1),
-        finalize(() => setTimeout(() => this.isLoading = false))
+        finalize(() => this.isLoading = false)
       )
-      .subscribe(qs=> this.dataSource.data = qs);
+      .subscribe(qs => this.dataSource.data = qs);
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 

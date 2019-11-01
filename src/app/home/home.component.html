@@ -63,8 +63,6 @@
 
                 <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
 
-                <nx-teacher-subjects-menu [roles]='roles'></nx-teacher-subjects-menu>
-
                 <nx-quiz-menu [roles]='roles'></nx-quiz-menu>
 
             </mat-nav-list>
@@ -193,7 +191,7 @@
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
 
-            <div class="contenido" (nxScroller)="isScrolled=$event" [ngStyle]="dinamicStyles">
+            <div class="contenido" (nxScroller)="isScrolled=$event">
                 <router-outlet></router-outlet>
             </div>
 

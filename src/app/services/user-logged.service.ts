@@ -23,6 +23,7 @@ export class UserLoggedService {
         private localStorageService: LocalStorageService,
     ) { }
 
+    //manual
     get userLogged$() {
         return this.userLoggedSource.asObservable();
     }

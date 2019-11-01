@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("btnSettingsBack") btnSettingsBack: MatButton;
 
   currentUrl: string = '';
-  dinamicStyles = {};
+
 
   constructor(
     private loginService: LoginService, private userLoggedService: UserLoggedService,
@@ -82,16 +82,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.router.navigate([this.userLoggedService.redirectUrl]);
     });
 
-    this.currentUrl = this.router.url;
-    this.setStyles();
-
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.currentUrl = event.url;
-        this.setStyles();
-      }
-    });
-
 
 
     if (this.user) {
@@ -106,18 +96,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
   }
-
-  setStyles() {
-    //console.log('setOverflow currentUrl: ', this.currentUrl);
-    let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
-    if (url === '/home/manager/subjects/detail' || url === '/home/teacher/subjects/detail') {
-      this.dinamicStyles = { 'overflow': 'hidden' };
-    } else {
-      this.dinamicStyles = { 'overflow': 'auto' };
-    }
-
-  }
-
 
 
   ngAfterViewInit() {

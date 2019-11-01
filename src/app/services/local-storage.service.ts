@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 //import { default as decode } from 'jwt-decode';
-import { LOCAL_STORAGE_TOKEN_KEY, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../app.config';
+import { LOCAL_STORAGE_TOKEN_KEY, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY } from '../app.config';
 import * as decode from 'jwt-decode';
+import { Grade } from '../models/grade';
 
 
 @Injectable({
@@ -86,7 +87,22 @@ export class LocalStorageService {
         }
     }
 
+    //**********--QuizFromWebSocket--**************
+    setQuizWebSocket(grade: Grade): void {
+        localStorage.setItem(LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY, JSON.stringify(grade));
+    }
 
 
+    isQuizWebSocketStored(): boolean {
+        return (this.isStored(LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY));
+    }
+
+    getQuizWebSocket(): string {
+        return (this.isTokenStored()) ? this.getItem(LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY) : null;
+    }
+
+    removeQuizWebSocket(): void {
+        localStorage.removeItem(LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY);
+    }
 
 }

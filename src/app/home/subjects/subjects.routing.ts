@@ -6,6 +6,7 @@ import { SubjectsComponent } from './subjects.component';
 import { SubjectCourseComponent } from './subject-detail/subject-course/subject-course.component';
 import { SubjectQuizComponent } from './subject-detail/subject-quiz/subject-quiz.component';
 import { SubjectEvaluationsComponent } from './subject-detail/subject-evaluations/subject-evaluations.component';
+import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/subject-send-quiz.component';
 
 
 const routes: Routes = [
@@ -32,7 +33,7 @@ const routes: Routes = [
 
             {
                 path: 'quiz/:id',
-                component: SubjectQuizComponent
+                component: SubjectSendQuizComponent
             },
 
             {

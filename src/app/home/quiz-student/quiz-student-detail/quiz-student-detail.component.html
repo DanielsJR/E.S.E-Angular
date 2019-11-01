@@ -23,11 +23,12 @@
 
         <mat-list-item>
           <img matListAvatar
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.quizStudent?.student?.avatar?.type+';base64,' + grade?.quizStudent?.student?.avatar?.data)"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar?.type +';base64,' + grade?.student?.avatar?.data)"
             alt="student" (click)="imageZoom.openDialogImage()">
-          <nx-image-zoom-user #imageZoom [avatar]="grade?.quizStudent?.student?.avatar"></nx-image-zoom-user>
 
-          <h3 matLine> {{grade?.quizStudent?.student | shortNameLastname}} </h3>
+          <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+
+          <h3 matLine *ngIf="grade.student"> {{ grade.student | shortNameLastname}} </h3>
 
           <p matLine>
             <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>
@@ -35,7 +36,6 @@
           </p>
 
         </mat-list-item>
-
 
         <mat-list-item>
           <mat-form-field appearance="outline">

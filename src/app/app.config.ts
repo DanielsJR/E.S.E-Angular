@@ -2,6 +2,7 @@
 //*******************AUTH*************************/
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 export const LOCAL_STORAGE_THEME_KEY = 'theme';
+export const LOCAL_STORAGE_QUIZ_WEB_SOCKET_KEY = 'quizWebSocket';
 
 export const SESSION_STORAGE_TOKEN_KEY = 'token';
 export const SESSION_STORAGE_THEME_KEY = 'theme';
@@ -43,6 +44,7 @@ export const URI_NAME = '/name';
 
 export const URI_SUBJECTS = '/subjects';
 export const URI_TEACHER = '/teacher';
+export const URI_COURSE = '/course';
 
 export const URI_GRADES = '/grades';
 export const URI_TITLE = '/title';

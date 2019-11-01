@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL } from '../../../../../app.config';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER } from '../../../../../app.config';
 import { User } from '../../../../../models/user';
 import { Subject } from '../../../../../models/subject';
 import { MatSort, MatPaginator, MatTableDataSource, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
@@ -13,6 +13,7 @@ import { SnackbarService } from '../../../../../services/snackbar.service';
 import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
 import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
 
 
 @Component({
@@ -23,7 +24,9 @@ import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/c
 export class SubjectGradesComponent implements OnInit {
 
   @Input() areaRole: string;
+  roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
 
   student: User;
   subject: Subject;
@@ -46,25 +49,18 @@ export class SubjectGradesComponent implements OnInit {
   isDark: boolean;
   isLoading: boolean = false;
 
-
   isThemeDarkSubscription: Subscription;
   isLoadingGetGradesSubscription: Subscription;
   gradesSubscription: Subscription;
   grade: Grade;
   colorGrade: string;
 
-
-
   constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
     private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) {
-
-  }
+    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
 
   ngOnInit() {
-
     this.dataSource = new MatTableDataSource<Grade[]>();
-
     this.dataSource.filterPredicate = (grade: Grade, filterValue: string) =>
       grade.grade.toString().toLowerCase().indexOf(filterValue) === 0
       || grade.evaluation.title.toLowerCase().indexOf(filterValue) === 0
@@ -74,9 +70,20 @@ export class SubjectGradesComponent implements OnInit {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     // snapshot doesn't re-use the component
-    this.studentName = this.route.snapshot.paramMap.get('username');
-    this.subjectId = this.route.snapshot.paramMap.get('id');
-    this.gradesSubscription = this.gradeStoreService.grades$
+    //this.studentName = this.route.snapshot.paramMap.get('username');
+    //this.subjectId = this.route.snapshot.paramMap.get('id');
+    //this.gradesSubscription = this.gradeStoreService.grades$
+
+    this.gradesSubscription = this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          this.studentName = params.get('username');
+          this.subjectId = params.get('id');
+
+          return this.gradeStoreService.grades$
+        }),
+
+      )
       .subscribe(grades => {
         if (grades) {
           let filteredGrades = grades.filter(g => (g.student.username.indexOf(this.studentName) === 0) && (g.evaluation.subject.id.indexOf(this.subjectId) === 0))
@@ -86,6 +93,8 @@ export class SubjectGradesComponent implements OnInit {
           if (grade) {
             this.subject = grade.evaluation.subject;
             this.student = grade.student;
+          } else {
+            this.subject = null;
           }
         }
       });

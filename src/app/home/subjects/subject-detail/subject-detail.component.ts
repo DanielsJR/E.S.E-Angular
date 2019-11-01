@@ -6,11 +6,13 @@ import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { Subject } from '../../../models/subject';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ROLE_MANAGER, ROLE_TEACHER } from '../../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../../app.config';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { EvaluationStoreService } from '../../../services/evaluation-store.service';
 import { Course } from '../../../models/course';
 import { GradeStoreService } from '../../../services/grade-store.service';
+import { UserLoggedService } from '../../../services/user-logged.service';
+import { User } from '../../../models/user';
 
 
 
@@ -25,6 +27,8 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   @Input() areaRole: string;
   roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
+
   subjectId: string;
   subject: Subject;
   isDark: boolean;
@@ -45,12 +49,12 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   enableToolbar: boolean;
   currentUrl: string;
   dinamicStyles = {};
-
+  userLogged: User;
 
   constructor(private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
-    private router: Router
+    private router: Router, private userLoggedService: UserLoggedService
   ) { }
 
   ngOnInit() {
@@ -68,8 +72,15 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
           this.gradeStoreService.clearStore();
           this.gradeStoreService.getGradesBySubject(this.subjectId);
 
+          return this.userLoggedService.userLogged$
+        }),
+
+        switchMap(user => {
+          this.userLogged = user;
           return this.subjectStoreService.loadOneSubject(this.subjectId);
-        }), switchMap(s => {
+        }),
+
+        switchMap(s => {
           this.subject = s;
           return this.subjectStoreService.subjects$;
         })
@@ -81,7 +92,13 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
         this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
         this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
 
-        if (this.areaRole === this.roleTeacher) {
+        if (this.areaRole === this.roleManager) {
+          this.toolbarMenus = [
+            { name: 'Curso', route: ['./course', this.subjectId] },
+            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
+          ];
+
+        } else if (this.areaRole === this.roleTeacher) {
           this.toolbarMenus = [
             { name: 'Curso', route: ['./course', this.subjectId] },
             { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
@@ -89,11 +106,18 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
             { name: 'Pasar Lista', route: ['./list', this.subjectId] },
             { name: 'Libro de Clases', route: ['./book', this.subjectId] }
           ];
-        } else {
+
+        } else if (this.areaRole === this.roleStudent) {
           this.toolbarMenus = [
-            { name: 'Curso', route: ['./course', this.subjectId] },
-            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
+            { name: 'Curso', route: ['./course', this.subjectId, { username: this.userLogged.username }] },
+            { name: 'Mis Notas', route: ['./grades', this.subjectId, { username: this.userLogged.username }] },
+            { name: 'Rendir Prueba', route: ['./quiz', this.subjectId, { username: this.userLogged.username }] },
+            { name: 'Mis Asistencias', route: ['./list', this.subjectId, { username: this.userLogged.username }] },
+            { name: 'Libro de Clases', route: ['./book', this.subjectId, { username: this.userLogged.username }] }
           ];
+
+        } else {
+          console.error('No areaRol!!');
         }
 
 
@@ -102,8 +126,6 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
-
-
 
 
     this.router.events.subscribe(event => {
@@ -120,9 +142,11 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
     if (url === `/home/manager/subjects/detail/${this.subjectId}/grades` || url === `/home/teacher/subjects/detail/${this.subjectId}/grades`) {
       this.enableToolbar = false;
       this.dinamicStyles = { 'top': '0' };
+      //console.log('enableToolbar: false');
     } else {
       this.enableToolbar = true;
       this.dinamicStyles = { 'top': '64px' };
+      //console.log('enableToolbar: true');
     }
   }
 
@@ -137,7 +161,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
     let currentUrl = this.router.url;
     let arrayUrl = currentUrl.split('/');
     let path = arrayUrl[arrayUrl.length - 2];
-    this.router.navigate(['../' + id + '/' + path, id], { relativeTo: this.route });
+    this.router.navigate(['../' + id + '/' + path, id, { username: this.userLogged.username }], { relativeTo: this.route });
 
   }
 

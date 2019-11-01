@@ -44,7 +44,7 @@ export class QuizStudentDetailComponent implements OnInit {
   buildForm() {
     this.quizStudentDetailForm = this.formBuilder.group({
       title: [this.grade.evaluation.quiz.title],
-      description: [this.grade.evaluation.quiz.description],
+      //description: [this.grade.evaluation.quiz.description],
       subjectName: [this.grade.evaluation.subject.name],
       courseName: [this.grade.evaluation.subject.course.name],
     });
@@ -76,7 +76,7 @@ export class QuizStudentDetailComponent implements OnInit {
   }
 
   get title() { return this.quizStudentDetailForm.get('title'); }
-  get description() { return this.quizStudentDetailForm.get('description'); }
+  //get description() { return this.quizStudentDetailForm.get('description'); }
   get subjectName() { return this.quizStudentDetailForm.get('subjectName'); }
   get quizLevel() { return this.quizStudentDetailForm.get('courseName'); }
 
@@ -144,4 +144,7 @@ export class QuizStudentDetailComponent implements OnInit {
     })
   }
 
+
+
 }
+

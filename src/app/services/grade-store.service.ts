@@ -32,29 +32,6 @@ export class GradeStoreService {
         return this.isLoadingGet.asObservable();
     }
 
-    loadAllGrades() {
-        if (this.gradesSource.getValue().length) {
-            console.log(`********GET-Grades-FROM-CACHE********`);
-            this.gradesSource.next(this.dataStore.grades);
-        } else {
-            console.log(`********GET-Grades-FROM-BACKEND********`);
-            this.isLoadingGet.next(true);
-            this.gradeBackendService.getGrades()
-                .pipe(finalize(() => this.isLoadingGet.next(false)))
-                .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.grades = data;
-                        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                    } else {
-                        data = null;
-                        console.error('Lista de Notas vacia');
-                    }
-                }, error => console.error('error retrieving Grades, ' + error.message)
-                );
-        }
-
-    }
-
     getGradesBySubject(id: string) {
         if (this.gradesSource.getValue().length) {
             console.log(`********GET-Grades-FROM-CACHE********`);
@@ -124,10 +101,27 @@ export class GradeStoreService {
                 ));
     }
 
-    clearStore(){
-        console.log("****************Clearing the store******************");
+    clearStore() {
+        console.log("****************Clearing gradeStore******************");
         this.dataStore.grades = [];
         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+    }
+
+
+    updateGradeInDataStore(grade: Grade): void {
+        let index = this.dataStore.grades.findIndex((g: Grade) => g.id === grade.id);
+
+        if ((index != -1)) {
+            console.log('found (it updates)');
+            this.dataStore.grades[index] = grade;
+            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+
+        } else {
+            console.log('not found (it addes)');
+            this.dataStore.grades.push(grade);
+            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+        }
+
     }
 
 

@@ -4,7 +4,7 @@ import { ROLE_TEACHER } from '../../../../app.config';
 
 @Component({
   template: `
-  <nx-subject-course [areaRole]="areaRole"></nx-subject-course>
+  <nx-subject-course [areaRole] ="areaRole"></nx-subject-course>
   `,
   styles:['']
 })

@@ -158,7 +158,7 @@
                         </mat-action-row>
                         <nx-simple-dialog #deleteDialog [obj]="ci" [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' "
                           [subtitle]=" 'Items Correspondientes' " [dialogTitle]=" 'Eliminar Item' "
-                          [cancelButton]=" 'Descartar' " [type]=" 'delete-classic' " [icon]=" 'delete' ">
+                          [cancelButton]=" 'Descartar' " [type]=" 'classic' " [icon]=" 'delete' ">
                         </nx-simple-dialog>
 
                       </div>
@@ -216,7 +216,7 @@
 
                         <br>
                         <mat-form-field appearance="fill" class="fullWith">
-                          <mat-select formControlName="answer">
+                          <mat-select formControlName="answer" required>
                             <mat-option *ngFor="let trueFalse of trueFalses" [value]="trueFalse.value">
                               {{ trueFalse.viewValue }}
                             </mat-option>
@@ -240,7 +240,7 @@
                         </mat-action-row>
                         <nx-simple-dialog #deleteTrueFalse [obj]="tf"
                           [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Verdadero o Falso' "
-                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'delete-classic' "
+                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
                           [icon]=" 'delete' ">
                         </nx-simple-dialog>
 
@@ -333,7 +333,7 @@
                         <br>
                         <mat-form-field appearance="fill" class="fullWith">
 
-                          <mat-select formControlName="answer">
+                          <mat-select formControlName="answer" required>
                             <mat-option [value]="ms.get('alternativeA').value">
                               A
                             </mat-option>
@@ -368,7 +368,7 @@
                         </mat-action-row>
                         <nx-simple-dialog #deleteMultipleSelectionItem [obj]="ms"
                           [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Seleción Múltiple' "
-                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'delete-classic' "
+                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
                           [icon]=" 'delete' ">
                         </nx-simple-dialog>
 
@@ -446,7 +446,7 @@
                         </mat-action-row>
                         <nx-simple-dialog #deleteIncompleteTextItem [obj]="it"
                           [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Texto Incompleto' "
-                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'delete-classic' "
+                          [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
                           [icon]=" 'delete' ">
                         </nx-simple-dialog>
 

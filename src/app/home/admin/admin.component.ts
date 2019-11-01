@@ -32,8 +32,6 @@ export class AdminComponent implements OnInit, OnDestroy {
             this.courseStoreService.loadAllCourses('2018');
 
             this.subjectStoreService.loadSubjects();
-
-            this.gradeStoreService.loadAllGrades();
         }
 
     }
