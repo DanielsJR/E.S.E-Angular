@@ -51,7 +51,7 @@ const routes: Routes = [
                             },
 
                             {
-                                path: 'list/:id',
+                                path: 'attendance/:id',
                                 component: StudentSubjectsComponent
                             },
 

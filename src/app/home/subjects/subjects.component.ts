@@ -78,7 +78,8 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           switchMap(value => {
             this.courseName = value;
             return this.courseStoreService.courses$;
-          }), switchMap(cs => {
+          }),
+          switchMap(cs => {
             this.course = cs.find(c => c.name.indexOf(this.courseName) === 0);
             return this.subjectStoreService.subjects$;
           })

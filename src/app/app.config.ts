@@ -52,6 +52,9 @@ export const URI_STUDENT = '/student';
 
 export const URI_EVALUATIONS = '/evaluations';
 
+export const URI_ATTENDANCES = '/attendances';
+export const URI_SUBJECT = '/subject';
+
 export const URI_QUIZES = '/quizes';
 export const URI_QUIZES_STUDENT = '/quizes-student';
 
@@ -121,9 +124,16 @@ export const GRADE_DELETE_SUCCEED = 'Calificación Eliminada';
 export const QUIZ_CREATE_ERROR = 'Error al Crear Prueba';
 export const QUIZ_CREATE_SUCCEED = 'Prueba Creada';
 export const QUIZ_UPDATE_ERROR = 'Error al Actualizar Prueba';
-export const QUIZ_UPDATE_SUCCEED = 'Prueban Actualizada';
+export const QUIZ_UPDATE_SUCCEED = 'Prueba Actualizada';
 export const QUIZ_DELETE_ERROR = 'Error al Eliminar Prueba';
 export const QUIZ_DELETE_SUCCEED = 'Prueba Eliminada';
+
+export const ATTENDANCE_CREATE_ERROR = 'Error al Crear Asistencia';
+export const ATTENDANCE_CREATE_SUCCEED = 'Asistencia Creada';
+export const ATTENDANCE_UPDATE_ERROR = 'Error al Actualizar Asistencia';
+export const ATTENDANCE_UPDATE_SUCCEED = 'Asistencia Actualizada';
+export const ATTENDANCE_DELETE_ERROR = 'Error al Eliminar Asistencia';
+export const ATTENDANCE_DELETE_SUCCEED = 'Asistencia Eliminada';
 
 
 export const CANCEL_MESSAGE = 'Operación Cancelada';
@@ -142,4 +152,7 @@ export const CRUD_TYPE_EDIT = 'edit';
 export const CRUD_TYPE_CREATE = 'create';
 export const CRUD_TYPE_DELETE = 'delete';
 
-
+//*******************BTN-ACTIONS*************************/
+export const BTN_ACTION_CREATE = 'Crear';
+export const BTN_ACTION_UPDATE = 'Actualizar';
+export const BTN_ACTION_DELETE = 'Borrar';

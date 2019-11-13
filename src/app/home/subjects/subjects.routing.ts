@@ -7,6 +7,8 @@ import { SubjectCourseComponent } from './subject-detail/subject-course/subject-
 import { SubjectQuizComponent } from './subject-detail/subject-quiz/subject-quiz.component';
 import { SubjectEvaluationsComponent } from './subject-detail/subject-evaluations/subject-evaluations.component';
 import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/subject-send-quiz.component';
+import { SubjectAttendanceComponent } from './subject-detail/subject-attendance/subject-attendance.component';
+import { SubjectBookComponent } from './subject-detail/subject-book/subject-book.component';
 
 
 const routes: Routes = [
@@ -37,13 +39,13 @@ const routes: Routes = [
             },
 
             {
-                path: 'list/:id',
-                component: SubjectQuizComponent
+                path: 'attendance/:id',
+                component: SubjectAttendanceComponent
             },
 
             {
                 path: 'book/:id',
-                component: SubjectQuizComponent
+                component: SubjectBookComponent
             },
 
             {

@@ -50,11 +50,14 @@ export class ThemePickerComponent implements OnInit {
   }
 
   get themeName(): string {
-    return this.theme().name;
+    //return this.theme().name;
+    if (this.theme()) return this.theme().name;
+    return undefined;
   }
 
   get isDark(): boolean {
-    return this.theme().isDark;
+    if (this.theme()) return this.theme().isDark;
+    return false;
   }
 
   setThemeArray(): void {
@@ -62,7 +65,7 @@ export class ThemePickerComponent implements OnInit {
   }
 
   installTheme(theme: Theme): void {
-    let oldThemeName = (this.theme()) ? this.themeName : undefined;
+    let oldThemeName = this.themeName;//(this.theme()) ? this.themeName : undefined;
     this.sessionStorage.setTheme(theme);
     if (oldThemeName) this.overlayContainer.getContainerElement().classList.remove(oldThemeName);
     this.overlayContainer.getContainerElement().classList.add(theme.name);

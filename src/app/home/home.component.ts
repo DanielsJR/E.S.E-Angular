@@ -11,6 +11,7 @@ import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELC
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
+import { QuizNotificationService } from '../services/quiz-notification.service';
 
 
 @Component({
@@ -66,7 +67,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private loginService: LoginService, private userLoggedService: UserLoggedService,
     private router: Router, private route: ActivatedRoute,
     private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
-    private isLoadingService: IsLoadingService,
+    private isLoadingService: IsLoadingService, private quizNotificationService: QuizNotificationService,
   ) { }
 
   ngOnInit() {
@@ -123,6 +124,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    this.quizNotificationService.setQuizSent(true);
     this.loginService.logout();
     this.router.navigate([URI_WELCOME]).then(() => {
       window.location.reload(true);//cache clean

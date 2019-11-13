@@ -15,6 +15,8 @@ import { QuizModule } from "../quiz/quiz.module";
 import { SubjectEvaluationsCourseComponent } from './subject-detail/subject-evaluations/subject-evaluations-course/subject-evaluations-course.component';
 import { SubjectEvaluationsCrudDialogRefComponent } from "./subject-detail/subject-evaluations/subject-evaluations-crud-dialog-ref/subject-evaluations-crud-dialog-ref.component";
 import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/subject-send-quiz.component';
+import { SubjectAttendanceComponent } from './subject-detail/subject-attendance/subject-attendance.component';
+import { SubjectBookComponent } from './subject-detail/subject-book/subject-book.component';
 
 
 
@@ -45,6 +47,8 @@ import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/sub
     SubjectGradesComponent,
     SubjectsGradesCrudDialogRefComponent,
     SubjectSendQuizComponent,
+    SubjectAttendanceComponent,
+    SubjectBookComponent,
 
 
 
@@ -69,6 +73,8 @@ import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/sub
     SubjectEvaluationsComponent,
     SubjectQuizComponent,
     SubjectSendQuizComponent,
+    SubjectAttendanceComponent,
+    SubjectBookComponent,
 
     SubjectGradesComponent,
 

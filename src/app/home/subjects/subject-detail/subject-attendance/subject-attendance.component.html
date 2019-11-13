@@ -1,0 +1,148 @@
+<div class="container">
+  <mat-card class="mat-elevation-z8">
+
+    <mat-toolbar color="primary">
+
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar Estudiante
+        </mat-placeholder>
+      </mat-form-field>
+
+      <span class="spacer-r"></span>
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">
+          <mat-icon svgIcon="school"></mat-icon>
+          &nbsp; {{subject?.name}} {{subject?.course?.name}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-toolbar>
+
+    <mat-divider></mat-divider>
+
+    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <mat-toolbar class="toolbar2">
+
+      <mat-form-field appearance="standard">
+        <input matInput [matDatepicker]="picker" [(ngModel)]="date" placeholder="1/11/1990"
+          (dateChange)="loadAttendanceByDate($event.value)">
+        <mat-label>
+          <i class="mdi mdi-gesture-tap app-input-icon">&nbsp;</i>Seleccione una Fecha.
+        </mat-label>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+    </mat-toolbar>
+
+    <mat-divider></mat-divider>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef style="flex-grow: .5">
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+          <!--&nbsp; Todos-->
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row" style="flex-grow: .5">
+
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </mat-header-cell>
+        <mat-cell *matCellDef="let student" style="flex-grow: 2">
+
+          <mat-list>
+            <mat-list-item>
+              <img matListAvatar
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
+                alt="{{student?.username}}"
+                (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+              <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"
+                [onlyRead]="crudUserOnlyRead"></nx-card-user-dialog>
+
+              <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
+              <p matLine>
+                <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
+              </p>
+            </mat-list-item>
+          </mat-list>
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="crud">
+        <mat-header-cell *matHeaderCellDef class="crud">
+
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let student" class="crud">
+
+          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
+            [onlyRead]="crudUserOnlyRead">
+          </nx-crud-user-dialog>
+
+          <button mat-icon-button color="accent">
+            <mat-icon svgIcon="dots-vertical"></mat-icon>
+          </button>
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      </mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
+
+    <mat-divider></mat-divider>
+
+    <mat-toolbar>
+      <span class="spacer-r"></span>
+      <button *ngIf="btnAction" type="button" mat-stroked-button [color]=" isCreating ? 'primary' : 'accent' "
+        (click)="updateAttendanceDialog(updateDialog.openSimpleDialog())"
+        cdkFocusRegionstart style="margin-right: 5px;">
+        <!--<mat-icon svgIcon="content-save"></mat-icon>-->{{btnAction}}
+      </button>
+      <nx-simple-dialog #updateDialog
+       [dialogTitle]=" (isCreating) ? 'Crear Asistencia' : 'Modificar Asistencia' "
+       [icon]=" 'pencil' "
+       [title]="date"
+       [subtitle]="subject?.name +'/'+ subject?.course?.name"
+       [message]=" (isCreating) ? '¿Crear Asistencia?' : '¿Modificar Asistencia?' "
+       [cancelButton]=" 'Cancelar' "
+       [type]=" 'card' ">
+    </nx-simple-dialog>
+
+      <button *ngIf="btnAction && !isCreating" type="button" mat-stroked-button [color]=" 'warn' "
+       (click)="deleteAttendanceDialog(deleteDialog.openSimpleDialog())">
+        <!--<mat-icon svgIcon="content-save"></mat-icon>-->Borrar
+      </button>
+      <nx-simple-dialog #deleteDialog
+        [dialogTitle]=" 'Eliminar Asistencia' "
+        [icon]=" 'delete' "
+        [title]="date"
+        [subtitle]="subject?.name +'/'+ subject?.course?.name"
+        [message]=" '¿Eliminar Asistencia?' "
+        [cancelButton]=" 'Cancelar' "
+        [type]=" 'card' ">
+      </nx-simple-dialog>
+    </mat-toolbar>
+
+  </mat-card>
+</div>

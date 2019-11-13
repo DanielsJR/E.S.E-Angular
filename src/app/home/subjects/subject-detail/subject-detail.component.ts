@@ -13,6 +13,7 @@ import { Course } from '../../../models/course';
 import { GradeStoreService } from '../../../services/grade-store.service';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { User } from '../../../models/user';
+import { AttendanceStoreService } from '../../../services/attendance-store.service';
 
 
 
@@ -54,7 +55,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
-    private router: Router, private userLoggedService: UserLoggedService
+    private router: Router, private userLoggedService: UserLoggedService, private attendanceStoreService: AttendanceStoreService,
   ) { }
 
   ngOnInit() {
@@ -71,6 +72,9 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
 
           this.gradeStoreService.clearStore();
           this.gradeStoreService.getGradesBySubject(this.subjectId);
+
+          this.attendanceStoreService.clearStore();
+          this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
 
           return this.userLoggedService.userLogged$
         }),
@@ -96,6 +100,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
           this.toolbarMenus = [
             { name: 'Curso', route: ['./course', this.subjectId] },
             { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
+            { name: 'Asistencia', route: ['./attendance', this.subjectId] },
           ];
 
         } else if (this.areaRole === this.roleTeacher) {
@@ -103,7 +108,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
             { name: 'Curso', route: ['./course', this.subjectId] },
             { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
             { name: 'Tomar Prueba', route: ['./quiz', this.subjectId] },
-            { name: 'Pasar Lista', route: ['./list', this.subjectId] },
+            { name: 'Asistencia', route: ['./attendance', this.subjectId] },
             { name: 'Libro de Clases', route: ['./book', this.subjectId] }
           ];
 
@@ -112,7 +117,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
             { name: 'Curso', route: ['./course', this.subjectId, { username: this.userLogged.username }] },
             { name: 'Mis Notas', route: ['./grades', this.subjectId, { username: this.userLogged.username }] },
             { name: 'Rendir Prueba', route: ['./quiz', this.subjectId, { username: this.userLogged.username }] },
-            { name: 'Mis Asistencias', route: ['./list', this.subjectId, { username: this.userLogged.username }] },
+            { name: 'Mis Asistencias', route: ['./attendance', this.subjectId, { username: this.userLogged.username }] },
             { name: 'Libro de Clases', route: ['./book', this.subjectId, { username: this.userLogged.username }] }
           ];
 

@@ -58,3 +58,7 @@ mat-list-item p {
 .role-style {
     color: darkgray;
 }
+
+.active {
+    background: hsla(0, 0%, 0%, 0.1) !important;
+}

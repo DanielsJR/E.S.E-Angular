@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SESSION_STORAGE_THEME_KEY } from '../app.config';
-import { Subject, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { Theme } from '../shared/theme-picker/theme';
 
 
@@ -15,7 +15,7 @@ export class SessionStorageService {
 
 
     isStored(key: string): boolean {
-        return (this.getItem(key) !== null);
+        return (this.getItem(key));
     }
 
     getItem(key: string): any {
@@ -45,7 +45,7 @@ export class SessionStorageService {
 
     getTheme(): Theme {
         return (this.isStored(SESSION_STORAGE_THEME_KEY)) ? JSON.parse(this.getItem(SESSION_STORAGE_THEME_KEY)) : null;
-    }
+   }
 
     setTheme(theme: Theme): void {
         sessionStorage.setItem(SESSION_STORAGE_THEME_KEY, JSON.stringify(theme));

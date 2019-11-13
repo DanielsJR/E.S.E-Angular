@@ -17,7 +17,7 @@ export class LocalStorageService {
     constructor() { }
 
     isStored(key: string): boolean {
-        return (this.getItem(key) !== null);
+        return (this.getItem(key));
     }
 
     getItem(key: string): any {

@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EvaluationStoreService } from '../../../../../services/evaluation-store.service';
 import { Evaluation } from '../../../../../models/evaluation';
-import { EVALUATION_TYPES, EvaluationType } from '../../../../../models/evaluation-types';
+import { EVALUATION_TYPES } from '../../../../../models/evaluation-types';
 import { Quiz } from '../../../../../models/quiz';
 import { UserLoggedService } from '../../../../../services/user-logged.service';
 import { QuizBackendService } from '../../../../../services/quiz-backend.service';

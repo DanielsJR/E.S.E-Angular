@@ -56,9 +56,15 @@ export class QuizNotificationService {
             .subscribe((message: Message) => {
                 this.gradeToStudent = JSON.parse(message.body);
                 this.gradeStoreService.updateGradeInDataStore(this.gradeToStudent);
-                this.quizSentSource.next(true);
+                this.setQuizSent(true);
             }, error => console.error('error retrieving notification, ' + error.message)
             );
+    }
+
+    setQuizSent(value:boolean) {
+        console.log("****************setQuizSent******************");
+        this.quizSentSource.next(value);
+
     }
 
     clearNotification() {

@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { TeacherGuard } from '../../guards/teacher-guard.service';
 import { TeacherComponent } from './teacher.component';
 import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-detail.component';
-import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-grades.component';
 import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
 import { TeacherQuizesDetailComponent } from './teacher-quizes/teacher-quizes-detail/teacher-quizes-detail.component';
 import { TeacherQuizesCreateComponent } from './teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
@@ -14,6 +13,9 @@ import { TeacherSubjectQuizComponent } from './teacher-subjects/teacher-subject-
 import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
 import { TeacherSubjectSendQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-send-quiz.component';
+import { TeacherSubjectGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-grades.component';
+import { TeacherSubjectAttendanceComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-attendance.component';
+import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-book.component';
 
 
 const routes: Routes = [
@@ -55,19 +57,19 @@ const routes: Routes = [
                             },
 
                             {
-                                path: 'list/:id',
-                                component: TeacherSubjectQuizComponent
+                                path: 'attendance/:id',
+                                component: TeacherSubjectAttendanceComponent
                             },
 
                             {
                                 path: 'book/:id',
-                                component: TeacherSubjectQuizComponent
+                                component: TeacherSubjectBookComponent
                             },
 
 
                             {
                                 path: 'grades/:id',
-                                component: TeacherSubjectsGradesComponent
+                                component: TeacherSubjectGradesComponent
                             },
 
 

@@ -87,6 +87,11 @@ const adminRoutes: Routes = [
                             },
 
                             {
+                                path: 'attendance/:id',
+                                component: ManagerSubjectQuizComponent
+                            },
+
+                            {
                                 path: 'grades/:id',
                                 component: ManagerSubjectsGradesComponent
                             },

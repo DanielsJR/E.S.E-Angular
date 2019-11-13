@@ -2,7 +2,7 @@
 
     <mat-toolbar color="accent" class="toolbarMenu" *ngIf="enableToolbar">
 
-        <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route">{{m.name}}</button>
+        <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route" routerLinkActive="active">{{m.name}}</button>
 
         <span class="spacer-r"></span>
 

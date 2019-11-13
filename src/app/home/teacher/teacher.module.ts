@@ -4,7 +4,6 @@ import { TeacherHomeComponent } from './teacher-home/teacher-home.component';
 import { SharedModule } from '../../shared/shared.module';
 import { TeacherComponent } from './teacher.component';
 import { TeacherSubjectsDetailComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-detail.component';
-import { TeacherSubjectsGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subjects-grades.component';
 import { UsersModule } from '../users/users.module';
 import { SubjectsModule } from '../subjects/subjects.module';
 import { TeacherQuizesComponent } from './teacher-quizes/teacher-quizes.component';
@@ -17,6 +16,9 @@ import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-s
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
 import { TeacherSubjectSendQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-send-quiz.component';
+import { TeacherSubjectAttendanceComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-attendance.component';
+import { TeacherSubjectGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-grades.component';
+import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-book.component';
 
 
 @NgModule({
@@ -35,19 +37,19 @@ import { TeacherSubjectSendQuizComponent } from './teacher-subjects/teacher-subj
     
     TeacherSubjectsComponent,
     TeacherSubjectsDetailComponent,
-    TeacherSubjectsGradesComponent,
+    TeacherSubjectGradesComponent,
     TeacherSubjectCourseComponent,
     TeacherSubjectQuizComponent,
     TeacherSubjectSendQuizComponent,
     TeacherSubjectEvaluationsComponent,
+    TeacherSubjectAttendanceComponent,
 
     TeacherQuizesComponent,
     TeacherQuizesDetailComponent,
     TeacherQuizesCreateComponent,
     TeacherQuizesSendQuizComponent,
+    TeacherSubjectBookComponent,
     
-
-
   ],
 
   providers: [
