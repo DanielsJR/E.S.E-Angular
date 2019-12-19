@@ -11,9 +11,9 @@ import { ManagerCoursesCreateComponent } from './manager-courses/manager-courses
 import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subject-detail/manager-subjects-grades.component';
 import { ManagerSubjectsDetailComponent } from './manager-subjects/manager-subject-detail/manager-subjects-detail.component';
 import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subject-detail/manager-subject-course.component';
-import { ManagerSubjectQuizComponent } from './manager-subjects/manager-subject-detail/manager-subject-quiz.component';
 import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
+import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-subject-detail/manager-subject-attendance.component';
 
 
 
@@ -81,14 +81,10 @@ const adminRoutes: Routes = [
                                 component: ManagerSubjectEvaluationsComponent
                             },
 
-                            {
-                                path: 'quiz/:id',
-                                component: ManagerSubjectQuizComponent
-                            },
 
                             {
                                 path: 'attendance/:id',
-                                component: ManagerSubjectQuizComponent
+                                component: ManagerSubjectAttendanceComponent
                             },
 
                             {

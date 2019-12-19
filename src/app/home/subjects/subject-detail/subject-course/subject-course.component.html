@@ -23,7 +23,7 @@
 
     <div *ngIf="!isLoading" style="height: 5px;" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-    
+
     <mat-toolbar class="toolbar2" *ngIf="areaRole !== roleTeacher">
       <mat-list>
         <mat-list-item>
@@ -60,20 +60,20 @@
 
       <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </mat-header-cell>
-        <mat-cell *matCellDef="let student" style="flex-grow: 2">
+        <mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
 
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
-                alt="{{student?.username}}"
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ studentGrade?.student?.avatar.type+';base64,' + studentGrade?.student?.avatar.data)"
+                alt="{{studentGrade?.student?.username}}"
                 (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
-              <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"
+              <nx-card-user-dialog #cardStudentDialog [user]="studentGrade?.student" [areaRole]="areaRole"
                 [onlyRead]="crudUserOnlyRead"></nx-card-user-dialog>
 
-              <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
+              <h3 matLine *ngIf="studentGrade?.student"> {{studentGrade?.student | shortNameLastname}} </h3>
               <p matLine>
-                <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
+                <span class="role-style">{{studentGrade?.student?.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
@@ -81,23 +81,40 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud">
 
+
+      <ng-container matColumnDef="grades">
+        <mat-header-cell *matHeaderCellDef style="flex-grow: 2">
+          Notas Parciales
         </mat-header-cell>
 
-        <mat-cell *matCellDef="let student" class="crud">
+        <mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
+          <a mat-button color="none" *ngFor="let g of studentGrade?.grades" [ngClass]="dinamicColorGrade(g)"
+            (click)="openDialogDetail(g);$event.stopPropagation()">
+            {{g.grade | number : '1.1-1'}}  
+          </a>
+        </mat-cell>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="crud">
+        <mat-header-cell *matHeaderCellDef class="crud" style="flex-grow: .5">
+           Acciones
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let studentGrade" class="crud" style="flex-grow: .5">
 
           <!-- <button mat-icon-button color="primary"
           (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
           <mat-icon svgIcon="eye"></mat-icon>
         </button> -->
-          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
-            [onlyRead]="crudUserOnlyRead">
+          <nx-crud-user-dialog #crudStudentDialog [user]="studentGrade.student" [uriRole]="uriStudents"
+            [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
           </nx-crud-user-dialog>
 
           <button mat-icon-button color="accent"
-            [routerLink]="['../../grades', subject.id, { username:student.username } ]">
+            [routerLink]="['../../grades', subject.id, { username:studentGrade.student.username } ]">
             <mat-icon svgIcon="folder-star"></mat-icon>
           </button>
 
@@ -105,9 +122,8 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"
-        [routerLink]="['../../grades', subject.id, { username:row.username } ]"
-        [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      <!--[routerLink]="['../../grades', subject.id, { username:row.student.username } ]"-->
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
 
       </mat-row>
 

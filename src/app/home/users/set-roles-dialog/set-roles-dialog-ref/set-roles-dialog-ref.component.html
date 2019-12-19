@@ -3,7 +3,7 @@
   <mat-toolbar color="primary">
     <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
     <span class="spacer-r"></span>
-    <mat-icon svgIcon="security-account"></mat-icon>
+    <mat-icon svgIcon="shield-account"></mat-icon>
     <span>&nbsp;&nbsp;</span>
     <h1 mat-dialog-title>Asignar Privilégios</h1>
   </mat-toolbar>
@@ -16,7 +16,7 @@
     <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
 
       <mat-label>
-        <i class="mdi mdi-security-account app-input-icon"></i>
+        <i class="mdi mdi-shield-account app-input-icon"></i>
         Asignar a
         <strong *ngIf="user">{{user | shortName}}&nbsp;
         </strong>{{roles.length | i18nPlural: rolesMapping}}

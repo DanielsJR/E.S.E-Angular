@@ -26,6 +26,7 @@ export class CorrespondItem {
     constructor(
         public item: string,
         public correspond: string,
+        public correct?: boolean,
     ) { }
 }
 
@@ -33,6 +34,7 @@ export class TrueFalseItem {
     constructor(
         public sentence: string,
         public answer: boolean,
+        public correct?: boolean,
     ) { }
 }
 
@@ -44,6 +46,7 @@ export class MultipleSeletionItem {
         public alternativeC:string,
         public alternativeD:string,
         public answer: string,
+        public correct?: boolean,
     ) { }
 }
 
@@ -51,6 +54,7 @@ export class IncompleteTextItem {
     constructor(
         public sentence: string,
         public answer: string,
+        public correct?: boolean,
     ) { }
 }
 

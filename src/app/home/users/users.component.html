@@ -46,18 +46,18 @@
 
       <ng-container matColumnDef="crud">
         <mat-header-cell *matHeaderCellDef class="crud">
-          <button mat-mini-fab *ngIf="!isAdminEditingTeacher(userLoggedRoles)"
+
+          <button mat-mini-fab *ngIf="!isAdminEditingTeacher()"
             (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{userRole}}" style="margin-bottom:5px">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
         </mat-header-cell>
-        <mat-cell *matCellDef="let user" class="crud">
 
+        <mat-cell *matCellDef="let user" class="crud">
 
           <button mat-icon-button color="primary" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
-
 
           <button mat-icon-button color="accent" (click)="crudUserDialog.openDialogEdit(); $event.stopPropagation()"
             [style.visibility]="crudVisibility(user)">
@@ -69,17 +69,18 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
+          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"
+           [onlyRead]="isAdminEditingTeacher()">
+          </nx-crud-user-dialog>
 
-          <button *ngIf="isAdmin(userLoggedRoles)" mat-icon-button color="warn"
+          <button *ngIf="isAdmin()" mat-icon-button color="warn"
             (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()">
-            <mat-icon svgIcon="security-account"></mat-icon>
+            <mat-icon svgIcon="shield-account"></mat-icon>
           </button>
 
           <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
 
-          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"
-            [onlyRead]="isAdminEditingTeacher(userLoggedRoles)">
-          </nx-crud-user-dialog>
+
 
         </mat-cell>
       </ng-container>
@@ -89,7 +90,7 @@
         (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
 
         <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"
-          [onlyRead]="isAdminEditingTeacher(userLoggedRoles)">
+          [onlyRead]="isAdminEditingTeacher()">
         </nx-card-user-dialog>
 
       </mat-row>

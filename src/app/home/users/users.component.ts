@@ -10,6 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { shortNameSecondName } from '../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SnackbarService } from '../../services/snackbar.service';
+import { UserLoggedService } from '../../services/user-logged.service';
 
 
 
@@ -23,7 +24,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userRole: string;
   usersRole: string;
-  userLoggedRoles: string[] = [];
   @Input() areaRole;
 
   // mat table
@@ -47,12 +47,11 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingGetSubscription: Subscription;
 
   constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+    public sanitizer: DomSanitizer, private userLoggedService: UserLoggedService,
   ) { }
 
   ngOnInit() {
-    this.userLoggedRoles.push(this.areaRole.toLocaleUpperCase());
-    console.log("AreaRole: " + this.areaRole);
+    console.log("AreaRole: " + this.areaRole + "  userLoggedRoles: " + this.userLoggedService.getRoles());
 
     this.dataSource = new MatTableDataSource<User[]>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
@@ -126,20 +125,17 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     return userLoggedRoles.every(role => userDbRoles.includes(role));
   }
 
-  isAdminEditingTeacher(userLoggedRoles: string[]) {
-    if (userLoggedRoles.includes(ROLE_ADMIN) && this.uriRole === URI_TEACHERS)
-      return true;
+  isAdminEditingTeacher() {
+    if (this.isAdmin() && this.uriRole === URI_TEACHERS) return true;
     return false;
-
   }
 
-  isAdmin(userLoggedRoles: string[]) {
-    return userLoggedRoles.includes(ROLE_ADMIN);
+  isAdmin() {
+    return this.userLoggedService.isAdmin();
   }
 
-
-  crudVisibility(user: User){
-    return (!this.checkEqualOrGreaterPrivileges(this.userLoggedRoles, user.roles) && !this.isAdminEditingTeacher(this.userLoggedRoles)) ? 'visible' : 'hidden';
+  crudVisibility(user: User) {
+    return (!this.checkEqualOrGreaterPrivileges(this.userLoggedService.getRoles(), user.roles) && !this.isAdminEditingTeacher()) ? 'visible' : 'hidden';
   }
 
 

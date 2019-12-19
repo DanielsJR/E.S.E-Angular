@@ -69,6 +69,7 @@
         <form [formGroup]="correspondItemsForm">
           <div formArrayName="correspondItems">
             <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true">
+
               <mat-toolbar color="accent">
                 <mat-icon svgIcon="message-outline"></mat-icon>
                 <span>&nbsp;&nbsp;</span>
@@ -145,6 +146,7 @@
                 </button>
 
               </mat-toolbar>
+              
               <mat-expansion-panel *ngFor="let tf of trueFalseItems.controls ; let i=index;"
                 [expanded]="tf.get('expanded').value" (opened)="panelOpenTrueFalseItems = true"
                 (closed)="panelOpenTrueFalseItems = false">

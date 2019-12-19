@@ -7,7 +7,6 @@ import { SubjectsRoutingModule } from "./subjects.routing";
 import { SubjectsGradesCrudDialogRefComponent } from "./subject-detail/subject-course/subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component";
 import { SharedModule } from "../../shared/shared.module";
 import { UsersModule } from "../users/users.module";
-import { SubjectQuizComponent } from './subject-detail/subject-quiz/subject-quiz.component';
 import { SubjectCourseComponent } from './subject-detail/subject-course/subject-course.component';
 import { SubjectEvaluationsComponent } from './subject-detail/subject-evaluations/subject-evaluations.component';
 import { QuizStudentModule } from "../quiz-student/quizStudent.module";
@@ -17,6 +16,7 @@ import { SubjectEvaluationsCrudDialogRefComponent } from "./subject-detail/subje
 import { SubjectSendQuizComponent } from './subject-detail/subject-send-quiz/subject-send-quiz.component';
 import { SubjectAttendanceComponent } from './subject-detail/subject-attendance/subject-attendance.component';
 import { SubjectBookComponent } from './subject-detail/subject-book/subject-book.component';
+import { SubjectBookDetailComponent } from './subject-detail/subject-book/subject-book-detail/subject-book-detail.component';
 
 
 
@@ -42,14 +42,12 @@ import { SubjectBookComponent } from './subject-detail/subject-book/subject-book
     SubjectEvaluationsCrudDialogRefComponent,
     SubjectEvaluationsCourseComponent,
 
-    SubjectQuizComponent,
-
     SubjectGradesComponent,
     SubjectsGradesCrudDialogRefComponent,
     SubjectSendQuizComponent,
     SubjectAttendanceComponent,
     SubjectBookComponent,
-
+    SubjectBookDetailComponent,
 
 
   ],
@@ -71,10 +69,10 @@ import { SubjectBookComponent } from './subject-detail/subject-book/subject-book
 
     SubjectCourseComponent,
     SubjectEvaluationsComponent,
-    SubjectQuizComponent,
     SubjectSendQuizComponent,
     SubjectAttendanceComponent,
     SubjectBookComponent,
+    SubjectBookDetailComponent,
 
     SubjectGradesComponent,
 

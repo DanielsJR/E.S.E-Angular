@@ -144,7 +144,8 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   }
   setEnableToolbar() {
     let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
-    if (url === `/home/manager/subjects/detail/${this.subjectId}/grades` || url === `/home/teacher/subjects/detail/${this.subjectId}/grades`) {
+    if ((url === `/home/manager/subjects/detail/${this.subjectId}/grades` || url === `/home/teacher/subjects/detail/${this.subjectId}/grades`)
+      || (url === `/home/manager/subjects/detail/${this.subjectId}/book-detail` || url === `/home/teacher/subjects/detail/${this.subjectId}/book-detail`)) {
       this.enableToolbar = false;
       this.dinamicStyles = { 'top': '0' };
       //console.log('enableToolbar: false');

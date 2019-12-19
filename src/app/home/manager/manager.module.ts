@@ -14,11 +14,10 @@ import { ManagerSubjectsGradesComponent } from './manager-subjects/manager-subje
 import { UsersModule } from '../users/users.module';
 import { SubjectsModule } from '../subjects/subjects.module';
 import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subject-detail/manager-subject-course.component';
-import { ManagerSubjectQuizComponent } from './manager-subjects/manager-subject-detail/manager-subject-quiz.component';
 import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
-import { QuizModule } from '../quiz/quiz.module';
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
+import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-subject-detail/manager-subject-attendance.component';
 
 
 @NgModule({
@@ -46,8 +45,8 @@ import { QuizStudentModule } from '../quiz-student/quizStudent.module';
         
     ManagerSubjectsDetailComponent,
     ManagerSubjectCourseComponent,
-    ManagerSubjectQuizComponent,
     ManagerSubjectEvaluationsComponent,
+    ManagerSubjectAttendanceComponent,
     ManagerSubjectsGradesComponent,
 
     

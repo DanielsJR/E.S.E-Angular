@@ -11,7 +11,6 @@ import { TeacherQuizesDetailComponent } from './teacher-quizes/teacher-quizes-de
 import { TeacherQuizesCreateComponent } from './teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
 import { TeacherQuizesSendQuizComponent } from './teacher-quizes/teacher-quizes-send-quiz/teacher-quizes-send-quiz.component';
 import { TeacherSubjectCourseComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-course.component';
-import { TeacherSubjectQuizComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-quiz.component';
 import { TeacherSubjectEvaluationsComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
 import { TeacherSubjectsComponent } from './teacher-subjects/teacher-subjects.component';
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
@@ -39,7 +38,6 @@ import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-
     TeacherSubjectsDetailComponent,
     TeacherSubjectGradesComponent,
     TeacherSubjectCourseComponent,
-    TeacherSubjectQuizComponent,
     TeacherSubjectSendQuizComponent,
     TeacherSubjectEvaluationsComponent,
     TeacherSubjectAttendanceComponent,

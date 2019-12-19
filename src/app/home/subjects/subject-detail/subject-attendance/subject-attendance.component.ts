@@ -261,8 +261,6 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
           this.snackbarService.openSnackBar(ATTENDANCE_DELETE_ERROR, RESULT_ERROR);
         }
       });
-
-
   }
 
   deleteAttendanceDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {

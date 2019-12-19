@@ -109,3 +109,29 @@ mat-action-row button {
 mat-form-field textarea {
     resize: none;
 }
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    box-shadow: none;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+mat-expansion-panel mat-form-field textarea {
+    font-family: monospace;
+
+}
+
+mat-expansion-panel mat-form-field input {
+    font-family: monospace;
+
+}
+

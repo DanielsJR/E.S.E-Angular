@@ -577,12 +577,12 @@
                         <mat-form-field appearance="outline" floatLabel="always"
                             *ngIf="isAdmin && (usersRole!='student')">
                             <mat-label>
-                                <i class="mdi mdi-security app-input-icon">&nbsp;</i>Privilegios de Usuario
+                                <i class="mdi mdi-shield-account app-input-icon">&nbsp;</i>Privilegios de Usuario
                             </mat-label>
                             <input matInput readonly hidden>
                             <button type="button" mat-raised-button color="warn" class="buttonResetPass"
                                 (click)="editRolesSubscription(setRoles.openDialogSetRoles())">
-                                <mat-icon svgIcon="security-account"></mat-icon>&nbsp; Añadir o Remover Privilegios
+                                <mat-icon svgIcon="shield-account"></mat-icon>&nbsp; Añadir o Remover Privilegios
                             </button>
                             <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
                         </mat-form-field>
