@@ -90,7 +90,7 @@
 
   </mat-card>
 
-  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail">
+  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail" (closeQuizDetail)="setEvaluationQuizDetail($event)">
   </nx-quiz-detail>
 
 </div>

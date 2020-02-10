@@ -1,17 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Grade } from '../../../models/grade';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { QuizStudent } from '../../../models/quiz-student';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TRUE_FALSES, Quiz } from '../../../models/quiz';
 import { Evaluation } from '../../../models/evaluation';
+import { MatAccordion } from '@angular/material';
 
 @Component({
   selector: 'nx-quiz-detail',
   templateUrl: './quiz-detail.component.html',
   styleUrls: ['./quiz-detail.component.css']
 })
-export class QuizDetailComponent implements OnInit {
+export class QuizDetailComponent implements OnInit, AfterViewInit {
+
 
   quizDetailForm: FormGroup;
 
@@ -25,7 +27,12 @@ export class QuizDetailComponent implements OnInit {
   panelOpenMultipleSelectionItems = false;
   panelOpenIncompleteTextItems = false;
 
+  accordionDisplayMode = 'flat';
+
   private _evaluation: Evaluation;
+
+
+  @ViewChild('trueFalseItemsAccordion') trueFalseItemsAccordion: MatAccordion;
 
   @Input() set evaluation(evaluation: Evaluation) {
     if (evaluation.quiz) this._evaluation = evaluation;
@@ -36,11 +43,20 @@ export class QuizDetailComponent implements OnInit {
     return this._evaluation;
   }
 
+  @Output()
+  closeQuizDetail = new EventEmitter<any>();
+
   constructor(private formBuilder: FormBuilder, public sanitizer: DomSanitizer, ) { }
 
   ngOnInit() {
     this.buildForm();
+
   }
+
+  ngAfterViewInit(): void {
+    //this.trueFalseItemsAccordion.closeAll();
+  }
+
 
   buildForm() {
     this.quizDetailForm = this.formBuilder.group({
@@ -72,7 +88,8 @@ export class QuizDetailComponent implements OnInit {
     this.setMultipleSelectionItems(this.evaluation.quiz);
     this.setIncompleteTextItems(this.evaluation.quiz);
 
-    this.panelsClosed();
+    //this.openClosePanels(false);
+
 
   }
 
@@ -87,12 +104,11 @@ export class QuizDetailComponent implements OnInit {
   get incompleteTextItems() { return this.detailIncompleteTextItemsForm.get('incompleteTextItems'); }
 
 
-
-  panelsClosed() {
-    this.panelOpenCorrespondItems = false;
-    this.panelOpenTrueFalseItems = false;
-    this.panelOpenMultipleSelectionItems = false;
-    this.panelOpenIncompleteTextItems = false;
+  openClosePanels(value: boolean) {
+    this.panelOpenCorrespondItems = value;
+    this.panelOpenTrueFalseItems = value;
+    this.panelOpenMultipleSelectionItems = value;
+    this.panelOpenIncompleteTextItems = value;
   }
 
   setCorrespondItems(quiz: Quiz) {
@@ -101,7 +117,7 @@ export class QuizDetailComponent implements OnInit {
       control.push(this.formBuilder.group({
         item: [ci.item],
         correspond: [ci.correspond],
-        open: [false],
+        //open: [true],
       }))
     })
   }
@@ -112,7 +128,7 @@ export class QuizDetailComponent implements OnInit {
       control.push(this.formBuilder.group({
         sentence: [tf.sentence],
         answer: [(tf.answer === true) ? 'Verdadero' : 'Falso'],
-        open: [false],
+        //open: [true],
       }))
     })
   }
@@ -127,7 +143,7 @@ export class QuizDetailComponent implements OnInit {
         alternativeC: [ms.alternativeC],
         alternativeD: [ms.alternativeD],
         answer: [ms.answer],
-        open: [false],
+        //open: [true],
       }));
 
     })
@@ -140,9 +156,13 @@ export class QuizDetailComponent implements OnInit {
       control.push(this.formBuilder.group({
         sentence: [it.sentence],
         answer: [it.answer],
-        open: [false],
+        //open: [true],
       }))
     })
+  }
+
+  closeButton() {
+    this.closeQuizDetail.emit(null);
   }
 
 }

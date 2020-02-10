@@ -122,6 +122,6 @@
 
   </mat-card>
 
-  <nx-quiz-student-detail *ngIf="grade" [grade]="grade"></nx-quiz-student-detail>
+  <nx-quiz-student-detail *ngIf="grade" [grade]="grade" (closeQuizStudentDetail)="setQuizDetail($event)"></nx-quiz-student-detail>
 
 </div>

@@ -1,26 +1,27 @@
 <mat-card class="mat-elevation-z8">
 
+  <button mat-mini-fab color="accent" class="closeButton miniFabMini2" (click)="closeButton()" matTooltip="Cerrar">
+    <mat-icon svgIcon="close" color="primary"></mat-icon>
+  </button>
+
   <mat-toolbar color="primary">
-    <h1 mat-dialog-title>Detalle de Prueba</h1>
+    <h1>{{grade?.evaluation?.quiz?.title}}</h1>
     <span class="spacer-r"></span>
     <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
   </mat-toolbar>
 
   <form [formGroup]="quizStudentDetailForm">
-
-    <mat-divider></mat-divider>
-
     <mat-list class="listContainer">
 
-      <mat-list-item>
+      <!--   <mat-list-item>
         <mat-form-field appearance="fill" class="fullWith">
           <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Título</mat-label>
           <input matInput formControlName="title" readonly>
         </mat-form-field>
-      </mat-list-item>
+      </mat-list-item> -->
 
       <div class="data">
-
+        <mat-divider></mat-divider>
         <mat-list-item>
           <img matListAvatar
             [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar?.type +';base64,' + grade?.student?.avatar?.data)"
@@ -38,6 +39,12 @@
         </mat-list-item>
 
         <mat-list-item>
+
+          <mat-form-field appearance="outline">
+            <mat-label><i class="mdi mdi-school app-input-icon">&nbsp;</i>Calificación</mat-label>
+            <input matInput [value]="grade?.grade | number : '1.1-1'" readonly [ngClass]="dinamicColorGrade(grade)">
+          </mat-form-field>
+
           <mat-form-field appearance="outline">
             <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Curso</mat-label>
             <input matInput formControlName="courseName" readonly>
@@ -47,6 +54,8 @@
             <mat-label><i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura</mat-label>
             <input matInput formControlName="subjectName" readonly>
           </mat-form-field>
+
+
         </mat-list-item>
 
       </div>
@@ -58,7 +67,8 @@
   <mat-divider></mat-divider>
 
   <div class="mat-elevation-z8 quizContainer">
-    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight (selectedTabChange)="panelsClosed()">
+    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight
+      (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll(); multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()">
 
       <mat-tab>
         <ng-template mat-tab-label>
@@ -66,75 +76,74 @@
           <span>&nbsp;&nbsp;Correspondencia</span>
         </ng-template>
 
-        <ng-template matTabContent>
-          <form [formGroup]="detailCorrespondItemsForm">
-            <div formArrayName="correspondItems">
-              <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true">
 
-                <mat-toolbar color="accent">
-                  <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Correctas {{ciAnswers[0]}}</h1>
+        <form [formGroup]="detailCorrespondItemsForm">
+          <div formArrayName="correspondItems">
+            <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
 
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Correctas {{ciAnswers[0]}}</h1>
 
-                  <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Incorrectas {{ciAnswers[1]}}</h1>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-                  <span class="spacer-r"></span>
-                  <button type="button" mat-mini-fab color="primary"
-                    (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
-                    <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i>
-                  </button>
-                </mat-toolbar>
+                <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Incorrectas {{ciAnswers[1]}}</h1>
 
-                <mat-expansion-panel *ngFor="let ci of correspondItems.controls; let i=index;"
-                  [expanded]="ci.get('open').value" (opened)="panelOpenCorrespondItems = true"
-                  (closed)="panelOpenCorrespondItems = false">
+                <span class="spacer-r"></span>
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+              </mat-toolbar>
 
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <button mat-mini-fab color="accent" class="miniFabMini"
-                        [color]="checkAnswerColor(ci.get('correct').value)">
-                        {{ i + 1 }}
-                      </button>
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <mat-icon [svgIcon]="checkAnswerIcon(ci.get('correct').value)"
-                        [color]="checkAnswerColor(ci.get('correct').value)"></mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+              <mat-expansion-panel *ngFor="let ci of correspondItems.controls; let i=index;"
+                [expanded]="ci.get('open').value" (opened)="panelOpenCorrespondItems = true"
+                (closed)="panelOpenCorrespondItems = false">
 
-                  <div [formGroupName]="i">
-                    <mat-form-field appearance="outline" class="fullWith">
-                      <mat-label>
-                        Item
-                      </mat-label>
-                      <textarea matInput formControlName="item" readonly></textarea>
-                    </mat-form-field>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab class="miniFabMini" [color]="checkAnswerColor(ci.get('correct').value)">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-icon [svgIcon]="checkAnswerIcon(ci.get('correct').value)"
+                      [color]="checkAnswerColor(ci.get('correct').value)"></mat-icon>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
 
-                    <br>
-                    <mat-form-field appearance="fill" class="fullWith">
-                      <mat-label>
-                        Correspondencia
-                        &nbsp;<i class="mdi app-input-icon"
-                          [ngClass]="ci.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
-                      </mat-label>
-                      <input matInput formControlName="correspond" readonly
-                        [ngClass]="ci.get('correct').value ? 'primaryColor' : 'warnColor' ">
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Item
+                    </mat-label>
+                    <textarea matInput formControlName="item" readonly></textarea>
+                  </mat-form-field>
 
-                    </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="fill" class="fullWith">
+                    <mat-label>
+                      Correspondencia
+                      &nbsp;<i class="mdi app-input-icon"
+                        [ngClass]="ci.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                    </mat-label>
+                    <input matInput formControlName="correspond" readonly
+                      [ngClass]="ci.get('correct').value ? 'primaryColor' : 'warnColor' ">
 
-                  </div>
+                  </mat-form-field>
 
-                </mat-expansion-panel>
+                </div>
 
-              </mat-accordion>
+              </mat-expansion-panel>
 
-            </div>
-          </form>
-        </ng-template>
+            </mat-accordion>
+
+          </div>
+        </form>
+
       </mat-tab>
 
       <mat-tab>
@@ -142,73 +151,74 @@
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Verdadero o Falso</span>
         </ng-template>
-        <ng-template matTabContent>
-          <form [formGroup]="detailTrueFalseItemsForm">
-            <div formArrayName="trueFalseItems">
 
-              <mat-accordion #trueFalseItemsAccordion="matAccordion" [multi]="true">
-                <mat-toolbar color="accent">
-                  <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Correctas {{tfAnswers[0]}}</h1>
 
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <form [formGroup]="detailTrueFalseItemsForm">
+          <div formArrayName="trueFalseItems">
 
-                  <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Incorrectas {{tfAnswers[1]}}</h1>
-                  <span class="spacer-r"></span>
+            <mat-accordion #trueFalseItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Correctas {{tfAnswers[0]}}</h1>
 
-                  <button type="button" mat-mini-fab color="primary"
-                    (click)=" panelOpenTrueFalseItems ? trueFalseItemsAccordion.closeAll() : trueFalseItemsAccordion.openAll()">
-                    <i class="mdi mdi-menu-{{panelOpenTrueFalseItems ? 'up' : 'down'}} size-mdi-icon"></i>
-                  </button>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-                </mat-toolbar>
+                <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Incorrectas {{tfAnswers[1]}}</h1>
+                <span class="spacer-r"></span>
 
-                <mat-expansion-panel *ngFor="let tf of trueFalseItems.controls ; let i=index;"
-                  [expanded]="tf.get('open').value" (opened)="panelOpenTrueFalseItems = true"
-                  (closed)="panelOpenTrueFalseItems = false">
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenTrueFalseItems ? trueFalseItemsAccordion.closeAll() : trueFalseItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenTrueFalseItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
 
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <button mat-mini-fab [color]="checkAnswerColor(tf.get('correct').value)" class="miniFabMini">
-                        {{ i + 1 }}
-                      </button>
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <mat-icon [svgIcon]="checkAnswerIcon(tf.get('correct').value)"
-                        [color]="checkAnswerColor(tf.get('correct').value)"></mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+              </mat-toolbar>
 
-                  <div [formGroupName]="i">
-                    <mat-form-field appearance="outline" class="fullWith">
-                      <mat-label>
-                        Sentencia
-                      </mat-label>
-                      <textarea matInput formControlName="sentence" readonly></textarea>
-                    </mat-form-field>
+              <mat-expansion-panel *ngFor="let tf of trueFalseItems.controls ; let i=index;"
+                [expanded]="tf.get('open').value" (opened)="panelOpenTrueFalseItems = true"
+                (closed)="panelOpenTrueFalseItems = false">
 
-                    <br>
-                    <mat-form-field appearance="fill" class="fullWith">
-                      <input matInput formControlName="answer" [readonly]="true"
-                        [ngClass]="tf.get('correct').value ? 'primaryColor' : 'warnColor' ">
-                      <mat-label>
-                        Respuesta
-                        &nbsp;<i class="mdi app-input-icon"
-                          [ngClass]="tf.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
-                      </mat-label>
-                    </mat-form-field>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab [color]="checkAnswerColor(tf.get('correct').value)" class="miniFabMini">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-icon [svgIcon]="checkAnswerIcon(tf.get('correct').value)"
+                      [color]="checkAnswerColor(tf.get('correct').value)"></mat-icon>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
 
-                  </div>
-                </mat-expansion-panel>
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
+                  </mat-form-field>
 
-              </mat-accordion>
+                  <br>
+                  <mat-form-field appearance="fill" class="fullWith">
+                    <input matInput formControlName="answer" [readonly]="true"
+                      [ngClass]="tf.get('correct').value ? 'primaryColor' : 'warnColor' ">
+                    <mat-label>
+                      Respuesta
+                      &nbsp;<i class="mdi app-input-icon"
+                        [ngClass]="tf.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                    </mat-label>
+                  </mat-form-field>
 
-            </div>
-          </form>
-        </ng-template>
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
       </mat-tab>
 
       <mat-tab>
@@ -216,108 +226,110 @@
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Seleción Múltiple</span>
         </ng-template>
-        <ng-template matTabContent>
-          <form [formGroup]="detailMultipleSelectionItemsForm">
-            <div formArrayName="multipleSelectionItems">
-              <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true">
-
-                <mat-toolbar color="accent">
-                  <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Correctas {{msAnswers[0]}}</h1>
-
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
-                  <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Incorrectas {{msAnswers[1]}}</h1>
-                  <span class="spacer-r"></span>
-                  <button type="button" mat-mini-fab color="primary"
-                    (click)=" panelOpenMultipleSelectionItems ? multipleSelectionItemsAccordion.closeAll() : multipleSelectionItemsAccordion.openAll()">
-                    <i class="mdi mdi-menu-{{panelOpenMultipleSelectionItems ? 'up' : 'down'}} size-mdi-icon"></i>
-                  </button>
-
-                </mat-toolbar>
 
 
-                <mat-expansion-panel *ngFor="let ms of multipleSelectionItems.controls ; let i=index;"
-                  [expanded]="ms.get('open').value" (opened)="panelOpenMultipleSelectionItems = true"
-                  (closed)="panelOpenMultipleSelectionItems = false">
+        <form [formGroup]="detailMultipleSelectionItemsForm">
+          <div formArrayName="multipleSelectionItems">
+            <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true"
+              [displayMode]="accordionDisplayMode">
+
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Correctas {{msAnswers[0]}}</h1>
+
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Incorrectas {{msAnswers[1]}}</h1>
+                <span class="spacer-r"></span>
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenMultipleSelectionItems ? multipleSelectionItemsAccordion.closeAll() : multipleSelectionItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenMultipleSelectionItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
+
+              </mat-toolbar>
 
 
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <button mat-mini-fab color="accent" class="miniFabMini"
-                        [color]="checkAnswerColor(ms.get('correct').value)">
-                        {{ i + 1 }}
-                      </button>
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <mat-icon [svgIcon]="checkAnswerIcon(ms.get('correct').value)"
-                        [color]="checkAnswerColor(ms.get('correct').value)"></mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+              <mat-expansion-panel *ngFor="let ms of multipleSelectionItems.controls ; let i=index;"
+                [expanded]="ms.get('open').value" (opened)="panelOpenMultipleSelectionItems = true"
+                (closed)="panelOpenMultipleSelectionItems = false">
 
-                  <div [formGroupName]="i">
-                    <mat-form-field appearance="outline" class="fullWith">
-                      <mat-label>
-                        Sentencia
-                      </mat-label>
-                      <textarea matInput formControlName="sentence" readonly></textarea>
 
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="standard" class="fullWith">
-                      <mat-label>
-                        Alternativa  A
-                      </mat-label>
-                      <input matInput formControlName="alternativeA" readonly>
-                      <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon primaryColor"></i>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="standard" class="fullWith">
-                      <mat-label>
-                        Alternativa  B
-                      </mat-label>
-                      <input matInput formControlName="alternativeB" readonly>
-                      <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon primaryColor"></i>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="standard" class="fullWith">
-                      <mat-label>
-                        Alternativa C
-                      </mat-label>
-                      <input matInput formControlName="alternativeC" readonly>
-                      <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon primaryColor"></i>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="standard" class="fullWith">
-                      <mat-label>
-                        Alternativa D
-                      </mat-label>
-                      <input matInput formControlName="alternativeD" readonly>
-                      <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon primaryColor"></i>
-                    </mat-form-field>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab color="accent" class="miniFabMini"
+                      [color]="checkAnswerColor(ms.get('correct').value)">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-icon [svgIcon]="checkAnswerIcon(ms.get('correct').value)"
+                      [color]="checkAnswerColor(ms.get('correct').value)"></mat-icon>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
 
-                    <br>
-                    <mat-form-field appearance="fill" class="fullWith">
-                      <input matInput formControlName="answer" readonly
-                        [ngClass]="ms.get('correct').value ? 'primaryColor' : 'warnColor' ">
-                      <mat-label>
-                        Respuesta
-                        &nbsp;<i class="mdi app-input-icon"
-                          [ngClass]="ms.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
-                      </mat-label>
-                    </mat-form-field>
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
 
-                  </div>
-                </mat-expansion-panel>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fullWith">
+                    <mat-label>
+                      Alternativa A
+                    </mat-label>
+                    <input matInput formControlName="alternativeA" readonly>
+                    <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon primaryColor"></i>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fullWith">
+                    <mat-label>
+                      Alternativa B
+                    </mat-label>
+                    <input matInput formControlName="alternativeB" readonly>
+                    <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon primaryColor"></i>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fullWith">
+                    <mat-label>
+                      Alternativa C
+                    </mat-label>
+                    <input matInput formControlName="alternativeC" readonly>
+                    <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon primaryColor"></i>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="standard" class="fullWith">
+                    <mat-label>
+                      Alternativa D
+                    </mat-label>
+                    <input matInput formControlName="alternativeD" readonly>
+                    <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon primaryColor"></i>
+                  </mat-form-field>
 
-              </mat-accordion>
+                  <br>
+                  <mat-form-field appearance="fill" class="fullWith">
+                    <input matInput formControlName="answer" readonly
+                      [ngClass]="ms.get('correct').value ? 'primaryColor' : 'warnColor' ">
+                    <mat-label>
+                      Respuesta
+                      &nbsp;<i class="mdi app-input-icon"
+                        [ngClass]="ms.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                    </mat-label>
+                  </mat-form-field>
 
-            </div>
-          </form>
-        </ng-template>
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
       </mat-tab>
 
       <mat-tab>
@@ -325,74 +337,76 @@
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Texto Incompleto</span>
         </ng-template>
-        <ng-template matTabContent>
-          <form [formGroup]="detailIncompleteTextItemsForm">
-            <div formArrayName="incompleteTextItems">
-              <mat-accordion #incompleteTextItemsAccordion="matAccordion" [multi]="true">
-                <mat-toolbar color="accent">
-                  <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Correctas {{itAnswers[0]}}</h1>
 
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-                  <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
-                  <span>&nbsp;&nbsp;</span>
-                  <h1 mat-dialog-title>Incorrectas {{itAnswers[1]}}</h1>
-                  <span class="spacer-r"></span>
+        <form [formGroup]="detailIncompleteTextItemsForm">
+          <div formArrayName="incompleteTextItems">
+            <mat-accordion #incompleteTextItemsAccordion="matAccordion" [multi]="true"
+              [displayMode]="accordionDisplayMode">
+              <mat-toolbar color="accent">
+                <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Correctas {{itAnswers[0]}}</h1>
 
-                  <button type="button" mat-mini-fab color="primary"
-                    (click)=" panelOpenIncompleteTextItems ? incompleteTextItemsAccordion.closeAll() : incompleteTextItemsAccordion.openAll()">
-                    <i class="mdi mdi-menu-{{panelOpenIncompleteTextItems ? 'up' : 'down'}} size-mdi-icon"></i>
-                  </button>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-                </mat-toolbar>
+                <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
+                <span>&nbsp;&nbsp;</span>
+                <h1 mat-dialog-title>Incorrectas {{itAnswers[1]}}</h1>
+                <span class="spacer-r"></span>
 
-                <mat-expansion-panel *ngFor="let it of incompleteTextItems.controls ; let i=index;"
-                  [expanded]="it.get('open').value" (opened)="panelOpenIncompleteTextItems = true"
-                  (closed)="panelOpenIncompleteTextItems = false">
+                <button type="button" mat-mini-fab color="primary"
+                  (click)=" panelOpenIncompleteTextItems ? incompleteTextItemsAccordion.closeAll() : incompleteTextItemsAccordion.openAll()">
+                  <i class="mdi mdi-menu-{{panelOpenIncompleteTextItems ? 'up' : 'down'}} size-mdi-icon"></i>
+                </button>
 
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <button mat-mini-fab color="accent" class="miniFabMini"
-                        [color]="checkAnswerColor(it.get('correct').value)">
-                        {{ i + 1 }}
-                      </button>
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <mat-icon [svgIcon]="checkAnswerIcon(it.get('correct').value)"
-                        [color]="checkAnswerColor(it.get('correct').value)"></mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+              </mat-toolbar>
 
-                  <div [formGroupName]="i">
-                    <mat-form-field appearance="outline" class="fullWith">
-                      <mat-label>
-                        Sentencia
-                      </mat-label>
-                      <textarea matInput formControlName="sentence" readonly></textarea>
+              <mat-expansion-panel *ngFor="let it of incompleteTextItems.controls ; let i=index;"
+                [expanded]="it.get('open').value" (opened)="panelOpenIncompleteTextItems = true"
+                (closed)="panelOpenIncompleteTextItems = false">
 
-                    </mat-form-field>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-mini-fab color="accent" class="miniFabMini"
+                      [color]="checkAnswerColor(it.get('correct').value)">
+                      {{ i + 1 }}
+                    </button>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-icon [svgIcon]="checkAnswerIcon(it.get('correct').value)"
+                      [color]="checkAnswerColor(it.get('correct').value)"></mat-icon>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
 
-                    <br>
-                    <mat-form-field appearance="fill" class="fullWith">
-                      <input matInput formControlName="answer" readonly
-                        [ngClass]="it.get('correct').value ? 'primaryColor' : 'warnColor' ">
-                      <mat-label>
-                        Respuesta
-                        &nbsp;<i class="mdi app-input-icon"
-                          [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
-                      </mat-label>
-                    </mat-form-field>
+                <div [formGroupName]="i">
+                  <mat-form-field appearance="outline" class="fullWith">
+                    <mat-label>
+                      Sentencia
+                    </mat-label>
+                    <textarea matInput formControlName="sentence" readonly></textarea>
 
-                  </div>
-                </mat-expansion-panel>
+                  </mat-form-field>
 
-              </mat-accordion>
+                  <br>
+                  <mat-form-field appearance="fill" class="fullWith">
+                    <input matInput formControlName="answer" readonly
+                      [ngClass]="it.get('correct').value ? 'primaryColor' : 'warnColor' ">
+                    <mat-label>
+                      Respuesta
+                      &nbsp;<i class="mdi app-input-icon"
+                        [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                    </mat-label>
+                  </mat-form-field>
 
-            </div>
-          </form>
-        </ng-template>
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+
+          </div>
+        </form>
+
       </mat-tab>
 
     </mat-tab-group>

@@ -119,8 +119,8 @@
   <div *ngIf="!isLoading" style="height: 5px;"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
-    <mat-list>
+  <mat-list class="listContainer">
+    <div class="data">
       <mat-list-item>
         <img matListAvatar
           [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
@@ -132,8 +132,18 @@
         <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
       </mat-list-item>
 
-    </mat-list>
-  </div>
+      <mat-list-item>
+        <mat-form-field appearance="outline">
+          <input matInput [value]="grade.grade | number : '1.1-1'" readonly [ngClass]="dinamicColorGrade(grade)">
+          <mat-label>
+            <i class="mdi mdi-star">&nbsp;</i>Calificación
+          </mat-label>
+        </mat-form-field>
+      </mat-list-item>
+    </div>
+  </mat-list>
+
+
 
   <mat-divider></mat-divider>
 
@@ -168,18 +178,18 @@
       </mat-label>
     </mat-form-field>
 
-
+    <!-- 
     <mat-form-field appearance="outline">
       <input matInput [value]="grade.grade | number : '1.1-1'" readonly [ngClass]="dinamicColorGrade(grade)">
       <mat-label>
         <i class="mdi mdi-star">&nbsp;</i>Calificación
       </mat-label>
-    </mat-form-field>
+    </mat-form-field>  
 
     <mat-form-field appearance="fill" style="visibility: hidden;">
       <input matInput readonly hidden>
     </mat-form-field>
-
+-->
 
     <!--    <mat-form-field appearance="outline" floatLabel="always">
         <input matInput readonly hidden>

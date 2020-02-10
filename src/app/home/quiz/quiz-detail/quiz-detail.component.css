@@ -3,6 +3,14 @@ mat-card {
     margin: 20px;
     height: fit-content;
     width: fit-content;
+    
+}
+
+.closeButton {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
 }
 
 mat-form-field {
@@ -56,6 +64,7 @@ mat-form-field {
 
 .data {
     display: flex;
+    padding-top: 15px;
 
 }
 
@@ -108,4 +117,43 @@ mat-action-row button {
 
 mat-form-field textarea {
     resize: none;
+}
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    box-shadow: none;
+    line-height: 12px;
+}
+
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+
+.miniFabMini2 {
+    width: 24px;
+    height: 24px;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini2 .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+mat-expansion-panel-header {
+    height: 64px;
+}
+
+mat-expansion-panel mat-form-field {
+    font-family: monospace;
 }

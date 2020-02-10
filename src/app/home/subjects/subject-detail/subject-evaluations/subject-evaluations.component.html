@@ -1,6 +1,6 @@
 <div class="container">
 
-  <nx-subject-evaluations-course *ngIf="evaluationCourse" [evaluation]="evaluationCourse">
+  <nx-subject-evaluations-course *ngIf="evaluationCourse" [evaluation]="evaluationCourse" (closeEvaluationCourseDetail)="setEvaluationCourse($event)">
   </nx-subject-evaluations-course>
 
   <mat-card class="mat-elevation-z8">
@@ -107,7 +107,7 @@
 
   </mat-card>
 
-  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail">
+  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail" (closeQuizDetail)="setEvaluationQuizDetail($event)">
   </nx-quiz-detail>
 
 </div>

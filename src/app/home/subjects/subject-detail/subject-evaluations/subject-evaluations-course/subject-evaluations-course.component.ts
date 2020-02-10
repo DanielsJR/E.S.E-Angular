@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Subject } from '../../../../../models/subject';
 import { User } from '../../../../../models/user';
 import { Grade } from '../../../../../models/grade';
@@ -43,6 +43,9 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   student: User;
   //@Input() subject: Subject;
   grades: Grade[];
+
+  @Output()
+  closeEvaluationCourseDetail = new EventEmitter<any>();
 
   studentName;
 
@@ -169,4 +172,11 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
     this.quizStudentGrade = grade;
   }
 
+  closeButton() {
+    this.closeEvaluationCourseDetail.emit(null);
+  }
+
+
 }
+
+

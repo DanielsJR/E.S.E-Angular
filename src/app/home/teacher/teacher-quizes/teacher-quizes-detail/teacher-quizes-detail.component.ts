@@ -102,7 +102,7 @@ export class TeacherQuizesDetailComponent implements OnInit {
     this.setMultipleSelectionItems(this.quiz);
     this.setIncompleteTextItems(this.quiz);
 
-    this.panelsClosed();
+    this.openClosePanels(false);
 
   }
 
@@ -116,11 +116,11 @@ export class TeacherQuizesDetailComponent implements OnInit {
   get multipleSelectionItems() { return this.editMultipleSelectionItemsForm.get('multipleSelectionItems'); }
   get incompleteTextItems() { return this.editIncompleteTextItemsForm.get('incompleteTextItems'); }
 
-  panelsClosed() {
-    this.panelOpenCorrespondItems = false;
-    this.panelOpenTrueFalseItems = false;
-    this.panelOpenMultipleSelectionItems = false;
-    this.panelOpenIncompleteTextItems = false;
+  openClosePanels(value: boolean) {
+    this.panelOpenCorrespondItems = value;
+    this.panelOpenTrueFalseItems = value;
+    this.panelOpenMultipleSelectionItems = value;
+    this.panelOpenIncompleteTextItems = value;
   }
 
   setCorrespondItems(quiz: Quiz) {

@@ -112,3 +112,24 @@ mat-header-cell:first-of-type {
     color: tomato;
     font-size: larger;
 }
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+.closeButton {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
+}

@@ -39,8 +39,8 @@ mat-dialog-actions {
 
 .listContainer {
     display: flex;
-    justify-content: flex-start;
-    padding: 0 8px;
+    flex-direction: column;
+    padding-top: 0;
 }
 
 .listContainer .mat-list {
@@ -56,6 +56,10 @@ mat-dialog-actions {
     width: 65px;
 }
 
+.listContainer mat-form-field {
+    margin-bottom: -1.45em !important;
+}
+
 
 .mat-list-avatar {
     cursor: pointer;
@@ -67,6 +71,17 @@ mat-dialog-actions {
 .mat-list-avatar:hover {
     opacity: 0.3;
 }
+
+.data {
+    display: flex;
+    padding: 5px 0 10px 0;
+
+}
+
+.data mat-form-field {
+    margin-left: 150px;
+}
+
 
 .example-additional-selection {
     opacity: 0.75;

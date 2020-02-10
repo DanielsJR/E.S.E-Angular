@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter,Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Grade } from '../../../models/grade';
 import { QuizStudent } from '../../../models/quiz-student';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { SessionStorageService } from '../../../services/session-storage.service';
 
 
 @Component({
@@ -24,12 +26,18 @@ export class QuizStudentDetailComponent implements OnInit {
   panelOpenMultipleSelectionItems = false;
   panelOpenIncompleteTextItems = false;
 
+  accordionDisplayMode = 'flat';
+
   private _grade: Grade;
 
   ciAnswers: number[] = [];
   tfAnswers: number[] = [];
   msAnswers: number[] = [];
   itAnswers: number[] = [];
+  colorGrade: string;
+  isDark: boolean;
+
+  isThemeDarkSubscription: Subscription;
 
   @Input() set grade(grade: Grade) {
     if (grade.quizStudent) this._grade = grade;
@@ -40,10 +48,14 @@ export class QuizStudentDetailComponent implements OnInit {
     return this._grade;
   }
 
-  constructor(private formBuilder: FormBuilder, public sanitizer: DomSanitizer, ) { }
+  @Output()
+  closeQuizStudentDetail = new EventEmitter<any>();
+
+  constructor(private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private sessionStorage: SessionStorageService ) { }
 
   ngOnInit() {
     this.buildForm();
+    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
 
   buildForm() {
@@ -110,7 +122,7 @@ export class QuizStudentDetailComponent implements OnInit {
         item: [ci.item],
         correspond: [ci.correspond],
         correct: [ci.correct],
-        open: [false],
+        open: [true],
       }));
     });
     this.ciAnswers = [correctAnswers, incorrectAnswers];
@@ -127,7 +139,7 @@ export class QuizStudentDetailComponent implements OnInit {
         sentence: [tf.sentence],
         answer: [(tf.answer === true) ? 'Verdadero' : 'Falso'],
         correct: [tf.correct],
-        open: [false],
+        open: [true],
       }));
     });
     this.tfAnswers = [correctAnswers, incorrectAnswers];
@@ -148,7 +160,7 @@ export class QuizStudentDetailComponent implements OnInit {
         alternativeD: [ms.alternativeD],
         answer: [ms.answer],
         correct: [ms.correct],
-        open: [false],
+        open: [true],
       }));
     });
 
@@ -167,7 +179,7 @@ export class QuizStudentDetailComponent implements OnInit {
         sentence: [it.sentence],
         answer: [it.answer],
         correct: [it.correct],
-        open: [false],
+        open: [true],
       }));
     });
     this.itAnswers = [correctAnswers, incorrectAnswers];
@@ -179,6 +191,25 @@ export class QuizStudentDetailComponent implements OnInit {
 
   checkAnswerColor(value: boolean): string {
     return value ? "primary" : "warn";
+  }
+
+  closeButton() {
+    this.closeQuizStudentDetail.emit(null);
+  }
+
+  dinamicColorGrade(grade: Grade) {
+    if (grade.grade > 4.0) {
+      this.colorGrade = 'gradeColorHigh'
+      if (this.isDark) {
+        this.colorGrade = 'gradeColorHighDark'
+      }
+    } else {
+      this.colorGrade = 'gradeColorLow'
+      if (this.isDark) {
+        this.colorGrade = 'gradeColorLowDark'
+      }
+    }
+    return this.colorGrade;
   }
 
 }

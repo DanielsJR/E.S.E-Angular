@@ -1,21 +1,29 @@
 <div class="container">
-
   <mat-card class="mat-elevation-z8">
+    <button mat-mini-fab color="accent" class="closeButton miniFabMini" (click)="closeButton()" matTooltip="Cerrar">
+      <mat-icon svgIcon="close" color="primary"></mat-icon>
+    </button>
 
-    <mat-toolbar class="toolbar" color="accent">
-      <mat-form-field>
+    <mat-toolbar class="toolbar" color="primary">
+      <h2>{{evaluation.title}}</h2>
+    </mat-toolbar>
+
+    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <mat-toolbar class="toolbar" color="none">
+      <mat-form-field style="width: 50%;">
         <input matInput (keyup)="applyFilter($event.target.value)">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
       </mat-form-field>
-      <span class="spacer-r"></span>
-      <h2>{{evaluation.title}}</h2>
+
     </mat-toolbar>
 
     <mat-divider></mat-divider>
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+
 
     <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -87,6 +95,7 @@
 
   </mat-card>
 
-  <nx-quiz-student-detail *ngIf="quizStudentGrade" [grade]="quizStudentGrade"></nx-quiz-student-detail>
+  <nx-quiz-student-detail *ngIf="quizStudentGrade" [grade]="quizStudentGrade" (closeQuizStudentDetail)="setQuizStudent($event)"></nx-quiz-student-detail>
 
 </div>
+
