@@ -2,15 +2,17 @@
     display: flex;
     justify-content: space-evenly;
     flex-flow: row wrap;
-    min-width: fit-content;
+    --min-width: fit-content;
 }
 
 mat-card {
-    width: fit-content;
+    --width: fit-content;
+    width: 100%;
+    min-width: 600px;
     height: fit-content;
     margin: 20px;
     padding: 0;
-    min-width: 600px;
+    
 }
 
 mat-form-field {

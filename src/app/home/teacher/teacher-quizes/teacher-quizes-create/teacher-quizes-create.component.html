@@ -1,9 +1,12 @@
 <div class="container">
+  
   <mat-card class="mat-elevation-z8">
     <form [formGroup]="createQuizForm" (ngSubmit)="createQuiz()">
 
       <mat-toolbar color="primary">
-        <h1>Crear Pueba</h1>
+        <mat-icon svgIcon="file-plus"></mat-icon>
+        <span>&nbsp;&nbsp;</span>
+        <h1>Crear Prueba</h1>
         <span class="spacer-r"></span>
 
         <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -11,32 +14,47 @@
       </mat-toolbar>
 
       <mat-list class="listContainer">
-
         <mat-list-item>
           <mat-form-field appearance="standard" class="fullWith">
-            <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Titulo</mat-label>
+            <mat-label><i class="mdi mdi-text app-input-icon">&nbsp;</i>Titulo</mat-label>
             <input matInput formControlName="title" required id="idTitle">
           </mat-form-field>
         </mat-list-item>
 
         <mat-list-item>
-          <mat-form-field appearance="standard" class="fullWith">
-            <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Descripción</mat-label>
-            <textarea matInput formControlName="description" id="idDescription"></textarea>
+          <mat-form-field appearance="fill" class="fullWith">
+            <mat-label><i class="mdi mdi-text-subject app-input-icon">&nbsp;</i>Descripción (opcional)</mat-label>
+            <textarea matInput formControlName="description" id="idDescription" [matTextareaAutosize]="true"></textarea>
           </mat-form-field>
         </mat-list-item>
 
+
         <mat-list-item>
-          <img matListAvatar
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data)"
-            alt="author" (click)="imageZoom.openDialogImage()">
-          <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
-          <p matLine>
-            <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
-            <span class="role-style">Autor</span>
-          </p>
+
+          <mat-list-item>
+            <img matListAvatar
+              [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data)"
+              alt="author" (click)="imageZoom.openDialogImage()">
+            <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
+            <p matLine>
+              <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
+              <span class="role-style">Autor</span>
+            </p>
+          </mat-list-item>
+
 
           <div class="data">
+
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>
+                <i class="mdi app-input-icon" [ngClass]="st.checked ? 'mdi-lock-open-variant-outline' : 'mdi-lock' ">&nbsp;</i>
+                {{ st.checked ? 'compartido' : 'no compartido'  }}
+              </mat-label>
+              <input matInput hidden>
+              <mat-slide-toggle #st [checked]="shareQuiz">
+                Compartir Prueba
+              </mat-slide-toggle>
+            </mat-form-field>
 
             <mat-form-field appearance="standard">
               <mat-select formControlName="subjectName" required #idSubjectName>
@@ -70,7 +88,7 @@
 
       <mat-toolbar>
         <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoQuizes()" cdkFocusRegionstart>
-          <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
+          <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Cancelar
         </button>
         <span class="spacer-r"></span>
         <button type="submit" mat-raised-button color="accent" tabindex="2"

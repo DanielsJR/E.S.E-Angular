@@ -1,31 +1,37 @@
 <div class="profileSideNav">
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
+  
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
+
   <form [formGroup]="editProfileForm" (ngSubmit)="save()" [ngSwitch]="profileAction">
 
     <div *ngSwitchCase="'usuario'">
 
       <mat-form-field appearance="standard">
         <mat-label>
-            <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
+          <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
         </mat-label>
         <input matInput formControlName="username">
-    </mat-form-field>
+      </mat-form-field>
 
-      <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event" (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
+      <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event"
+        (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
         (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>
           <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Foto de Perfil
         </mat-label>
-        <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer" readonly>
+        <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer"
+          readonly>
 
-        <button mat-icon-button matSuffix *ngIf="files" (click)="fileInput.clear();resetAvatar(); $event.stopPropagation()" (keyup.enter)="fileInput.clear();resetAvatar()">
+        <button mat-icon-button matSuffix *ngIf="files"
+          (click)="fileInput.clear();resetAvatar(); $event.stopPropagation()"
+          (keyup.enter)="fileInput.clear();resetAvatar()">
           <mat-icon svgIcon="close-circle" class="iconRemove"></mat-icon>
         </button>
 
-        <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" [ngModelOptions]="{standalone:true}"
-          (select)="selectEventEdit($event)">
+        <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files"
+          [ngModelOptions]="{standalone:true}" (select)="selectEventEdit($event)">
           <mat-icon svgIcon="folder-upload"></mat-icon>
           <span class="text-upper">Buscar...</span>
         </td-file-input>
@@ -121,7 +127,8 @@
     <div *ngSwitchCase="'contacto'">
 
       <mat-form-field appearance="standard">
-        <input matInput [type]="tel" formControlName="mobile" maxlength="9" placeholder="911222333" placeholder="911222333">
+        <input matInput [type]="tel" formControlName="mobile" maxlength="9" placeholder="911222333"
+          placeholder="911222333">
         <mat-label>
           <i class="mdi mdi-phone app-input-icon">&nbsp;</i>Teléfono
         </mat-label>
@@ -179,7 +186,8 @@
     </div>
 
     <div class="btnSave">
-      <button type="submit" mat-raised-button color="accent" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
+      <button type="submit" mat-raised-button color="accent"
+        [disabled]="editProfileForm.invalid || editProfileForm.pristine">Guardar</button>
     </div>
 
   </form>

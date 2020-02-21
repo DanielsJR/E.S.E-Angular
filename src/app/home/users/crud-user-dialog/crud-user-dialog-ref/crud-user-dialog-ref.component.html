@@ -1,8 +1,9 @@
 <div *ngIf="data.type === 'detail'">
+   
     <mat-toolbar color="primary">
         <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
-        <mat-icon svgIcon="account-card-details"></mat-icon>
+        <mat-icon svgIcon="card-account-details"></mat-icon>
         <span>&nbsp;&nbsp;</span>
         <h1 mat-dialog-title>Detalles de {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
@@ -92,7 +93,7 @@
                     <mat-form-field appearance="fill">
                         <input matInput [(ngModel)]="user.address" readonly>
                         <mat-label>
-                            <i class="mdi mdi-account-location app-input-icon">&nbsp;</i>Dirección
+                            <i class="mdi mdi-tooltip-account app-input-icon">&nbsp;</i>Dirección
                         </mat-label>
                     </mat-form-field>
 
@@ -301,7 +302,7 @@
                         <mat-form-field appearance="standard">
                             <input matInput formControlName="address" placeholder="Mi Calle 334">
                             <mat-label>
-                                <i class="mdi mdi-account-location app-input-icon">&nbsp;</i>Dirección
+                                <i class="mdi mdi-tooltip-account app-input-icon">&nbsp;</i>Dirección
                             </mat-label>
                             <mat-error *ngIf="cAddress.hasError('whitespace')">No se permiten espacios en
                                 <strong>blanco</strong>.
@@ -372,12 +373,12 @@
                         </button>
                         <button mat-menu-item (click)="fileInput.inputElement.click()"
                             (keyup.enter)="fileInput.inputElement.click()">
-                            <mat-icon svgIcon="camera"></mat-icon>
+                            <mat-icon svgIcon="camera-retake"></mat-icon>
                             <span> Cambiar Imagen </span>
                         </button>
                         <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()"
                             (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
-                            <mat-icon svgIcon="camera"></mat-icon>
+                            <mat-icon svgIcon="camera-retake-outline"></mat-icon>
                             <span> Imagen por defecto </span>
                         </button>
                     </mat-menu>
@@ -473,7 +474,7 @@
                                 <i class="mdi mdi-phone app-input-icon">&nbsp;</i>Teléfono
                             </mat-label>
                             <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
-                            <mat-hint align="end">{{eMobile.value?.length || 0}}/9</mat-hint>
+                            <mat-hint align ="end">{{eMobile.value?.length || 0}}/9</mat-hint>
                             <mat-error *ngIf="eMobile.hasError('whitespace')">No se permiten espacios en
                                 <strong>blanco</strong>.
                             </mat-error>
@@ -505,7 +506,7 @@
                         <mat-form-field appearance="standard">
                             <input matInput formControlName="address" placeholder="Mi Calle 334">
                             <mat-label>
-                                <i class="mdi mdi-account-location app-input-icon">&nbsp;</i>Dirección
+                                <i class="mdi mdi-tooltip-account app-input-icon">&nbsp;</i>Dirección
                             </mat-label>
                             <i class="mdi mdi-pencil app-input-icon" matSuffix></i>
                             <mat-error *ngIf="eAddress.hasError('whitespace')">No se permiten espacios en

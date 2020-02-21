@@ -32,6 +32,10 @@ export class TeacherQuizesCreateComponent implements OnInit {
   panelOpenMultipleSelectionItems = false;
   panelOpenIncompleteTextItems = false;
 
+  shareQuiz=false;
+
+  nothing= ' ';
+
   constructor(private quizBackendService: QuizBackendService, private router: Router,
     private route: ActivatedRoute, public sanitizer: DomSanitizer,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,

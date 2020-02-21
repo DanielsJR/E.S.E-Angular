@@ -25,8 +25,8 @@
         </div>
     </mat-toolbar>
 
-    <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
-
+    <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
+        class="sidenavContainer">
 
         <!-- sidenav menu -->
         <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav">
@@ -35,7 +35,8 @@
             <mat-toolbar class="side-toolbar">
                 <mat-list>
                     <mat-list-item>
-                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                        <img matListAvatar
+                            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
                             alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
                         <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
                         <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
@@ -52,21 +53,6 @@
                 </div>
             </mat-toolbar>
 
-            <!-- sidenav menus -->
-            <mat-nav-list class="menu">
-
-                <nx-home-menu [roles]='roles'></nx-home-menu>
-
-                <nx-users-menu [roles]='roles'></nx-users-menu>
-
-                <nx-courses-menu [roles]='roles'></nx-courses-menu>
-
-                <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
-
-                <nx-quiz-menu [roles]='roles'></nx-quiz-menu>
-
-            </mat-nav-list>
-
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
 
                 <button mat-menu-item (click)="sidenavMenuProfile.toggle()">
@@ -75,8 +61,13 @@
                 </button>
 
                 <button mat-menu-item (click)="sidenavSettings.toggle()">
-                    <mat-icon svgIcon="settings"></mat-icon>
+                    <mat-icon svgIcon="cogs"></mat-icon>
                     <span> Preferencias </span>
+                </button>
+
+                <button mat-menu-item (click)="sidenavSettings.toggle()">
+                    <mat-icon svgIcon="help-circle"></mat-icon>
+                    <span> Ayuda </span>
                 </button>
 
                 <button mat-menu-item (click)="logout()">
@@ -85,6 +76,24 @@
                 </button>
 
             </mat-menu>
+
+            
+            <!-- sidenav menus -->
+            <mat-nav-list class="sideToolbarMainMenu">
+                    <nx-home-menu [roles]='roles'></nx-home-menu>
+
+                    <nx-users-menu [roles]='roles'></nx-users-menu>
+
+                    <nx-courses-menu [roles]='roles'></nx-courses-menu>
+
+                    <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
+
+                    <nx-quiz-menu [roles]='roles'></nx-quiz-menu>
+            </mat-nav-list>
+
+     
+
+
 
             <!-- sidenav user-menu-profile -->
             <mat-sidenav mode="side" opened="false" #sidenavMenuProfile class="sidenav">
@@ -99,15 +108,17 @@
                     <h1>Perfil</h1>
                 </mat-toolbar>
 
-                <mat-list class="listAvatarContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+                <mat-list class="listAvatarContainer"
+                    [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
                     <mat-list-item>
-                        <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                        <img matListAvatar
+                            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                             alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
                     </mat-list-item>
                     <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
                 </mat-list>
 
-                <mat-nav-list class="menuProfile">
+                <mat-nav-list class="sideToolbarProfileMenu">
                     <mat-list-item (click)="sidenavProfile.toggle(); profileAction='usuario'">
                         <h4 mat-line>Usuario</h4>
                         <mat-icon matListIcon svgIcon="account-circle"></mat-icon>
@@ -135,7 +146,8 @@
                     </button>
                     <mat-list style="flex-grow: 8">
                         <mat-list-item>
-                            <img matListAvatar [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                            <img matListAvatar
+                                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
                                 alt="{{privilege | lowercase}}">
                         </mat-list-item>
                     </mat-list>
@@ -145,8 +157,8 @@
                     <mat-icon svgIcon="account-edit"></mat-icon>
                 </mat-toolbar>
 
-                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction" [isSidenavProfileOpen]="isSidenavProfileOpen"
-                    (title)="profileTitle=$event"></nx-user-profile>
+                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
+                    [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event"></nx-user-profile>
 
 
 
@@ -161,7 +173,7 @@
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
-                    <mat-icon svgIcon="settings"></mat-icon>
+                    <mat-icon svgIcon="cogs"></mat-icon>
                     <span>&nbsp;</span>
                     <h1>Preferencias</h1>
                 </mat-toolbar>
@@ -181,20 +193,20 @@
             </mat-toolbar>
 
             <!-- sidenav content -->
-            <mat-nav-list class="menu">
+            <mat-nav-list class="sideToolbarMainMenu">
             </mat-nav-list>
 
         </mat-sidenav>
 
         <!-- primary content -->
         <mat-sidenav-content>
+
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
 
             <div class="contenido" (nxScroller)="isScrolled=$event">
                 <router-outlet></router-outlet>
             </div>
-
 
         </mat-sidenav-content>
 

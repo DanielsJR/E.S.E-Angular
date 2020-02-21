@@ -69,18 +69,22 @@ export class QuizDetailComponent implements OnInit, AfterViewInit {
 
     this.detailCorrespondItemsForm = this.formBuilder.group({
       correspondItems: this.formBuilder.array([]),
+      
     });
 
     this.detailTrueFalseItemsForm = this.formBuilder.group({
       trueFalseItems: this.formBuilder.array([]),
+      
     });
 
     this.detailMultipleSelectionItemsForm = this.formBuilder.group({
       multipleSelectionItems: this.formBuilder.array([]),
+      
     });
 
     this.detailIncompleteTextItemsForm = this.formBuilder.group({
       incompleteTextItems: this.formBuilder.array([]),
+      
     });
 
     this.setCorrespondItems(this.evaluation.quiz);

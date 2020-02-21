@@ -4,7 +4,7 @@ import { Quiz, TRUE_FALSES, QUIZ_LEVELS } from '../../../../models/quiz';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_SUCCEED, QUIZ_UPDATE_SUCCEED, QUIZ_UPDATE_ERROR } from '../../../../app.config';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,6 +13,7 @@ import { IsLoadingService } from '../../../../services/isLoadingService.service'
 import { MatDialogRef, MatSelect } from '@angular/material';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { SUBJECT_NAMES } from '../../../../models/subject-names';
+import { coerceNumberProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'nx-teacher-quizes-detail',
@@ -40,6 +41,26 @@ export class TeacherQuizesDetailComponent implements OnInit {
   panelOpenIncompleteTextItems = false;
 
   matExpansionExpanded = false;
+
+  accordionDisplayMode = 'default';
+
+  //slider
+  autoTicks = false;
+  disabled = false;
+  max = 100;
+  min = 0;
+  showTicks = false;
+  step = 5;
+  thumbLabel = true;
+  value = 0;
+
+  get tickInterval(): number | 'auto' {
+    return this.showTicks ? (this.autoTicks ? 'auto' : this._tickInterval) : 0;
+  }
+  set tickInterval(value) {
+    this._tickInterval = coerceNumberProperty(value);
+  }
+  private _tickInterval = 1;
 
 
   @ViewChild('idTitle') idTitle: ElementRef;
@@ -81,21 +102,25 @@ export class TeacherQuizesDetailComponent implements OnInit {
 
     this.editCorrespondItemsForm = this.formBuilder.group({
       correspondItems: this.formBuilder.array([]),
+      ponderation: 0
     });
 
     this.editTrueFalseItemsForm = this.formBuilder.group({
       trueFalseItems: this.formBuilder.array([]),
+      ponderation: 0
     });
 
     this.editMultipleSelectionItemsForm = this.formBuilder.group({
       multipleSelectionItems: this.formBuilder.array([]),
+      ponderation: 0
     });
 
     this.editIncompleteTextItemsForm = this.formBuilder.group({
       incompleteTextItems: this.formBuilder.array([]),
+      ponderation: 0
     });
 
-    
+
 
     this.setCorrespondItems(this.quiz);
     this.setTrueFalseItems(this.quiz);
@@ -112,9 +137,16 @@ export class TeacherQuizesDetailComponent implements OnInit {
   get quizLevel() { return this.editDataQuizForm.get('quizLevel'); }
 
   get correspondItems() { return this.editCorrespondItemsForm.get('correspondItems'); }
+  get ponderationCorrespondItems() { return this.editCorrespondItemsForm.get('ponderation').value; }
+
   get trueFalseItems() { return this.editTrueFalseItemsForm.get('trueFalseItems'); }
+  get ponderationTrueFalseItems() { return this.editTrueFalseItemsForm.get('ponderation').value; }
+
   get multipleSelectionItems() { return this.editMultipleSelectionItemsForm.get('multipleSelectionItems'); }
+  get ponderationMultipleSelectionItems() { return this.editMultipleSelectionItemsForm.get('ponderation').value; }
+
   get incompleteTextItems() { return this.editIncompleteTextItemsForm.get('incompleteTextItems'); }
+  get ponderationIncompleteTextItems() { return this.editIncompleteTextItemsForm.get('ponderation').value; }
 
   openClosePanels(value: boolean) {
     this.panelOpenCorrespondItems = value;
@@ -129,9 +161,13 @@ export class TeacherQuizesDetailComponent implements OnInit {
       control.push(this.formBuilder.group({
         item: [ci.item, [Validators.required]],
         correspond: [ci.correspond, [Validators.required]],
-        open: [false],
+        open: [true],
       }))
     })
+
+    //this.editCorrespondItemsForm.controls.ponderation.setValue(25);
+
+
   }
 
   addCorrespondItem() {
@@ -173,6 +209,8 @@ export class TeacherQuizesDetailComponent implements OnInit {
         open: [false],
       }))
     })
+
+    //this.editTrueFalseItemsForm.controls.ponderation.setValue(25);
   }
 
   addTrueFalseItem() {
@@ -221,6 +259,8 @@ export class TeacherQuizesDetailComponent implements OnInit {
 
     })
 
+    //this.editMultipleSelectionItemsForm.controls.ponderation.setValue(25);
+
   }
 
   addMultipleSelectionItem() {
@@ -266,6 +306,8 @@ export class TeacherQuizesDetailComponent implements OnInit {
         open: [false],
       }))
     })
+
+    //this.editIncompleteTextItemsForm.controls.ponderation.setValue(25);
   }
 
   addIncompleteTextItem() {
@@ -457,6 +499,10 @@ export class TeacherQuizesDetailComponent implements OnInit {
 
         }
       });
+  }
+
+  formatLabel(value: number | null) {
+     return value + '%';
   }
 
 

@@ -67,13 +67,11 @@
     <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight
       (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll(); multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()">
 
-
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Correspondencia</span>
         </ng-template>
-
 
         <form [formGroup]="detailCorrespondItemsForm">
           <div formArrayName="correspondItems">

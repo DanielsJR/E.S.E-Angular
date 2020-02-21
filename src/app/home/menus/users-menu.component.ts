@@ -31,7 +31,7 @@ import { TdRotateAnimation, TdCollapseAnimation } from '@covalent/core';
 </mat-list-item>
 
 <mat-list-item *ngIf = "roles?.includes(roleManager)" [routerLink]="['./manager/students']">
-  <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-multiple-outline"></mat-icon>
+  <mat-icon matListIcon></mat-icon><mat-icon matListIcon svgIcon="account-group-outline"></mat-icon>
     <h3 matLine>Estudiantes</h3>
 </mat-list-item>
 

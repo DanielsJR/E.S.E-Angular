@@ -2,21 +2,29 @@
     display: flex;
     justify-content: space-evenly;
     flex-flow: row wrap;
-    min-width: fit-content;
+    --min-width: fit-content;
 }
 
 mat-card {
-    width: fit-content;
+    --width: fit-content;
+    width: 100%;
     height: fit-content;
     margin: 20px;
     padding: 0;
-    --min-width: 500px;
+}
+
+mat-card:last-of-type {
+    margin-top: 0;
 }
 
 mat-form-field {
     font-size: 16px;
 }
 
+.toolbarDiv {
+    padding-right: 20px;
+    width: 100%;
+}
 
 .imgEseToolbar {
     height: 40px;
@@ -38,7 +46,25 @@ mat-form-field {
 }
 
 .listContainer .mat-list-item {
-    height: 90px;
+    min-height: 90px;
+    height: 100%;
+}
+
+.listContainer .mat-list-item:first-of-type {
+    margin-top: 10px;
+}
+
+.listContainer .mat-list-item:last-of-type {
+    padding-bottom: 21.5px;
+}
+
+.listContainer .mat-list-item .mat-list-item {
+    padding-bottom: 0;
+    min-height: 65px;
+}
+
+::ng-deep .listContainer .mat-list-item:last-of-type .mat-list-item-content {
+    justify-content: space-between;
 }
 
 .listContainer .mat-list-avatar {
@@ -59,10 +85,20 @@ mat-form-field {
 
 .listContainer .data {
     display: flex;
+    flex-flow: row wrap;
+    align-items: center;
 }
 
 .listContainer .data mat-form-field {
     margin-left: 50px;
+}
+
+.listContainer .data mat-form-field:first-of-type {
+    margin-left: 0;
+}
+
+::ng-deep .listContainer .data mat-form-field:first-of-type .mat-form-field-wrapper {
+    padding: 0;
 }
 
 .level {
@@ -73,6 +109,7 @@ mat-form-field {
 .quizContainer {
     margin: 15px !important;
 }
+
 
 .fullWith {
     width: 100%;
@@ -100,4 +137,42 @@ mat-accordion mat-toolbar button {
 
 mat-action-row button {
     margin: 0 5px;
+}
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    box-shadow: none;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+
+.miniFabMini2 {
+    width: 24px;
+    height: 24px;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini2 .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+mat-expansion-panel-header {
+    height: 64px;
+}
+
+mat-expansion-panel mat-form-field {
+    font-family: monospace;
 }
