@@ -1,0 +1,110 @@
+<div class="container">
+
+  <mat-card class="mat-elevation-z8">
+
+    <mat-toolbar color="primary">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar
+        </mat-placeholder>
+      </mat-form-field>
+
+      <span class="spacer-r"></span>
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">
+          <mat-icon svgIcon="school"></mat-icon>
+          &nbsp; {{subject?.name}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-toolbar>
+
+    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+    <mat-toolbar class="toolbar2">
+      <mat-list>
+        <mat-list-item>
+          <img matListAvatar *ngIf="(student) as s"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+s?.avatar.type+';base64,' + s?.avatar.data)"
+            alt="{{s?.username}}"
+            (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+          <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
+          </nx-card-user-dialog>
+          <!--<nx-image-zoom-user #imageZoom [avatar]="student?.avatar"></nx-image-zoom-user>-->
+
+          <h3 matLine>
+            <ng-container *ngIf="(student) as s">{{ s | shortNameLastname}}</ng-container>
+          </h3>
+          <p matLine>
+            <span *ngIf="student" class="role-style">{{student?.roles | rolesToSpanish}}</span>
+          </p>
+          <span class="spacer-r"></span>
+
+          <nx-crud-user-dialog #crudUserDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
+            [onlyRead]="crudUserOnlyRead">
+          </nx-crud-user-dialog>
+
+        </mat-list-item>
+      </mat-list>
+
+
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="evaluation.title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Titulo </mat-header-cell>
+        <mat-cell *matCellDef="let grade" style="flex-grow: 2">
+          {{grade?.evaluation?.title}}
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="crud">
+        <mat-header-cell *matHeaderCellDef class="crud">
+          <button *ngIf="(student && subject) && (areaRole !== roleStudent)" mat-mini-fab matTooltip="Agregar Calificación">
+            <mat-icon svgIcon="plus"></mat-icon>
+          </button>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let grade" class="crud">
+
+          <button mat-icon-button color="primary" (click)="openDialogDetail(grade);$event.stopPropagation()">
+            <mat-icon svgIcon="eye"></mat-icon>
+          </button>
+
+          <button mat-icon-button color="warn" (click)="setQuizDetail(grade);$event.stopPropagation()"
+            [style.visibility]="quizDetailButton(grade)">
+            <mat-icon svgIcon="book-outline"></mat-icon>
+          </button>
+
+          <button mat-icon-button color="accent" (click)="openDialogEdit(grade);$event.stopPropagation()"
+            [style.visibility]="areaRole === roleTeacher ? 'visible' : 'hidden' ">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      </mat-row>
+
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    </mat-paginator>
+
+    <mat-divider *ngIf="areaRole !== roleStudent"></mat-divider>
+    <mat-toolbar *ngIf="areaRole !== roleStudent">
+      <button type="button" mat-flat-button color="primary" tabindex="1" (click)="goBack()" cdkFocusRegionstart>
+        <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
+      </button>
+      <span class="spacer-r"></span>
+
+    </mat-toolbar>
+
+  </mat-card>
+
+</div>

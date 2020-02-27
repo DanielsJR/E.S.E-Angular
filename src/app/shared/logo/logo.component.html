@@ -1,0 +1,51 @@
+<div [ngSwitch]="type">
+
+    <ng-template [ngSwitchCase]="'mat-raised-button'">
+        <button type="button" mat-raised-button  [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState" [@tdJello]="jelloState">
+          <span>e</span>
+        </button>
+        <button type="button" mat-raised-button color="primary" [@tdBounce]="bounceState" (click)="bounceState = !bounceState" [@tdJello]="jelloState">
+          <span>S</span>
+        </button>
+        <button type="button" mat-raised-button color="accent" [@tdPulse]="pulseState" (click)="pulseState = !pulseState" [@tdJello]="jelloState">
+          <span>e</span>
+        </button>
+      </ng-template>
+
+  <ng-template [ngSwitchCase]="'mat-fab'">
+    <button type="button" mat-fab color="" mat-fab [@tdJello]="jelloState" (click)="jelloState = !jelloState">
+      <span>e</span>
+    </button>
+    <button type="button" mat-fab color="primary" [@tdBounce]="bounceState" (click)="bounceState = !bounceState">
+      <span>S</span>
+    </button>
+    <button type="button" mat-fab color="accent" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+      <span>e</span>
+    </button>
+  </ng-template>
+
+  <ng-template [ngSwitchCase]="'mat-mini-fab'">
+    <button type="button" mat-mini-fab color="" [@tdJello]="jelloState" (click)="jelloState = !jelloState">
+      <span class="mini">e</span>
+    </button>
+    <button type="button" mat-mini-fab color="primary" [@tdBounce]="bounceState" (click)="bounceState = !bounceState">
+      <span class="mini">S</span>
+    </button>
+    <button type="button" mat-mini-fab color="accent" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+      <span class="mini">e</span>
+    </button>
+  </ng-template>
+
+  <ng-template [ngSwitchCase]="'mat-icon-button'">
+      <button type="button" mat-icon-button color="" [@tdJello]="jelloState" (click)="jelloState = !jelloState">
+        <span>e</span>
+      </button>
+      <button type="button" mat-icon-button color="primary" [@tdBounce]="bounceState" (click)="bounceState = !bounceState">
+        <span>S</span>
+      </button>
+      <button type="button" mat-icon-button color="accent" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+        <span>e</span>
+      </button>
+    </ng-template>
+
+</div>

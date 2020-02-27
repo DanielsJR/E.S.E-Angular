@@ -1,0 +1,57 @@
+mat-dialog-content {
+    margin: 0;
+    padding: 0;
+    max-height: 100%;
+}
+
+mat-card{
+    --padding: 24px 24px 15px;
+}
+
+.imgLogo {
+    height: 40px;
+}
+
+.title {
+    margin-bottom: 10px !important;
+    font-size: 16px !important;
+}
+
+.subtitle {
+    font-size: 14px !important;
+}
+
+.imageCard {
+    margin-bottom: 0 !important;
+}
+
+mat-form-field {
+    font-size: 14px !important;
+}
+
+.form {
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+[dir='rtl'] .option-img {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+mat-card-actions {
+    --padding: 15px 0 0 !important;
+    --margin: 0;
+    display: flex;
+    justify-content: space-between;
+
+}
+

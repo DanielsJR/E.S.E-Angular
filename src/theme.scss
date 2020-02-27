@@ -1,0 +1,50 @@
+@import '~@angular/material/theming';
+
+
+//custom-themes
+@import './assets/custom-themes/pink-purple.scss';
+@import './assets/custom-themes/indigo-pink.scss';
+@import './assets/custom-themes/orange-lightblue.scss';
+@import './assets/custom-themes/deeppurple-amber.scss';
+@import './assets/custom-themes/bluegrey-amber.scss';
+@import './assets/custom-themes/purple-pink.scss';
+@import './assets/custom-themes/blue-orange.scss';
+@import './assets/custom-themes/lightblue-lime.scss';
+@import './assets/custom-themes/cyan-blue-grey.scss';
+@import './assets/custom-themes/teal-yellow.scss';
+@import './assets/custom-themes/red-indigo.scss';
+@import './assets/custom-themes/green-amber.scss';
+@import './assets/custom-themes/lightgreen-blue.scss';
+@import './assets/custom-themes/lime-pink.scss';
+@import './assets/custom-themes/yellow-deeppurple.scss';
+@import './assets/custom-themes/amber-indigo.scss';
+@import './assets/custom-themes/deeporange-indigo.scss';
+@import './assets/custom-themes/brown-orange.scss';
+@import './assets/custom-themes/grey-indigo.scss';
+
+
+
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// **Be sure that you only ever include this mixin once!**
+@include mat-core();
+
+
+// Define the default theme.
+$primary: mat-palette($mat-indigo);
+$accent:  mat-palette($mat-pink, A200, A100, A400);
+
+$theme: mat-light-theme($primary, $accent);
+@include angular-material-theme($theme);
+
+
+
+
+
+
+
+
+
+

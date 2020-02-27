@@ -1,0 +1,89 @@
+<mat-toolbar color="primary">
+  <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  <span class="spacer-r"></span>
+  <mat-icon svgIcon="lock-reset"></mat-icon>
+  <span>&nbsp;&nbsp;</span>
+  <h1 mat-dialog-title>Cambiar Contraseña</h1>
+</mat-toolbar>
+
+<div *ngIf="!isLoading" style="height: 5px;"></div>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+<form [formGroup]="setPassForm" (ngSubmit)="setPassword()">
+  <mat-dialog-content>
+
+    <mat-form-field appearance="fill">
+      <mat-label>
+        <i class="mdi mdi-lock material-icons app-input-icon">&nbsp;</i>Contraseña Actual
+      </mat-label>
+      <input matInput formControlName="currentPass" placeholder="Ingresa tu contraseña actual" [type]="hideCurrentPass ? 'password' : 'text'"
+        required>
+      <mat-icon matSuffix (click)="hideCurrentPass = !hideCurrentPass" svgIcon="{{hideCurrentPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-error *ngIf="currentPass.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+      <mat-error *ngIf="currentPass.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
+      </mat-label>
+      <input matInput formControlName="newPass1" placeholder="Ingresa tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
+        (keyup)="comparePass()" required minlength="8">
+      <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-hint align="end">{{newPass1.value?.length || 0}}/min 8</mat-hint>
+      <mat-error *ngIf="newPass1.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass1.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass1.hasError('minlength') && !newPass1.hasError('whitespace')">minimo
+        <strong>8</strong> caracteres.
+      </mat-error>
+      <mat-error *ngIf="newPass1.hasError('noMatch')">
+        <strong>Las contraseñas no coinciden</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Nueva Contraseña
+      </mat-label>
+      <input matInput formControlName="newPass2" placeholder="Vuelve a ingresar tu nueva contraseña" [type]="hideNewPass ? 'password' : 'text'"
+        (keyup)="comparePass()" required minlength="8">
+      <mat-icon matSuffix (click)="hideNewPass = !hideNewPass" svgIcon="{{hideNewPass ? 'eye' : 'eye-off'}}"></mat-icon>
+      <mat-hint align="end">{{newPass2.value?.length || 0}}/min 8</mat-hint>
+      <mat-error *ngIf="newPass2.hasError('required')">Este campo es
+        <strong>requerido</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('minlength') && !newPass2.hasError('whitespace')">minimo
+        <strong>8</strong> caracteres.
+      </mat-error>
+      <mat-error *ngIf="newPass2.hasError('noMatch')">
+        <strong>Las contraseñas no coinciden</strong>.
+      </mat-error>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+  <mat-dialog-actions>
+    <mat-toolbar>
+      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+        Cancelar
+      </button>
+      <span class="spacer-r"></span>
+      <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="setPassForm.invalid || setPassForm.pristine">Cambiar Contraseña</button>
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+
+
+</form>

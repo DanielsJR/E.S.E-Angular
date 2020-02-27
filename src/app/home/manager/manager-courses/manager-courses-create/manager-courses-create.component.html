@@ -1,0 +1,167 @@
+<div class="container">
+
+  <mat-card class="mat-elevation-z8">
+    <form [formGroup]="createForm" (ngSubmit)="createCourse()">
+      <mat-toolbar class="toolbar1" color="primary">
+        <mat-form-field [floatLabel]=" 'never' ">
+          <mat-select formControlName="name">
+            <mat-option>-- None --</mat-option>
+            <mat-optgroup *ngFor="let group of coursesNamesGroups" [label]="group.name" [disabled]="group.disabled">
+              <mat-option *ngFor="let courseName of group.course" [value]="courseName.viewValue">
+                {{courseName.viewValue}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+          <mat-label>
+            <i class="mdi mdi-book-variant app-input-icon">&nbsp;</i>Nombre de Curso
+          </mat-label>
+          <mat-error *ngIf="name.hasError('required')">Nombre de Curso es
+            <strong>requerido</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        &nbsp;&nbsp;
+        <mat-form-field [floatLabel]=" 'never' ">
+          <input matInput formControlName="year">
+          <mat-label>
+            <i class="mdi mdi-calendar-range app-input-icon">&nbsp;</i>Año
+          </mat-label>
+          <mat-error *ngIf="year.hasError('required')">Año es
+            <strong>requerido</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <span class="spacer-r"></span>
+        <mat-chip-list>
+          <mat-chip color="accent" selected="true">
+            <mat-icon svgIcon="book"></mat-icon>
+            &nbsp; {{name.value}}/{{year.value}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-toolbar>
+
+      <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+      <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+      <mat-toolbar class="toolbar2">
+
+        <mat-list style="flex-grow: 1">
+          <mat-list-item>
+            <img matListAvatar *ngIf="(chiefTeacher) as t"
+              [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
+              alt="{{t?.username}}"
+              (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
+            <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
+            <p matLine>
+              <span class="role-style">Profesor Jefe</span>
+            </p>
+            <span class="spacer-r"></span>
+            <button type="button" *ngIf="chiefTeacher" mat-icon-button color="primary"
+              (click)="crudTeacherDialog.openDialogDetail()">
+              <mat-icon svgIcon="eye"></mat-icon>
+            </button>
+            <button type="button" *ngIf="!chiefTeacher" mat-mini-fab color="accent" matTooltip="Agregar Docente"
+              (click)="changeTeacherDialog.openDialogSearchUser()">
+              <mat-icon svgIcon="account-plus"></mat-icon>
+            </button>
+            <button type="button" *ngIf="chiefTeacher" mat-mini-fab color="accent" matTooltip="Cambiar Docente"
+              (click)="changeTeacherDialog.openDialogSearchUser()">
+              <mat-icon svgIcon="account-edit"></mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+
+        <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriRole]="uriTeachers" [areaRole]="areaRole"
+          [onlyRead]="crudUserOnlyRead"></nx-crud-user-dialog>
+        <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="addTeacher($event)">
+        </nx-search-user-dialog>
+        <nx-card-user-dialog #cardTeacherDialog [user]="chiefTeacher" [areaRole]="areaRole"
+          [onlyRead]="crudUserOnlyRead"></nx-card-user-dialog>
+
+      </mat-toolbar>
+      <mat-divider></mat-divider>
+
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="student">
+          <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let student" style="flex-grow: 2">
+
+            <mat-list>
+              <mat-list-item>
+                <img matListAvatar
+                  [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar?.type+';base64,' + student?.avatar?.data)"
+                  alt="{{student?.username}}"
+                  (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+                <h3 matLine *ngIf="student"> {{student | shortName}} </h3>
+                <p matLine>
+                  <span class="role-style">{{student?.roles | rolesToSpanish}}</span>
+                </p>
+              </mat-list-item>
+            </mat-list>
+            <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"
+              [onlyRead]="crudUserOnlyRead"></nx-card-user-dialog>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="crud">
+          <mat-header-cell *matHeaderCellDef class="crud">
+            <button type="button" mat-mini-fab matTooltip="Agregar Estudiante"
+              (click)="addStudentDialog.openDialogSearchUser()">
+              <mat-icon svgIcon="account-plus"></mat-icon>
+            </button>
+            <nx-search-user-dialog #addStudentDialog [userRole]="'STUDENT'" (userSelected)="addStudent($event)">
+            </nx-search-user-dialog>
+          </mat-header-cell>
+
+          <mat-cell *matCellDef="let student" class="crud">
+
+            <button type="button" mat-icon-button color="primary"
+              (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
+              <mat-icon svgIcon="eye"></mat-icon>
+            </button>
+
+            <button type="button" mat-icon-button color="warn"
+              (click)="deleteStudent(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
+              <mat-icon svgIcon="account-minus"></mat-icon>
+            </button>
+
+            <nx-simple-dialog #deleteDialog [obj]="student" [title]="student | shortNameLastname"
+              [subtitle]="student.roles | rolesToSpanish" [message]="'Eliminar de este Curso?'"
+              [avatar]="student?.avatar" [cancelButton]="'Descartar'" [type]="'card'">
+            </nx-simple-dialog>
+
+            <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
+              [onlyRead]="crudUserOnlyRead"></nx-crud-user-dialog>
+
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+
+        </mat-row>
+
+      </mat-table>
+
+      <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+      </mat-paginator>
+
+      <mat-divider></mat-divider>
+      <mat-toolbar>
+        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()"
+          cdkFocusRegionstart>
+          <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
+        </button>
+        <span class="spacer-r"></span>
+        <button type="submit" mat-stroked-button color="accent" tabindex="2"
+          [disabled]="createForm.invalid || createForm.pristine">
+          <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
+        </button>
+      </mat-toolbar>
+
+    </form>
+
+  </mat-card>
+
+</div>

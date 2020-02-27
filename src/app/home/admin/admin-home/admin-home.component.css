@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  
+  mat-card {
+    text-align: center;
+    width: 500px;
+    min-width: 450px;
+    height: fit-content;
+    margin: 20px;
+    overflow: hidden;
+  }
+  
+  h1 {
+    font-size: 27px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .done {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+  }

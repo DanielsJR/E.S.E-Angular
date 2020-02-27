@@ -1,0 +1,31 @@
+<mat-toolbar color="primary">
+  <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+  <span class="spacer-r"></span>
+  <mat-icon svgIcon="lock-reset"></mat-icon>
+  <span>&nbsp;&nbsp;</span>
+  <h1 mat-dialog-title>Restablecer Contraseña</h1>
+</mat-toolbar>
+
+<div *ngIf="!isLoading" style="height: 5px;"></div>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <input matInput [value]="this.resetedPass()" readonly>
+    <mat-label>
+      <i class="mdi mdi-lock-reset material-icons app-input-icon">&nbsp;</i>Se restablecerá la contraseña de
+      <strong>{{user | shortName}}&nbsp;</strong>a:
+    </mat-label>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <mat-toolbar>
+    <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+      Cancelar
+    </button>
+    <span class="spacer-r"></span>
+    <button mat-raised-button color="warn" (click)="resetPassword()" tabindex="2">Restablecer Contraseña</button>
+  </mat-toolbar>
+</mat-dialog-actions>

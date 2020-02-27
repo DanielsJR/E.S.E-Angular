@@ -1,0 +1,77 @@
+<form [formGroup]="setRolesForm" (ngSubmit)="setUserRoles()">
+
+  <mat-toolbar color="primary">
+    <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="shield-account"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1 mat-dialog-title>Asignar Privilégios</h1>
+  </mat-toolbar>
+
+  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+
+  <mat-dialog-content>
+
+    <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
+
+      <mat-label>
+        <i class="mdi mdi-shield-account app-input-icon"></i>
+        Asignar a
+        <strong *ngIf="user">{{user | shortName}}&nbsp;
+        </strong>{{roles.length | i18nPlural: rolesMapping}}
+        <ng-container *ngIf="roles.length > 0">de:</ng-container>
+        &nbsp;
+      </mat-label>
+
+      <div class="container">
+
+        <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
+              Administrador
+            </mat-chip>
+          </mat-chip-list>
+        </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
+              Docente
+            </mat-chip>
+          </mat-chip-list>
+        </mat-slide-toggle>
+
+      </div>
+
+    </mat-form-field>
+
+    <br>
+
+    <!--{{roles | json}}-->
+
+    <div *ngIf="!slideToggleManager.value && !slideToggleTeacher.value" class="errorRoles centerField">
+      <i class="mdi mdi-alert-circle app-input-icon">&nbsp;</i>
+      Al menos un Privilégio es &nbsp;
+      <strong>requerido</strong>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+  <mat-dialog-actions>
+    <mat-toolbar>
+
+      <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>
+        Cancelar
+      </button>
+
+      <span class="spacer-r"></span>
+      <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="(!slideToggleManager.value && !slideToggleTeacher.value) || (setRolesForm.pristine)">
+        Asignar {{roles.length | i18nPlural: rolesMapping}}
+      </button>
+
+    </mat-toolbar>
+  </mat-dialog-actions>
+
+</form>

@@ -1,0 +1,37 @@
+<mat-dialog-content class="dialogContent">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title class="title" *ngIf="user">{{user | shortName}}</mat-card-title>
+      <mat-card-subtitle class="subtitle" *ngIf="user">{{user?.roles | rolesToSpanish}}</mat-card-subtitle>
+      <span class="spacer-r"></span>
+      <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
+    </mat-card-header>
+
+    <form class="form">
+      <mat-form-field class="full-width">
+        <input matInput aria-label="User" [matAutocomplete]="auto" [formControl]="stateCtrl">
+        <mat-placeholder>
+          <i class="mdi mdi-magnify"></i>Buscar
+        </mat-placeholder>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectedUser($event.option.value)">
+          <mat-option *ngFor="let u of filteredUsers$ | async" [value]="u">
+            <img class="option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
+            <span>{{u | shortNameLastname}}</span>
+            <!-- | <small>{{u.roles[0] | lowercase}}</small>-->
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+
+      <img *ngIf="user" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+        alt="user" class="imageCard">
+
+    </form>
+
+    <mat-card-actions>
+      <button type="button" mat-button color="accent" tabindex="1" (click)="cancel()" cdkFocusRegionstart>Cancelar</button>
+      <button type="button" mat-button color="primary" tabindex="2" [disabled]="stateCtrl.invalid || stateCtrl.pristine" (click)="accept()">{{actionButton}}</button>
+    </mat-card-actions>
+
+  </mat-card>
+</mat-dialog-content>

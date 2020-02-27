@@ -1,0 +1,71 @@
+<div class="container">
+
+    <mat-toolbar color="accent" class="toolbarMenu" *ngIf="enableToolbar">
+
+        <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route" routerLinkActive="active">{{m.name}}</button>
+
+        <span class="spacer-r"></span>
+
+        <ng-container *ngIf="areaRole === roleManager">
+
+            <button mat-mini-fab color="primary" [matMenuTriggerFor]="menuCoursesSubjects">
+                <mat-icon svgIcon="school"></mat-icon>
+            </button>
+
+
+            <mat-menu #menuCoursesSubjects="matMenu">
+                <ng-container *ngFor="let c of coursesSubjects">
+                    <button mat-menu-item [matMenuTriggerFor]="menuSubjectsCourse">{{c?.name}}</button>
+
+                    <mat-menu #menuSubjectsCourse="matMenu">
+                        <ng-container *ngFor="let s of getSubjectsByCourse(c)">
+                            <button mat-menu-item (click)="navigateSubject(s.id)">{{s.name}}</button>
+                        </ng-container>
+                    </mat-menu>
+
+                </ng-container>
+            </mat-menu>
+
+        </ng-container>
+
+
+        <ng-container *ngIf="areaRole === roleTeacher">
+            <button mat-mini-fab color="primary" [matMenuTriggerFor]="menuCourses">
+                <mat-icon svgIcon="school"></mat-icon>
+            </button>
+
+            <mat-menu #menuCourses="matMenu">
+                <ng-container *ngFor="let c of coursesTeacher">
+                    <button mat-menu-item [matMenuTriggerFor]="menuSubjects">{{c?.name}}</button>
+
+                    <mat-menu #menuSubjects="matMenu">
+                        <ng-container *ngFor="let s of getSubjectsTeacherByCourse(c)">
+                            <button mat-menu-item (click)="navigateSubject(s.id)">{{s.name}}</button>
+                        </ng-container>
+                    </mat-menu>
+
+                </ng-container>
+            </mat-menu>
+
+        </ng-container>
+
+        <ng-container *ngIf="areaRole === roleStudent">
+            <button mat-mini-fab color="primary" [matMenuTriggerFor]="menuSubjects">
+                <mat-icon svgIcon="school"></mat-icon>
+            </button>
+
+            <mat-menu #menuSubjects="matMenu">
+                <ng-container *ngFor="let s of subjects">
+                    <button mat-menu-item (click)="navigateSubject(s.id)">{{s.name}}</button>
+                </ng-container>
+            </mat-menu>
+
+        </ng-container>
+
+    </mat-toolbar>
+
+    <div class="content" [ngStyle]="dinamicStyles">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>

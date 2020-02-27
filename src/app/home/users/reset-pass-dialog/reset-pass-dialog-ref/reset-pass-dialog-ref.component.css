@@ -1,0 +1,18 @@
+mat-dialog-content {
+    overflow-x: hidden;
+    padding: 25px 30px 10px;
+    margin: 0;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-dialog-actions {
+    margin: 0;
+    padding: 0;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}

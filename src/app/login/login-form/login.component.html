@@ -1,0 +1,42 @@
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+
+  <mat-toolbar color="primary">
+    <nx-logo [type]="'mat-mini-fab'"></nx-logo>
+    <span class="spacer-r"></span>
+    <mat-icon svgIcon="login"></mat-icon>
+    <span>&nbsp;&nbsp;</span>
+    <h1>Login</h1>
+  </mat-toolbar>
+
+  <div class="login-content">
+
+    <mat-form-field appearance="standard">
+      <input matInput type="text" formControlName="username">
+      <mat-label>
+        <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
+      </mat-label>
+      <mat-error *ngIf="username.hasError('required')">Nombre de Usuario es requerido.</mat-error>
+      <mat-error *ngIf="username.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.</mat-error>
+      <mat-error *ngIf="password.hasError('bad-credencials')">{{unauthMessage}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <input matInput type="password" formControlName="password">
+      <mat-label>
+        <i class="mdi mdi-lock-open app-input-icon">&nbsp;</i>Contraseña
+      </mat-label>
+      <mat-error *ngIf="password.hasError('required')">Contraseña es requerida.</mat-error>
+      <mat-error *ngIf="password.hasError('whitespace')">No se permiten espacios en
+        <strong>blanco</strong>.</mat-error>
+      <mat-error *ngIf="password.hasError('bad-credencials')">{{unauthMessage}}</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" type="submit" id="login-submit-button" [disabled]="!loginForm.valid"
+      class="login-actions ">
+      Ingresa
+    </button>
+
+  </div>
+
+</form>

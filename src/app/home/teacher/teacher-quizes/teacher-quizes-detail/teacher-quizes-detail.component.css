@@ -1,0 +1,175 @@
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+    --min-width: fit-content;
+}
+
+mat-card {
+    --width: fit-content;
+    width: 100%;
+    height: fit-content;
+    margin: 20px;
+    padding: 0;
+}
+
+mat-card:last-of-type {
+    margin-top: 0;
+}
+
+mat-form-field {
+    font-size: 16px;
+}
+
+.toolbarDiv {
+    padding-right: 20px;
+    width: 100%;
+}
+
+.imgEseToolbar {
+    height: 40px;
+}
+
+
+.role-style {
+    color: darkgray;
+}
+
+.description {
+    font-size: 16px;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.listContainer .mat-list-item {
+    min-height: 90px;
+    height: 100%;
+}
+
+.listContainer .mat-list-item:first-of-type {
+    margin-top: 10px;
+}
+
+.listContainer .mat-list-item:last-of-type {
+    padding-bottom: 21.5px;
+}
+
+.listContainer .mat-list-item .mat-list-item {
+    padding-bottom: 0;
+    min-height: 65px;
+    width: fit-content;
+}
+
+::ng-deep .listContainer .mat-list-item:last-of-type .mat-list-item-content {
+    justify-content: space-between;
+}
+
+.listContainer .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}
+
+.mat-list-avatar {
+    cursor: pointer;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.listContainer .data {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.listContainer .data mat-form-field {
+    margin-left: 50px;
+}
+
+::ng-deep .listContainer .data mat-form-field:first-of-type .mat-form-field-wrapper {
+    padding: 0;
+}
+
+.level {
+    font-size: 17px;
+    color: darkgray;
+}
+
+.quizContainer {
+    margin: 15px !important;
+}
+
+
+.fullWith {
+    width: 100%;
+}
+
+.fiftyWith {
+    width: 50%;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}
+
+.size-mdi-icon {
+    font-size: 24px;
+}
+
+.mat-action-row {
+    padding: 16px 8px 0 24px;
+}
+
+mat-accordion mat-toolbar button {
+    margin: 0 5px;
+}
+
+mat-action-row button {
+    margin: 0 5px;
+}
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    box-shadow: none !important;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+
+.miniFabMini2 {
+    width: 24px;
+    height: 24px;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini2 .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+mat-expansion-panel-header {
+    height: 64px;
+}
+
+mat-expansion-panel mat-form-field {
+    font-family: monospace;
+}

@@ -1,0 +1,6 @@
+<div matTooltip="{{tooltipMessage}}">
+    <button mat-icon-button (click)="toggleFullScreen()">
+        <mat-icon *ngIf="!isFullscreen" svgIcon="fullscreen"></mat-icon>
+        <mat-icon *ngIf="isFullscreen" svgIcon="fullscreen-exit"></mat-icon>
+    </button>
+</div>

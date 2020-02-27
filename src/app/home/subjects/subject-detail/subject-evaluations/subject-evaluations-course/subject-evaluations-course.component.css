@@ -1,0 +1,134 @@
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+}
+
+mat-card {
+    width: 100%;
+    height: fit-content;
+    margin: 20px;
+    padding: 0;
+    min-width: 500px;
+}
+
+mat-toolbar-row {
+    padding: 0;
+}
+
+mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    padding: 10px 20px 0 0;
+}
+
+.toolbar2 {
+    padding-bottom: 5px !important;
+    height: 59px !important;
+}
+
+.fila:hover {
+    --cursor: pointer;
+    background: #f5f5f5;
+}
+
+.fila:active {
+    background: #eaeaea;
+}
+
+.fila-dark:hover {
+
+    background: #353535;
+}
+
+.fila-dark:active {
+    background: #292929;
+}
+
+.mat-list-avatar {
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    cursor: pointer;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+mat-list {
+    padding: 0;
+}
+
+mat-list-item {
+    height: 55px !important;
+}
+
+mat-cell {
+    padding-left: 20px;
+}
+
+mat-cell:first-of-type {
+    padding-left: 24px;
+}
+
+mat-header-cell {
+    padding-left: 20px;
+}
+
+mat-header-cell:first-of-type {
+    padding-left: 24px;
+}
+
+.crud {
+    justify-content: flex-end !important;
+}
+
+.role-style {
+    color: darkgray;
+}
+
+.gradeColorHigh {
+    color: blue;
+    font-size: larger;
+}
+
+.gradeColorLow {
+    color: red;
+    font-size: larger;
+}
+
+.gradeColorHighDark {
+    color: skyblue;
+    font-size: larger;
+}
+
+.gradeColorLowDark {
+    color: tomato;
+    font-size: larger;
+}
+
+.miniFabMini {
+    width: 24px;
+    height: 24px;
+    line-height: 12px;
+}
+
+::ng-deep .miniFabMini .mat-button-wrapper {
+    font-weight: bold;
+    line-height: 12px;
+    padding: 0;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+
+.closeButton {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
+}

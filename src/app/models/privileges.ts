@@ -1,0 +1,8 @@
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH } from "../app.config";
+
+export const PRIVILEGES = [
+  //  { value: ROLE_ADMIN, viewValue: ROLE_ADMIN_SPANISH },
+    { value: ROLE_MANAGER, viewValue: ROLE_MANAGER_SPANISH },
+    { value: ROLE_TEACHER, viewValue: ROLE_TEACHER_SPANISH }
+    
+];

@@ -1,0 +1,116 @@
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+}
+
+mat-card {
+    --width: fit-content;
+    width: 100%;
+    height: fit-content;
+    margin: 20px;
+    padding: 0;
+    min-width: 500px;
+}
+
+.toolbar1 {
+    height: 74px !important;
+}
+
+mat-toolbar-row {
+    padding: 0;
+}
+
+mat-form-field {
+    font-size: 14px;
+    width: 35%;
+}
+
+.toolbar2 {
+    padding: 0 24px 5px 24px !important;
+    height: 59px !important;
+}
+
+.toolbar2,
+.toolbar2 h3 {
+    font: unset !important;
+}
+
+.fila:hover {
+    --cursor: pointer;
+    background: #f5f5f5;
+}
+
+.fila:active {
+    background: #eaeaea;
+}
+
+.fila-dark:hover {
+    --cursor: pointer;
+    background: #353535;
+}
+
+.fila-dark:active {
+    background: #292929;
+}
+
+mat-cell {
+    padding-left: 20px;
+}
+
+mat-cell:first-of-type {
+    padding-left: 24px;
+}
+
+mat-header-cell {
+    padding-left: 20px;
+}
+
+mat-header-cell:first-of-type {
+    padding-left: 24px;
+}
+
+mat-list {
+    padding: 0;
+}
+
+mat-list-item {
+    height: 55px !important;
+}
+
+:host /deep/ .toolbar2 .mat-list-item-content {
+    padding: 0 !important;
+}
+
+.mat-list-avatar {
+    cursor: pointer;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+
+.crud {
+    justify-content: flex-end !important;
+}
+
+
+.role-style {
+    color: darkgray;
+}
+
+.wrapperPaginator {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

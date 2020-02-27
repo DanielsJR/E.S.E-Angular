@@ -1,0 +1,35 @@
+mat-dialog-content {
+    margin: 0;
+    padding: 0;
+    max-height: 100%;
+}
+
+mat-card-title {
+    margin-bottom: 10px;
+}
+
+.imgLogo {
+    height: 40px;
+}
+
+.title {
+    font-size: 16px !important;
+}
+
+.subtitle {
+    font-size: 14px !important;
+}
+
+.imageCard {
+    margin-bottom: 0 !important;
+}
+
+mat-card-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+mat-card-actions button {
+    margin: 0;
+}
+

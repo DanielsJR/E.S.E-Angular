@@ -1,0 +1,128 @@
+.container {
+    display: flex;
+}
+
+
+mat-card {
+    min-width: 400px;
+    width: 100%;
+    height: fit-content;
+    margin: 20px;
+    padding: 0;
+
+}
+
+mat-form-field {
+    font-size: 16px;
+}
+
+
+.imgEseToolbar {
+    height: 40px;
+}
+
+
+.role-style {
+    color: darkgray;
+}
+
+.description {
+    font-size: 16px;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.listContainer .mat-list-item {
+    min-height: 90px;
+    height: 100%;
+}
+
+.listContainer .mat-list-item:last-of-type {
+    padding-bottom: 21.5px;
+}
+
+.listContainer .mat-list-item .mat-list-item {
+    padding-bottom: 0;
+    min-height: 65px;
+    width: fit-content;
+}
+
+
+::ng-deep .listContainer .mat-list-item:last-of-type .mat-list-item-content {
+    justify-content: space-between;
+}
+
+
+.listContainer .mat-list-avatar {
+    height: 65px;
+    width: 65px;
+}
+
+
+.mat-list-avatar {
+    cursor: pointer;
+    opacity: 1;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
+    opacity: 0.3;
+}
+
+.listContainer .data {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+
+::ng-deep .listContainer .data mat-form-field:first-of-type .mat-form-field-wrapper {
+    padding: 0;
+}
+
+.listContainer .data mat-form-field {
+    margin-left: 50px;
+}
+
+.level {
+    font-size: 17px;
+    color: darkgray;
+}
+
+.quizContainer div {
+    margin: 15px;
+}
+
+.quizContainer div div {
+    margin: 0 0 15px;
+}
+
+
+.fullWith {
+    width: 100%;
+}
+
+.fiftyWith {
+    width: 50%;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}
+
+.size-mdi-icon {
+    font-size: 24px;
+}
+
+.mat-action-row {
+    padding: 16px 8px 0 24px;
+}
+
+mat-action-row button {
+    margin: 0 5px;
+}

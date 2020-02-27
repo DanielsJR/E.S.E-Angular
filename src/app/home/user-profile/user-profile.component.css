@@ -1,0 +1,35 @@
+.profileSideNav {
+    overflow-y: auto;
+    position: absolute;
+    bottom: 0;
+    top: 64px;
+    margin: auto;
+}
+
+.profileSideNav:hover {
+    --overflow-y: overlay;
+}
+
+form {
+    padding: 20px;
+}
+
+mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    margin: 0;
+}
+
+.btnSave {
+    padding-top: 20px !important;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.btnResetPass {
+    width: 100%;
+}
+
+.photo {
+    cursor: pointer;
+}

@@ -1,0 +1,75 @@
+<div *ngIf="data.type === guiTypeCard">
+
+    <mat-dialog-content>
+        <mat-card>
+            
+            <mat-card-header>
+                <mat-card-title class="title">{{title}}</mat-card-title>
+                <mat-card-subtitle class="subtitle">{{subtitle}}</mat-card-subtitle>
+                <span class="spacer-r"></span>
+                <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
+            </mat-card-header>
+
+            <img *ngIf="avatar" mat-card-image
+                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type +';base64,' + avatar?.data)"
+                class="imageCard">
+            <p *ngIf="message" class="message">{{message}}</p>
+
+            <mat-card-actions>
+                <button *ngIf="cancelButton" type="button" mat-button color="accent" tabindex="1" (click)="cancel()"
+                    cdkFocusRegionstart>Cancelar</button>
+                <button type="button" mat-button color="primary" tabindex="2"
+                    (click)="action1()">{{actionButton1}}</button>
+                <button *ngIf="actionButton2" type="button" mat-button color="accent" tabindex="3"
+                    (click)="action2()">{{actionButton2}}</button>
+                <button *ngIf="actionButton3" type="button" mat-button color="warn" tabindex="3"
+                    (click)="action3()">{{actionButton3}}</button>
+            </mat-card-actions>
+
+        </mat-card>
+    </mat-dialog-content>
+
+</div>
+
+<div *ngIf="data.type === guiTypeClassic">
+
+    <mat-dialog-content>
+        <mat-toolbar color="primary">
+            <img class="imgLogo" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+            <span class="spacer-r"></span>
+            <mat-icon svgIcon={{icon}}></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>{{dialogTitle}}</h1>
+        </mat-toolbar>
+
+        <div class="listContainer">
+            <mat-list>
+                <mat-list-item>
+                    <img *ngIf="avatar" matListAvatar
+                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type +';base64,' + avatar?.data)"
+                        (click)="imageZoom.openDialogImage()">
+                    <h3 matLine> {{title}}</h3>
+                    <p matLine>
+                        <span class="role-style">{{subtitle}}</span>
+                    </p>
+                </mat-list-item>
+                <nx-image-zoom-user #imageZoom [avatar]="avatar"></nx-image-zoom-user>
+            </mat-list>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-dialog-actions>
+            <mat-toolbar>
+                <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()"
+                    cdkFocusRegionstart>
+                    {{cancelButton}}
+                </button>
+                <span class="spacer-r"></span>
+                <button type="button" mat-raised-button color="warn" (click)="action1()"
+                    tabindex="2">{{actionButton1}}</button>
+            </mat-toolbar>
+        </mat-dialog-actions>
+    </mat-dialog-content>
+
+</div>

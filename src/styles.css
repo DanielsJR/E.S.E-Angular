@@ -1,0 +1,140 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*MATERIAL DESIGN*/
+
+/*@import 'https://fonts.googleapis.com/css?family=Roboto';
+@import 'https://fonts.googleapis.com/css?family=Black+Ops+One'; 
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';*/
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+/*mat-toolbar */
+
+.spacer-c {
+    flex: .5 1 auto;
+}
+
+
+.spacer-r {
+    flex: 1 1 auto;
+}
+
+/*mat-toolbar */
+
+/*mat-sidenav*/
+
+
+/*mat-sidenav*/
+
+
+/*MATERIAL dialog*/
+.dialogService {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dialogService .mat-dialog-container {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/*MATERIAL dialog*/
+
+
+
+/*MATERIAL snackBar*/
+.snackBarService {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/*MATERIAL snackBar*/
+
+/*MATERIAL table.... mat-list in tables*/
+mat-cell mat-list mat-list-item .mat-list-item-content {
+    padding: 0 !important;
+}
+
+/*MATERIAL snackBar*/
+
+/*MAT icons*/
+button.mat-menu-item {
+    line-height: 24px !important;
+}
+
+a.mat-menu-item>mat-icon {
+    margin-bottom: 14px;
+}
+
+.mat-icon svg {
+    height: 24px;
+    width: 24px;
+}
+
+/*MAT icons*/
+
+
+
+/*scrollbar 
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.7);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+::-webkit-scrollbar-thumb:active {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+}
+
+/*scrollbar */
+
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
+    display: none;
+} 
+
+::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
+

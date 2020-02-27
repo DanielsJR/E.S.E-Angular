@@ -1,0 +1,35 @@
+<mat-sidenav-container [class]="theme.themeName">
+  <mat-sidenav-content>
+
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+
+    <div id="head" class="primaryColorBG">
+      <nx-theme-picker #theme></nx-theme-picker>
+    </div>
+
+    <button id="line1" mat-raised-button color="accent"></button>
+
+    <mat-card id="center" [style.background-color]="theme.isDark ? 'rgb(46, 46, 46)': 'rgb(246, 246, 246)'">
+    </mat-card>
+
+    <button id="line2" mat-raised-button color="accent"></button>
+
+    <div id="footer" class="primaryColorBG">
+      <img id="l-s" alt="logo" src="assets/images/logos/ese-logo.png">
+      <h6>Powered by Daniel's &copy; &nbsp; 2017-{{year}}.</h6>
+    </div>
+
+    <mat-card id="content" class="mat-elevation-z8">
+      <nx-login></nx-login>
+
+      <!-- <div class="logo">
+        <h2>Bienvenido a</h2>
+        <nx-logo></nx-logo>
+        <img width="180" src="assets/images/logos/ese-logo-big2.png">
+      </div>-->
+    </mat-card>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

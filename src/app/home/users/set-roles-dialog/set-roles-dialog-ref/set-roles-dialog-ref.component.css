@@ -1,0 +1,38 @@
+mat-dialog-content {
+    overflow-x: hidden;
+    padding: 25px 30px 10px;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-dialog-actions {
+    margin: 0;
+    padding: 0;
+}
+
+.app-input-icon {
+    font-size: 16px;
+}
+
+.errorRoles {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 0.75em;
+    color: red;
+}
+
+.chip-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+}
