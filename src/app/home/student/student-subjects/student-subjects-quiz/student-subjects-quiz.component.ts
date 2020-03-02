@@ -29,8 +29,11 @@ export class StudentSubjectsQuizComponent implements OnInit, OnDestroy, CanCompo
   isLoading: boolean;
   processing: boolean = false;
 
-  constructor(private quizNotificationService: QuizNotificationService, private localStorageService: LocalStorageService,
-    private route: ActivatedRoute, private router: Router, ) {
+  constructor(
+    private quizNotificationService: QuizNotificationService,
+    private localStorageService: LocalStorageService,
+    private route: ActivatedRoute,
+    private router: Router, ) {
 
     if (this.localStorageService.isQuizWebSocketStored()) this.quizFromWebSocket = JSON.parse(this.localStorageService.getQuizWebSocket());
 

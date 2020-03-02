@@ -31,12 +31,15 @@ export class ThemePickerComponent implements OnInit {
     private sessionStorage: SessionStorageService,
     private themeService: ThemeService,
     private userLoggedService: UserLoggedService
-  ) { }
+  ) {
 
-  ngOnInit() {
     if (!this.isInstalled) {
       this.installTheme((this.initialTheme) ? this.initialTheme : this.defaultTheme);//indigo-pink default
     }
+
+   }
+
+  ngOnInit() {
     this.overlayContainer.getContainerElement().classList.add(this.theme().name);
     this.setThemeArray();
     this.userLoggedService.userLogged$.subscribe(user => {

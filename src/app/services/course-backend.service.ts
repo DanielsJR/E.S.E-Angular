@@ -12,11 +12,9 @@ import { tap } from "../../../node_modules/rxjs/internal/operators/tap";
 })
 export class CourseBackendService {
 
-
     private courseURL = API_SERVER + URI_COURSES;
 
     constructor(private httpCli: HttpClient) { }
-
 
     getCourses(year:string): Observable<Course[]> {
         const url = `${this.courseURL}${URI_YEAR}/${year}`;

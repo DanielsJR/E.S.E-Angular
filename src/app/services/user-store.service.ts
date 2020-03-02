@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { User } from "../models/user";
 import { URI_MANAGERS, ROLE_MANAGER, URI_TEACHERS, ROLE_TEACHER, URI_STUDENTS, ROLE_STUDENT } from "../app.config";
@@ -16,6 +16,7 @@ import { SubjectStoreService } from "./subject-store.service";
     providedIn: 'root',
 })
 export class UserStoreService {
+    
     private dataStore: { managers: User[], teachers: User[], students: User[] };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
@@ -33,10 +34,14 @@ export class UserStoreService {
     private studentRole: string = ROLE_STUDENT;
     private isLoadingGetStudents = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private userBackendService: UserBackendService,
+
+    constructor(
+        private userBackendService: UserBackendService,
         private courseStoreService: CourseStoreService,
         private subjectStoreService: SubjectStoreService,
-        private gradeStoreService: GradeStoreService) {
+        private gradeStoreService: GradeStoreService
+    ) {
+
         this.dataStore = { managers: [], teachers: [], students: [] }
     }
 

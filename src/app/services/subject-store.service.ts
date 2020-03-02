@@ -23,8 +23,11 @@ export class SubjectStoreService {
     private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private subjectBackendService: SubjectBackendService, private isLoadingService: IsLoadingService,
-        private gradeStoreService: GradeStoreService, private userLoggedService: UserLoggedService,
+    constructor(
+        private subjectBackendService: SubjectBackendService,
+        private isLoadingService: IsLoadingService,
+        private gradeStoreService: GradeStoreService,
+        private userLoggedService: UserLoggedService,
     ) {
         this.dataStore = { subjects: [] };
     }

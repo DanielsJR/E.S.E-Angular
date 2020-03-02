@@ -10,17 +10,21 @@ import { SubjectStoreService } from "./subject-store.service";
 import { map } from "rxjs/operators";
 
 
-
 @Injectable({
     providedIn: 'root',
 })
 export class CourseStoreService {
+
     private dataStore: { courses: Course[] };
     private coursesSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private courseBackendService: CourseBackendService, private isLoadingService: IsLoadingService,
-        private subjectStoreService: SubjectStoreService, ) {
+    constructor(
+        private courseBackendService: CourseBackendService,
+        private isLoadingService: IsLoadingService,
+        private subjectStoreService: SubjectStoreService
+    ) {
+
         this.dataStore = { courses: [] };
     }
 
@@ -193,14 +197,6 @@ export class CourseStoreService {
             this.coursesSource.next(Object.assign({}, this.dataStore).courses);
         }
     }
-
-
-
-
-
-
-
-
 
 
 

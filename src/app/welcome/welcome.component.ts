@@ -16,7 +16,6 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
-
   }
 
   get year() {

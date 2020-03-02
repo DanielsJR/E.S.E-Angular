@@ -2,9 +2,8 @@ import { LocalStorageService } from './services/local-storage.service';
 import { BROKER_URL } from './app.config';
 import { Injectable } from '@angular/core';
 
-//@Injectable()
+@Injectable()
 export class MyStomp {
-
 
     brokerURL = BROKER_URL;
     connectHeaders = {};
@@ -13,17 +12,12 @@ export class MyStomp {
     reconnectDelay = 500;
 
     constructor(private localStorageService: LocalStorageService) {
-
-        this.connectHeaders = {
-            'Authorization': 'Bearer ' + this.localStorageService.getToken(),
-        };
-
+        this.connectHeaders = { 'Authorization': 'Bearer ' + this.localStorageService.getToken() };
     }
 
     debug = (msg: string): void => {
         console.log(new Date(), msg);
     }
-
 
 }
 

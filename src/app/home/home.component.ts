@@ -10,11 +10,12 @@ import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELC
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
-import { QuizNotificationService } from '../services/quiz-notification.service';
+
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatButton } from '@angular/material/button';
 import { MatMenu } from '@angular/material/menu';
 import { delay } from 'rxjs/internal/operators/delay';
+import { QuizNotificationService } from '../services/quiz-notification.service';
 
 
 @Component({
@@ -64,16 +65,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild("btnSettingsBack") btnSettingsBack: MatButton;
 
   currentUrl: string = '';
-
+  
 
   constructor(
-    private loginService: LoginService, private userLoggedService: UserLoggedService,
-    private router: Router, private route: ActivatedRoute,
-    private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
-    private isLoadingService: IsLoadingService, private quizNotificationService: QuizNotificationService,
+    private loginService: LoginService,
+    private userLoggedService: UserLoggedService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private snackbarService: SnackbarService,
+    public sanitizer: DomSanitizer,
+    private isLoadingService: IsLoadingService,
+   // private quizNotificationService: QuizNotificationService,
   ) {
 
     this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
+
     this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
@@ -83,17 +89,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    this.route.data
-    .pipe(delay(0))
-    .subscribe((data: { theme: Theme }) => {
-      if (data.theme) {
-        console.log('NAMEEE ', data.theme.name);
-        this.themePicker.installTheme(data.theme);
-      }
-      if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
-        this.router.navigate([this.userLoggedService.redirectUrl]);
-    });
 
     if (this.user) {
       if (this.user.username === '111') {
@@ -111,6 +106,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
 
+    this.route.data
+    .pipe(delay(0))
+    .subscribe((data: { theme: Theme }) => {
+      if (data.theme) {
+        this.themePicker.installTheme(data.theme);
+      }
+      if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
+        this.router.navigate([this.userLoggedService.redirectUrl]);
+    });
 
 
     this.sidenavMenuProfile.openedChange.subscribe(() => {
@@ -137,7 +141,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.quizNotificationService.setQuizSent(true);
+   // this.quizNotificationService.setQuizSent(true);
     this.loginService.logout();
     this.router.navigate([URI_WELCOME]).then(() => {
       window.location.reload(true);//cache clean

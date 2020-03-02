@@ -12,7 +12,6 @@ import { Subject } from "../models/subject";
 })
 export class SubjectBackendService {
 
-
     private subjectURL = API_SERVER + URI_SUBJECTS;
 
     constructor(private httpCli: HttpClient) { }

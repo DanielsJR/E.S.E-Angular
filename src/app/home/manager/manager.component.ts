@@ -10,8 +10,12 @@ import { UserLoggedService } from '../../services/user-logged.service';
 
 export class ManagerComponent implements OnInit, OnDestroy {
 
-    constructor(private courseStoreService: CourseStoreService, private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService, private userLoggedService: UserLoggedService
+    constructor(
+        private courseStoreService: CourseStoreService,
+        private subjectStoreService: SubjectStoreService,
+        private userStoreService: UserStoreService,
+        private userLoggedService: UserLoggedService,
+
     ) { }
 
     ngOnInit(): void {
