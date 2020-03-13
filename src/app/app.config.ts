@@ -10,11 +10,11 @@ export const SESSION_STORAGE_THEME_KEY = 'theme';
 export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
 //*******************WEB-SOCKET*************************/
-export const BROKER_URL = 'ws://192.168.1.90:8080/api/v0/socket';
+export const BROKER_URL = 'ws://192.168.1.40:8080/api/v0/socket';
 
 
 //*******************REST*************************/
-export const API_SERVER = 'http://192.168.1.90:8080/api/v0';
+export const API_SERVER = 'http://192.168.1.40:8080/api/v0';
 export const API_GENERIC_URI = '/api/v0';
 
 export const URI_TOKEN_AUTH = '/token/generate-token';

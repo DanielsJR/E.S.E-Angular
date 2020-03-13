@@ -38,23 +38,41 @@
 
 .sidenav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
-    width: 350px;
-
+    width: 100%;
     position: fixed;
     top: 64px;
     bottom: 0;
 }
+
 
 .sideToolbarMainMenu {
     overflow-y: auto;
     width: inherit;
     position: absolute;
     top: 64px;
-    bottom: 0;
+    bottom: 64px;
+    overflow-x: hidden;
 }
+
+::ng-deep .sideToolbarMainMenu h3 {
+    font-weight: bold !important;
+    
+}
+
+
 
 .side-toolbar {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
+    padding-left: 0;
+    overflow: hidden;
+}
+
+.sideFooter-toolbar {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
+    padding-left: 12px;
+    overflow: hidden;  
+    position: absolute;
+    bottom: 0;
 }
 
 .side-toolbar,
@@ -64,10 +82,15 @@
 
 .side-toolbar mat-list {
     padding: 0;
+    width: inherit;
 }
 
 .side-toolbar mat-list-item {
     height: 55px !important;
+}
+
+::ng-deep .side-toolbar mat-list .mat-list-item .mat-list-item-content {
+    padding: 12px;
 }
 
 
@@ -98,6 +121,8 @@
 
 ::ng-deep .listAvatarContainer .mat-list-item .mat-list-item-content {
     justify-content: center;
+
+    padding: 0;
 }
 
 .listAvatarContainer .mat-list-avatar {
@@ -147,3 +172,5 @@ mat-sidenav-content {
     overflow: auto;
 
 }
+
+

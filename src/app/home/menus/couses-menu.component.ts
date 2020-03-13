@@ -4,9 +4,9 @@ import { Component, OnInit, Input } from '@angular/core';
   selector: 'nx-courses-menu',
   template: `
 
-<mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]= "['./manager/courses']">
-  <mat-icon matListIcon svgIcon="book-multiple"></mat-icon>
-    <h3 matLine>Administrar Cursos</h3>
+<mat-list-item *ngIf = "roles?.includes('MANAGER')" [routerLink]= "['./manager/courses']" routerLinkActive #rla="routerLinkActive">
+  <mat-icon matListIcon svgIcon="book-multiple" [color]= "rla.isActive ? 'primary' : '' "></mat-icon>
+    <h3 matLine [class.primaryColor]= "rla.isActive">Cursos</h3>
 </mat-list-item>
   
   `,

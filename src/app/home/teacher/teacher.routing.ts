@@ -95,14 +95,20 @@ const routes: Routes = [
                     },
 
                     {
-                        path: 'quizes/send-quiz',
+                        path: 'quizes/send',
                         component: TeacherQuizesSendQuizComponent
                     },
 
                     {
-                        path: 'quizes/historical-quiz',
+                        path: 'quizes/import',
                         component: TeacherQuizesComponent
                     },
+
+                    {
+                        path: 'quizes/historical',
+                        component: TeacherQuizesComponent
+                    },
+
 
                     {
                         path: '',

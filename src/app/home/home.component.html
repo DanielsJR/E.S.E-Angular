@@ -5,8 +5,8 @@
     <!-- toolbar 1 -->
     <mat-toolbar color="primary" class="toolbar1">
 
-        <button type="button" mat-icon-button (click)="sidenavMenu.toggle(); menuUser = !menuUser">
-            <mat-icon svgIcon="backburger" [@tdRotate]="!menuUser"></mat-icon>
+        <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
+            <mat-icon svgIcon="backburger" [@tdRotate]="!sidenavMenu.opened"></mat-icon>
         </button>
 
         <img id="imgHome" alt="E.S.E" src="assets/images/logos/ese-logo.png">
@@ -25,11 +25,13 @@
         </div>
     </mat-toolbar>
 
+
     <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
         class="sidenavContainer">
 
         <!-- sidenav menu -->
-        <mat-sidenav mode="side" opened="true" #sidenavMenu class="sidenav" [position]=" 'start' ">
+        <mat-sidenav #sidenavMenu mode="side" opened="true" class="sidenav" [position]=" 'start' "
+            [@onSideNavChange]="sideNavState ? 'open' : 'close'">
 
             <!-- sidenav toobar -->
             <mat-toolbar class="side-toolbar">
@@ -38,11 +40,11 @@
                         <img matListAvatar
                             [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
                             alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
-                        <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
                         <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
                         <p matLine>
                             <span *ngIf="user" class="roles">{{user.roles | rolesToSpanish}}</span>
                         </p>
+                        <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
                     </mat-list-item>
                 </mat-list>
                 <span class="spacer-r"></span>
@@ -80,19 +82,23 @@
             <!-- sidenav menus -->
             <mat-nav-list class="sideToolbarMainMenu">
                 <nx-home-menu [roles]='roles'></nx-home-menu>
-
-                <nx-users-menu [roles]='roles'></nx-users-menu>
-
+                <nx-users-menu [roles]='roles' [shortMenu]="!sideNavState"></nx-users-menu>
                 <nx-courses-menu [roles]='roles'></nx-courses-menu>
-
                 <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
-
-                <nx-quiz-menu [roles]='roles'></nx-quiz-menu>
+                <nx-quiz-menu [roles]='roles' [shortMenu]="!sideNavState"></nx-quiz-menu>
             </mat-nav-list>
 
+            <!-- sidenav footer toobar -->
+            <mat-toolbar class="sideFooter-toolbar">
+                <span class="spacer-r"></span>
+                <button mat-icon-button (click)="sideNavState = !sideNavState">
+                    <mat-icon *ngIf="sideNavState" svgIcon="arrow-collapse-horizontal"></mat-icon>
+                    <mat-icon *ngIf="!sideNavState" svgIcon="arrow-expand-horizontal"></mat-icon>
+                </button>
+            </mat-toolbar>
 
             <!-- sidenav user-menu-profile -->
-            <mat-drawer mode="side" opened="false" #sidenavMenuProfile class="sidenav">
+            <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="sidenav">
 
                 <mat-toolbar color="accent" class="side-toolbar">
                     <button mat-icon-button (click)="sidenavMenuProfile.toggle()" #btnMenuProfileBack>
@@ -131,31 +137,30 @@
                     </mat-list-item>
                 </mat-nav-list>
 
-            </mat-drawer>
+                <!-- sidenav user-profile -->
+                <mat-drawer mode="side" opened="false" #sidenavProfile class="sidenav">
 
-            <!-- sidenav user-profile -->
-            <mat-drawer mode="side" opened="false" #sidenavProfile class="sidenav">
+                    <mat-toolbar color="accent" class="side-toolbar">
+                        <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
+                            <mat-icon svgIcon="arrow-left"></mat-icon>
+                        </button>
+                        <mat-list style="flex-grow: 8">
+                            <mat-list-item>
+                                <img matListAvatar
+                                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                                    alt="{{privilege | lowercase}}">
+                            </mat-list-item>
+                        </mat-list>
+                        <span class="spacer-r"></span>
+                         <h3>{{profileTitle}}</h3> 
+                        <span>&nbsp;&nbsp;</span>
+                        <mat-icon svgIcon="account-edit"></mat-icon>
+                    </mat-toolbar>
 
-                <mat-toolbar color="accent" class="side-toolbar">
-                    <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
-                        <mat-icon svgIcon="arrow-left"></mat-icon>
-                    </button>
-                    <mat-list style="flex-grow: 8">
-                        <mat-list-item>
-                            <img matListAvatar
-                                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
-                                alt="{{privilege | lowercase}}">
-                        </mat-list-item>
-                    </mat-list>
-                    <span class="spacer-r"></span>
-                  <!--TODO  <span>{{profileTitle}}</span> -->
-                    <span>&nbsp;&nbsp;</span>
-                    <mat-icon svgIcon="account-edit"></mat-icon>
-                </mat-toolbar>
+                    <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
+                        [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event"></nx-user-profile>
 
-                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
-                    [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event"></nx-user-profile>
-
+                </mat-drawer>
 
 
             </mat-drawer>
@@ -178,7 +183,6 @@
                 <nx-user-settings [user]="user"></nx-user-settings>
             </mat-drawer>
 
-
         </mat-sidenav>
 
         <!-- sidenav chat -->
@@ -195,7 +199,7 @@
         </mat-sidenav>
 
         <!-- primary content -->
-        <mat-sidenav-content>
+        <mat-sidenav-content [@onMainContentChange]="sideNavState ? 'open': 'close'">
 
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
