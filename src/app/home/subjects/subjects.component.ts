@@ -19,12 +19,14 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { delay } from 'rxjs/internal/operators/delay';
+import { rowAnimation } from '../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-subjects',
   templateUrl: './subjects.component.html',
-  styleUrls: ['./subjects.component.css']
+  styleUrls: ['./subjects.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 

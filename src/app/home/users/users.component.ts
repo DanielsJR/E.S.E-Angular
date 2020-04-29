@@ -14,13 +14,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef } from '@angular/material/dialog';
+import { rowAnimation } from '../../shared/animations/animations';
 
 
 
 @Component({
   selector: 'nx-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  animations: [rowAnimation]
 })
 
 export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -62,7 +64,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-    
+
 
 
     if (this.uriRole === URI_MANAGERS) {
@@ -94,7 +96,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(()=> this.paginator.pageIndex = 0);
+    //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   }
 
   ngOnDestroy(): void {

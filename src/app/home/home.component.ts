@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
-import { tdRotateAnimation, tdCollapseAnimation } from '@covalent/core/common';
+import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdPulseAnimation } from '@covalent/core/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, RouterOutlet } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
@@ -16,7 +16,7 @@ import { MatButton } from '@angular/material/button';
 import { MatMenu } from '@angular/material/menu';
 import { delay } from 'rxjs/internal/operators/delay';
 import { QuizNotificationService } from '../services/quiz-notification.service';
-import { onMainContentChange, animateText, onSideNavChange } from '../shared/animations/animations';
+import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, onLogoChange,} from '../shared/animations/animations';
 
 
 
@@ -26,9 +26,14 @@ import { onMainContentChange, animateText, onSideNavChange } from '../shared/ani
   animations: [
     tdRotateAnimation,
     tdCollapseAnimation,
-    onMainContentChange,
+
+    onMainContentChangeLeft,
+    onMainContentChangeRight,
     onSideNavChange,
     animateText,
+
+    onLogoChange,
+    tdBounceAnimation,
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -63,9 +68,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   currentUrl: string = '';
 
-  isSidenavMenuClosed: boolean = false;
-  sideNavState: boolean = true;
-
+  sideNavMenuState: boolean = true;
+  sideNavChatState: boolean = false ;
+State;
   constructor(
     private loginService: LoginService,
     private userLoggedService: UserLoggedService,
@@ -141,5 +146,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
   }
+
 
 }

@@ -12,12 +12,14 @@ import { SnackbarService } from '../../../services/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { rowAnimation } from '../../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-manager-courses',
   templateUrl: './manager-courses.component.html',
-  styleUrls: ['./manager-courses.component.css']
+  styleUrls: ['./manager-courses.component.css'],
+  animations: [rowAnimation]
 })
 export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -54,7 +56,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   }
 
   ngOnDestroy() {

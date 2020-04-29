@@ -14,6 +14,8 @@ import { GradeStoreService } from '../../../services/grade-store.service';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { User } from '../../../models/user';
 import { AttendanceStoreService } from '../../../services/attendance-store.service';
+import { subjectRouteAnimations } from '../../../shared/animations/animations';
+
 
 
 
@@ -21,6 +23,7 @@ import { AttendanceStoreService } from '../../../services/attendance-store.servi
   selector: 'nx-subject-detail',
   templateUrl: './subject-detail.component.html',
   styleUrls: ['./subject-detail.component.css'],
+  animations: [subjectRouteAnimations]
 })
 
 export class SubjectDetailComponent implements OnInit, OnDestroy {
@@ -178,5 +181,10 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
   getSubjectsByCourse(course: Course) {
     return this.subjects.filter(sj => sj.course.name.indexOf(course.name) === 0);
   }
+
+  getState(outlet) {
+    return outlet.activatedRouteData.animation;
+  }
+
 
 }

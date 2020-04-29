@@ -22,7 +22,7 @@ export class QuizMenuComponent implements OnInit {
   @Input() roles: string[];
   @Input() shortMenu: boolean;
   roleTeacher = ROLE_TEACHER;
-  trigger = false;
+  trigger = true;
   activeColor = 'primary';
  
   constructor() { }

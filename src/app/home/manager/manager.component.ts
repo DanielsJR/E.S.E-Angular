@@ -3,9 +3,12 @@ import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
+import { managerRouteAnimations } from '../../shared/animations/animations';
 
 @Component({
-    template: `<router-outlet></router-outlet>`
+    templateUrl:'./manager.component.html',
+    styleUrls: ['./manager.component.css'],
+    animations: [managerRouteAnimations]
 })
 
 export class ManagerComponent implements OnInit, OnDestroy {
@@ -36,4 +39,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         console.log("ManagerComponent ngOnDestroy() called!!!");
     }
+
+    getState(outlet)  {
+		return outlet.activatedRouteData.animation;
+	}
 }

@@ -1,6 +1,7 @@
-<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive" *ngIf="!shortMenu">
+<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+    *ngIf="!shortMenu && roles?.includes(roleTeacher)">
 
-    <mat-list-item (click)="trigger= !trigger" *ngIf="roles?.includes(roleTeacher)">
+    <mat-list-item (click)="trigger = !trigger">
         <mat-icon matListIcon svgIcon="file-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
         <h3 matLine [class.primaryColor]="rla.isActive">Pruebas</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
@@ -39,9 +40,10 @@
 </div>
 
 
-<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive" *ngIf="shortMenu">
+<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+    *ngIf="shortMenu && roles?.includes(roleTeacher)">
 
-    <mat-list-item *ngIf="roles?.includes(roleTeacher)" [matMenuTriggerFor]="menuQuiz">
+    <mat-list-item [matMenuTriggerFor]="menuQuiz">
         <mat-icon matListIcon svgIcon="file-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
         <h3 matLine [class.primaryColor]="rla.isActive">Pruebas</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
@@ -70,7 +72,8 @@
             <span [class.primaryColor]="rlaImport.isActive">Importar Prueba</span>
         </button>
 
-        <button mat-menu-item [routerLink]="['./teacher/quizes/historical']" routerLinkActive #rlaReports="routerLinkActive">
+        <button mat-menu-item [routerLink]="['./teacher/quizes/historical']" routerLinkActive
+            #rlaReports="routerLinkActive">
             <mat-icon matListIcon svgIcon="file-chart" [color]=" rlaReports.isActive ? activeColor : '' "></mat-icon>
             <span [class.primaryColor]="rlaReports.isActive">Reportes de Pruebas</span>
         </button>

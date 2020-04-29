@@ -110,13 +110,11 @@
 
   </mat-card>
 
-  
+
   <mat-card class="mat-elevation-z8">
 
-    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight
-      (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
-       multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()"
-       animationDuration="0">
+    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
+       multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()" animationDuration="0">
 
       <mat-tab>
         <ng-template mat-tab-label>

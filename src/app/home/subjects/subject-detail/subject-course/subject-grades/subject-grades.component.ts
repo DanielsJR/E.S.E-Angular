@@ -17,12 +17,14 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-subject-grades',
   templateUrl: './subject-grades.component.html',
-  styleUrls: ['./subject-grades.component.css']
+  styleUrls: ['./subject-grades.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectGradesComponent implements OnInit {
 

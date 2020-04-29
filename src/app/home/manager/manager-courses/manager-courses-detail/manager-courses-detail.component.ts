@@ -19,12 +19,14 @@ import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-us
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-manager-courses-detail',
   templateUrl: './manager-courses-detail.component.html',
-  styleUrls: ['./manager-courses-detail.component.css']
+  styleUrls: ['./manager-courses-detail.component.css'],
+  animations: [rowAnimation]
 })
 export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 

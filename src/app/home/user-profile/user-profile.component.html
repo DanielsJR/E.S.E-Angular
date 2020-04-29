@@ -4,9 +4,8 @@
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
 
   <form [formGroup]="editProfileForm" (ngSubmit)="save()" [ngSwitch]="profileAction">
-
+    
     <div *ngSwitchCase="'usuario'">
-
       <mat-form-field appearance="standard">
         <mat-label>
           <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>Nombre de Usuario
@@ -51,8 +50,6 @@
         <nx-set-pass-dialog #setPass [user]="user"></nx-set-pass-dialog>
 
       </mat-form-field>
-
-
     </div>
 
     <div *ngSwitchCase="'personal'">

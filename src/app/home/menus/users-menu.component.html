@@ -1,6 +1,7 @@
-<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive" *ngIf="!shortMenu">
+<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+    *ngIf="!shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
-    <mat-list-item (click)="trigger = !trigger" *ngIf="roles?.includes(roleAdmin) || roles?.includes(roleManager)">
+    <mat-list-item (click)="trigger = !trigger">
         <mat-icon matListIcon svgIcon="account-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
         <h3 matLine [class.primaryColor]="rla.isActive">Usuarios</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
@@ -41,10 +42,10 @@
 </ng-container>
 
 
-<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive" *ngIf="shortMenu">
+<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+    *ngIf="shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
-    <mat-list-item *ngIf="roles?.includes(roleAdmin) || roles?.includes(roleManager)"
-        [matMenuTriggerFor]="menuUsers">
+    <mat-list-item [matMenuTriggerFor]="menuUsers">
         <mat-icon matListIcon svgIcon="account-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
         <h3 matLine [class.primaryColor]="rla.isActive">Usuarios</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>

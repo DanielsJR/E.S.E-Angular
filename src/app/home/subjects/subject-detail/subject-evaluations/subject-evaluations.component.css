@@ -1,15 +1,24 @@
 .container {
     display: flex;
-    justify-content: space-evenly;
     flex-flow: row wrap;
+    justify-content: center;
+    align-content: flex-start;
+    width: 100%;
+    height: 100%;
 }
 
 mat-card {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: flex-start;
+
     width: 100%;
+    min-width: 500px;
     height: fit-content;
     margin: 20px;
     padding: 0;
-    min-width: 650px;
+    overflow: hidden;
 }
 
 mat-toolbar-row {
@@ -25,6 +34,27 @@ mat-form-field {
 .toolbar2 {
     padding-bottom: 5px !important;
     height: 59px !important;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    padding-left: 20px;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type {
+    padding-left: 24px;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type {
+    text-align: end;
 }
 
 .fila:hover {
@@ -62,26 +92,6 @@ mat-list {
 
 .mat-list-avatar:hover {
     opacity: 0.3;
-}
-
-mat-cell {
-    padding-left: 20px;
-}
-
-mat-cell:first-of-type {
-    padding-left: 24px;
-}
-
-mat-header-cell {
-    padding-left: 20px;
-}
-
-mat-header-cell:first-of-type {
-    padding-left: 24px;
-}
-
-.crud {
-    justify-content: flex-end !important;
 }
 
 .role-style {

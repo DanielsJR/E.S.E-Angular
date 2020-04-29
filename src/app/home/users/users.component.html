@@ -1,4 +1,5 @@
 <div class="container">
+
   <mat-card class="mat-elevation-z8">
 
     <mat-toolbar color="primary">
@@ -18,16 +19,17 @@
           &nbsp; {{usersRole}}
         </mat-chip>
       </mat-chip-list>
+
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <table mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Nombre </mat-header-cell>
-        <mat-cell *matCellDef="let user" style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Nombre </th>
+        <td mat-cell *matCellDef="let user" style="flex-grow: 2">
 
           <mat-list>
             <mat-list-item>
@@ -41,19 +43,18 @@
             </mat-list-item>
           </mat-list>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud">
-
-          <button mat-mini-fab *ngIf="!isAdminEditingTeacher()"
-            (click)="crudUserDialog.openDialogCreate()" matTooltip="Agregar {{userRole}}" style="margin-bottom:5px">
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab *ngIf="!isAdminEditingTeacher()" (click)="crudUserDialog.openDialogCreate()"
+            matTooltip="Agregar {{userRole}}" style="margin-bottom: 5px;">
             <mat-icon svgIcon="account-plus"></mat-icon>
           </button>
-        </mat-header-cell>
+        </th>
 
-        <mat-cell *matCellDef="let user" class="crud">
+        <td mat-cell *matCellDef="let user">
 
           <button mat-icon-button color="primary" (click)="crudUserDialog.openDialogDetail(); $event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
@@ -70,7 +71,7 @@
           </button>
 
           <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"
-           [onlyRead]="isAdminEditingTeacher()">
+            [onlyRead]="isAdminEditingTeacher()">
           </nx-crud-user-dialog>
 
           <button *ngIf="isAdmin()" mat-icon-button color="warn"
@@ -80,25 +81,25 @@
 
           <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
 
-
-
-        </mat-cell>
+        </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
-        (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())">
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
+      <tr mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+        (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())" @rowAnimation>
 
-        <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole"
-          [onlyRead]="isAdminEditingTeacher()">
+        <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole" [onlyRead]="isAdminEditingTeacher()">
         </nx-card-user-dialog>
 
-      </mat-row>
+      </tr>
 
-    </mat-table>
+    </table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
   </mat-card>
+
+  <mat-card style="margin: 0;"></mat-card>
+
 </div>

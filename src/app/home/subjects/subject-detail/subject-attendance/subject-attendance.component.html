@@ -19,9 +19,7 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
-
-    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <div *ngIf="!isLoading" class="mat-toolbar divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
@@ -38,31 +36,30 @@
 
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
+    <mat-divider style="position: relative;"></mat-divider>
 
-    <mat-table #table [dataSource]="dataSource" matSort>
-
+    <table mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef style="flex-grow: .5">
+        <th mat-header-cell *matHeaderCellDef style="flex-grow: .5">
           <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
             [indeterminate]="selection.hasValue() && !isAllSelected()">
           </mat-checkbox>
           <!--&nbsp; Todos-->
-        </mat-header-cell>
+        </th>
 
-        <mat-cell *matCellDef="let row" style="flex-grow: .5">
+        <td mat-cell *matCellDef="let row" style="flex-grow: .5">
 
           <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
             [checked]="selection.isSelected(row)">
           </mat-checkbox>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </mat-header-cell>
-        <mat-cell *matCellDef="let student" style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </th>
+        <td mat-cell *matCellDef="let student" style="flex-grow: 2">
 
           <mat-list>
             <mat-list-item>
@@ -80,15 +77,13 @@
             </mat-list-item>
           </mat-list>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud">
+        <th mat-header-cell *matHeaderCellDef></th>
 
-        </mat-header-cell>
-
-        <mat-cell *matCellDef="let student" class="crud">
+        <td mat-cell *matCellDef="let student">
 
           <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
             [onlyRead]="crudUserOnlyRead">
@@ -98,51 +93,43 @@
             <mat-icon svgIcon="dots-vertical"></mat-icon>
           </button>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
-      </mat-row>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
+      </tr>
 
-    </mat-table>
+    </table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
-    <mat-divider></mat-divider>
+    <mat-divider style="position: relative;"></mat-divider>
 
     <mat-toolbar>
       <span class="spacer-r"></span>
       <button *ngIf="btnAction" type="button" mat-stroked-button [color]=" isCreating ? 'primary' : 'accent' "
-        (click)="updateAttendanceDialog(updateDialog.openSimpleDialog())"
-        cdkFocusRegionstart style="margin-right: 5px;">
+        (click)="updateAttendanceDialog(updateDialog.openSimpleDialog())" cdkFocusRegionstart
+        style="margin-right: 5px;">
         <!--<mat-icon svgIcon="content-save"></mat-icon>-->{{btnAction}}
       </button>
-      <nx-simple-dialog #updateDialog
-       [dialogTitle]=" (isCreating) ? 'Crear Asistencia' : 'Modificar Asistencia' "
-       [icon]=" 'pencil' "
-       [title]="date | date: 'dd/MM/yyyy'"
-       [subtitle]="subject?.name +'/'+ subject?.course?.name"
-       [message]=" (isCreating) ? '¿Crear Asistencia?' : '¿Modificar Asistencia?' "
-       [cancelButton]=" 'Cancelar' "
-       [type]=" 'card' ">
-    </nx-simple-dialog>
+      <nx-simple-dialog #updateDialog [dialogTitle]=" (isCreating) ? 'Crear Asistencia' : 'Modificar Asistencia' "
+        [icon]=" 'pencil' " [title]="date | date: 'dd/MM/yyyy'" [subtitle]="subject?.name +'/'+ subject?.course?.name"
+        [message]=" (isCreating) ? '¿Crear Asistencia?' : '¿Modificar Asistencia?' " [cancelButton]=" 'Cancelar' "
+        [type]=" 'card' ">
+      </nx-simple-dialog>
 
       <button *ngIf="btnAction && !isCreating" type="button" mat-stroked-button [color]=" 'warn' "
-       (click)="deleteAttendanceDialog(deleteDialog.openSimpleDialog())">
+        (click)="deleteAttendanceDialog(deleteDialog.openSimpleDialog())">
         <!--<mat-icon svgIcon="content-save"></mat-icon>-->Borrar
       </button>
-      <nx-simple-dialog #deleteDialog
-        [dialogTitle]=" 'Eliminar Asistencia' "
-        [icon]=" 'delete' "
-        [title]="date | date: 'dd/MM/yyyy'"
-        [subtitle]="subject?.name +'/'+ subject?.course?.name"
-        [message]=" '¿Eliminar Asistencia?' "
-        [cancelButton]=" 'Cancelar' "
-        [type]=" 'card' ">
+      <nx-simple-dialog #deleteDialog [dialogTitle]=" 'Eliminar Asistencia' " [icon]=" 'delete' "
+        [title]="date | date: 'dd/MM/yyyy'" [subtitle]="subject?.name +'/'+ subject?.course?.name"
+        [message]=" '¿Eliminar Asistencia?' " [cancelButton]=" 'Cancelar' " [type]=" 'card' ">
       </nx-simple-dialog>
     </mat-toolbar>
 
   </mat-card>
+  <mat-card style="margin: 0;"></mat-card>
 </div>

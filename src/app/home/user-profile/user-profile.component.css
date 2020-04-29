@@ -1,9 +1,9 @@
 .profileSideNav {
+    width: 100%;
     overflow-y: auto;
     position: absolute;
-    bottom: 0;
     top: 64px;
-    margin: auto;
+    bottom: 0;
 }
 
 .profileSideNav:hover {
@@ -14,7 +14,7 @@ form {
     padding: 20px;
 }
 
-mat-form-field {
+form mat-form-field {
     font-size: 14px;
     width: 100%;
     margin: 0;

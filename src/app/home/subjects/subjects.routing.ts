@@ -15,53 +15,61 @@ const routes: Routes = [
 
     {
         path: 'subjects',
-        component: SubjectsComponent
+        component: SubjectsComponent,
+        data: { animation: 'subjects' },
     },
 
     {
         path: 'subjects/detail/:id',
         component: SubjectDetailComponent,
+        data: { animation: 'subjects-detail-id' },
         children: [
-
             {
                 path: 'course/:id',
-                component: SubjectCourseComponent
+                component: SubjectCourseComponent,
+                data: { animation: 'course-id' },
             },
 
             {
                 path: 'evaluations/:id',
-                component: SubjectEvaluationsComponent
+                component: SubjectEvaluationsComponent,
+                data: { animation: 'evaluations-id' },
             },
 
             {
                 path: 'quiz/:id',
-                component: SubjectSendQuizComponent
+                component: SubjectSendQuizComponent,
+                data: { animation: 'quiz-id' },
             },
 
             {
                 path: 'attendance/:id',
-                component: SubjectAttendanceComponent
+                component: SubjectAttendanceComponent,
+                data: { animation: 'attendance-id' },
             },
-            
 
             {
                 path: 'book/:id',
-                component: SubjectBookComponent
+                component: SubjectBookComponent,
+                data: { animation: 'book-id' },
             },
 
             {
                 path: 'book-detail/:id',
-                component: SubjectBookDetailComponent
+                component: SubjectBookDetailComponent,
+                data: { animation: 'book-detail-id' },
             },
 
             {
                 path: 'grades/:id',
-                component: SubjectGradesComponent
+                component: SubjectGradesComponent,
+                data: { animation: 'grades-id' },
             },
 
 
 
-        ]
+        ],
+
     },
 
 ]

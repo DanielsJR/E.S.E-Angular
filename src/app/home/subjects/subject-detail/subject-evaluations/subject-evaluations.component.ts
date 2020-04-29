@@ -15,12 +15,14 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-subject-evaluations',
   templateUrl: './subject-evaluations.component.html',
-  styleUrls: ['./subject-evaluations.component.css']
+  styleUrls: ['./subject-evaluations.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterViewInit {
 

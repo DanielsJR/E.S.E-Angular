@@ -26,34 +26,33 @@
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <table mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Título </mat-header-cell>
-        <mat-cell *matCellDef="let evaluation" style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Título </th>
+        <td mat-cell *matCellDef="let evaluation" style="flex-grow: 2">
           {{evaluation?.title}}
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="type">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
-        <mat-cell *matCellDef="let evaluation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+        <td mat-cell *matCellDef="let evaluation">
           {{evaluation?.type}}
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let evaluation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+        <td mat-cell *matCellDef="let evaluation">
           {{evaluation?.date}}
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud">
-        </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef></th>
 
-        <mat-cell *matCellDef="let evaluation" class="crud">
+        <td mat-cell *matCellDef="let evaluation">
 
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menuDetailEvaluation">
             <mat-icon svgIcon="eye"></mat-icon>
@@ -74,14 +73,14 @@
             <mat-icon svgIcon="file-send"></mat-icon>
           </button>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
-      </mat-row>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      </tr>
 
-    </mat-table>
+    </table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
@@ -90,7 +89,8 @@
 
   </mat-card>
 
-  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail" (closeQuizDetail)="setEvaluationQuizDetail($event)">
+  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail"
+    (closeQuizDetail)="setEvaluationQuizDetail($event)">
   </nx-quiz-detail>
 
 </div>

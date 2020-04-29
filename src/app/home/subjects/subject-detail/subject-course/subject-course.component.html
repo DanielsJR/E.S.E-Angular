@@ -19,9 +19,7 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <mat-divider></mat-divider>
-
-    <div *ngIf="!isLoading" style="height: 5px;" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
+    <div *ngIf="!isLoading" class="divToobar" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2" *ngIf="areaRole !== roleTeacher">
@@ -54,13 +52,13 @@
       </mat-list>
     </mat-toolbar>
 
-    <mat-divider *ngIf="areaRole !== roleTeacher"></mat-divider>
+    <mat-divider *ngIf="areaRole !== roleTeacher" style="position: relative;"></mat-divider>
 
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <table mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="student.firstName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </mat-header-cell>
-        <mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Alumno </th>
+        <td mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
 
           <mat-list>
             <mat-list-item>
@@ -78,32 +76,28 @@
             </mat-list-item>
           </mat-list>
 
-        </mat-cell>
+        </td>
       </ng-container>
-
-
 
       <ng-container matColumnDef="grades">
-        <mat-header-cell *matHeaderCellDef style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef style="flex-grow: 2">
           Notas Parciales
-        </mat-header-cell>
+        </th>
 
-        <mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
+        <td mat-cell *matCellDef="let studentGrade" style="flex-grow: 2">
           <a mat-button color="none" *ngFor="let g of studentGrade?.grades" [ngClass]="dinamicColorGrade(g)"
             (click)="openDialogDetail(g);$event.stopPropagation()">
-            {{g.grade | number : '1.1-1'}}  
+            {{g.grade | number : '1.1-1'}}
           </a>
-        </mat-cell>
+        </td>
       </ng-container>
 
-
-
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud" style="flex-grow: .5">
-           Acciones
-        </mat-header-cell>
+        <th mat-header-cell *matHeaderCellDef style="flex-grow: .5">
+          Acciones
+        </th>
 
-        <mat-cell *matCellDef="let studentGrade" class="crud" style="flex-grow: .5">
+        <td mat-cell *matCellDef="let studentGrade" style="flex-grow: .5">
 
           <!-- <button mat-icon-button color="primary"
           (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
@@ -118,21 +112,21 @@
             <mat-icon svgIcon="folder-star"></mat-icon>
           </button>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
       <!--[routerLink]="['../../grades', subject.id, { username:row.student.username } ]"-->
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+        @rowAnimation>
 
-      </mat-row>
+      </tr>
 
-    </mat-table>
+    </table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
-    <mat-divider></mat-divider>
-
   </mat-card>
+  <mat-card style="margin: 0;"></mat-card>
 </div>

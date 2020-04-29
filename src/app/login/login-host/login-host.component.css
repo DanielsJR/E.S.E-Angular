@@ -53,11 +53,6 @@
 
 
 
-
-
-
-
-
 mat-card,
 .form {
     grid-area: 2/2/2/3;
@@ -66,4 +61,5 @@ mat-card,
 
 mat-card {
     padding: 0;
+    overflow: hidden;
 }

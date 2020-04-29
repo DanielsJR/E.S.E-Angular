@@ -32,11 +32,13 @@ const adminRoutes: Routes = [
                     {
                         path: 'teachers',
                         component: ManagerGetTeachersComponent,
+                        data: { animation: 'teachers' },
                     },
 
                     {
                         path: 'students',
                         component: ManagerGetStudentsComponent,
+                        data: { animation: 'students' },
                     },
 
 
@@ -45,17 +47,19 @@ const adminRoutes: Routes = [
                     {
                         path: 'courses',
                         component: ManagerCoursesComponent,
-
+                        data: { animation: 'courses' },
                     },
 
                     {
                         path: 'courses/create',
                         component: ManagerCoursesCreateComponent,
+                        data: { animation: 'courses-create' },
                     },
 
                     {
                         path: 'courses/:name',
                         component: ManagerCoursesDetailComponent,
+                        data: { animation: 'courses-name' },
                     },
 
 
@@ -63,47 +67,57 @@ const adminRoutes: Routes = [
 
                     {
                         path: 'subjects',
-                        component: ManagerSubjectsComponent
+                        component: ManagerSubjectsComponent,
+                        data: { animation: 'subjects' },
                     },
 
                     {
                         path: 'subjects/detail/:id',
                         component: ManagerSubjectsDetailComponent,
+                        data: { animation: 'subjects-detail-id' },
                         children: [
-
                             {
                                 path: 'course/:id',
-                                component: ManagerSubjectCourseComponent
+                                component: ManagerSubjectCourseComponent,
+                                data: { animation: 'course-id' },
                             },
 
                             {
                                 path: 'evaluations/:id',
-                                component: ManagerSubjectEvaluationsComponent
+                                component: ManagerSubjectEvaluationsComponent,
+                                data: { animation: 'evaluations-id' },
                             },
 
 
                             {
                                 path: 'attendance/:id',
-                                component: ManagerSubjectAttendanceComponent
+                                component: ManagerSubjectAttendanceComponent,
+                                data: { animation: 'attendance-id' },
                             },
 
                             {
                                 path: 'grades/:id',
-                                component: ManagerSubjectsGradesComponent
+                                component: ManagerSubjectsGradesComponent,
+                                data: { animation: 'grades-id' },
                             },
 
 
-                        ]
+                        ],
+
                     },
 
 
                     {
                         path: '',
-                        component: ManagerHomeComponent
-                    }
-                ]
+                        component: ManagerHomeComponent,
+                        data: { animation: 'manager-home' },
+                    },
+
+
+                ],
             }
-        ]
+        ],
+        data: { animation: 'manager' },
     }
 ];
 
@@ -111,11 +125,11 @@ const adminRoutes: Routes = [
     imports: [
         RouterModule.forChild(adminRoutes)
     ],
-    
+
     exports: [
         RouterModule
     ],
-    
+
     providers: [
 
     ]

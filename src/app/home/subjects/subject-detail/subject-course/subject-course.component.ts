@@ -19,11 +19,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 @Component({
   selector: 'nx-subject-course',
   templateUrl: './subject-course.component.html',
-  styleUrls: ['./subject-course.component.css']
+  styleUrls: ['./subject-course.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit {
 

@@ -21,14 +21,14 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <table mat-table #table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Curso </mat-header-cell>
-        <mat-cell *matCellDef="let course" style="flex-grow: 2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex-grow: 2"> Curso </th>
+        <td mat-cell *matCellDef="let course" style="flex-grow: 2">
 
           <mat-list style="flex-grow: 8">
             <mat-list-item>
@@ -42,17 +42,17 @@
             </mat-list-item>
           </mat-list>
 
-        </mat-cell>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="crud">
-        <mat-header-cell *matHeaderCellDef class="crud">
-          <button mat-mini-fab matTooltip="Agregar Curso" [routerLink]="['./create']" style="margin-bottom:5px">
+        <th mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab matTooltip="Agregar Curso" [routerLink]="['./create']" style="margin-bottom: 5px;">
             <mat-icon svgIcon="book-plus"></mat-icon>
           </button>
-        </mat-header-cell>
+        </th>
 
-        <mat-cell *matCellDef="let course" class="crud">
+        <td mat-cell *matCellDef="let course">
 
           <button mat-icon-button color="primary" [routerLink]="['./',course.name]">
             <mat-icon svgIcon="eye"></mat-icon>
@@ -70,21 +70,22 @@
           </nx-simple-dialog>
 
 
-        </mat-cell>
+        </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]"
-        [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
+      <tr mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]"
+        [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
 
-      </mat-row>
+      </tr>
 
-    </mat-table>
+    </table>
 
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
   </mat-card>
 
+  <mat-card style="margin: 0;"></mat-card>
 
 </div>

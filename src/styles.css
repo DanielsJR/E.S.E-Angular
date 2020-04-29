@@ -59,7 +59,7 @@ body {
 /*MATERIAL snackBar*/
 
 /*MATERIAL table.... mat-list in tables*/
-mat-cell mat-list mat-list-item .mat-list-item-content {
+td.mat-cell mat-list mat-list-item .mat-list-item-content {
     padding: 0 !important;
 }
 

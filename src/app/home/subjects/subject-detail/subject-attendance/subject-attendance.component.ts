@@ -23,11 +23,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 @Component({
   selector: 'nx-subject-attendance',
   templateUrl: './subject-attendance.component.html',
-  styleUrls: ['./subject-attendance.component.css']
+  styleUrls: ['./subject-attendance.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewInit {
 

@@ -3,24 +3,63 @@
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
     <!-- toolbar 1 -->
-    <mat-toolbar color="primary" class="toolbar1">
+    <mat-toolbar color="primary" class="mainToolbar">
 
         <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
             <mat-icon svgIcon="backburger" [@tdRotate]="!sidenavMenu.opened"></mat-icon>
         </button>
 
-        <img id="imgHome" alt="E.S.E" src="assets/images/logos/ese-logo.png">
+
+
+        <div matTooltip="Favoritos">
+            <button type="button" mat-icon-button>
+                <mat-icon svgIcon="star"></mat-icon>
+            </button>
+        </div>
+
+        <!-- <span class="spacer-r"></span>
+         <nx-logo [jelloState]=isScrolled></nx-logo>-->
 
         <span class="spacer-r"></span>
-        <nx-logo [jelloState]=isScrolled></nx-logo>
 
-        <span class="spacer-r"></span>
+        <div class="profileMini">
+            <mat-list>
+                <mat-list-item>
+                    <img matListAvatar
+                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                        alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
+                    <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
+                    <p matLine>
+                        <span *ngIf="user">{{user.roles | rolesToSpanish}}</span>
+                    </p>
+                    <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
+                </mat-list-item>
+            </mat-list>
+
+            <span class="spacer-r"></span>
+
+            <div matTooltip="opciones">
+                <button mat-icon-button [matMenuTriggerFor]="settings">
+                    <mat-icon svgIcon="dots-vertical"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+
+
+        <div matTooltip="Notificaciones">
+            <button type="button" mat-icon-button>
+                <mat-icon svgIcon="bell"></mat-icon>
+            </button>
+        </div>
+
         <nx-full-screen></nx-full-screen>
         <nx-theme-picker #themePicker></nx-theme-picker>
 
-        <div matTooltip="chat">
+        <div matTooltip="Chat">
             <button type="button" mat-icon-button (click)="sidenavChat.toggle()">
-                <mat-icon svgIcon="message-text"></mat-icon>
+                <mat-icon *ngIf="sidenavChat.opened" svgIcon="message"></mat-icon>
+                <mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon>
             </button>
         </div>
     </mat-toolbar>
@@ -31,28 +70,12 @@
 
         <!-- sidenav menu -->
         <mat-sidenav #sidenavMenu mode="side" opened="true" class="sidenav" [position]=" 'start' "
-            [@onSideNavChange]="sideNavState ? 'open' : 'close'">
+            [@onSideNavChange]="sideNavMenuState ? 'open' : 'close'">
 
             <!-- sidenav toobar -->
-            <mat-toolbar class="side-toolbar">
-                <mat-list>
-                    <mat-list-item>
-                        <img matListAvatar
-                            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
-                            alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
-                        <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
-                        <p matLine>
-                            <span *ngIf="user" class="roles">{{user.roles | rolesToSpanish}}</span>
-                        </p>
-                        <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
-                    </mat-list-item>
-                </mat-list>
-                <span class="spacer-r"></span>
-                <div matTooltip="opciones">
-                    <button mat-icon-button [matMenuTriggerFor]="settings">
-                        <mat-icon svgIcon="dots-vertical"></mat-icon>
-                    </button>
-                </div>
+            <mat-toolbar class="sidenavToolbar">
+                <img class="imgLogo" alt="E.S.E" src="assets/images/logos/ese-logo.png"
+                    [@onLogoChange]="sideNavMenuState ? 'open' : 'close'" [@tdBounce]="sideNavMenuState">
             </mat-toolbar>
 
             <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
@@ -80,27 +103,27 @@
             </mat-menu>
 
             <!-- sidenav menus -->
-            <mat-nav-list class="sideToolbarMainMenu">
+            <mat-nav-list class="sidenavMainMenu">
                 <nx-home-menu [roles]='roles'></nx-home-menu>
-                <nx-users-menu [roles]='roles' [shortMenu]="!sideNavState"></nx-users-menu>
+                <nx-users-menu [roles]='roles' [shortMenu]="!sideNavMenuState"></nx-users-menu>
                 <nx-courses-menu [roles]='roles'></nx-courses-menu>
                 <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
-                <nx-quiz-menu [roles]='roles' [shortMenu]="!sideNavState"></nx-quiz-menu>
+                <nx-quiz-menu [roles]='roles' [shortMenu]="!sideNavMenuState"></nx-quiz-menu>
             </mat-nav-list>
 
-            <!-- sidenav footer toobar -->
-            <mat-toolbar class="sideFooter-toolbar">
+            <!-- sidenav menu footer toobar -->
+            <mat-toolbar class="sidenavToolbarFooter">
                 <span class="spacer-r"></span>
-                <button mat-icon-button (click)="sideNavState = !sideNavState">
-                    <mat-icon *ngIf="sideNavState" svgIcon="arrow-collapse-horizontal"></mat-icon>
-                    <mat-icon *ngIf="!sideNavState" svgIcon="arrow-expand-horizontal"></mat-icon>
+                <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState">
+                    <mat-icon *ngIf="sideNavMenuState" svgIcon="arrow-collapse-horizontal"></mat-icon>
+                    <mat-icon *ngIf="!sideNavMenuState" svgIcon="arrow-expand-horizontal"></mat-icon>
                 </button>
             </mat-toolbar>
 
             <!-- sidenav user-menu-profile -->
             <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="sidenav">
 
-                <mat-toolbar color="accent" class="side-toolbar">
+                <mat-toolbar color="accent" class="sidenavToolbar">
                     <button mat-icon-button (click)="sidenavMenuProfile.toggle()" #btnMenuProfileBack>
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
@@ -140,7 +163,7 @@
                 <!-- sidenav user-profile -->
                 <mat-drawer mode="side" opened="false" #sidenavProfile class="sidenav">
 
-                    <mat-toolbar color="accent" class="side-toolbar">
+                    <mat-toolbar color="accent" class="sidenavToolbar">
                         <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
                             <mat-icon svgIcon="arrow-left"></mat-icon>
                         </button>
@@ -152,7 +175,7 @@
                             </mat-list-item>
                         </mat-list>
                         <span class="spacer-r"></span>
-                         <h3>{{profileTitle}}</h3> 
+                        <h3>{{profileTitle}}</h3>
                         <span>&nbsp;&nbsp;</span>
                         <mat-icon svgIcon="account-edit"></mat-icon>
                     </mat-toolbar>
@@ -169,7 +192,7 @@
             <mat-drawer mode="side" opened="false" #sidenavSettings class="sidenav">
 
                 <!-- sidenav settings toobar -->
-                <mat-toolbar color="accent" class="side-toolbar">
+                <mat-toolbar color="accent" class="sidenavToolbar">
                     <button mat-icon-button (click)="sidenavSettings.toggle()" #btnSettingsBack>
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
@@ -186,25 +209,36 @@
         </mat-sidenav>
 
         <!-- sidenav chat -->
-        <mat-sidenav mode="side" opened="false" #sidenavChat class="sidenav" [position]=" 'end' ">
+        <mat-sidenav mode="side" opened="true" #sidenavChat class="sidenav" [position]=" 'end' "
+            [@onSideNavChange]="sideNavChatState ? 'open' : 'close'">
 
             <!-- sidenav toobar -->
-            <mat-toolbar class="side-toolbar">
+            <mat-toolbar class="sidenavToolbar">
             </mat-toolbar>
 
             <!-- sidenav content -->
-            <mat-nav-list class="sideToolbarMainMenu">
+            <mat-nav-list class="sidenavMainMenu">
             </mat-nav-list>
+
+            <!-- sidenav chat footer toobar -->
+            <mat-toolbar class="sidenavToolbarFooter">
+                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState">
+                    <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
+                    <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
+                </button>
+            </mat-toolbar>
 
         </mat-sidenav>
 
         <!-- primary content -->
-        <mat-sidenav-content [@onMainContentChange]="sideNavState ? 'open': 'close'">
+        <mat-sidenav-content [@onMainContentChangeLeft]="sideNavMenuState ? 'open': 'close'"
+            [@onMainContentChangeRight]="sideNavChatState ? 'open': 'close'">
 
             <!-- toolbar2 -->
             <mat-toolbar class="toolbar2"></mat-toolbar>
 
-            <div class="contenido" (nxScroller)="isScrolled=$event">
+            <div class="contenido">
+                <!-- (nxScroller)="isScrolled=$event"-->
                 <router-outlet></router-outlet>
             </div>
 

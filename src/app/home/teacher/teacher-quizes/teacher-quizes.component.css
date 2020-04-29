@@ -12,7 +12,26 @@ mat-card {
     height: fit-content;
     margin: 20px;
     padding: 0;
-    
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    padding-left: 20px;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type {
+    padding-left: 24px;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type {
+    text-align: end;
 }
 
 mat-form-field {
@@ -53,32 +72,12 @@ mat-form-field {
     opacity: 0.3;
 }
 
-mat-cell {
-    padding-left: 20px;
-}
-
-mat-cell:first-of-type {
-    padding-left: 24px;
-}
-
-mat-header-cell {
-    padding-left: 20px;
-}
-
-mat-header-cell:first-of-type {
-    padding-left: 24px;
-}
-
 mat-list {
     padding: 0;
 }
 
 mat-list-item {
     height: 55px !important;
-}
-
-.crud {
-    justify-content: flex-end !important;
 }
 
 .role-style {

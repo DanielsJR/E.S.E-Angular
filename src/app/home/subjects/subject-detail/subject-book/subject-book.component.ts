@@ -15,11 +15,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 @Component({
   selector: 'nx-subject-book',
   templateUrl: './subject-book.component.html',
-  styleUrls: ['./subject-book.component.css']
+  styleUrls: ['./subject-book.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
 

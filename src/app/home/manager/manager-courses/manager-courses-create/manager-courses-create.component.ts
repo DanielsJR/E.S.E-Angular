@@ -19,10 +19,12 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 @Component({
   templateUrl: './manager-courses-create.component.html',
-  styleUrls: ['./manager-courses-create.component.css']
+  styleUrls: ['./manager-courses-create.component.css'],
+  animations: [rowAnimation]
 })
 export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
