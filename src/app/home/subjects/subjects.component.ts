@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy, ChangeDetectorRef, AfterViewChecked, AfterContentInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectsCrudDialogRefComponent } from './subjects-crud-dialog-ref/subjects-crud-dialog-ref.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription, of } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, of, EMPTY } from 'rxjs';
+import { ActivatedRoute, Router, NavigationStart, RouterOutlet } from '@angular/router';
 import { Subject } from '../../models/subject';
-import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_CREATE_SUCCEED, CRUD_TYPE_EDIT, SUBJECT_UPDATE_ERROR, SUBJECT_UPDATE_SUCCEED, SUBJECT_DELETE_SUCCEED, SUBJECT_DELETE_ERROR, CANCEL_MESSAGE, RESULT_WARN, CRUD_TYPE_DELETE } from '../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_CREATE_SUCCEED, CRUD_TYPE_EDIT, SUBJECT_UPDATE_ERROR, SUBJECT_UPDATE_SUCCEED, SUBJECT_DELETE_SUCCEED, SUBJECT_DELETE_ERROR, CANCEL_MESSAGE, RESULT_WARN, CRUD_TYPE_DELETE, ROLE_STUDENT } from '../../app.config';
 import { User } from '../../models/user';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
@@ -19,20 +19,27 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { delay } from 'rxjs/internal/operators/delay';
-import { rowAnimation } from '../../shared/animations/animations';
+import { rowAnimation, subjectRouteAnimations } from '../../shared/animations/animations';
+import { tdBounceAnimation } from '@covalent/core/common';
+import { slide } from 'ngx-router-animations';
+import { EvaluationStoreService } from '../../services/evaluation-store.service';
+import { GradeStoreService } from '../../services/grade-store.service';
+import { AttendanceStoreService } from '../../services/attendance-store.service';
+
 
 
 @Component({
   selector: 'nx-subjects',
   templateUrl: './subjects.component.html',
   styleUrls: ['./subjects.component.css'],
-  animations: [rowAnimation]
+  animations: [rowAnimation, subjectRouteAnimations]
 })
 export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() areaRole: string;
   roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
 
   user: User;
   courseName: string;
@@ -41,9 +48,8 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // mat table
   displayedColumns = ['name', 'crud'];
-  dataSource;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource = new MatTableDataSource<Subject>();
+
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
@@ -55,28 +61,70 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   isThemeDarkSubscription: Subscription;
   coursesSubscription: Subscription;
   isBtnAddDisabled: boolean = true;
-  isSelectCourseDisabled: boolean;
+  isSelectCourseDisabled: boolean = true;
   isSeachDisabled: boolean = true;
 
-  @ViewChild('matSelect') matSelect: MatSelect;
 
+
+  routerSubscription: Subscription;
+
+  @ViewChild('select') set select(select: MatSelect) {
+    if (!select) return;
+    this.setDataSource(select);
+  }
+
+  private matSort: MatSort;
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (!sort) return;
+    this.dataSource.sort = sort;
+    this.matSort = sort;
+  }
+
+
+  private matPaginator;
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (!paginator) return;
+    this.dataSource.paginator = paginator;
+    this.matPaginator = paginator;
+    this.matSort.sortChange.subscribe(() => this.matPaginator.pageIndex = 0);
+  }
+
+  enableToolbar: boolean = false;
+  currentUrl: string;
+  userLogged: User;
+
+  toolbarMenus: any[] = [];
+  subjectId: any;
 
   constructor(private sessionStorage: SessionStorageService,
     private subjectStoreService: SubjectStoreService, private courseStoreService: CourseStoreService,
     private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
-    public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer) { }
+    public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef,
+    private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
+    private attendanceStoreService: AttendanceStoreService,
+
+  ) { }
 
   ngOnInit() {
-    this.isSelectCourseDisabled = this.courses.length < 1;
-    this.dataSource = new MatTableDataSource<Subject>();
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.currentUrl = this.router.url;
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+  setDataSource(matSelect: MatSelect) {
+    //this.evaluationStoreService.clearStore();
+    //this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
+
+    //this.gradeStoreService.clearStore();
+    //this.gradeStoreService.getGradesBySubject(this.subjectId);
+
+    //this.attendanceStoreService.clearStore();
+    //this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
+
+
+    //console.error("*****************setDataSource()*******************")
 
 
     if (this.areaRole === this.roleManager) {
@@ -87,7 +135,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isSelectCourseDisabled = this.courses.length < 1;
         });
 
-      this.subjectsSubscription = this.matSelect.valueChange
+      this.subjectsSubscription = matSelect.valueChange
         .pipe(
           switchMap(value => {
             this.courseName = value;
@@ -106,7 +154,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isBtnAddDisabled = false;
           }
         });
-
 
     } else if (this.areaRole === this.roleTeacher) {
 
@@ -131,7 +178,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           .pipe(
             switchMap(user => {
               this.user = user;
-              return this.matSelect.valueChange;
+              return matSelect.valueChange;
             }),
             switchMap((value: any) => {
               this.courseName = value;
@@ -158,7 +205,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           });
 
 
-        this.subjectsSubscription = this.matSelect.valueChange
+        this.subjectsSubscription = matSelect.valueChange
           .pipe(
             switchMap(value => {
               this.courseName = value;
@@ -181,11 +228,47 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
+
+
+
+  ngAfterViewInit() {
+    console.error("*****************ngAfterViewInit()*******************")
+    this.isSelectCourseDisabled = this.courses.length < 1;
+    
+
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.currentUrl = event.url;
+        if (this.subjectId) {
+          this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
+        }
+      }
+
+    });
+
+    //reload page
+    if (this.route.snapshot.firstChild) {
+      this.route.firstChild.params
+        .subscribe(params => {
+          this.subjectId = params.id;
+          this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
+        });
+    }
+
+    this.cdRef.detectChanges();
+
+  }
+
+
+
   ngOnDestroy(): void {
     this.subjectsSubscription.unsubscribe();
     this.isLoadingGetSubjectsSubscription.unsubscribe();
     this.isThemeDarkSubscription.unsubscribe();
     this.coursesSubscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
+    console.log("yujuu!! OnDestroy!")
   }
 
   applyFilter(filterValue: string) {
@@ -284,6 +367,78 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+
+
+
+
+  setEnableToolbar(toolbarMenus) {
+    //let url = this.currentUrl.substring(this.currentUrl.lastIndexOf('/') + 1);
+    let array = this.currentUrl.split('/');
+    let currentRoute = './' + array[array.length - 2] + '/' + array[array.length - 1];
+
+    for (let tbm of toolbarMenus) {
+
+      if ((tbm.route[0] + "/" + tbm.route[1]) === currentRoute) {
+        this.enableToolbar = true;
+        //console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
+        //console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
+        break;
+
+      } else {
+        this.enableToolbar = false;
+        //console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
+        //console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
+        }
+
+    }
+
+
+  }
+
+
+  setToolbarMenus(subjectId): string[] {
+    if (this.areaRole === this.roleManager) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId] },
+        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
+        { name: 'Asistencia', route: ['./attendance', subjectId] },
+      ];
+
+    } else if (this.areaRole === this.roleTeacher) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId] },
+        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
+        { name: 'Tomar Prueba', route: ['./quiz', subjectId] },
+        { name: 'Asistencia', route: ['./attendance', subjectId] },
+        { name: 'Libro de Clases', route: ['./book', subjectId] }
+      ];
+
+    } else if (this.areaRole === this.roleStudent) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId, { username: this.userLogged.username }] },
+        { name: 'Mis Notas', route: ['./grades', subjectId, { username: this.userLogged.username }] },
+        { name: 'Rendir Prueba', route: ['./quiz', subjectId, { username: this.userLogged.username }] },
+        { name: 'Mis Asistencias', route: ['./attendance', subjectId, { username: this.userLogged.username }] },
+        { name: 'Libro de Clases', route: ['./book', subjectId, { username: this.userLogged.username }] }
+      ];
+
+    } else {
+      this.toolbarMenus = [];
+      console.error('No areaRol!!');
+
+    }
+
+    return this.toolbarMenus;
+  }
+
+
+  getState(outlet:RouterOutlet) {
+    //return outlet.activatedRouteData.animation;
+    
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+
 
 
 }

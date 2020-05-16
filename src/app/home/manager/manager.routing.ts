@@ -69,12 +69,6 @@ const adminRoutes: Routes = [
                         path: 'subjects',
                         component: ManagerSubjectsComponent,
                         data: { animation: 'subjects' },
-                    },
-
-                    {
-                        path: 'subjects/detail/:id',
-                        component: ManagerSubjectsDetailComponent,
-                        data: { animation: 'subjects-detail-id' },
                         children: [
                             {
                                 path: 'course/:id',
@@ -103,9 +97,7 @@ const adminRoutes: Routes = [
 
 
                         ],
-
                     },
-
 
                     {
                         path: '',

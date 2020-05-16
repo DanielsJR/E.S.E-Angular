@@ -3,10 +3,15 @@ import { UserStoreService } from '../../../services/user-store.service';
 import { ROLE_MANAGER, URI_STUDENTS } from '../../../app.config';
 
 @Component({
-  template: `
-  <nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>
-  `,
-  styles: ['']
+  selector: 'nx-manager-students',
+  template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
+  styles: [`:host  {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  `]
 })
 
 export class ManagerGetStudentsComponent implements OnInit {

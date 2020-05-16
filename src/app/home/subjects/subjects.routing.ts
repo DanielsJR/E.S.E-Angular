@@ -17,13 +17,8 @@ const routes: Routes = [
         path: 'subjects',
         component: SubjectsComponent,
         data: { animation: 'subjects' },
-    },
-
-    {
-        path: 'subjects/detail/:id',
-        component: SubjectDetailComponent,
-        data: { animation: 'subjects-detail-id' },
         children: [
+
             {
                 path: 'course/:id',
                 component: SubjectCourseComponent,

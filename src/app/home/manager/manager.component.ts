@@ -6,6 +6,7 @@ import { UserLoggedService } from '../../services/user-logged.service';
 import { managerRouteAnimations } from '../../shared/animations/animations';
 
 @Component({
+    selector: 'ng-manager-component',
     templateUrl:'./manager.component.html',
     styleUrls: ['./manager.component.css'],
     animations: [managerRouteAnimations]

@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   sideNavMenuState: boolean = true;
   sideNavChatState: boolean = false ;
-State;
+  
   constructor(
     private loginService: LoginService,
     private userLoggedService: UserLoggedService,

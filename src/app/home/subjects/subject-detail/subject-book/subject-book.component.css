@@ -8,11 +8,6 @@
 }
 
 mat-card {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-content: flex-start;
-
     width: 100%;
     height: fit-content;
     margin: 20px;

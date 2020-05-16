@@ -1,4 +1,4 @@
-<mat-sidenav-container [class]="theme.themeName">
+<div [ngClass]="theme.themeName" class="mat-app-background myWrapper">
 
   <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
@@ -36,4 +36,4 @@
 
   </div>
 
-</mat-sidenav-container>
+</div>

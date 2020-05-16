@@ -6,7 +6,13 @@ import { ROLE_MANAGER } from '../../../../app.config';
   template: `
   <nx-subject-evaluations [areaRole] = "areaRole"></nx-subject-evaluations>
   `,
-  styles:['']
+  styles: [`:host  {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  `]
 })
 export class ManagerSubjectEvaluationsComponent implements OnInit {
   areaRole = ROLE_MANAGER;

@@ -3,11 +3,29 @@ import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
+import { adminRouteAnimations } from '../../shared/animations/animations';
 
 @Component({
-    template: `
-        <router-outlet></router-outlet>
-  `
+    template: `<div class="routerWrapper" [@adminRouteAnimations]= "getState(o)">
+                  <router-outlet #o="outlet"></router-outlet>
+                </div>`,
+    styles: [`
+    :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      
+      .routerWrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+      }
+    `],
+    animations: [adminRouteAnimations]
+
 })
 export class AdminComponent implements OnInit, OnDestroy {
     constructor(
@@ -33,5 +51,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log("AdminComponent ngOnDestroy() called!!!");
+    }
+
+
+    getState(outlet) {
+        return outlet.activatedRouteData.animation;
     }
 }

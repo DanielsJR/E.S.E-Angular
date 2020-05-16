@@ -8,11 +8,6 @@
 }
 
 mat-card {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-content: flex-start;
-
     width: 100%;
     min-width: 500px;
     height: fit-content;
@@ -145,6 +140,5 @@ a {
 
 :host /deep/ mat-cell .mat-button {
     min-width: fit-content !important;
-    font-weight: unset !important ;
+    font-weight: unset !important;
 }
-

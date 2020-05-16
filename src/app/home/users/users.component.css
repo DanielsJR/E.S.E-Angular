@@ -1,3 +1,5 @@
+
+
 .container {
     display: flex;
     flex-flow: row wrap;
@@ -8,11 +10,6 @@
 }
 
 mat-card {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-content: flex-start;
-
     width: 100%;
     min-width: 500px;
     height: fit-content;

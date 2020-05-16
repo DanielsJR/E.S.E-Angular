@@ -22,17 +22,20 @@ const adminRoutes: Routes = [
                     {
                         path: 'managers',
                         component: AdminGetManagersComponent,
+                        data: { animation: 'managers' },
                     },
 
                     {
                         path: 'teachers',
                         component: AdminGetTeachersComponent,
+                        data: { animation: 'teachers' },
                     },
 
 
                     {
                         path: '',
-                        component: AdminHomeComponent
+                        component: AdminHomeComponent,
+                        data: { animation: 'admin-home' },
                     }
 
                 ]

@@ -58,12 +58,11 @@
 
         <div matTooltip="Chat">
             <button type="button" mat-icon-button (click)="sidenavChat.toggle()">
-                <mat-icon *ngIf="sidenavChat.opened" svgIcon="message"></mat-icon>
-                <mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon>
+                <mat-icon svgIcon="message"></mat-icon>
+                <!--<mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon> -->
             </button>
         </div>
     </mat-toolbar>
-
 
     <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
         class="sidenavContainer">
@@ -175,7 +174,7 @@
                             </mat-list-item>
                         </mat-list>
                         <span class="spacer-r"></span>
-                        <h3>{{profileTitle}}</h3>
+                        <!--<h3>{{profileTitle}}</h3>-->
                         <span>&nbsp;&nbsp;</span>
                         <mat-icon svgIcon="account-edit"></mat-icon>
                     </mat-toolbar>

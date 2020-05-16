@@ -18,7 +18,7 @@ import { SubjectAttendanceComponent } from './subject-detail/subject-attendance/
 import { SubjectBookComponent } from './subject-detail/subject-book/subject-book.component';
 import { SubjectBookDetailComponent } from './subject-detail/subject-book/subject-book-detail/subject-book-detail.component';
 
-
+import { NgxAnimationsModule } from 'ngx-animations';
 
 @NgModule({
   imports: [
@@ -27,6 +27,9 @@ import { SubjectBookDetailComponent } from './subject-detail/subject-book/subjec
     SubjectsRoutingModule,
     QuizStudentModule,
     QuizModule,
+
+    NgxAnimationsModule,
+
 
   ],
 

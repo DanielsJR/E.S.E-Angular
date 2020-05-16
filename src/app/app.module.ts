@@ -24,12 +24,13 @@ import { MyStomp } from './my-rx-stomp.config';
 
 
 
+
 @NgModule({
 
   imports: [
     // BrowserModule,
     BrowserAnimationsModule,
-
+   
     SharedModule,
 
     WelcomeModule,
