@@ -1,6 +1,6 @@
 <div class="container">
 
-  <!-- [style.display]="enableToolbar? '' : 'none'" -->
+  <!-- -->
   <mat-toolbar color="accent" class="toolbarMenu"
     *animIf="enableToolbar; info: { startAnim: 'fadeIn', endAnim: 'fadeOut', time: 1000 }">
 
@@ -10,16 +10,15 @@
 
   </mat-toolbar>
 
-  <!-- [style.display]="enableToolbar? '' : 'none'" -->
-  <div class="content" [@subjectRouteAnimations]="getState(o)"
-    *animIf="enableToolbar; info: { startAnim: 'lightSpeedIn', endAnim: 'lightSpeedOut', time: 1000 }">
+  <!-- #routerInAnim="animated" [animAted]="{time: 1000, animation: 'fadeIn'}" -->
+  <!-- *animIf="enableToolbar; info: { startAnim: 'lightSpeedIn', endAnim: 'lightSpeedOut', time: 1000 }" -->
+  <div class="content" [@subjectRouteAnimations]="getState(o)">
     <router-outlet #o="outlet"></router-outlet>
   </div>
 
-
-  <!--[style.display]="!enableToolbar? '' : 'none'"-->
-  <mat-card class="mat-elevation-z8"
-    *animIf="!enableToolbar; info: { startAnim: 'lightSpeedIn', endAnim: 'lightSpeedOut', time: 1000 }">
+  <!-- [style.display]="!enableToolbar? '' : 'none'"-->
+  <!---->
+  <mat-card class="mat-elevation-z8" *animIf="!enableToolbar; info: { startAnim: 'slideInLeft', endAnim: 'slideOutRight', time: 1000 }" >
 
     <mat-toolbar color="primary">
 
@@ -90,6 +89,7 @@
 
           <button mat-icon-button color="primary" [routerLink]="['./course', subject.id ]"
             (mousedown)="subjectId= subject.id">
+            <!-- (click)="routerInAnim.animate()"-->
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
@@ -120,6 +120,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
       <tr mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
         [routerLink]="['./course', subject.id ]" @rowAnimation (mousedown)="subjectId= subject.id">
+        <!-- (click)="routerInAnim.animate()"-->
 
       </tr>
 

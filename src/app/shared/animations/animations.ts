@@ -83,6 +83,8 @@ export const managerRouteAnimations = trigger('managerRouteAnimations', [
   transition('subjects => courses-create', useAnimation(rotateCarouselToBottom)),
   transition('subjects => courses-name', useAnimation(rotateCarouselToBottom)),
 
+  transition('* => *', useAnimation(slide)),
+
 ]);
 
 export const subjectRouteAnimations = trigger('subjectRouteAnimations', [
@@ -98,15 +100,20 @@ export const subjectRouteAnimations = trigger('subjectRouteAnimations', [
   transition('attendance-id => course-id', useAnimation(rotateCarouselToRight)),
   transition('attendance-id => evaluations-id', useAnimation(rotateCarouselToRight)),
 
+  
+  //transition('* => course-id , * => evaluations-id , * => attendance-id', useAnimation(slide)),
+  //transition('course-id => * , evaluations-id => * , attendance-id => *', useAnimation(slide)),
+  transition('* <=> *', useAnimation(slide)),
+
   //waits 1000ms 
-  transition('* => subjects', [
+   //transition('* <=> *', [query(':enter, :leave', [animate('1000ms'),], { optional: true }),]),
+   /*transition('* => course-id , * => evaluations-id , * => attendance-id', [
     query(':enter', [animate('1000ms'),], { optional: true }),
   ]),
 
   transition('course-id => * , attendance-id => * , evaluations-id => *', [
     query(':leave', [animate('1000ms')], { optional: true }),
-  ]),
-
+  ]), */
 
 ]);
 
@@ -223,9 +230,7 @@ export const fadeAnimation = trigger('fadeAnimation', [
 //fixes mat-table animations
 export const rowAnimation = trigger('rowAnimation', [transition('* => void', [animate('0ms', style({ display: 'none' }))])]);
 
-export const mySlideAnimation = trigger('mySlideAnimation', [
-  transition('* => *', useAnimation(slide)),
-]);
+
 
 
 

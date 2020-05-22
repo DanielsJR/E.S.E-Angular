@@ -16,7 +16,7 @@ import { SubjectStoreService } from "./subject-store.service";
     providedIn: 'root',
 })
 export class UserStoreService {
-    
+
     private dataStore: { managers: User[], teachers: User[], students: User[] };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
@@ -39,10 +39,11 @@ export class UserStoreService {
         private userBackendService: UserBackendService,
         private courseStoreService: CourseStoreService,
         private subjectStoreService: SubjectStoreService,
-        private gradeStoreService: GradeStoreService
-    ) {
+        private gradeStoreService: GradeStoreService,
 
+    ) {
         this.dataStore = { managers: [], teachers: [], students: [] }
+
     }
 
 

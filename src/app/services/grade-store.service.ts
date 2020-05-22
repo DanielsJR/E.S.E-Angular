@@ -20,7 +20,10 @@ export class GradeStoreService {
     private gradesSource = <BehaviorSubject<Grade[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private gradeBackendService: GradeBackendService, private isLoadingService: IsLoadingService) {
+    constructor(
+        private gradeBackendService: GradeBackendService,
+        private isLoadingService: IsLoadingService
+    ) {
         this.dataStore = { grades: [] };
     }
 

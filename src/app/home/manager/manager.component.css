@@ -4,10 +4,16 @@
   height: 100%;
 }
 
-.routerWrapper {
+.animWrapper {
   position: relative;
   width: 100%;
   height: 100%;
   perspective: 1200px;
   transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+.routerWrapper {
+  max-height: 100%;
+  overflow-x: hidden;
 }

@@ -1,10 +1,12 @@
-import { Injectable } from "../../../node_modules/@angular/core";
+
 import { API_SERVER, URI_COURSES, URI_YEAR, URI_NAME } from "../app.config";
-import { HttpClient } from "../../../node_modules/@angular/common/http";
+
 import { Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
 import { retry } from "../../../node_modules/rxjs/internal/operators/retry";
 import { tap } from "../../../node_modules/rxjs/internal/operators/tap";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
 
 
 @Injectable({

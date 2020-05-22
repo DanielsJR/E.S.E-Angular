@@ -13,11 +13,15 @@ import { EvaluationBackendService } from "./evaluation-backend.service";
     providedIn: 'root',
 })
 export class EvaluationStoreService {
+
     private dataStore: { evaluations: Evaluation[] };
     private evaluationsSource = <BehaviorSubject<Evaluation[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private evaluationBackendService: EvaluationBackendService, private isLoadingService: IsLoadingService) {
+    constructor(
+        private evaluationBackendService: EvaluationBackendService,
+        private isLoadingService: IsLoadingService
+    ) {
         this.dataStore = { evaluations: [] };
     }
 
@@ -98,7 +102,7 @@ export class EvaluationStoreService {
                 ));
     }
 
-    clearStore(){
+    clearStore() {
         console.log("****************Clearing evaluationStore******************");
         this.dataStore.evaluations = [];
         this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);

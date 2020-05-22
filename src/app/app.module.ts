@@ -45,7 +45,7 @@ import { MyStomp } from './my-rx-stomp.config';
 
   declarations: [
     AppComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
 
   ],
 
@@ -53,7 +53,7 @@ import { MyStomp } from './my-rx-stomp.config';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AppAuthInterceptor,
-      multi: true,
+      multi: true
     },
 
     {

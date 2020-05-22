@@ -1,11 +1,14 @@
-import { Injectable } from "../../../node_modules/@angular/core";
-import { BehaviorSubject, Observable } from "../../../node_modules/rxjs";
-import { finalize } from "../../../node_modules/rxjs/internal/operators/finalize";
+
+
 import { tap } from "rxjs/internal/operators/tap";
 import { IsLoadingService } from "./isLoadingService.service";
-import { map } from "rxjs/operators";
 import { Attendance } from "../models/attendance";
 import { AttendanceBackendService } from "./attendance-backend.service";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Observable } from 'rxjs/internal/Observable';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { map } from 'rxjs/internal/operators/map';
 
 
 
@@ -17,7 +20,9 @@ export class AttendanceStoreService {
     private attendancesSource = <BehaviorSubject<Attendance[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(private attendanceBackendService: AttendanceBackendService, private isLoadingService: IsLoadingService,
+    constructor(
+        private attendanceBackendService: AttendanceBackendService,
+        private isLoadingService: IsLoadingService,
     ) {
         this.dataStore = { attendances: [] };
     }

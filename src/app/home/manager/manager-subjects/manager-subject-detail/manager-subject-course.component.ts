@@ -6,9 +6,7 @@ import { ROLE_MANAGER } from '../../../../app.config';
   template: `<nx-subject-course [areaRole] = "areaRole"></nx-subject-course>`,
   styles: [`:host  {
     display: block;
-    position: absolute;
     width: 100%;
-    height: 100%;
   }
   `]
 })

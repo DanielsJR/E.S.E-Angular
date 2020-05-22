@@ -18,16 +18,17 @@ import { take } from "rxjs/internal/operators/take";
     providedIn: 'root',
 })
 export class SubjectStoreService {
-    private dataStore: { subjects: Subject[] };
 
+    private dataStore: { subjects: Subject[] };
     private subjectsSource = <BehaviorSubject<Subject[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     constructor(
         private subjectBackendService: SubjectBackendService,
-        private isLoadingService: IsLoadingService,
         private gradeStoreService: GradeStoreService,
+        private isLoadingService: IsLoadingService,
         private userLoggedService: UserLoggedService,
+
     ) {
         this.dataStore = { subjects: [] };
     }

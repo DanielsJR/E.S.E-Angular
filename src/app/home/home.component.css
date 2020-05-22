@@ -20,7 +20,7 @@
     width: 100% !important;
     z-index: 2;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
-    
+
 }
 
 .mainToolbar,
@@ -50,7 +50,7 @@
 }
 
 
-.profileMini{
+.profileMini {
     display: flex;
     align-items: center;
 }
@@ -79,7 +79,7 @@
 
 ::ng-deep .sidenavMainMenu h3 {
     font-weight: bold !important;
-    
+
 }
 
 .sidenavToolbar {
@@ -109,7 +109,7 @@
 .sidenavToolbarFooter {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
     padding-left: 12px;
-    overflow: hidden;  
+    overflow: hidden;
     position: absolute;
     bottom: 0;
 }
@@ -175,16 +175,7 @@
 /* primary content */
 
 mat-sidenav-content {
-    display: flex;
-    position: fixed;
-    top: 64px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    height: auto;
+
 }
 
 .toolbar2 {
@@ -193,13 +184,7 @@ mat-sidenav-content {
 
 .contenido {
     position: absolute;
-    padding: 0;
-    margin: 0;
+    top: 0;
+    bottom: 64px;
     width: 100%;
-    height: 100%;
-    --overflow: auto;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
-
-

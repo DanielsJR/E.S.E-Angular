@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy, ChangeDetectorRef, AfterViewChecked, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy, ChangeDetectorRef, AfterViewChecked, AfterContentInit, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
@@ -19,7 +19,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { delay } from 'rxjs/internal/operators/delay';
-import { rowAnimation, subjectRouteAnimations } from '../../shared/animations/animations';
+import { rowAnimation, subjectRouteAnimations, fadeAnimation, managerRouteAnimations } from '../../shared/animations/animations';
 import { tdBounceAnimation } from '@covalent/core/common';
 import { slide } from 'ngx-router-animations';
 import { EvaluationStoreService } from '../../services/evaluation-store.service';
@@ -32,7 +32,7 @@ import { AttendanceStoreService } from '../../services/attendance-store.service'
   selector: 'nx-subjects',
   templateUrl: './subjects.component.html',
   styleUrls: ['./subjects.component.css'],
-  animations: [rowAnimation, subjectRouteAnimations]
+  animations: [rowAnimation, managerRouteAnimations, subjectRouteAnimations]
 })
 export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -68,13 +68,22 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   routerSubscription: Subscription;
 
-  @ViewChild('select') set select(select: MatSelect) {
+  /*
+  private rOutlet: RouterOutlet;
+  @ViewChild(RouterOutlet, { static: false }) set outlet(outlet: RouterOutlet) {
+    if (!outlet) return
+    this.rOutlet = outlet;
+  }*/
+
+  @ViewChild('routerInAnim') routerInAnim : any;
+
+  @ViewChild('select', { static: false }) set select(select: MatSelect) {
     if (!select) return;
     this.setDataSource(select);
   }
 
   private matSort: MatSort;
-  @ViewChild(MatSort) set sort(sort: MatSort) {
+  @ViewChild(MatSort, { static: false }) set sort(sort: MatSort) {
     if (!sort) return;
     this.dataSource.sort = sort;
     this.matSort = sort;
@@ -82,7 +91,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   private matPaginator;
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+  @ViewChild(MatPaginator, { static: false }) set paginator(paginator: MatPaginator) {
     if (!paginator) return;
     this.dataSource.paginator = paginator;
     this.matPaginator = paginator;
@@ -90,6 +99,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   enableToolbar: boolean = false;
+  
   currentUrl: string;
   userLogged: User;
 
@@ -107,11 +117,15 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$
+      .subscribe(isLoadding =>
+        setTimeout(() => this.isLoading = isLoadding)
+      );
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
     this.currentUrl = this.router.url;
-  }
 
+    
+  }
 
   setDataSource(matSelect: MatSelect) {
     //this.evaluationStoreService.clearStore();
@@ -228,20 +242,24 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
-
-
-
   ngAfterViewInit() {
-    console.error("*****************ngAfterViewInit()*******************")
+    //console.error("*****************ngAfterViewInit()*******************");
     this.isSelectCourseDisabled = this.courses.length < 1;
+
+    /*
+        this.setDataSource();
+        this.dataSource.sort = this.matSort;
+        this.dataSource.paginator = this.matPaginator;
+        this.matSort.sortChange.subscribe(() => this.matPaginator.pageIndex = 0);
     
+        */
 
     this.routerSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.currentUrl = event.url;
         if (this.subjectId) {
           this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
+          //this.routerInAnim.animate();
         }
       }
 
@@ -253,14 +271,13 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(params => {
           this.subjectId = params.id;
           this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
+          //this.routerInAnim.animate();
         });
     }
 
     this.cdRef.detectChanges();
 
   }
-
-
 
   ngOnDestroy(): void {
     this.subjectsSubscription.unsubscribe();
@@ -276,7 +293,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
 
   openDialogCreate(): void {
     let subject: Subject = new Subject();
@@ -389,7 +405,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.enableToolbar = false;
         //console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
         //console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
-        }
+      }
 
     }
 
@@ -432,12 +448,10 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.toolbarMenus;
   }
 
-
-  getState(outlet:RouterOutlet) {
-    //return outlet.activatedRouteData.animation;
-    
+  getState(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
+
 
 
 

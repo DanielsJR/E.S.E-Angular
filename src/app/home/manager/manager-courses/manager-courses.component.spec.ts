@@ -8,11 +8,11 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CourseStoreService } from '../../../services/course-store.service';
 import { courseTest, courseTest2 } from '../../../testing/models';
 import { asyncData } from '../../../testing/async-helpers';
-import { MatDialogRef } from '@angular/material';
+
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { By } from '@angular/platform-browser';
 import { SimpleDialogComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog.component';
-import { RESULT_ACTION1, RESULT_SUCCESS, RESULT_CANCELED } from '../../../app.config';
+import { RESULT_ACTION1, RESULT_SUCCEED, RESULT_CANCELED } from '../../../app.config';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { of } from 'rxjs/internal/observable/of';
 import { DebugElement } from '@angular/core';
@@ -126,7 +126,7 @@ describe('ManagerCoursesComponent', () => {
     tick();
     expect(component.isLoading).toBeFalsy('isLoading');
     expect(deleteSpy).toHaveBeenCalled();
-    expect(openSnackBarSpy).toHaveBeenCalledWith('Curso: ' + simpleDialogRef.componentInstance.obj.name + ' eliminado', RESULT_SUCCESS);
+    expect(openSnackBarSpy).toHaveBeenCalledWith('Curso: ' + simpleDialogRef.componentInstance.obj.name + ' eliminado', RESULT_SUCCEED);
 
   }));
 

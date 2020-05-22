@@ -7,9 +7,7 @@ import { ROLE_MANAGER, URI_STUDENTS } from '../../../app.config';
   template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
   styles: [`:host  {
     display: block;
-    position: absolute;
     width: 100%;
-    height: 100%;
   }
   `]
 })

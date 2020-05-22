@@ -1,13 +1,15 @@
-import { Injectable } from "../../../node_modules/@angular/core";
-import { BehaviorSubject, Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
-import { finalize } from "../../../node_modules/rxjs/internal/operators/finalize";
 import { CourseBackendService } from "./course-backend.service";
-import { tap } from "rxjs/internal/operators/tap";
 import { User } from "../models/user";
 import { IsLoadingService } from "./isLoadingService.service";
 import { SubjectStoreService } from "./subject-store.service";
-import { map } from "rxjs/operators";
+
+import { tap } from "rxjs/internal/operators/tap";
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs/internal/Observable';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { Injectable } from '@angular/core';
 
 
 @Injectable({
@@ -19,12 +21,13 @@ export class CourseStoreService {
     private coursesSource = <BehaviorSubject<Course[]>>new BehaviorSubject([]);
     private isLoadingGet = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
-    constructor(
-        private courseBackendService: CourseBackendService,
-        private isLoadingService: IsLoadingService,
-        private subjectStoreService: SubjectStoreService
-    ) {
 
+    constructor(
+        private isLoadingService: IsLoadingService,
+        private courseBackendService: CourseBackendService,
+        private subjectStoreService: SubjectStoreService,
+
+    ) {
         this.dataStore = { courses: [] };
     }
 
