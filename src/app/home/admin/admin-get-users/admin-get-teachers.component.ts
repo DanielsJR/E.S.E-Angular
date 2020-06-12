@@ -4,11 +4,10 @@ import { ROLE_ADMIN, URI_MANAGERS, URI_TEACHERS } from '../../../app.config';
 
 @Component({
   template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
-  styles: [`:host  {
+  styles: [`
+    :host  {
     display: block;
-    position: absolute;
     width: 100%;
-    height: 100%;
   }
   `]
 })

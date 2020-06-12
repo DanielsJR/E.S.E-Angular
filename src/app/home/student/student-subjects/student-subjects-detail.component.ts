@@ -7,7 +7,12 @@ import { ROLE_STUDENT } from '../../../app.config';
   template: `
   <nx-subject-detail [areaRole]= "areaRole"></nx-subject-detail>
   `,
-  styles:['']
+  styles: [`
+    :host  {
+    display: block;
+    width: 100%;
+  }
+  `]
 })
 export class StudentSubjectsDetailComponent implements OnInit {
   areaRole = ROLE_STUDENT;

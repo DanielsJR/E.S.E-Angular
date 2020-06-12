@@ -12,6 +12,8 @@ import { UsersMenuComponent } from './menus/users-menu.component';
 import { CoursesMenuComponent } from './menus/couses-menu.component';
 import { QuizMenuComponent } from './menus/quiz-menu.component';
 import { SubjectsMenuComponent } from './menus/subjects-menu.component';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomReuseStrategy } from './customReuseStrategy';
 
 
 @NgModule({
@@ -42,7 +44,11 @@ import { SubjectsMenuComponent } from './menus/subjects-menu.component';
   
   entryComponents: [
     SetPassDialogRefComponent,
-  ]
+  ],
+
+  providers: [
+   // {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
+],
 
 
 })

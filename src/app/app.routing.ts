@@ -7,7 +7,11 @@ import { HomeResolverService } from './services/home-resolver.service';
 
 const routes: Routes = [
 
-    { path: 'about', loadChildren: () => import('./about/about.module').then(m => m.AboutModule) },
+    {
+        path: 'about',
+        loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
+        data: { animation: 'about' },
+    },
 
     {
         path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
@@ -16,8 +20,12 @@ const routes: Routes = [
     },
 
     { path: '', redirectTo: '/welcome', pathMatch: 'full' },
-    
-    { path: '**', component: PageNotFoundComponent } // wildcard route the last
+
+    {
+        path: '**',
+        component: PageNotFoundComponent,
+        data: { animation: 'not-found' },
+    } // wildcard route the last
 
 ];
 

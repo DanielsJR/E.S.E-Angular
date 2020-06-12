@@ -74,7 +74,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course.name]"
+      <tr mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course?.name]"
         [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
 
       </tr>
@@ -85,5 +85,9 @@
     </mat-paginator>
 
   </mat-card>
+
+  <button color="warn" mat-raised-button [routerLink]="['/welcome']">WELCOME</button>
+  <br>&nbsp;
+  <button color="warn" mat-raised-button [routerLink]="['/login']">LOGIN</button>
 
 </div>

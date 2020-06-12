@@ -6,7 +6,8 @@
   <div class="grid-container">
 
     <span class="theme-picker">
-      <nx-theme-picker #theme></nx-theme-picker>
+      <nx-theme-picker #theme [hidden]= "true"></nx-theme-picker>
+      <button color="warn" mat-raised-button [routerLink]="['/welcome']">WELCOME</button>
     </span>
 
     <mat-card class="mat-elevation-z8">

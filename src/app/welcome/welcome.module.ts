@@ -4,8 +4,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { LoginModule } from '../login/login-form/login.module';
 
+
 const routes: Routes = [
-  { path: 'welcome', component: WelcomeComponent }
+  {
+    path: 'welcome',
+    component: WelcomeComponent,
+    data: { animation: 'welcome' },
+  },
 ];
 
 @NgModule({

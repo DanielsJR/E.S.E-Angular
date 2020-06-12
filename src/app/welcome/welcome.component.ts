@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Theme } from '../shared/theme-picker/theme';
 import { IsLoadingService } from '../services/isLoadingService.service';
+import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
+import { SessionStorageService } from '../services/session-storage.service';
+import { THEMESLIGHT } from '../shared/theme-picker/themes';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -8,14 +12,27 @@ import { IsLoadingService } from '../services/isLoadingService.service';
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
-export class WelcomeComponent implements OnInit {
+export class WelcomeComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
+
+  private defaultTheme: Theme = THEMESLIGHT[4]; //indigo-pink
+  @ViewChild("theme") theme: ThemePickerComponent;
   initialTheme: Theme;
-  
-  constructor(private isLoadingService: IsLoadingService) { }
+  teamPickerSubs: Subscription;
+
+  constructor(private isLoadingService: IsLoadingService, private sessionStorage: SessionStorageService,) { }
+
 
   ngOnInit() {
-    this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
+    this.isLoadingService.isLoading$.subscribe(result => this.isLoading = result);
+
+    this.teamPickerSubs = this.sessionStorage.isThemeInstalled$.subscribe(isThemeInstalled => {
+      if (!isThemeInstalled) this.theme.installTheme(this.defaultTheme);
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.teamPickerSubs.unsubscribe();
   }
 
   get year() {

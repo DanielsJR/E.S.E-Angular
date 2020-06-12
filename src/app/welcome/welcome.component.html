@@ -4,7 +4,8 @@
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
   <div id="head" class="primaryColorBG">
-    <nx-theme-picker #theme></nx-theme-picker>
+    <nx-theme-picker #theme  [hidden]= "true"></nx-theme-picker>
+    <button color="warn" mat-raised-button [routerLink]="['/login']">LOGIN</button>
   </div>
 
   <button id="line1" mat-raised-button color="accent"></button>

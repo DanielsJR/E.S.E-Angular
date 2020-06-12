@@ -1,11 +1,10 @@
-import { Injectable } from "../../../node_modules/@angular/core";
 import { API_SERVER, URI_QUIZES } from "../app.config";
-import { HttpClient } from "../../../node_modules/@angular/common/http";
-import { Observable } from "../../../node_modules/rxjs";
-
-import { retry } from "../../../node_modules/rxjs/internal/operators/retry";
-import { tap } from "../../../node_modules/rxjs/internal/operators/tap";
 import { Quiz } from "../models/quiz";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
+import { retry } from 'rxjs/internal/operators/retry';
+import { tap } from 'rxjs/internal/operators/tap';
 
 
 @Injectable({

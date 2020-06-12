@@ -6,6 +6,7 @@ import { AdminGuard } from '../guards/admin-guard.service';
 import { ManagerGuard } from '../guards/manager-guard.service';
 import { TeacherGuard } from '../guards/teacher-guard.service';
 import { StudentGuard } from '../guards/student-guard.service';
+import { CanDeactivateGuard } from '../guards/can-deactivate-guard.service';
 
 
 const homeRoutes: Routes = [
@@ -14,11 +15,32 @@ const homeRoutes: Routes = [
         canActivate: [AuthGuard],
         component: HomeComponent,
         children: [
-            { path: 'admin', loadChildren: () => import('./../home/admin/admin.module').then(m => m.AdminModule), canLoad: [AdminGuard] },
-            { path: 'manager', loadChildren: () => import('./../home/manager/manager.module').then(m => m.ManagerModule), canLoad: [ManagerGuard] },
-            { path: 'teacher', loadChildren: () => import('./../home/teacher/teacher.module').then(m => m.TeacherModule), canLoad: [TeacherGuard] },
-            { path: 'student', loadChildren: () => import('./../home/student/student.module').then(m => m.StudentModule), canLoad: [StudentGuard] },
-        ]
+            {
+                path: 'admin',
+                loadChildren: () => import('./../home/admin/admin.module').then(m => m.AdminModule),
+                canLoad: [AdminGuard]
+            },
+
+            {
+                path: 'manager',
+                loadChildren: () => import('./../home/manager/manager.module').then(m => m.ManagerModule),
+                canLoad: [ManagerGuard]
+            },
+
+            {
+                path: 'teacher',
+                loadChildren: () => import('./../home/teacher/teacher.module').then(m => m.TeacherModule),
+                canLoad: [TeacherGuard]
+            },
+
+            {
+                path: 'student',
+                loadChildren: () => import('./../home/student/student.module').then(m => m.StudentModule),
+                canLoad: [StudentGuard]
+            },
+        ],
+        data: { animation: 'main-home' },
+        canDeactivate: [CanDeactivateGuard]
     }
 ];
 

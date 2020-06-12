@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { Quiz, TRUE_FALSES, QUIZ_LEVELS } from '../../../../models/quiz';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './teacher-quizes-detail.component.html',
   styleUrls: ['./teacher-quizes-detail.component.css']
 })
-export class TeacherQuizesDetailComponent implements OnInit {
+export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
 
   quiz: Quiz;
 
@@ -72,12 +72,21 @@ export class TeacherQuizesDetailComponent implements OnInit {
   constructor(private quizBackendService: QuizBackendService,
     private route: ActivatedRoute, public sanitizer: DomSanitizer,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
-    private isLoadingService: IsLoadingService, private renderer1: Renderer2, private renderer2: Renderer2) {
+    private isLoadingService: IsLoadingService,
+    private renderer2: Renderer2,
+    //private cdRef: ChangeDetectorRef,
+     ) {
 
   }
 
+
   ngOnInit() {
     this.isLoadingService.isLoadingTrue();
+
+
+  }
+
+  ngAfterViewInit(): void {
     this.route.paramMap.pipe(
       take(1), // take(1) will complete the observable after it has emitted one value
       switchMap(params =>
@@ -90,6 +99,7 @@ export class TeacherQuizesDetailComponent implements OnInit {
       }, error => console.error('error getting quiz ', error.message)
       );
 
+    //this.cdRef.detectChanges();
   }
 
   buildForm() {
@@ -503,7 +513,7 @@ export class TeacherQuizesDetailComponent implements OnInit {
   }
 
   formatLabel(value: number | null) {
-     return value + '%';
+    return value + '%';
   }
 
 

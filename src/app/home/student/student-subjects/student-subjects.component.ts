@@ -20,11 +20,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'nx-student-subjects',
   templateUrl: './student-subjects.component.html',
-  styleUrls: ['./student-subjects.component.css']
+  styleUrls: ['./student-subjects.component.css'],
+  animations: [rowAnimation]
 })
 export class StudentSubjectsComponent implements OnInit {
 

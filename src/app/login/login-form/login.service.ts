@@ -10,7 +10,6 @@ import { Token } from '../../models/token';
 @Injectable()
 export class LoginService {
     private endpoint = API_SERVER + URI_TOKEN_AUTH;
-    isAuth = false;
 
     constructor(
         private localStorageService: LocalStorageService,
@@ -26,7 +25,6 @@ export class LoginService {
     logout(): void {
         this.localStorageService.clearLocalStorage();
         this.sessionStorageService.clearSessionStorage();
-        this.isAuth = false;
     }
 
 

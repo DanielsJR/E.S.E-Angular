@@ -1,18 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
-import { managerRouteAnimations } from '../../shared/animations/animations';
 
 @Component({
-    selector: 'ng-manager-component',
-    templateUrl:'./manager.component.html',
-    styleUrls: ['./manager.component.css'],
-    animations: [managerRouteAnimations]
+    template: `<router-outlet></router-outlet>`,
+    styles: [`
+    :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    `],
 })
 
-export class ManagerComponent implements OnInit, OnDestroy {
+export class ManagerComponent implements OnInit {
 
     constructor(
         private courseStoreService: CourseStoreService,
@@ -23,8 +26,6 @@ export class ManagerComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        console.log("ManagerComponent ngOnInit() called!!!");
-
         if (this.userLoggedService.isAdmin()) {
             this.userStoreService.loadAllManagers();
         }
@@ -37,11 +38,4 @@ export class ManagerComponent implements OnInit, OnDestroy {
 
     }
 
-    ngOnDestroy() {
-        console.log("ManagerComponent ngOnDestroy() called!!!");
-    }
-
-    getState(outlet)  {
-		return outlet.activatedRouteData.animation;
-	}
 }

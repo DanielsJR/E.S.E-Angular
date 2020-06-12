@@ -19,20 +19,14 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { delay } from 'rxjs/internal/operators/delay';
-import { rowAnimation, subjectRouteAnimations, fadeAnimation, managerRouteAnimations } from '../../shared/animations/animations';
-import { tdBounceAnimation } from '@covalent/core/common';
-import { slide } from 'ngx-router-animations';
-import { EvaluationStoreService } from '../../services/evaluation-store.service';
-import { GradeStoreService } from '../../services/grade-store.service';
-import { AttendanceStoreService } from '../../services/attendance-store.service';
-
+import { rowAnimation, fadeAnimation } from '../../shared/animations/animations';
 
 
 @Component({
   selector: 'nx-subjects',
   templateUrl: './subjects.component.html',
   styleUrls: ['./subjects.component.css'],
-  animations: [rowAnimation, managerRouteAnimations, subjectRouteAnimations]
+  animations: [rowAnimation]
 })
 export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -48,8 +42,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // mat table
   displayedColumns = ['name', 'crud'];
-  dataSource = new MatTableDataSource<Subject>();
-
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
@@ -64,46 +56,13 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   isSelectCourseDisabled: boolean = true;
   isSeachDisabled: boolean = true;
 
+  dataSource = new MatTableDataSource<Subject>();
+  @ViewChild('select') select: MatSelect;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
-  routerSubscription: Subscription;
-
-  /*
-  private rOutlet: RouterOutlet;
-  @ViewChild(RouterOutlet, { static: false }) set outlet(outlet: RouterOutlet) {
-    if (!outlet) return
-    this.rOutlet = outlet;
-  }*/
-
-  @ViewChild('routerInAnim') routerInAnim : any;
-
-  @ViewChild('select', { static: false }) set select(select: MatSelect) {
-    if (!select) return;
-    this.setDataSource(select);
-  }
-
-  private matSort: MatSort;
-  @ViewChild(MatSort, { static: false }) set sort(sort: MatSort) {
-    if (!sort) return;
-    this.dataSource.sort = sort;
-    this.matSort = sort;
-  }
-
-
-  private matPaginator;
-  @ViewChild(MatPaginator, { static: false }) set paginator(paginator: MatPaginator) {
-    if (!paginator) return;
-    this.dataSource.paginator = paginator;
-    this.matPaginator = paginator;
-    this.matSort.sortChange.subscribe(() => this.matPaginator.pageIndex = 0);
-  }
-
-  enableToolbar: boolean = false;
-  
   currentUrl: string;
   userLogged: User;
-
-  toolbarMenus: any[] = [];
   subjectId: any;
 
   constructor(private sessionStorage: SessionStorageService,
@@ -111,39 +70,25 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
     public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-    private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
-    private attendanceStoreService: AttendanceStoreService,
 
   ) { }
 
   ngOnInit() {
     this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$
-      .subscribe(isLoadding =>
-        setTimeout(() => this.isLoading = isLoadding)
-      );
+      .subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+
     this.currentUrl = this.router.url;
 
-    
   }
 
   setDataSource(matSelect: MatSelect) {
-    //this.evaluationStoreService.clearStore();
-    //this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
-
-    //this.gradeStoreService.clearStore();
-    //this.gradeStoreService.getGradesBySubject(this.subjectId);
-
-    //this.attendanceStoreService.clearStore();
-    //this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
-
-
     //console.error("*****************setDataSource()*******************")
-
 
     if (this.areaRole === this.roleManager) {
       this.coursesSubscription = this.courseStoreService.courses$
-        .pipe(delay(0))
+        //.pipe(delay(0))
         .subscribe(data => {
           this.courses = data;
           this.isSelectCourseDisabled = this.courses.length < 1;
@@ -178,8 +123,8 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
             switchMap(user => {
               this.user = user;
               return this.subjectStoreService.subjects$
-            }),
-            delay(0))
+            }))
+            //,delay(0))
           .subscribe(subjects => {
             if (subjects) {
               let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
@@ -212,7 +157,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
 
         this.coursesSubscription = this.subjectStoreService.subjects$
-          .pipe(delay(0))
+          //.pipe(delay(0))
           .subscribe(subjects => {
             this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
             this.isSelectCourseDisabled = this.courses.length < 1;
@@ -243,40 +188,12 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    //console.error("*****************ngAfterViewInit()*******************");
     this.isSelectCourseDisabled = this.courses.length < 1;
-
-    /*
-        this.setDataSource();
-        this.dataSource.sort = this.matSort;
-        this.dataSource.paginator = this.matPaginator;
-        this.matSort.sortChange.subscribe(() => this.matPaginator.pageIndex = 0);
-    
-        */
-
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.currentUrl = event.url;
-        if (this.subjectId) {
-          this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
-          //this.routerInAnim.animate();
-        }
-      }
-
-    });
-
-    //reload page
-    if (this.route.snapshot.firstChild) {
-      this.route.firstChild.params
-        .subscribe(params => {
-          this.subjectId = params.id;
-          this.setEnableToolbar(this.setToolbarMenus(this.subjectId));
-          //this.routerInAnim.animate();
-        });
-    }
-
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.setDataSource(this.select);
     this.cdRef.detectChanges();
-
   }
 
   ngOnDestroy(): void {
@@ -284,8 +201,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingGetSubjectsSubscription.unsubscribe();
     this.isThemeDarkSubscription.unsubscribe();
     this.coursesSubscription.unsubscribe();
-    this.routerSubscription.unsubscribe();
-    console.log("yujuu!! OnDestroy!")
   }
 
   applyFilter(filterValue: string) {
@@ -383,76 +298,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
-
-
-
-
-
-  setEnableToolbar(toolbarMenus) {
-    //let url = this.currentUrl.substring(this.currentUrl.lastIndexOf('/') + 1);
-    let array = this.currentUrl.split('/');
-    let currentRoute = './' + array[array.length - 2] + '/' + array[array.length - 1];
-
-    for (let tbm of toolbarMenus) {
-
-      if ((tbm.route[0] + "/" + tbm.route[1]) === currentRoute) {
-        this.enableToolbar = true;
-        //console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
-        //console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
-        break;
-
-      } else {
-        this.enableToolbar = false;
-        //console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
-        //console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
-      }
-
-    }
-
-
-  }
-
-
-  setToolbarMenus(subjectId): string[] {
-    if (this.areaRole === this.roleManager) {
-      this.toolbarMenus = [
-        { name: 'Curso', route: ['./course', subjectId] },
-        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
-        { name: 'Asistencia', route: ['./attendance', subjectId] },
-      ];
-
-    } else if (this.areaRole === this.roleTeacher) {
-      this.toolbarMenus = [
-        { name: 'Curso', route: ['./course', subjectId] },
-        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
-        { name: 'Tomar Prueba', route: ['./quiz', subjectId] },
-        { name: 'Asistencia', route: ['./attendance', subjectId] },
-        { name: 'Libro de Clases', route: ['./book', subjectId] }
-      ];
-
-    } else if (this.areaRole === this.roleStudent) {
-      this.toolbarMenus = [
-        { name: 'Curso', route: ['./course', subjectId, { username: this.userLogged.username }] },
-        { name: 'Mis Notas', route: ['./grades', subjectId, { username: this.userLogged.username }] },
-        { name: 'Rendir Prueba', route: ['./quiz', subjectId, { username: this.userLogged.username }] },
-        { name: 'Mis Asistencias', route: ['./attendance', subjectId, { username: this.userLogged.username }] },
-        { name: 'Libro de Clases', route: ['./book', subjectId, { username: this.userLogged.username }] }
-      ];
-
-    } else {
-      this.toolbarMenus = [];
-      console.error('No areaRol!!');
-
-    }
-
-    return this.toolbarMenus;
-  }
-
-  getState(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
-  }
-
-
 
 
 }

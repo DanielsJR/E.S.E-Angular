@@ -1,6 +1,6 @@
 
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+import { Component, OnInit, Input, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router, NavigationStart, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
@@ -14,7 +14,7 @@ import { GradeStoreService } from '../../../services/grade-store.service';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { User } from '../../../models/user';
 import { AttendanceStoreService } from '../../../services/attendance-store.service';
-import { subjectRouteAnimations } from '../../../shared/animations/animations';
+import { subjectRouteAnimations, } from '../../../shared/animations/animations';
 
 
 
@@ -26,7 +26,7 @@ import { subjectRouteAnimations } from '../../../shared/animations/animations';
   animations: [subjectRouteAnimations]
 })
 
-export class SubjectDetailComponent implements OnInit, OnDestroy {
+export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() areaRole: string;
   roleManager = ROLE_MANAGER;
@@ -59,118 +59,67 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
     private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
     private router: Router, private userLoggedService: UserLoggedService, private attendanceStoreService: AttendanceStoreService,
+    private cdRef: ChangeDetectorRef,
   ) { }
 
+
+
   ngOnInit() {
+    this.evaluationStoreService.clearStore();
+    this.gradeStoreService.clearStore();
+    this.attendanceStoreService.clearStore();
 
-    this.subjectSubscription = this.route.paramMap
-      .pipe(
-        switchMap(params => {
-          this.subjectId = params.get('id');
-          this.currentUrl = this.router.url;
-          this.setEnableToolbar();
-
-          this.evaluationStoreService.clearStore();
-          this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
-
-          this.gradeStoreService.clearStore();
-          this.gradeStoreService.getGradesBySubject(this.subjectId);
-
-          this.attendanceStoreService.clearStore();
-          this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
-
-          return this.userLoggedService.userLogged$
-        }),
-
-        switchMap(user => {
-          this.userLogged = user;
-          return this.subjectStoreService.loadOneSubject(this.subjectId);
-        }),
-
-        switchMap(s => {
-          this.subject = s;
-          return this.subjectStoreService.subjects$;
-        })
-      )
-      .subscribe(sbjs => {
-        this.subjects = sbjs;
-        this.coursesSubjects = this.subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-
-        this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
-        this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-
-        if (this.areaRole === this.roleManager) {
-          this.toolbarMenus = [
-            { name: 'Curso', route: ['./course', this.subjectId] },
-            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
-            { name: 'Asistencia', route: ['./attendance', this.subjectId] },
-          ];
-
-        } else if (this.areaRole === this.roleTeacher) {
-          this.toolbarMenus = [
-            { name: 'Curso', route: ['./course', this.subjectId] },
-            { name: 'Evaluaciones', route: ['./evaluations', this.subjectId] },
-            { name: 'Tomar Prueba', route: ['./quiz', this.subjectId] },
-            { name: 'Asistencia', route: ['./attendance', this.subjectId] },
-            { name: 'Libro de Clases', route: ['./book', this.subjectId] }
-          ];
-
-        } else if (this.areaRole === this.roleStudent) {
-          this.toolbarMenus = [
-            { name: 'Curso', route: ['./course', this.subjectId, { username: this.userLogged.username }] },
-            { name: 'Mis Notas', route: ['./grades', this.subjectId, { username: this.userLogged.username }] },
-            { name: 'Rendir Prueba', route: ['./quiz', this.subjectId, { username: this.userLogged.username }] },
-            { name: 'Mis Asistencias', route: ['./attendance', this.subjectId, { username: this.userLogged.username }] },
-            { name: 'Libro de Clases', route: ['./book', this.subjectId, { username: this.userLogged.username }] }
-          ];
-
-        } else {
-          console.error('No areaRol!!');
-        }
-
-
-      });
-
-    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-
+    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding);
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
-
-
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.currentUrl = event.url;
-        this.setEnableToolbar();
-      }
-    });
-
-
+    this.currentUrl = this.router.url;
   }
-  setEnableToolbar() {
-    let url = this.currentUrl.substring(0, this.currentUrl.lastIndexOf('/'));
-    if ((url === `/home/manager/subjects/detail/${this.subjectId}/grades` || url === `/home/teacher/subjects/detail/${this.subjectId}/grades`)
-      || (url === `/home/manager/subjects/detail/${this.subjectId}/book-detail` || url === `/home/teacher/subjects/detail/${this.subjectId}/book-detail`)) {
-      this.enableToolbar = false;
-      this.dinamicStyles = { 'top': '0' };
-      //console.log('enableToolbar: false');
-    } else {
-      this.enableToolbar = true;
-      this.dinamicStyles = { 'top': '64px' };
-      //console.log('enableToolbar: true');
+
+  ngAfterViewInit(): void {
+    if (this.route.snapshot.firstChild) {
+      this.subjectSubscription = this.route.firstChild.params
+        .pipe(
+          switchMap(params => {
+            this.subjectId = params.id;
+            
+
+            this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
+            this.gradeStoreService.getGradesBySubject(this.subjectId);
+            this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
+
+            return this.userLoggedService.userLogged$
+          }),
+
+          switchMap(user => {
+            this.userLogged = user;
+            this.setToolbarMenus(this.subjectId);
+            return this.subjectStoreService.loadOneSubject(this.subjectId);
+          }),
+
+          switchMap(s => {
+            this.subject = s;
+            return this.subjectStoreService.subjects$;
+          })
+        )
+        .subscribe(sbjs => {
+          this.subjects = sbjs;
+          this.coursesSubjects = this.subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+
+          this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
+          this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+
+        });
+
     }
+
+    this.cdRef.detectChanges();
+
   }
+
 
   ngOnDestroy(): void {
     this.isThemeDarkSubscription.unsubscribe();
     this.isLoadingGetSubjectsSubscription.unsubscribe();
-    this.subjectSubscription.unsubscribe();
-
-  }
-
-  navigateSubject(id: string) {
-    let currentUrl = this.router.url;
-    let arrayUrl = currentUrl.split('/');
-    let path = arrayUrl[arrayUrl.length - 2];
-    this.router.navigate(['../' + id + '/' + path, id, { username: this.userLogged.username }], { relativeTo: this.route });
+    if (this.subjectSubscription) this.subjectSubscription.unsubscribe();
 
   }
 
@@ -182,8 +131,68 @@ export class SubjectDetailComponent implements OnInit, OnDestroy {
     return this.subjects.filter(sj => sj.course.name.indexOf(course.name) === 0);
   }
 
-  getState(outlet) {
-    return outlet.activatedRouteData.animation;
+  getState(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+
+  setToolbarMenus(subjectId): string[] {
+    if (this.areaRole === this.roleManager) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId] },
+        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
+        { name: 'Asistencia', route: ['./attendance', subjectId] },
+        { name: 'Libro de Clases', route: ['./book', subjectId] },
+      ];
+
+    } else if (this.areaRole === this.roleTeacher) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId] },
+        { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
+        { name: 'Asistencia', route: ['./attendance', subjectId] },
+        { name: 'Libro de Clases', route: ['./book', subjectId] },
+        { name: 'Tomar Prueba', route: ['./quiz', subjectId] },
+      ];
+
+    } else if (this.areaRole === this.roleStudent) {
+      this.toolbarMenus = [
+        { name: 'Curso', route: ['./course', subjectId, { username: this.userLogged.username }] },
+        { name: 'Mis Asistencias', route: ['./attendance', subjectId, { username: this.userLogged.username }] },
+        { name: 'Libro de Clases', route: ['./book', subjectId, { username: this.userLogged.username }] },
+        { name: 'Mis Notas', route: ['./grades', subjectId, { username: this.userLogged.username }] },
+        { name: 'Rendir Prueba', route: ['./quiz', subjectId, { username: this.userLogged.username }] },
+      ];
+
+    } else {
+      this.toolbarMenus = [];
+      console.error('No areaRol!!');
+
+    }
+
+    return this.toolbarMenus;
+  }
+
+  setEnableToolbar(toolbarMenus) {
+    //let url = this.currentUrl.substring(this.currentUrl.lastIndexOf('/') + 1);
+    let array = this.currentUrl.split('/');
+    let currentRoute = './' + array[array.length - 2] + '/' + array[array.length - 1];
+
+    for (let tbm of toolbarMenus) {
+
+      if ((tbm.route[0] + "/" + tbm.route[1]) === currentRoute) {
+        this.enableToolbar = true;
+        console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
+        console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
+        break;
+
+      } else {
+        this.enableToolbar = false;
+        console.log('enableToolbar: ', this.enableToolbar, ' currentUrl: ', currentRoute);
+        console.log('filter url: ', (tbm.route[0] + "/" + tbm.route[1]));
+      }
+
+    }
+
+
   }
 
 

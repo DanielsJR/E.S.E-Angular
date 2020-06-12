@@ -1,24 +1,6 @@
 <div class="container">
 
-  <!-- -->
-  <mat-toolbar color="accent" class="toolbarMenu"
-    *animIf="enableToolbar; info: { startAnim: 'fadeIn', endAnim: 'fadeOut', time: 1000 }">
-
-    <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route" routerLinkActive="active">{{m.name}}
-    </button>
-    <span class="spacer-r"></span>
-
-  </mat-toolbar>
-
-  <!-- #routerInAnim="animated" [animAted]="{time: 1000, animation: 'fadeIn'}" -->
-  <!-- *animIf="enableToolbar; info: { startAnim: 'lightSpeedIn', endAnim: 'lightSpeedOut', time: 1000 }" -->
-  <div class="content" [@subjectRouteAnimations]="getState(o)">
-    <router-outlet #o="outlet"></router-outlet>
-  </div>
-
-  <!-- [style.display]="!enableToolbar? '' : 'none'"-->
-  <!---->
-  <mat-card class="mat-elevation-z8" *animIf="!enableToolbar; info: { startAnim: 'slideInLeft', endAnim: 'slideOutRight', time: 1000 }" >
+  <mat-card class="mat-elevation-z8">
 
     <mat-toolbar color="primary">
 
@@ -119,7 +101,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
       <tr mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
-        [routerLink]="['./course', subject.id ]" @rowAnimation (mousedown)="subjectId= subject.id">
+        [routerLink]="['./detail/course', subject.id ]" @rowAnimation (mousedown)="subjectId= subject.id">
         <!-- (click)="routerInAnim.animate()"-->
 
       </tr>
@@ -130,6 +112,5 @@
     </mat-paginator>
 
   </mat-card>
-
 
 </div>

@@ -1,22 +1,27 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 
+
 @Component({
-    template: `<router-outlet></router-outlet>`
+    template: `<router-outlet id="outerOutlet"></router-outlet>`,
+    styles: [`
+    :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+  
+    `],
 })
 
-export class TeacherComponent implements OnInit, OnDestroy {
+export class TeacherComponent implements OnInit {
 
     constructor(private userLoggedService: UserLoggedService, private subjectStoreService: SubjectStoreService) { }
 
     ngOnInit(): void {
-        console.log("TeacherComponent ngOnInit() called!!!");
         this.userLoggedService.userLogged$
             .subscribe(teacher => this.subjectStoreService.loadSubjects(teacher.id));
     }
 
-    ngOnDestroy() {
-        console.log("TeacherComponent ngOnDestroy() called!!!");
-    }
 }

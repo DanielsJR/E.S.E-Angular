@@ -70,9 +70,9 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation ></tr>
       <tr mat-row *matRowDef="let quiz; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
-        [routerLink]="['./detail',quiz.id]">
+        [routerLink]="['./detail',quiz.id]" @rowAnimation>
 
       </tr>
 

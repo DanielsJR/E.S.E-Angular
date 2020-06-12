@@ -6,7 +6,12 @@ import { ROLE_TEACHER } from '../../../../app.config';
   template: `
   <nx-subject-send-quiz [areaRole] ="areaRole"></nx-subject-send-quiz>
   `,
-  styles:['']
+  styles: [`
+    :host  {
+    display: block;
+    width: 100%;
+  }
+  `]
 })
 export class TeacherSubjectSendQuizComponent implements OnInit {
   areaRole = ROLE_TEACHER;

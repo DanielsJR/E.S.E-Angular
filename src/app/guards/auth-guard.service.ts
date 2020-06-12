@@ -30,7 +30,12 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
     canLoad(route: Route): boolean {
         //console.log('AuthGuard#canLoad called');
-        const url = `/${route.path}`;
+        const navigation = this.router.getCurrentNavigation();
+        let url = '/';
+
+        if (navigation) {
+            url = navigation.extractedUrl.toString();
+        }
         return this.checkLogin(url);
     }
 
@@ -39,9 +44,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
            //console.log('checkLogin: true');
             return true;
         } else {
-            console.error('checkLogin: false');
+            console.error('checkLogin: false!!!');
             this.userLoggedService.redirectUrl = url;
-            console.log('AuthGuard#attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.getTokenUsername());
+            this.userLoggedService.redirectUser= this.userLoggedService.getTokenUsername();
+            console.log('AuthGuard attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.redirectUser);
             this.router.navigate([URI_LOGIN]);
             return false;
         }

@@ -110,7 +110,6 @@
 
   </mat-card>
 
-
   <mat-card class="mat-elevation-z8">
 
     <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
@@ -148,7 +147,7 @@
 
               <button type="button" mat-mini-fab color="primary"
                 (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
-                <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i>
+               <!-- <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i> -->
               </button>
             </mat-toolbar>
 

@@ -1,6 +1,3 @@
-import { Injectable } from "../../../node_modules/@angular/core";
-import { empty, ReplaySubject, BehaviorSubject, Subject } from "../../../node_modules/rxjs";
-import { switchMap } from "rxjs/operators";
 import { RxStompService } from "@stomp/ng2-stompjs";
 import { UserLoggedService } from "./user-logged.service";
 import { CourseBackendService } from "./course-backend.service";
@@ -8,6 +5,11 @@ import { Message } from '@stomp/stompjs';
 import { Grade } from "../models/grade";
 import { User } from "../models/user";
 import { GradeStoreService } from "./grade-store.service";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { empty } from 'rxjs/internal/observable/empty';
 
 
 @Injectable({

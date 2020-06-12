@@ -6,9 +6,12 @@ import { LoginHostComponent } from './login-host.component';
 import { LoginModule } from '../login-form/login.module';
 
 
-
 const routes: Routes = [
-  { path: 'login', component: LoginHostComponent }
+  {
+    path: 'login',
+    component: LoginHostComponent,
+    data: { animation: 'login' },
+  }
 ];
 
 @NgModule({
@@ -16,7 +19,7 @@ const routes: Routes = [
     SharedModule,
     LoginModule,
     RouterModule.forChild(routes),
-    
+
   ],
 
   declarations: [

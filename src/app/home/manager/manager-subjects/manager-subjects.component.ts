@@ -5,7 +5,8 @@ import { ROLE_MANAGER } from '../../../app.config';
 @Component({
   selector: 'nx-manager-subjects',
   template: `<nx-subjects [areaRole] = "areaRole"></nx-subjects>`,
-  styles: [`:host  {
+  styles: [`
+  :host  {
     display: block;
     width: 100%;
   }

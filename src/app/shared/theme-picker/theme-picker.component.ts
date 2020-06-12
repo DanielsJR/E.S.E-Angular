@@ -37,7 +37,7 @@ export class ThemePickerComponent implements OnInit {
       this.installTheme((this.initialTheme) ? this.initialTheme : this.defaultTheme);//indigo-pink default
     }
 
-   }
+  }
 
   ngOnInit() {
     this.overlayContainer.getContainerElement().classList.add(this.theme().name);
@@ -68,10 +68,11 @@ export class ThemePickerComponent implements OnInit {
   }
 
   installTheme(theme: Theme): void {
-    let oldThemeName = this.themeName;//(this.theme()) ? this.themeName : undefined;
     this.sessionStorage.setTheme(theme);
-    if (oldThemeName) this.overlayContainer.getContainerElement().classList.remove(oldThemeName);
+    //console.warn('this.overlayContainer.getContainerElement().classList',this.overlayContainer.getContainerElement().classList);
+    this.overlayContainer.getContainerElement().classList.value = 'cdk-overlay-container';
     this.overlayContainer.getContainerElement().classList.add(theme.name);
+    //console.warn('this.overlayContainer.getContainerElement().classList',this.overlayContainer.getContainerElement().classList);
     this.setThemeArray();
     this.isInstalled = true;
     this.sessionStorage.darkThemeNext();

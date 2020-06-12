@@ -19,11 +19,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { rowAnimation } from '../../../../shared/animations/animations';
 
 @Component({
   selector: 'nx-subject-send-quiz',
   templateUrl: './subject-send-quiz.component.html',
-  styleUrls: ['./subject-send-quiz.component.css']
+  styleUrls: ['./subject-send-quiz.component.css'],
+  animations: [rowAnimation]
 })
 export class SubjectSendQuizComponent implements OnInit {
 

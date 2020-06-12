@@ -32,7 +32,12 @@ export class StudentGuard implements CanActivate, CanActivateChild, CanLoad {
 
     canLoad(route: Route): boolean {
         //console.log('StudentGuard#canLoad called');
-        const url = `/${route.path}`;
+        const navigation = this.router.getCurrentNavigation();
+        let url = '/';
+
+        if (navigation) {
+            url = navigation.extractedUrl.toString();
+        }
         return this.checkLogin(url);
     }
 
@@ -44,7 +49,8 @@ export class StudentGuard implements CanActivate, CanActivateChild, CanLoad {
         } else {
             console.error('checkLogin: false');
             this.userLoggedService.redirectUrl = url;
-            console.log('StudentGuard#attempted url: ' + url + ' tokenUsername: '+ this.userLoggedService.getTokenUsername());
+            this.userLoggedService.redirectUser= this.userLoggedService.getTokenUsername();
+            console.log('StudentGuard attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.redirectUser);
             this.router.navigate([URI_LOGIN]);
             return false;
         }

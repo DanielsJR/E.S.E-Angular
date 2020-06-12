@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MatSort } from '../../../../../node_modules/@angular/material/sort';
 import { MatPaginator } from '../../../../../node_modules/@angular/material/paginator';
 import { DomSanitizer } from '../../../../../node_modules/@angular/platform-browser';
@@ -6,7 +6,7 @@ import { SessionStorageService } from '../../../services/session-storage.service
 import { MatTableDataSource } from '../../../../../node_modules/@angular/material/table';
 import { CourseStoreService } from '../../../services/course-store.service';
 import { Course } from '../../../models/course';
-import { finalize } from 'rxjs/operators';
+import { finalize, delay } from 'rxjs/operators';
 import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_DELETE_ERROR, COURSE_DELETE_SUCCEED, CANCEL_MESSAGE, RESULT_WARN } from '../../../app.config';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -25,10 +25,10 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
 
   // mat table
   displayedColumns = ['name', 'crud'];
-  dataSource: MatTableDataSource<Course>;
+  dataSource = new MatTableDataSource<Course>();
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSize = 20;
+  pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isDark: boolean;
   isLoading: boolean = false;
@@ -39,16 +39,12 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   isLoadingGetCoursesSubscription: Subscription;
 
   constructor(private sessionStorage: SessionStorageService, private courseStoreService: CourseStoreService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
+    public sanitizer: DomSanitizer, private snackbarService: SnackbarService,
+    private cdRef: ChangeDetectorRef, ) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<Course>();
     this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-    this.coursesSubscription = this.courseStoreService.courses$.subscribe(data => {
-      this.courseYear = data[0];
-      this.dataSource.data = data;
-    }
-    );
+
 
     this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
   }
@@ -56,7 +52,16 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    this.coursesSubscription = this.courseStoreService.courses$
+      .subscribe(data => {
+        this.courseYear = data[0]
+        this.dataSource.data = data
+      });
+
+    this.cdRef.detectChanges();
+
   }
 
   ngOnDestroy() {

@@ -14,10 +14,22 @@ import { ManagerSubjectCourseComponent } from './manager-subjects/manager-subjec
 import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-subject-detail/manager-subject-evaluations.component';
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-subject-detail/manager-subject-attendance.component';
+import { TeacherGuard } from '../../guards/teacher-guard.service';
+import { TeacherQuizesComponent } from '../teacher/teacher-quizes/teacher-quizes.component';
+import { TeacherQuizesDetailComponent } from '../teacher/teacher-quizes/teacher-quizes-detail/teacher-quizes-detail.component';
+import { TeacherQuizesCreateComponent } from '../teacher/teacher-quizes/teacher-quizes-create/teacher-quizes-create.component';
+import { TeacherSubjectsComponent } from '../teacher/teacher-subjects/teacher-subjects.component';
+import { TeacherSubjectsDetailComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subjects-detail.component';
+import { TeacherSubjectCourseComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-course.component';
+import { TeacherSubjectEvaluationsComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-evaluations.component';
+import { TeacherSubjectAttendanceComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-attendance.component';
+import { TeacherSubjectBookComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-book.component';
+import { TeacherSubjectSendQuizComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-send-quiz.component';
+import { TeacherSubjectGradesComponent } from '../teacher/teacher-subjects/teacher-subject-detail/teacher-subject-grades.component';
 
 
 
-const adminRoutes: Routes = [
+const routes: Routes = [
     {
         path: '',
         component: ManagerComponent,
@@ -41,9 +53,6 @@ const adminRoutes: Routes = [
                         data: { animation: 'students' },
                     },
 
-
-
-
                     {
                         path: 'courses',
                         component: ManagerCoursesComponent,
@@ -62,14 +71,18 @@ const adminRoutes: Routes = [
                         data: { animation: 'courses-name' },
                     },
 
-
-
-
                     {
                         path: 'subjects',
                         component: ManagerSubjectsComponent,
-                        data: { animation: 'subjects' },
+                        data: { animation: 'manager-subjects' },
+                    },
+
+                    {
+                        path: 'subjects/detail',
+                        component: ManagerSubjectsDetailComponent,
+                        data: { animation: 'subjects-detail' },
                         children: [
+
                             {
                                 path: 'course/:id',
                                 component: ManagerSubjectCourseComponent,
@@ -99,10 +112,107 @@ const adminRoutes: Routes = [
                         ],
                     },
 
+                    //teacher
+
+
+                    {
+                        path: 'teacher',
+                        canActivateChild: [TeacherGuard],
+                        children: [
+                            {
+                                path: 'subjects',
+                                component: TeacherSubjectsComponent,
+                                data: { animation: 'teacher-subjects' },
+                            },
+
+
+                            {
+                                path: 'subjects/detail',
+                                component: TeacherSubjectsDetailComponent,
+                                data: { animation: 'subjects-detail' },
+                                children: [
+
+                                    {
+                                        path: 'course/:id',
+                                        component: TeacherSubjectCourseComponent,
+                                        data: { animation: 'course-id' },
+                                    },
+
+                                    {
+                                        path: 'evaluations/:id',
+                                        component: TeacherSubjectEvaluationsComponent,
+                                        data: { animation: 'evaluations-id' },
+                                    },
+
+                                    {
+                                        path: 'attendance/:id',
+                                        component: TeacherSubjectAttendanceComponent,
+                                        data: { animation: 'attendance-id' },
+                                    },
+
+                                    {
+                                        path: 'book/:id',
+                                        component: TeacherSubjectBookComponent,
+                                        data: { animation: 'book-id' },
+                                    },
+
+                                    {
+                                        path: 'quiz/:id',
+                                        component: TeacherSubjectSendQuizComponent,
+                                        data: { animation: 'quiz-id' },
+                                    },
+
+                                    {
+                                        path: 'grades/:id',
+                                        component: TeacherSubjectGradesComponent,
+                                        data: { animation: 'grades-id' },
+                                    },
+
+
+
+                                ]
+                            },
+
+
+                            {
+                                path: 'quizes',
+                                component: TeacherQuizesComponent,
+                                data: { animation: 'quizes' },
+                            },
+
+                            {
+                                path: 'quizes/detail/:id',
+                                component: TeacherQuizesDetailComponent,
+                                data: { animation: 'quizes-detail' },
+
+                            },
+
+                            {
+                                path: 'quizes/create',
+                                component: TeacherQuizesCreateComponent,
+                                data: { animation: 'quizes-create' },
+                            },
+
+                            {
+                                path: 'quizes/import',
+                                component: TeacherQuizesComponent,
+                                data: { animation: 'quizes-import' },
+                            },
+
+                            {
+                                path: 'quizes/historical',
+                                component: TeacherQuizesComponent,
+                                data: { animation: 'quizes-historical' },
+                            },
+
+
+                        ]
+                    },
+
                     {
                         path: '',
                         component: ManagerHomeComponent,
-                        data: { animation: 'manager-home' },
+                        data: { animation: 'home' },
                     },
 
 
@@ -115,7 +225,7 @@ const adminRoutes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forChild(adminRoutes)
+        RouterModule.forChild(routes)
     ],
 
     exports: [

@@ -50,6 +50,15 @@ import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-
     
   ],
 
+  exports:[
+    TeacherQuizesComponent,
+    TeacherQuizesDetailComponent,
+    TeacherQuizesCreateComponent,
+    TeacherQuizesSendQuizComponent,
+    TeacherSubjectBookComponent,
+
+  ],
+
   providers: [
 
   ]

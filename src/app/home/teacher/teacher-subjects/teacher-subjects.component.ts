@@ -4,9 +4,14 @@ import { ROLE_TEACHER } from '../../../app.config';
 
 @Component({
   template: `
-  <nx-subjects [areaRole]="areaRole"></nx-subjects>
+  <nx-subjects [areaRole]= "areaRole"></nx-subjects>
   `,
-  styles:['']
+  styles: [`
+    :host  {
+    display: block;
+    width: 100%;
+  }
+  `]
 })
 export class TeacherSubjectsComponent implements OnInit {
   areaRole = ROLE_TEACHER;

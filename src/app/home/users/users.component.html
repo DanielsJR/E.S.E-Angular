@@ -13,7 +13,7 @@
 
       <span class="spacer-r"></span>
 
-      <mat-chip-list *ngIf="usersRole">
+      <mat-chip-list>
         <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="account-multiple"></mat-icon>
           &nbsp; {{usersRole}}
@@ -95,7 +95,7 @@
 
     </table>
 
-    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
   </mat-card>

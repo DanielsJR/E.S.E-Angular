@@ -20,19 +20,24 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private userLoggedService: UserLoggedService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        //console.log('ManagerGuard#canActivate called');
+        //console.log('ManagerGuard canActivate called');
         const url: string = state.url;
         return this.checkLogin(url);
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        //console.log('ManagerGuard#canActivateChild called');
+        //console.log('ManagerGuard canActivateChild called');
         return this.canActivate(route, state);
     }
 
     canLoad(route: Route): boolean {
-        //console.log('ManagerGuard#canLoad called');
-        const url = `/${route.path}`;
+        //console.log('ManagerGuard canLoad called');
+        const navigation = this.router.getCurrentNavigation();
+        let url = '/';
+
+        if (navigation) {
+            url = navigation.extractedUrl.toString();
+        }
         return this.checkLogin(url);
     }
 
@@ -42,9 +47,10 @@ export class ManagerGuard implements CanActivate, CanActivateChild, CanLoad {
             //console.log('checkLogin: true');
             return true;
         } else {
-            console.error('checkLogin: false');
+            console.error('checkLogin: false!!');
             this.userLoggedService.redirectUrl = url;
-            console.log('ManagerGuard#attempted url: ' + url + ' tokenUsername: '+ this.userLoggedService.getTokenUsername());
+            this.userLoggedService.redirectUser= this.userLoggedService.getTokenUsername();
+            console.log('ManagerGuard attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.redirectUser);
             this.router.navigate([URI_LOGIN]);
             return false;
         }

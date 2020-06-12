@@ -1,14 +1,20 @@
+:host  {
+	display: block;
+    width: 100%;
+}
+
 .container {
     display: flex;
-    justify-content: space-evenly;
     flex-flow: row wrap;
-    --min-width: fit-content;
+    justify-content: center;
+    align-content: flex-start;
+    width: 100%;
+    height: 100%;
 }
 
 mat-card {
-    --width: fit-content;
     width: 100%;
-    min-width: 600px;
+    min-width: 500px;
     height: fit-content;
     margin: 20px;
     padding: 0;
@@ -17,6 +23,8 @@ mat-card {
 
 table {
     width: 100%;
+    height: 100%;
+    padding: 0 20px;
 }
 
 th.mat-header-cell,

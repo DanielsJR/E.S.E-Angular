@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN } from '../../app.config';
 import { User } from '../../models/user';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../shared/animations/animations';
+import { delay } from 'rxjs/internal/operators/delay';
 
 
 
@@ -33,12 +34,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // mat table
   displayedColumns = ['firstName', 'crud'];
-  dataSource;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSize = 20;
+  dataSource = new MatTableDataSource<User>();
+  pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark;
+  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -47,41 +48,33 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() uriRole;
   @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
 
-  isThemeDarkSubscription: Subscription;
-  usersSubscription: Subscription;
-  isLoadingGetSubscription: Subscription;
+  private subscriptions = new Subscription();
+
 
   constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
     public sanitizer: DomSanitizer, private userLoggedService: UserLoggedService,
+    private cdRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
-    console.log("AreaRole: " + this.areaRole + "  userLoggedRoles: " + this.userLoggedService.getRoles());
+    //console.log("AreaRole: " + this.areaRole + "  userLoggedRoles: " + this.userLoggedService.getRoles());
 
-    this.dataSource = new MatTableDataSource<User[]>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-
-
+      this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
     if (this.uriRole === URI_MANAGERS) {
-      this.isLoadingGetSubscription = this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-      this.usersSubscription = this.userStoreService.managers$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_MANAGER_SPANISH;
       this.usersRole = ROLE_MANAGER_SPANISH + 'res';
 
     } else if (this.uriRole === URI_TEACHERS) {
-      this.isLoadingGetSubscription = this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-      this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
 
     } else if (this.uriRole === URI_STUDENTS) {
-      this.isLoadingGetSubscription = this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
-      this.usersSubscription = this.userStoreService.students$.subscribe(data => this.dataSource.data = data);
       this.userRole = ROLE_STUDENT_SPANISH;
       this.usersRole = ROLE_STUDENT_SPANISH + 's';
 
@@ -89,20 +82,36 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('NO uriRole');
     }
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
-
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.setDataSource();
+    this.cdRef.detectChanges();
+  }
+
+  setDataSource() {
+    if (this.uriRole === URI_MANAGERS) {
+      this.subscriptions.add(this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => this.isLoading = isLoadding));
+      this.subscriptions.add(this.userStoreService.managers$.subscribe(data => this.dataSource.data = data));
+
+    } else if (this.uriRole === URI_TEACHERS) {
+      this.subscriptions.add(this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => this.isLoading = isLoadding));
+      this.subscriptions.add(this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data));
+
+    } else if (this.uriRole === URI_STUDENTS) {
+      this.subscriptions.add(this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => this.isLoading = isLoadding));
+      this.subscriptions.add(this.userStoreService.students$.subscribe(data => this.dataSource.data = data));
+
+    } else {
+      console.error('NO uriRole');
+    }
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.usersSubscription.unsubscribe();
-    this.isLoadingGetSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {

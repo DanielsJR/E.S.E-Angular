@@ -12,55 +12,51 @@ import { SubjectBookDetailComponent } from './subject-detail/subject-book/subjec
 
 
 const routes: Routes = [
-
     {
         path: 'subjects',
         component: SubjectsComponent,
-        data: { animation: 'subjects' },
+    },
+
+
+    {
+        path: 'subjects/detail',
+        component: SubjectDetailComponent,
         children: [
 
             {
                 path: 'course/:id',
                 component: SubjectCourseComponent,
-                data: { animation: 'course-id' },
             },
 
             {
                 path: 'evaluations/:id',
                 component: SubjectEvaluationsComponent,
-                data: { animation: 'evaluations-id' },
-            },
-
-            {
-                path: 'quiz/:id',
-                component: SubjectSendQuizComponent,
-                data: { animation: 'quiz-id' },
             },
 
             {
                 path: 'attendance/:id',
                 component: SubjectAttendanceComponent,
-                data: { animation: 'attendance-id' },
             },
 
             {
                 path: 'book/:id',
                 component: SubjectBookComponent,
-                data: { animation: 'book-id' },
             },
 
             {
                 path: 'book-detail/:id',
                 component: SubjectBookDetailComponent,
-                data: { animation: 'book-detail-id' },
+            },
+
+            {
+                path: 'quiz/:id',
+                component: SubjectSendQuizComponent,
             },
 
             {
                 path: 'grades/:id',
                 component: SubjectGradesComponent,
-                data: { animation: 'grades-id' },
             },
-
 
 
         ],

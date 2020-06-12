@@ -18,6 +18,7 @@ import { ManagerSubjectEvaluationsComponent } from './manager-subjects/manager-s
 import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.component';
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
 import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-subject-detail/manager-subject-attendance.component';
+import { TeacherModule } from '../teacher/teacher.module';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-su
     SubjectsModule,
     UsersModule,
     QuizStudentModule,
+    TeacherModule,
     
   ],
 

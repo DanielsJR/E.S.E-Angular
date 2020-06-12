@@ -1,26 +1,30 @@
-import { Component, OnInit, ViewChild, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdPulseAnimation } from '@covalent/core/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router, ActivatedRoute, NavigationStart, RouterOutlet } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, RouterOutlet, NavigationEnd, ActivationEnd, ActivationStart, ChildActivationEnd } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
 
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatButton } from '@angular/material/button';
 import { MatMenu } from '@angular/material/menu';
 import { delay } from 'rxjs/internal/operators/delay';
 import { QuizNotificationService } from '../services/quiz-notification.service';
-import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, onLogoChange,} from '../shared/animations/animations';
-
+import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, onLogoChange, routeAnimations, rowAnimation, waitAnimation, } from '../shared/animations/animations';
+import { Subscription, Observable, of } from 'rxjs';
+import { filter } from 'rxjs/internal/operators/filter';
+import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
+  selector: 'nx-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   animations: [
@@ -34,9 +38,10 @@ import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideN
 
     onLogoChange,
     tdBounceAnimation,
+    routeAnimations,
   ],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate {
 
   user: User;
   privilege = this.userLoggedService.getPrivilege();
@@ -68,9 +73,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   currentUrl: string = '';
 
-  sideNavMenuState: boolean = true;
-  sideNavChatState: boolean = false ;
-  
+  sideNavMenuState: boolean;
+  sideNavChatState: boolean;
+  @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
+  @ViewChild("sidenavChat") sidenavChat: MatSidenav;
+
+  private subscriptions = new Subscription();
+
+  animString: String;
+
   constructor(
     private loginService: LoginService,
     private userLoggedService: UserLoggedService,
@@ -79,21 +90,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     private snackbarService: SnackbarService,
     public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService,
+    //private quizNotificationService: QuizNotificationService,
+    private cdRef: ChangeDetectorRef,
 
   ) {
 
-    this.isLoadingService.isLoading$.subscribe(result => setTimeout(() => this.isLoading = result));
+    this.subscriptions.add(this.isLoadingService.isLoading$.subscribe(result =>
+      this.isLoading = result
+    ));
 
-    this.userLoggedService.userLogged$.subscribe(user => {
+    this.subscriptions.add(this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
       if (this.isSidenavProfileOpen) this.sidenavProfile.close();
-    });
+    }));
 
+    this.getState();
 
   }
 
   ngOnInit() {
-
     if (this.user) {
       if (this.user.username === '111') {
         this.welcome = WELCOME_ADMIN + this.shortName(this.user);
@@ -101,51 +116,77 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
       }
 
-      setTimeout(() => this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCEED));
-
     }
 
-
   }
-
 
   ngAfterViewInit() {
-
-    this.route.data
-      .pipe(delay(0))
-      .subscribe((data: { theme: Theme }) => {
-        if (data.theme) {
-          this.themePicker.installTheme(data.theme);
+    this.subscriptions.add(this.route.data
+      .subscribe((t: { theme: Theme }) => {
+        if (t.theme) {
+          this.themePicker.installTheme(t.theme);
         }
-        if (this.userLoggedService.redirectUrl && (this.userLoggedService.getTokenUsername() === this.user.username))
+        if (this.userLoggedService.redirectUrl && (this.userLoggedService.redirectUser === this.user.username)) {
           this.router.navigate([this.userLoggedService.redirectUrl]);
-      });
+        }
 
-    this.sidenavProfile.openedChange.subscribe(isOpen => {
+        setTimeout(() => {
+          this.sidenavMenu.open();
+          this.sidenavChat.open();
+          this.sideNavMenuState = true;
+          this.sideNavChatState = false;
+          this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCEED);
+        }, 1000);
+
+      }));
+
+    this.subscriptions.add(this.sidenavProfile.openedChange.subscribe(isOpen => {
       // this.btnProfileBack._elementRef.nativeElement.focus();
       this._isSidenavProfileOpen.emit(this.isSidenavProfileOpen = isOpen);
-    });
+    }));
 
+    this.cdRef.detectChanges();
 
   }
-
 
   ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
-
 
   shortName(user: User): string {
     return user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
   }
 
   logout(): void {
-    // this.quizNotificationService.setQuizSent(true);
-    this.loginService.logout();
     this.router.navigate([URI_WELCOME]).then(() => {
-      window.location.reload(true);//cache clean
-    });
+      setTimeout(() => {
+        this.loginService.logout()
+        setTimeout(() => window.location.reload(true), 1000);
+      }, 1000);
 
+    });
+    //this.quizNotificationService.setQuizSent(true);
   }
 
+  getState() {
+    this.subscriptions.add(this.router.events.pipe(
+      filter(event => event instanceof ActivationEnd && event.snapshot.children.length == 0))
+      .subscribe((event: ActivationEnd) => {
+        if (event.snapshot.parent.url.toString() === 'subjects,detail') {
+          this.animString = event.snapshot.parent.data.animation;
+        } else {
+          this.animString = event.snapshot.data.animation;
+        }
+      }));
+  }
 
+  closeAllSidenav(): boolean {
+    this.sidenavMenu.close();
+    this.sidenavChat.close();
+    return (!this.sidenavMenu.opened && !this.sidenavChat.opened);
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    return of(this.closeAllSidenav()).pipe(delay(300));
+  }
 }

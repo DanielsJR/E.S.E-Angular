@@ -6,7 +6,12 @@ import { ROLE_TEACHER } from '../../../../app.config';
   template: `
   <nx-subject-attendance [areaRole]= "areaRole"></nx-subject-attendance>
   `,
-  styles:['']
+  styles: [`
+    :host  {
+    display: block;
+    width: 100%;
+  }
+  `]
 })
 export class TeacherSubjectAttendanceComponent implements OnInit {
   areaRole = ROLE_TEACHER;

@@ -16,6 +16,8 @@ export class UserLoggedService {
     private userLoggedSource = new ReplaySubject<User>(1);//<BehaviorSubject<User>>new BehaviorSubject(null);// new Subject<User>();
 
     redirectUrl: string;
+    redirectUser: string;
+
 
     constructor(
         private userBackendService: UserBackendService,

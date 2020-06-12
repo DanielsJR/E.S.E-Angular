@@ -5,7 +5,8 @@ import { ROLE_MANAGER, URI_STUDENTS } from '../../../app.config';
 @Component({
   selector: 'nx-manager-students',
   template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
-  styles: [`:host  {
+  styles: [`
+    :host  {
     display: block;
     width: 100%;
   }

@@ -25,42 +25,48 @@ const routes: Routes = [
 
                     {
                         path: 'subjects',
-                        component: StudentSubjectsComponent
+                        component: StudentSubjectsComponent,
+                        data: { animation: 'student-subjects' },
                     },
 
                     {
-                        path: 'subjects/detail/:id',
+                        path: 'subjects/detail',
                         component: StudentSubjectsDetailComponent,
+                        data: { animation: 'subjects-detail' },
                         children: [
 
-                            {
-                                path: 'grades/:id',
-                                component: StudentSubjectsGradesComponent
-                            },
+
 
                             {
                                 path: 'course/:id',
-                                component: StudentSubjectCourseComponent
-                            },
-
-
-                            {
-                                path: 'quiz/:id',
-                                component: StudentSubjectsQuizComponent,
-                                canDeactivate: [CanDeactivateGuard]
+                                component: StudentSubjectCourseComponent,
+                                data: { animation: 'course-id' },
                             },
 
                             {
                                 path: 'attendance/:id',
-                                component: StudentSubjectsComponent
+                                component: StudentSubjectsComponent,
+                                data: { animation: 'attendance-id' },
                             },
 
                             {
                                 path: 'book/:id',
-                                component: StudentSubjectsComponent
+                                component: StudentSubjectsComponent,
+                                data: { animation: 'book-id' },
                             },
 
+                            {
+                                path: 'grades/:id',
+                                component: StudentSubjectsGradesComponent,
+                                data: { animation: 'student-grades-id' },
+                            },
 
+                            {
+                                path: 'quiz/:id',
+                                component: StudentSubjectsQuizComponent,
+                                data: { animation: 'quiz-id' },
+                                canDeactivate: [CanDeactivateGuard]
+                            },
 
 
                         ]
@@ -68,14 +74,16 @@ const routes: Routes = [
 
                     {
                         path: '',
-                        component: StudentHomeComponent
+                        component: StudentHomeComponent,
+                        data: { animation: 'home' },
                     }
 
 
                 ]
             },
 
-        ]
+        ],
+        data: { animation: 'student' },
     }
 
 ];

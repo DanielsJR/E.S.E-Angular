@@ -8,6 +8,7 @@ import { ROLE_MANAGER, URI_TEACHERS } from '../../../app.config';
   styles: [`:host  {
     display: block;
     width: 100%;
+
   }
   `]
 })

@@ -5,19 +5,24 @@ import { ROLE_TEACHER, ROLE_ADMIN, ROLE_MANAGER, ROLE_STUDENT } from '../../app.
   selector: 'nx-subjects-menu',
   template: `
 
-<mat-list-item *ngIf= "roles?.includes(roleManager)" [routerLink]= "['./manager/subjects']" routerLinkActive #rla="routerLinkActive">
+<mat-list-item *ngIf= "roles?.includes(roleManager)" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school" [color]= "rla.isActive ? colorActive : '' "></mat-icon>
     <h3 matLine [class.primaryColor]= "rla.isActive">Asignaturas</h3>
 </mat-list-item>  
 
 <mat-divider *ngIf= "roles?.includes(roleTeacher) && roles?.includes(roleManager)"></mat-divider>
 
-<mat-list-item *ngIf= "roles?.includes(roleTeacher)" [routerLink]= "['./teacher/subjects']" routerLinkActive #rla="routerLinkActive">
+<mat-list-item *ngIf= "roles?.includes(roleTeacher) && roles?.includes(roleManager)" [routerLink]= "links[1].route" routerLinkActive #rla="routerLinkActive">
+  <mat-icon matListIcon svgIcon ="school" [color]= "rla.isActive ? colorActive : '' "></mat-icon>
+    <h3 matLine [class.primaryColor]= "rla.isActive">Asignaturas</h3>
+</mat-list-item>  
+
+<mat-list-item *ngIf= "roles?.includes(roleTeacher) && !roles?.includes(roleManager)" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon [svgIcon] ="(roles.includes(roleManager)) ? 'school-outline' : 'school' " [color]= "rla.isActive ? colorActive: '' " ></mat-icon>
     <h3 matLine [class.primaryColor]= "rla.isActive">Mis Asignaturas</h3>
 </mat-list-item>
 
-<mat-list-item *ngIf= "roles[0] === roleStudent" [routerLink]= "['./student/subjects']" routerLinkActive #rla="routerLinkActive">
+<mat-list-item *ngIf= "roles[0] === roleStudent" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school" [color]= "rla.isActive ? colorActive : '' "></mat-icon>
     <h3 matLine [class.primaryColor]= "rla.isActive">Mis Asignaturas</h3>
 </mat-list-item>
@@ -37,12 +42,36 @@ export class SubjectsMenuComponent implements OnInit {
   roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
-
   colorActive = 'primary';
+  rolePath: string;
+  links = []
 
   constructor() { }
 
   ngOnInit() {
+    this.rolePath = (this.roles.includes(this.roleManager) ?
+        './manager' : this.roles.includes(this.roleTeacher) ?
+          './teacher' : this.roles.includes(this.roleStudent) ?
+            './student' : '');
+
+    this.links = [
+      { name: 'subjects', route: [this.rolePath + '/subjects'] },
+      { name: 'subjects-teacher', route: [this.rolePath + '/teacher/subjects'] },
+
+    ]
+  }
+
+
+  getPrivilege(): string {
+    for (var i = 0; i < this.roles.length; i++) {
+      let role = this.roles[i];
+      if (role === ROLE_ADMIN) return ROLE_ADMIN;
+      if (role === ROLE_MANAGER) return ROLE_MANAGER;
+      if (role === ROLE_TEACHER) return ROLE_TEACHER;
+      if (role === ROLE_STUDENT) return ROLE_STUDENT;
+    }
+    console.error('error no role');
+    return 'no role';
   }
 
 

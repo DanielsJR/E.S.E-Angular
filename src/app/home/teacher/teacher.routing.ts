@@ -31,44 +31,51 @@ const routes: Routes = [
 
                     {
                         path: 'subjects',
-                        component: TeacherSubjectsComponent
+                        component: TeacherSubjectsComponent,
+                        data: { animation: 'teacher-subjects' },
                     },
 
 
                     {
-                        path: 'subjects/detail/:id',
+                        path: 'subjects/detail',
                         component: TeacherSubjectsDetailComponent,
+                        data: { animation: 'subjects-detail' },
                         children: [
 
                             {
                                 path: 'course/:id',
-                                component: TeacherSubjectCourseComponent
+                                component: TeacherSubjectCourseComponent,
+                                data: { animation: 'course-id' },
                             },
 
                             {
                                 path: 'evaluations/:id',
-                                component: TeacherSubjectEvaluationsComponent
-                            },
-
-                            {
-                                path: 'quiz/:id',
-                                component: TeacherSubjectSendQuizComponent
+                                component: TeacherSubjectEvaluationsComponent,
+                                data: { animation: 'evaluations-id' },
                             },
 
                             {
                                 path: 'attendance/:id',
-                                component: TeacherSubjectAttendanceComponent
+                                component: TeacherSubjectAttendanceComponent,
+                                data: { animation: 'attendance-id' },
                             },
 
                             {
                                 path: 'book/:id',
-                                component: TeacherSubjectBookComponent
+                                component: TeacherSubjectBookComponent,
+                                data: { animation: 'book-id' },
                             },
 
+                            {
+                                path: 'quiz/:id',
+                                component: TeacherSubjectSendQuizComponent,
+                                data: { animation: 'quiz-id' },
+                            },
 
                             {
                                 path: 'grades/:id',
-                                component: TeacherSubjectGradesComponent
+                                component: TeacherSubjectGradesComponent,
+                                data: { animation: 'grades-id' },
                             },
 
 
@@ -77,46 +84,47 @@ const routes: Routes = [
                     },
 
 
-
                     {
                         path: 'quizes',
-                        component: TeacherQuizesComponent
+                        component: TeacherQuizesComponent,
+                        data: { animation: 'quizes' },
                     },
 
                     {
                         path: 'quizes/detail/:id',
-                        component: TeacherQuizesDetailComponent
+                        component: TeacherQuizesDetailComponent,
+                        data: { animation: 'quizes-detail' },
 
                     },
 
                     {
                         path: 'quizes/create',
-                        component: TeacherQuizesCreateComponent
-                    },
-
-                    {
-                        path: 'quizes/send',
-                        component: TeacherQuizesSendQuizComponent
+                        component: TeacherQuizesCreateComponent,
+                        data: { animation: 'quizes-create' },
                     },
 
                     {
                         path: 'quizes/import',
-                        component: TeacherQuizesComponent
+                        component: TeacherQuizesComponent,
+                        data: { animation: 'quizes-import' },
                     },
 
                     {
                         path: 'quizes/historical',
-                        component: TeacherQuizesComponent
+                        component: TeacherQuizesComponent,
+                        data: { animation: 'quizes-historical' },
                     },
 
 
                     {
                         path: '',
-                        component: TeacherHomeComponent
+                        component: TeacherHomeComponent,
+                        data: { animation: 'home' },
                     }
                 ]
             }
-        ]
+        ],
+        data: { animation: 'teacher' },
 
     }
 ];

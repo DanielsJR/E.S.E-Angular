@@ -35,7 +35,7 @@ const adminRoutes: Routes = [
                     {
                         path: '',
                         component: AdminHomeComponent,
-                        data: { animation: 'admin-home' },
+                        data: { animation: 'home' },
                     }
 
                 ]
