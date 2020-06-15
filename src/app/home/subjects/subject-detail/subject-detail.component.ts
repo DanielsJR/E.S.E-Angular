@@ -1,7 +1,6 @@
 
 import { Component, OnInit, Input, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router, NavigationStart, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { Subject } from '../../../models/subject';
@@ -15,8 +14,7 @@ import { UserLoggedService } from '../../../services/user-logged.service';
 import { User } from '../../../models/user';
 import { AttendanceStoreService } from '../../../services/attendance-store.service';
 import { subjectRouteAnimations, } from '../../../shared/animations/animations';
-
-
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -46,9 +44,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   toolbarMenus: any[] = [];
 
-  isThemeDarkSubscription: Subscription;
-  isLoadingGetSubjectsSubscription: Subscription;
-  subjectSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   enableToolbar: boolean;
   currentUrl: string;
@@ -63,29 +59,25 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   ) { }
 
 
-
   ngOnInit() {
     this.evaluationStoreService.clearStore();
     this.gradeStoreService.clearStore();
     this.attendanceStoreService.clearStore();
 
-    this.isLoadingGetSubjectsSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding);
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
     this.currentUrl = this.router.url;
   }
 
   ngAfterViewInit(): void {
     if (this.route.snapshot.firstChild) {
-      this.subjectSubscription = this.route.firstChild.params
+      this.subscriptions.add(this.route.firstChild.params
         .pipe(
           switchMap(params => {
             this.subjectId = params.id;
-            
-
             this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
             this.gradeStoreService.getGradesBySubject(this.subjectId);
             this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
-
             return this.userLoggedService.userLogged$
           }),
 
@@ -103,11 +95,9 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         .subscribe(sbjs => {
           this.subjects = sbjs;
           this.coursesSubjects = this.subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-
           this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
           this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-
-        });
+        }));
 
     }
 
@@ -117,10 +107,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.isLoadingGetSubjectsSubscription.unsubscribe();
-    if (this.subjectSubscription) this.subjectSubscription.unsubscribe();
-
+    this.subscriptions.unsubscribe();
   }
 
   getSubjectsTeacherByCourse(course: Course) {
@@ -172,7 +159,6 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   setEnableToolbar(toolbarMenus) {
-    //let url = this.currentUrl.substring(this.currentUrl.lastIndexOf('/') + 1);
     let array = this.currentUrl.split('/');
     let currentRoute = './' + array[array.length - 2] + '/' + array[array.length - 1];
 
@@ -191,7 +177,6 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       }
 
     }
-
 
   }
 

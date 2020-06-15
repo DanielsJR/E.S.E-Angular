@@ -19,7 +19,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './subjects-grades-crud-dialog-ref.component.html',
   styleUrls: ['./subjects-grades-crud-dialog-ref.component.css']
 })
-export class SubjectsGradesCrudDialogRefComponent implements OnInit {
+export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
   areaRole;
   roleManager = ROLE_MANAGER;
@@ -46,7 +46,7 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit {
 
   student: any;
   colorGrade: string;
-  isThemeDarkSubscription: Subscription;
+  private subscriptions = new Subscription();
   isDark: boolean;
 
   constructor(public dialogRef: MatDialogRef<SubjectsGradesCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
@@ -78,7 +78,11 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   buildForm() {

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject } from '../../../../models/subject';
 import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, CRUD_TYPE_DETAIL, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT, EVALUATION_UPDATE_ERROR, EVALUATION_CREATE_ERROR, RESULT_SUCCEED, EVALUATION_CREATE_SUCCEED, EVALUATION_UPDATE_SUCCEED, CRUD_TYPE_DELETE, EVALUATION_DELETE_ERROR, EVALUATION_DELETE_SUCCEED, RESULT_WARN, CANCEL_MESSAGE, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
@@ -16,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { rowAnimation } from '../../../../shared/animations/animations';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -24,8 +24,8 @@ import { rowAnimation } from '../../../../shared/animations/animations';
   styleUrls: ['./subject-evaluations.component.css'],
   animations: [rowAnimation]
 })
-export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterViewInit {
 
+export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() areaRole: string;
   subjectId: string;
@@ -33,7 +33,6 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
 
   roleManager = ROLE_MANAGER;
   roleTeacher = ROLE_TEACHER;
-
 
   // mat table
   displayedColumns = ['title', 'type', 'date', 'crud'];
@@ -46,38 +45,34 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
   rowClasses: {};
   isLoading: boolean = false;
   btnDisabled = true;
-
-  isThemeDarkSubscription: Subscription;
-  evaluationsSubscription: Subscription;
-  subjectSubscription: Subscription;
-  isLoadingSubscription: Subscription;
-
   evaluationQuizDetail: Evaluation;
   evaluationCourse: Evaluation;
+
+  private subscriptions = new Subscription();
 
 
   constructor(private route: ActivatedRoute, private router: Router, public sanitizer: DomSanitizer,
     private evaluationStoreService: EvaluationStoreService, private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService, private snackbarService: SnackbarService) {
 
-    this.subjectSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
           return this.subjectStoreService.loadOneSubject(this.subjectId);
         })
       )
-      .subscribe(s => this.subject = s);
+      .subscribe(s => this.subject = s));
   }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<any[]>();
 
-    this.evaluationsSubscription = this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es);
+    this.subscriptions.add(this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es));
 
-    this.isLoadingSubscription = this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 
@@ -85,14 +80,11 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
   }
 
   ngOnDestroy(): void {
-    this.isLoadingSubscription.unsubscribe();
-    this.isThemeDarkSubscription.unsubscribe();
-    this.evaluationsSubscription.unsubscribe();
-    this.subjectSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -128,7 +120,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
 
@@ -139,7 +131,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         console.log(RESULT_EDIT);
         this.openDialogEdit(dialogRef.componentInstance.evaluation);
       }
-    });
+    }));
   }
 
   openDialogCreate(): void {
@@ -159,7 +151,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -172,7 +164,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_CREATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    });
+    }));
   }
 
   openDialogEdit(evaluation: Evaluation): void {
@@ -190,7 +182,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -203,7 +195,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_UPDATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    });
+    }));
   }
 
   openDialogDelete(evaluation: Evaluation): void {
@@ -221,7 +213,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -234,7 +226,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_DELETE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    });
+    }));
   }
 
 

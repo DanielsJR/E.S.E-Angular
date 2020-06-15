@@ -4,9 +4,7 @@ import { ROLE_STUDENT } from '../../../app.config';
 
 
 @Component({
-  template: `
-  <nx-subject-grades [areaRole]= "areaRole"></nx-subject-grades>
-  `,
+  template: `<nx-subject-grades [areaRole]= "areaRole"></nx-subject-grades>`,
   styles: [`
     :host  {
     display: block;

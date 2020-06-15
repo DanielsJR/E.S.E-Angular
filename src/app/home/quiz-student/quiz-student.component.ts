@@ -48,7 +48,7 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
 
   quizStudentToSend: QuizStudent;
   student: User;
-  userSubscription: Subscription;
+  private subscriptions = new Subscription();
 
 
   @Input() set grade(grade: Grade) {
@@ -68,12 +68,12 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.userSubscription = this.userLoggedService.userLogged$.subscribe(user => this.student = user);
+    this.subscriptions.add(this.userLoggedService.userLogged$.subscribe(user => this.student = user));
     this.buildForm();
   }
 
   ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   buildForm() {
@@ -224,7 +224,7 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
     this.quizStudentToSend.incompleteTextItems = this.incompleteTextItems.value;
 
     this.isLoadingService.isLoadingTrue();
-    this.quizStudentBackendService.create(this.quizStudentToSend)
+    this.subscriptions.add(this.quizStudentBackendService.create(this.quizStudentToSend)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(qs => {
         this.snackbarService.openSnackBar('Prueba Enviada', RESULT_SUCCEED);
@@ -238,7 +238,7 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
         } else {
           this.snackbarService.openSnackBar(QUIZ_CREATE_ERROR, RESULT_ERROR);
         }
-      });
+      }));
   }
 
   sendGradeToTeacher(quizStudent: QuizStudent) {

@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { Subscription, Observable, of } from 'rxjs';
-import { User } from '../../../../models/user';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Grade } from '../../../../models/grade';
 import { QuizNotificationService } from '../../../../services/quiz-notification.service';
 import { LocalStorageService } from '../../../../services/local-storage.service';
 import { CanComponentDeactivate } from '../../../../guards/can-deactivate-guard.service';
-import { tap } from 'rxjs/internal/operators/tap';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -17,23 +16,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class StudentSubjectsQuizComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   subjectId: string;
   studentUsername: string;
-
-  getQuizNotificationSubscription: Subscription;
-  quizSentNotificationSubscription: Subscription;
   quizFromWebSocket: Grade;
   quizSent: Observable<boolean>;
   gradeToStudent: Grade;
-
-  isThemeDarkSubscription: Subscription;
   isDark: boolean;
   isLoading: boolean;
   processing: boolean = false;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private quizNotificationService: QuizNotificationService,
     private localStorageService: LocalStorageService,
     private route: ActivatedRoute,
-    private router: Router, ) {
+    private router: Router,) {
 
     if (this.localStorageService.isQuizWebSocketStored()) this.quizFromWebSocket = JSON.parse(this.localStorageService.getQuizWebSocket());
 
@@ -42,7 +38,7 @@ export class StudentSubjectsQuizComponent implements OnInit, OnDestroy, CanCompo
   }
 
   ngOnInit() {
-    this.getQuizNotificationSubscription = this.quizNotificationService.notification$
+    this.subscriptions.add(this.quizNotificationService.notification$
       .subscribe(notification => {
         console.log('noty ', notification);
         if (!this.localStorageService.isQuizWebSocketStored() && notification) {
@@ -50,19 +46,18 @@ export class StudentSubjectsQuizComponent implements OnInit, OnDestroy, CanCompo
           this.localStorageService.setQuizWebSocket(this.quizFromWebSocket);
         }
 
-      });
+      }));
 
-    this.quizSentNotificationSubscription = this.quizNotificationService.quizSentSource$.subscribe(v => {
+    this.subscriptions.add(this.quizNotificationService.quizSentSource$.subscribe(v => {
       if (v) {
         this.gotoGrades();
       }
-    });
+    }));
 
   }
 
   ngOnDestroy(): void {
-    this.getQuizNotificationSubscription.unsubscribe();
-    this.quizSentNotificationSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   canDeactivate(): Observable<boolean> | boolean {

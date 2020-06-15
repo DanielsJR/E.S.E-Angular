@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { User } from '../../../../models/user';
 import {
     URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
@@ -10,7 +10,7 @@ import { COMMUNNES, Commune } from '../../../../models/communes';
 import { GENDERS, Gender } from '../../../../models/genders';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../../models/privileges';
-import { Subscription } from 'rxjs';
+
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 import { rutValidator } from '../../../../shared/validators/rut-validator';
 import { PHONE_PATTERN, NAME_PATTERN } from '../../../../shared/validators/patterns';
@@ -22,6 +22,7 @@ import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dia
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { UserLoggedService } from '../../../../services/user-logged.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     styleUrls: ['./crud-user-dialog-ref.component.css']
 })
 
-export class CrudUserDialogRefComponent implements OnInit {
+export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     [x: string]: any;
 
     createForm: FormGroup;
@@ -46,10 +47,10 @@ export class CrudUserDialogRefComponent implements OnInit {
     userHightPrivilege: string;
     oldAvatar: Avatar;
 
-    subscriptionSetRolesSuccess: Subscription;
-
     isLoading = false;
     onlyRead: boolean;
+
+    private subscriptions = new Subscription();
 
     constructor(public dialogRefCrudUser: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -78,6 +79,10 @@ export class CrudUserDialogRefComponent implements OnInit {
 
         this.isAdmin = this.userLoggedService.isAdmin();
 
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     usersRoleToSpanish(usersRole: string): string {
@@ -301,7 +306,7 @@ export class CrudUserDialogRefComponent implements OnInit {
     }
 
     editRolesSubscription(dialogRefSetRoles: MatDialogRef<SetRolesDialogRefComponent>) {
-        dialogRefSetRoles.afterClosed().subscribe(result => {
+        this.subscriptions.add(dialogRefSetRoles.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_SUCCEED) {
@@ -318,7 +323,7 @@ export class CrudUserDialogRefComponent implements OnInit {
             } else if (result === RESULT_ERROR) {
 
             }
-        });
+        }));
 
 
     }

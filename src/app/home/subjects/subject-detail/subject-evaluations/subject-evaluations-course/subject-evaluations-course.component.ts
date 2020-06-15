@@ -3,8 +3,6 @@ import { Subject } from '../../../../../models/subject';
 import { User } from '../../../../../models/user';
 import { Grade } from '../../../../../models/grade';
 import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER } from '../../../../../app.config';
-import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
@@ -18,6 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'nx-subject-evaluations-course',
@@ -49,13 +48,10 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
 
   @Output()
   closeEvaluationCourseDetail = new EventEmitter<any>();
-
   studentName;
-
   roleManager = ROLE_MANAGER;
   roleStudent = ROLE_STUDENT;
   roleTeacher = ROLE_TEACHER;
-  //@ViewChild(CrudUserDialogComponent) crudUserDialog: CrudUserDialogComponent;
 
   // mat table
   displayedColumns = ['student.firstName', 'grade', 'crud'];
@@ -69,11 +65,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   rowClasses: {};
   isLoading: boolean = false;
 
-  isThemeDarkSubscription: Subscription;
-  subjectsSubscription: Subscription;
-  isLoadingGetGradesSubscription: Subscription;
-  gradesSubscription: Subscription;
-  gradesSubscription2: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
@@ -82,9 +74,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    // paramMap re-uses the component
-    this.subjectsSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
@@ -96,7 +86,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
         if (s) {
           this.subject = s;
         }
-      });
+      }));
 
     this.dataSource = new MatTableDataSource<Grade[]>();
 
@@ -105,19 +95,19 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
       grade.student.firstName.toLowerCase().indexOf(filterValue) === 0 || grade.student.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(grade.student).toLowerCase().indexOf(filterValue) === 0;
 
-    
-    this.gradesSubscription = this.gradeStoreService.grades$
+
+    this.subscriptions.add(this.gradeStoreService.grades$
       .subscribe(grades => {
         if (grades) {
           this.grades = grades;
           if (this.grades.length) this.setGrades();
         }
 
-      });
+      }));
 
-    this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 
@@ -126,16 +116,12 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
     this.dataSource.sortingDataAccessor = (obj, property) => this.getPropertySorting(obj, property);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.isLoadingGetGradesSubscription.unsubscribe();
-    this.gradesSubscription.unsubscribe();
-    if (this.gradesSubscription2) this.gradesSubscription2.unsubscribe();
-    this.subjectsSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {

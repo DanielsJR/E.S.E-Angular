@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,13 +11,14 @@ import { UserLoggedService } from '../../../../services/user-logged.service';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SUBJECT_NAMES } from '../../../../models/subject-names';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'nx-teacher-quizes-create',
   templateUrl: './teacher-quizes-create.component.html',
   styleUrls: ['./teacher-quizes-create.component.css']
 })
-export class TeacherQuizesCreateComponent implements OnInit {
+export class TeacherQuizesCreateComponent implements OnInit, OnDestroy {
 
   quiz: Quiz;
 
@@ -32,21 +33,25 @@ export class TeacherQuizesCreateComponent implements OnInit {
   panelOpenMultipleSelectionItems = false;
   panelOpenIncompleteTextItems = false;
 
-  shareQuiz=false;
+  shareQuiz = false;
+  private subscriptions = new Subscription();
 
-  nothing= ' ';
 
   constructor(private quizBackendService: QuizBackendService, private router: Router,
     private route: ActivatedRoute, public sanitizer: DomSanitizer,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
-    private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService, ) {
+    private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,) {
 
   }
 
   ngOnInit() {
     this.quiz = new Quiz();
-    this.userLoggedService.userLogged$.subscribe(user => this.quiz.author = user);
+    this.subscriptions.add(this.userLoggedService.userLogged$.subscribe(user => this.quiz.author = user));
     this.buildForm();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   buildForm() {
@@ -86,11 +91,11 @@ export class TeacherQuizesCreateComponent implements OnInit {
     editedQuiz.incompleteTextItems = this.incompleteTextItems.value;
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.create(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.create(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
-        this.router.navigate(['../detail',q.id], { relativeTo: this.route });
+        this.router.navigate(['../detail', q.id], { relativeTo: this.route });
         this.snackbarService.openSnackBar(QUIZ_CREATE_SUCCEED, RESULT_SUCCEED);
       }, error => {
         if (error instanceof HttpErrorResponse) {
@@ -98,7 +103,7 @@ export class TeacherQuizesCreateComponent implements OnInit {
         } else {
           this.snackbarService.openSnackBar(QUIZ_CREATE_ERROR, RESULT_ERROR);
         }
-      });
+      }));
   }
 
   gotoQuizes() {

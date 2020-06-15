@@ -57,9 +57,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   rowClasses: {};
   isLoading: boolean = false;
 
-  isThemeDarkSubscription: Subscription;
-  isLoadingGetCoursesSubscription: Subscription;
-  coursesSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
@@ -76,7 +74,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
     // paramMap re-uses the component
-    this.coursesSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => this.courseStoreService.loadOneCourse(params.get('name')))
       )
@@ -87,24 +85,22 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
           this.dataSource.data = c.students;
           this.listStudents = this.dataSource.data;
         }
-      });
+      }));
 
-    this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => setTimeout(() => this.isLoading = isLoading));
+      this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => setTimeout(() => this.isLoading = isLoading)));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(data => this.isDark = data);
+      this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(data => this.isDark = data));
 
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.isLoadingGetCoursesSubscription.unsubscribe();
-    this.coursesSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -119,7 +115,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -141,7 +137,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
           this.crudTeacherDialog.openDialogDelete();
         }
       }
-    });
+    }));
   }
 
   addStudentToDataSource(student: User) {
@@ -159,7 +155,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -170,7 +166,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    });
+    }));
   }
 
   changeTeacher(teacher: User) {
@@ -183,7 +179,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
     courseEdit.chiefTeacher = this.chiefTeacher;
     courseEdit.students = this.listStudents;
 
-    this.courseStoreService.update(courseEdit)
+    this.subscriptions.add(this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
       .subscribe(_ => this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED)
         , error => {
@@ -192,7 +188,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
           } else {
             this.snackbarService.openSnackBar(COURSE_UPDATE_ERROR, RESULT_ERROR);
           }
-        });
+        }));
 
   }
 

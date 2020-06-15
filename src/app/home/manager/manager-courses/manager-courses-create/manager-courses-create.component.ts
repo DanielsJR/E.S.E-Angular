@@ -54,7 +54,8 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
   isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
-  isThemeDarkSubscription: Subscription;
+
+  private subscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
     private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
@@ -64,17 +65,17 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     this.buildForm();
     this.course = new Course();
     this.dataSource = new MatTableDataSource();
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(()=> this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   buildForm() {
@@ -109,7 +110,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   createCourse() {
     this.setCourse();
-    this.courseStoreService.create(this.course)
+    this.subscriptions.add(this.courseStoreService.create(this.course)
       .subscribe(_ => {
         this.snackbarService.openSnackBar(COURSE_CREATE_SUCCEED, RESULT_SUCCEED);
         this.gotoCourses();
@@ -119,13 +120,13 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
         } else {
           this.snackbarService.openSnackBar(COURSE_CREATE_ERROR, RESULT_ERROR);
         }
-      });
+      }));
 
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -147,7 +148,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
           this.crudTeacherDialog.openDialogDelete();
         }
       }
-    });
+    }));
   }
 
   private deleteStudentFromDataSource(id: string) {
@@ -157,7 +158,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
   }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -168,7 +169,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    });
+    }));
   }
 
 

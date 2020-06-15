@@ -53,9 +53,7 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoading: boolean = false;
   btnDisabled = true;
 
-  isThemeDarkSubscription: Subscription;
-  subjectSubscription: Subscription;
-  isLoadingSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute, public sanitizer: DomSanitizer,
     private subjectStoreService: SubjectStoreService,
@@ -67,7 +65,7 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
     //this.crudUserOnlyRead = (this.areaRole === this.roleManager) ? false : true;
     this.dataSource = new MatTableDataSource<User[]>();
 
-    this.subjectSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
@@ -80,28 +78,26 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
           this.teacher = this.subject.teacher;
           this.dataSource.data = this.subject.course.students;
         }
-      });
+      }));
 
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0
       || user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-    this.isLoadingSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.subjectSubscription.unsubscribe();
-    this.isLoadingSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -112,7 +108,7 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -134,7 +130,7 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
           this.crudTeacherDialog.openDialogDelete();
         }
       }
-    });
+    }));
   }
 
 

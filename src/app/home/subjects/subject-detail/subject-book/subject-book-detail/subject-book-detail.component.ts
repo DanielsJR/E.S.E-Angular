@@ -41,7 +41,7 @@ export class SubjectBookDetailComponent implements OnInit {
   crudUserOnlyRead: boolean = true;
 
   // mat table
-  displayedColumns = ['evaluation.title',  'crud'];
+  displayedColumns = ['evaluation.title', 'crud'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -51,9 +51,7 @@ export class SubjectBookDetailComponent implements OnInit {
   isDark: boolean;
   isLoading: boolean = false;
 
-  isThemeDarkSubscription: Subscription;
-  isLoadingGetGradesSubscription: Subscription;
-  gradesSubscription: Subscription;
+  private subscriptions = new Subscription();
   grade: Grade;
   colorGrade: string;
 
@@ -64,14 +62,14 @@ export class SubjectBookDetailComponent implements OnInit {
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Grade[]>();
 
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
     // snapshot doesn't re-use the component
     //this.studentName = this.route.snapshot.paramMap.get('username');
     //this.subjectId = this.route.snapshot.paramMap.get('id');
     //this.gradesSubscription = this.gradeStoreService.grades$
 
-    this.gradesSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.studentName = params.get('username');
@@ -81,11 +79,11 @@ export class SubjectBookDetailComponent implements OnInit {
         }),
 
       )
-      .subscribe();
+      .subscribe());
 
-    this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 
@@ -96,9 +94,7 @@ export class SubjectBookDetailComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.isLoadingGetGradesSubscription.unsubscribe();
-    this.gradesSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -112,7 +108,7 @@ export class SubjectBookDetailComponent implements OnInit {
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -122,7 +118,7 @@ export class SubjectBookDetailComponent implements OnInit {
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete();
       }
-    });
+    }));
   }
 
   openDialogDetail(grade: Grade): void {
@@ -140,7 +136,7 @@ export class SubjectBookDetailComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -149,7 +145,7 @@ export class SubjectBookDetailComponent implements OnInit {
         console.log(RESULT_EDIT);
         this.openDialogEdit(dialogRef.componentInstance.grade);
       }
-    });
+    }));
   }
 
   openDialogEdit(grade: Grade): void {
@@ -166,7 +162,7 @@ export class SubjectBookDetailComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -176,7 +172,7 @@ export class SubjectBookDetailComponent implements OnInit {
         console.log(RESULT_SUCCEED);
         this.snackbarService.openSnackBar(GRADE_CREATE_SUCCEED, RESULT_SUCCEED);
       }
-    });
+    }));
   }
 
 

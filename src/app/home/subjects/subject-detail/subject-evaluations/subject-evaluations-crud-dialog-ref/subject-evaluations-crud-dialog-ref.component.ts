@@ -55,7 +55,7 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
     @Inject(MAT_DIALOG_DATA) public data: any,
     public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
     private evaluationStoreService: EvaluationStoreService,
-    private userLoggedService: UserLoggedService, private quizBackendService: QuizBackendService, ) {
+    private userLoggedService: UserLoggedService, private quizBackendService: QuizBackendService,) {
 
     this.areaRole = this.data.areaRole;
     console.log('***EvaluationDialog*** type: ' + data.type);
@@ -63,8 +63,6 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
   }
 
   ngOnInit() {
-
-
     if (this.data.type === CRUD_TYPE_CREATE) {
       this.buildCreateForm();
     }
@@ -142,16 +140,13 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
     if (evaluationViewValue === 'Prueba' || evaluationViewValue === 'Exámen') {
       this.cQuiz.reset();
       this.cQuiz.enable();
-
       this.titleGroup.reset();
-
       this.quizEnable = true;
+
     } else {
       this.cQuiz.reset();
       this.cQuiz.disable();
-
       this.titleGroup.reset();
-
       this.quizEnable = false;
     }
 
@@ -161,16 +156,13 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
     if (evaluationViewValue === 'Prueba' || evaluationViewValue === 'Exámen') {
       this.eQuiz.reset();
       this.eQuiz.enable();
-
       this.titleEditGroup.reset();
-
       this.quizEnable = true;
+
     } else {
       this.eQuiz.reset();
       this.eQuiz.disable();
-
       this.titleEditGroup.reset();
-
       this.quizEnable = false;
     }
 

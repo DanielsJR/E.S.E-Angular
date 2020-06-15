@@ -8,15 +8,12 @@ import { UserStoreService } from '../../services/user-store.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { shortNameSecondName } from '../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { SnackbarService } from '../../services/snackbar.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../shared/animations/animations';
-import { delay } from 'rxjs/internal/operators/delay';
-
 
 
 @Component({
@@ -50,7 +47,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-
   constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
     public sanitizer: DomSanitizer, private userLoggedService: UserLoggedService,
     private cdRef: ChangeDetectorRef,
@@ -64,7 +60,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-      this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
     if (this.uriRole === URI_MANAGERS) {
       this.userRole = ROLE_MANAGER_SPANISH;
@@ -87,7 +83,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
     this.setDataSource();
     this.cdRef.detectChanges();
   }
@@ -122,7 +118,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dialogCardUserSubs(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -132,7 +128,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete(user);
       }
-    });
+    }));
   }
 
 

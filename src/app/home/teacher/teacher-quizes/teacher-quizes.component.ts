@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { QuizBackendService } from '../../../services/quiz-backend.service';
 import { Quiz } from '../../../models/quiz';
 import { UserLoggedService } from '../../../services/user-logged.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -26,6 +25,7 @@ import { rowAnimation } from '../../../shared/animations/animations';
   styleUrls: ['./teacher-quizes.component.css'],
   animations: [rowAnimation]
 })
+
 export class TeacherQuizesComponent implements OnInit {
 
   displayedColumns = ['title', 'crud'];
@@ -36,35 +36,32 @@ export class TeacherQuizesComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   isDark: boolean;
   isLoading: boolean = false;
-  isThemeDarkSubscription: Subscription;
-  userSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(private quizBackendService: QuizBackendService,
     private sessionStorage: SessionStorageService,
     public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,
-    private cdRef: ChangeDetectorRef, ) { }
+    private cdRef: ChangeDetectorRef,) { }
 
   ngOnInit() {
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
-
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
     this.setDataSource();
     this.cdRef.detectChanges();
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   setDataSource() {
-    this.userSubscription = this.userLoggedService.userLogged$
+    this.subscriptions.add(this.userLoggedService.userLogged$
       .pipe(
         switchMap(user => {
           this.isLoading = true;
@@ -73,8 +70,7 @@ export class TeacherQuizesComponent implements OnInit {
         take(1),
         finalize(() => this.isLoading = false)
       )
-      .subscribe(qs => this.dataSource.data = qs);
-
+      .subscribe(qs => this.dataSource.data = qs));
   }
 
   applyFilter(filterValue: string) {
@@ -85,7 +81,7 @@ export class TeacherQuizesComponent implements OnInit {
 
 
   deleteQuizDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -96,7 +92,7 @@ export class TeacherQuizesComponent implements OnInit {
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    });
+    }));
   }
 
   deleteQuizFromDataSource(id: string) {
@@ -106,7 +102,7 @@ export class TeacherQuizesComponent implements OnInit {
 
   deleteQuiz(quiz: Quiz) {
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.delete(quiz)
+    this.subscriptions.add(this.quizBackendService.delete(quiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(quiz => {
         this.deleteQuizFromDataSource(quiz.id);
@@ -120,8 +116,7 @@ export class TeacherQuizesComponent implements OnInit {
             this.snackbarService.openSnackBar(QUIZ_DELETE_ERROR, RESULT_ERROR);
 
           }
-        });
-
+        }));
   }
 
 }

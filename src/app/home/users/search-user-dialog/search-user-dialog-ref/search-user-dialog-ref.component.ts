@@ -24,7 +24,7 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
 
   //user$: Observable<User>;
   stateCtrl = new FormControl();
-  usersSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<SearchUserDialogRefComponent>,
@@ -35,10 +35,10 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
     //console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);
     if (data.user !== null) this.user = this.data.user;
     this.stateCtrl.setValidators(Validators.required);
-    this.stateCtrl.statusChanges.subscribe(status => {
+    this.subscriptions.add(this.stateCtrl.statusChanges.subscribe(status => {
       if (status === "INVALID")
         this.user = null;
-    });
+    }));
     this.actionButton = (data.actionButton) ? data.actionButton : 'Aceptar';
     this.filteredUsers$ = this.stateCtrl.valueChanges
       .pipe(
@@ -49,11 +49,11 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
       );
 
     if (data.userRole === ROLE_MANAGER) {
-      this.usersSubscription = this.userStoreService.managers$.subscribe(data => this.users = data);
+      this.subscriptions.add(this.userStoreService.managers$.subscribe(data => this.users = data));
     } else if (data.userRole === ROLE_TEACHER) {
-      this.usersSubscription = this.userStoreService.teachers$.subscribe(data => this.users = data);
+      this.subscriptions.add(this.userStoreService.teachers$.subscribe(data => this.users = data));
     } else if (data.userRole === ROLE_STUDENT) {
-      this.usersSubscription = this.userStoreService.students$.subscribe(data => this.users = data);
+      this.subscriptions.add(this.userStoreService.students$.subscribe(data => this.users = data));
     } else {
       console.error('no user role!!');
     }
@@ -63,7 +63,7 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   cancel(): void {

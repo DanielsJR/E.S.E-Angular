@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@
 import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER } from '../../../../../app.config';
 import { User } from '../../../../../models/user';
 import { Subject } from '../../../../../models/subject';
-import { Subscription } from 'rxjs';
 import { Grade } from '../../../../../models/grade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
@@ -18,6 +17,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { rowAnimation } from '../../../../../shared/animations/animations';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -54,11 +54,10 @@ export class SubjectGradesComponent implements OnInit {
   isDark: boolean;
   isLoading: boolean = false;
 
-  isThemeDarkSubscription: Subscription;
-  isLoadingGetGradesSubscription: Subscription;
-  gradesSubscription: Subscription;
   grade: Grade;
   colorGrade: string;
+
+  private subscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
     private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
@@ -72,13 +71,13 @@ export class SubjectGradesComponent implements OnInit {
       || grade.evaluation.type.toLowerCase().indexOf(filterValue) === 0
       || grade.evaluation.date.toLowerCase().indexOf(filterValue) === 0;
 
-    
+
     // snapshot doesn't re-use the component
     //this.studentName = this.route.snapshot.paramMap.get('username');
     //this.subjectId = this.route.snapshot.paramMap.get('id');
     //this.gradesSubscription = this.gradeStoreService.grades$
 
-    this.gradesSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.studentName = params.get('username');
@@ -101,11 +100,11 @@ export class SubjectGradesComponent implements OnInit {
             this.subject = null;
           }
         }
-      });
+      }));
 
-    this.isLoadingGetGradesSubscription = this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 
@@ -113,14 +112,12 @@ export class SubjectGradesComponent implements OnInit {
     this.dataSource.sortingDataAccessor = (obj, property) => this.getPropertySorting(obj, property);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
     // if (this.areaRole === this.roleTeacher) this.displayedColumns.push('crud');
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.isLoadingGetGradesSubscription.unsubscribe();
-    this.gradesSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -161,7 +158,7 @@ export class SubjectGradesComponent implements OnInit {
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -171,7 +168,7 @@ export class SubjectGradesComponent implements OnInit {
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete();
       }
-    });
+    }));
   }
 
   openDialogDetail(grade: Grade): void {
@@ -189,7 +186,7 @@ export class SubjectGradesComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -198,7 +195,7 @@ export class SubjectGradesComponent implements OnInit {
         console.log(RESULT_EDIT);
         this.openDialogEdit(dialogRef.componentInstance.grade);
       }
-    });
+    }));
   }
 
   openDialogEdit(grade: Grade): void {
@@ -215,7 +212,7 @@ export class SubjectGradesComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -225,7 +222,7 @@ export class SubjectGradesComponent implements OnInit {
         console.log(RESULT_SUCCEED);
         this.snackbarService.openSnackBar(GRADE_CREATE_SUCCEED, RESULT_SUCCEED);
       }
-    });
+    }));
   }
 
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Subscription, empty } from 'rxjs';
 import { ROLE_MANAGER, ROLE_TEACHER, CRUD_TYPE_DETAIL, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT } from '../../../../app.config';
 import { Subject } from '../../../../models/subject';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +19,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { rowAnimation } from '../../../../shared/animations/animations';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'nx-subject-send-quiz',
@@ -48,25 +49,18 @@ export class SubjectSendQuizComponent implements OnInit {
   isLoading: boolean = false;
   btnDisabled = true;
 
-  isThemeDarkSubscription: Subscription;
-  evaluationsSubscription: Subscription;
-  subjectSubscription: Subscription;
-  isLoadingSubscription: Subscription;
-
   evaluationQuizDetail: Evaluation;
 
   quizFromWebSocket: Grade;
   gradeToTeacher: Grade;
-
-  notificationSubscription: Subscription;
-  gradeNotificationSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute, private router: Router, public sanitizer: DomSanitizer,
     private evaluationStoreService: EvaluationStoreService, private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService, private snackbarService: SnackbarService,
-    private rxStompService: RxStompService, private gradeBackendService: GradeBackendService, ) {
+    private rxStompService: RxStompService, private gradeBackendService: GradeBackendService,) {
 
-    this.subjectSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
@@ -74,36 +68,33 @@ export class SubjectSendQuizComponent implements OnInit {
         }),
         switchMap(s => {
           this.subject = s
-          return (this.subject) ? this.rxStompService.watch(`/topic/grade-to-teacher/course/${this.subject.course.id}`) : empty();
+          return (this.subject) ? this.rxStompService.watch(`/topic/grade-to-teacher/course/${this.subject.course.id}`) : EMPTY;
         }),
         switchMap((message: Message) => {
           this.gradeToTeacher = JSON.parse(message.body);
           return this.gradeBackendService.create(this.gradeToTeacher)
         })
-      ).subscribe(g => this.sendGradeToStudent(g));
+      ).subscribe(g => this.sendGradeToStudent(g)));
   }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<any[]>();
 
-    this.evaluationsSubscription = this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es);
+    this.subscriptions.add(this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es));
 
-    this.isLoadingSubscription = this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
   }
 
   ngOnDestroy(): void {
-    this.isLoadingSubscription.unsubscribe();
-    this.isThemeDarkSubscription.unsubscribe();
-    this.evaluationsSubscription.unsubscribe();
-    this.subjectSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -126,7 +117,7 @@ export class SubjectSendQuizComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
 
@@ -137,7 +128,7 @@ export class SubjectSendQuizComponent implements OnInit {
         console.log(RESULT_EDIT);
         //this.openDialogEdit(dialogRef.componentInstance.evaluation);
       }
-    });
+    }));
   }
 
   setEvaluationQuizDetail(evaluation: Evaluation) {

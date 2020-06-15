@@ -3,9 +3,7 @@ import { ROLE_TEACHER } from '../../../../app.config';
 
 
 @Component({
-  template: `
-  <nx-subject-book [areaRole]= "areaRole"></nx-subject-book>
-  `,
+  template: `<nx-subject-book [areaRole]= "areaRole"></nx-subject-book>`,
   styles: [`
     :host  {
     display: block;

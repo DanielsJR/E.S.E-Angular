@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CrudUserDialogRefComponent } from './crud-user-dialog-ref/crud-user-dialog-ref.component';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCEED, USER_UPDATE_ERROR, USER_UPDATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, CRUD_TYPE_DELETE, CRUD_TYPE_CREATE, USER_CREATE_SUCCEED, USER_CREATE_ERROR } from '../../../app.config';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -11,16 +12,22 @@ import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCE
     template: ``,
     styles: []
 })
-export class CrudUserDialogComponent implements OnInit {
+export class CrudUserDialogComponent implements OnInit, OnDestroy {
 
     @Input() user: User;
     @Input() uriRole: string;
     @Input() areaRole: string;
     @Input() onlyRead: boolean;
 
+    private subscriptions = new Subscription();
+
     constructor(private dialog: MatDialog, private snackbarService: SnackbarService) { }
 
     ngOnInit() { }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
 
     openDialogDetail(user?: User): void {
         let data = {
@@ -37,7 +44,7 @@ export class CrudUserDialogComponent implements OnInit {
         config.width = '700px';
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
+        this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_EDIT) {
@@ -45,7 +52,7 @@ export class CrudUserDialogComponent implements OnInit {
             } else if (result === RESULT_DELETE) {
                 this.openDialogDelete(user);
             }
-        });
+        }));
     }
 
     openDialogEdit(user?: User): void {
@@ -62,7 +69,7 @@ export class CrudUserDialogComponent implements OnInit {
         config.disableClose = true;
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
+        this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
@@ -72,7 +79,7 @@ export class CrudUserDialogComponent implements OnInit {
                 this.snackbarService.openSnackBar(USER_UPDATE_SUCCEED, RESULT_SUCCEED);
                 console.log(RESULT_SUCCEED);
             }
-        });
+        }));
     }
 
     openDialogDelete(user?: User): void {
@@ -90,18 +97,18 @@ export class CrudUserDialogComponent implements OnInit {
         config.disableClose = true;
 
         this.dialog.open(CrudUserDialogRefComponent, config);
-       
-       /* let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === RESULT_CANCELED) {
-                console.log(RESULT_CANCELED);
-            } else if (result === RESULT_ERROR) {
-                console.error(RESULT_ERROR);
-            } else if (result === RESULT_SUCCEED) {
-                console.log(RESULT_SUCCEED);
-            }
-        });
-        */
+
+        /* let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
+         this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+             if (result === RESULT_CANCELED) {
+                 console.log(RESULT_CANCELED);
+             } else if (result === RESULT_ERROR) {
+                 console.error(RESULT_ERROR);
+             } else if (result === RESULT_SUCCEED) {
+                 console.log(RESULT_SUCCEED);
+             }
+         }));
+         */
     }
 
     openDialogCreate(): void {
@@ -119,7 +126,7 @@ export class CrudUserDialogComponent implements OnInit {
         config.disableClose = true;
 
         let dialogRef = this.dialog.open(CrudUserDialogRefComponent, config);
-        dialogRef.afterClosed().subscribe(result => {
+        this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
             if (result === RESULT_CANCELED) {
                 console.log(RESULT_CANCELED);
             } else if (result === RESULT_ERROR) {
@@ -129,7 +136,7 @@ export class CrudUserDialogComponent implements OnInit {
                 this.snackbarService.openSnackBar(USER_CREATE_SUCCEED, RESULT_SUCCEED);
                 console.log(RESULT_SUCCEED);
             }
-        });
+        }));
     }
 
 

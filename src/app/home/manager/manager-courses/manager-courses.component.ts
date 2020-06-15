@@ -34,40 +34,35 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   isLoading: boolean = false;
   courseYear;
 
-  isThemeDarkSubscription: Subscription;
-  coursesSubscription: Subscription;
-  isLoadingGetCoursesSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(private sessionStorage: SessionStorageService, private courseStoreService: CourseStoreService,
     public sanitizer: DomSanitizer, private snackbarService: SnackbarService,
-    private cdRef: ChangeDetectorRef, ) { }
+    private cdRef: ChangeDetectorRef,) { }
 
   ngOnInit() {
-    this.isLoadingGetCoursesSubscription = this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
 
-
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
-    this.coursesSubscription = this.courseStoreService.courses$
+    this.subscriptions.add(this.courseStoreService.courses$
       .subscribe(data => {
-        this.courseYear = data[0]
-        this.dataSource.data = data
-      });
+        this.courseYear = data[0];
+        this.dataSource.data = data;
+      }));
 
     this.cdRef.detectChanges();
 
   }
 
   ngOnDestroy() {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.coursesSubscription.unsubscribe();
-    this.isLoadingGetCoursesSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -77,7 +72,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   dialogAction(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
-    dialogRef.afterClosed()
+    this.subscriptions.add(dialogRef.afterClosed()
       .subscribe(result => {
         if (result === RESULT_CANCELED) {
           this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
@@ -87,20 +82,20 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
           console.log(RESULT_ACTION1);
           this.deleteCourse(dialogRef);
         }
-      })
+      }));
 
   }
 
   deleteCourse(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
     this.isLoading = true;
-    this.courseStoreService.delete(dialogRef.componentInstance.obj)
+    this.subscriptions.add(this.courseStoreService.delete(dialogRef.componentInstance.obj)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((c: Course) => {
         this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED);
       }, err => {
         this.snackbarService.openSnackBar(COURSE_DELETE_ERROR, RESULT_ERROR);
         console.error(COURSE_DELETE_ERROR + ' ' + err);
-      });
+      }));
   }
 
 }

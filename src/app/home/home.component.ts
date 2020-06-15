@@ -107,7 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.getState();
 
   }
-
+//console.warn('subscribing!!!!');
   ngOnInit() {
     if (this.user) {
       if (this.user.username === '111') {

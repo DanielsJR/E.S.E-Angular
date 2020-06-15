@@ -61,9 +61,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   isLoading: boolean = false;
   btnDisabled = true;
 
-  isThemeDarkSubscription: Subscription;
-  subjectSubscription: Subscription;
-  isLoadingSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   selection = new SelectionModel<User>(true, []);
 
@@ -82,10 +80,10 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
 
   ngOnInit() {
     //this.crudUserOnlyRead = (this.areaRole === this.roleManager) ? false : true;
-    this.attendanceStoreService.attendances$.subscribe();
+    this.subscriptions.add(this.attendanceStoreService.attendances$.subscribe());
     this.dataSource = new MatTableDataSource<User[]>();
 
-    this.subjectSubscription = this.route.paramMap
+    this.subscriptions.add(this.route.paramMap
       .pipe(
         switchMap(params => {
           this.subjectId = params.get('id');
@@ -108,7 +106,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(a => {
         console.log('subscribe');
         this.setStudentsList(a);
-      });
+      }));
 
 
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
@@ -117,22 +115,20 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
 
-    this.isLoadingSubscription = this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding));
+    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.isThemeDarkSubscription = this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark);
+    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
   }
 
   ngOnDestroy(): void {
-    this.isThemeDarkSubscription.unsubscribe();
-    this.subjectSubscription.unsubscribe();
-    this.isLoadingSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   applyFilter(filterValue: string) {
@@ -143,7 +139,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -165,7 +161,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
           this.crudTeacherDialog.openDialogDelete();
         }
       }
-    });
+    }));
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -185,11 +181,11 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   loadAttendanceByDate(date): void {
     let fDate = moment(date).format(DD_MM_YYYY);
     console.log('date ', fDate);
-    this.attendanceStoreService.loadOneAttendanceByDate(fDate)
+    this.subscriptions.add(this.attendanceStoreService.loadOneAttendanceByDate(fDate)
       .subscribe(a => {
         console.log('this.setStudentsList(a)');
         this.setStudentsList(a);
-      });
+      }));
   }
 
   setStudentsList(attendance: Attendance) {
@@ -237,7 +233,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
     let messageError = this.isCreating ? ATTENDANCE_CREATE_ERROR : ATTENDANCE_UPDATE_ERROR;
 
     let obs: Observable<Attendance> = (this.isCreating) ? this.attendanceStoreService.create(attendance) : this.attendanceStoreService.update(attendance);
-    obs
+    this.subscriptions.add(obs
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(_ => {
         this.snackbarService.openSnackBar(messageSucced, RESULT_SUCCEED);
@@ -248,7 +244,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
         } else {
           this.snackbarService.openSnackBar(messageError, RESULT_ERROR);
         }
-      });
+      }));
 
   }
 
@@ -268,7 +264,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   deleteAttendanceDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -277,11 +273,11 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
       } else {
         console.log('no result');
       }
-    });
+    }));
   }
 
   updateAttendanceDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -290,7 +286,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
       } else {
         console.log('no result');
       }
-    });
+    }));
   }
 
 }

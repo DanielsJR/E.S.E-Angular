@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { Quiz, TRUE_FALSES, QUIZ_LEVELS } from '../../../../models/quiz';
 import { ActivatedRoute } from '@angular/router';
@@ -15,13 +15,14 @@ import { SUBJECT_NAMES } from '../../../../models/subject-names';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { MatSelect } from '@angular/material/select';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'nx-teacher-quizes-detail',
   templateUrl: './teacher-quizes-detail.component.html',
   styleUrls: ['./teacher-quizes-detail.component.css']
 })
-export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
+export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   quiz: Quiz;
 
@@ -69,13 +70,15 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   @ViewChild('idSubjectName') idSubjectName: MatSelect;
   @ViewChild('idQuizLevel') idQuizLevel: MatSelect;
 
+  private subscriptions = new Subscription();
+
   constructor(private quizBackendService: QuizBackendService,
     private route: ActivatedRoute, public sanitizer: DomSanitizer,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
     private renderer2: Renderer2,
     //private cdRef: ChangeDetectorRef,
-     ) {
+  ) {
 
   }
 
@@ -87,7 +90,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.route.paramMap.pipe(
+    this.subscriptions.add(this.route.paramMap.pipe(
       take(1), // take(1) will complete the observable after it has emitted one value
       switchMap(params =>
         this.quizBackendService.getQuizById(params.get('id'))
@@ -97,9 +100,13 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
         this.quiz = q;
         this.buildForm();
       }, error => console.error('error getting quiz ', error.message)
-      );
+      ));
 
     //this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   buildForm() {
@@ -199,7 +206,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteCorrespondItemDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>, index): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -208,7 +215,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
       } else {
         console.error('no result');
       }
-    });
+    }));
   }
 
   setTrueFalseItems(quiz: Quiz) {
@@ -243,7 +250,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteTrueFalseItemDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>, index): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -252,7 +259,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
       } else {
         console.error('no result');
       }
-    });
+    }));
   }
 
   setMultipleSelectionItems(quiz: Quiz) {
@@ -296,7 +303,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteMultipleSelectionItemDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>, index): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -305,7 +312,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
       } else {
         console.error('no result');
       }
-    });
+    }));
   }
 
   setIncompleteTextItems(quiz: Quiz) {
@@ -340,7 +347,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
   }
 
   deleteIncompleteTextItemDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>, index): void {
-    dialogRef.afterClosed().subscribe(result => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -349,7 +356,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
       } else {
         console.error('no result');
       }
-    });
+    }));
   }
 
   saveDataQuiz() {
@@ -361,7 +368,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
     editedQuiz.quizLevel = this.quizLevel.value;
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.update(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.update(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
@@ -377,7 +384,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
           this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
-      });
+      }));
   }
 
   quitFocus() {
@@ -400,7 +407,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
     }
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.update(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.update(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
@@ -414,7 +421,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
           this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
-      });
+      }));
   }
 
   saveTrueFalseItems(index?) {
@@ -431,7 +438,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
 
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.update(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.update(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
@@ -445,7 +452,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
           this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
-      });
+      }));
   }
 
   saveMultipleSelectionItems(index?) {
@@ -465,7 +472,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
     }
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.update(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.update(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
@@ -479,7 +486,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
           this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
-      });
+      }));
   }
 
   saveIncompleteTextItems(index?) {
@@ -495,7 +502,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
     }
 
     this.isLoadingService.isLoadingTrue();
-    this.quizBackendService.update(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.update(editedQuiz)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
@@ -509,7 +516,7 @@ export class TeacherQuizesDetailComponent implements OnInit, AfterViewInit {
           this.snackbarService.openSnackBar(QUIZ_UPDATE_ERROR, RESULT_ERROR);
 
         }
-      });
+      }));
   }
 
   formatLabel(value: number | null) {

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -15,13 +16,19 @@ import { UserLoggedService } from '../../services/user-logged.service';
     `],
 })
 
-export class TeacherComponent implements OnInit {
+export class TeacherComponent implements OnInit, OnDestroy {
+
+    private subscriptions = new Subscription();
 
     constructor(private userLoggedService: UserLoggedService, private subjectStoreService: SubjectStoreService) { }
 
     ngOnInit(): void {
-        this.userLoggedService.userLogged$
-            .subscribe(teacher => this.subjectStoreService.loadSubjects(teacher.id));
+        this.subscriptions.add(this.userLoggedService.userLogged$
+            .subscribe(teacher => this.subjectStoreService.loadSubjects(teacher.id)));
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
 }
