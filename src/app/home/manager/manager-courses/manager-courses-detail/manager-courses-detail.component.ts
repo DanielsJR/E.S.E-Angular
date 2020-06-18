@@ -87,7 +87,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         }
       }));
 
-      this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => setTimeout(() => this.isLoading = isLoading)));
+      this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => this.isLoading = isLoading));
 
       this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(data => this.isDark = data));
 

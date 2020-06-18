@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { UserLoggedService } from '../services/user-logged.service';
+
+
 
 @Component({
   selector: 'nx-page-not-found',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  urlPath;
+
+  constructor(private userLoggedService: UserLoggedService,) {
+    this.urlPath = '/home/' + this.userLoggedService.getPrivilege().toLowerCase();
+  }
 
   ngOnInit() {
   }

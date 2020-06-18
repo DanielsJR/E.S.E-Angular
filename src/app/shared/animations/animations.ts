@@ -14,11 +14,16 @@ import { sharedStyles, moveFromRightKeyframes, moveFromLeftKeyframes, scaleDownK
 
 export const mainRouteAnimations = trigger('mainRouteAnimations', [
 
-  transition('welcome => login', useAnimation(rotateCubeToLeft)),
+  transition('welcome => login, * => not-found', [
+    group([
+      useAnimation(rotateCubeToLeft),
+      query('router-outlet ~ *', [style({}), animate(1, style({}))], { optional: true })
+    ])
+  ]),
 
-  transition('login => welcome', useAnimation(rotateCubeToRight)),
+  transition('login => welcome, not-found => *', useAnimation(rotateCubeToRight)),
 
-  transition('welcome => main-home , main-home => login',  [
+  transition('welcome => main-home , main-home => login', [
     group([
       useAnimation(rotateCubeToTop),
       query('router-outlet ~ *', [style({}), animate(1, style({}))], { optional: true })

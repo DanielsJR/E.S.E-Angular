@@ -39,10 +39,12 @@
         </div>
     </mat-toolbar>
 
+
+
     <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
         class="sidenavContainer">
 
-        <!-- sidenav menu -->
+        <!-- sidenavMenu -->
         <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
             [@onSideNavChange]="sideNavMenuState">
 
@@ -203,24 +205,35 @@
 
         </mat-sidenav>
 
-        <!-- sidenav chat -->
+        <!-- sidenavChat -->
         <mat-sidenav #sidenavChat mode="side" opened="false" class="sidenavChat" [position]=" 'end' "
-            [@onSideNavChange]= "sideNavChatState">
+            [@onSideNavChange]="sideNavChatState">
 
-            <!-- sidenav toobar -->
-            <mat-toolbar class="sidenavToolbar">
+            <!-- sidenavChat toobar -->
+            <mat-toolbar class="sidenavToolbar" color="accent">
             </mat-toolbar>
 
-            <!-- sidenav content -->
+            <!-- sidenavChat content -->
             <mat-nav-list class="sidenavMainMenu">
             </mat-nav-list>
 
-            <!-- sidenav chat footer toobar -->
+            <!-- sidenavChat footer toobar -->
             <mat-toolbar class="sidenavToolbarFooter">
-                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState">
+                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState" style="margin-right: 12px;">
                     <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
                     <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
                 </button>
+
+                <span class="spacer-r"></span>
+
+                <mat-form-field appearance="outline" [floatLabel]=" 'never' "
+                    [style.visibility]="!sideNavChatState? 'hidden': 'visible'">
+                    <input matInput autocomplete="off" placeholder="Escribe un mensaje">
+                    <button matSuffix mat-icon-button color="primary">
+                        <mat-icon svgIcon="send" ></mat-icon>
+                    </button>
+                </mat-form-field>
+
             </mat-toolbar>
 
         </mat-sidenav>
@@ -230,7 +243,7 @@
             [@onMainContentChangeRight]="sideNavChatState">
 
             <!-- toolbar2 -->
-            <mat-toolbar class="toolbarMainContent"></mat-toolbar>
+            <mat-toolbar class="toolbar2" [color]="(toolbarColorAccent) ? 'accent':''"></mat-toolbar>
 
             <div class="mainContent">
                 <div class="animWrapper" [@routeAnimations]="animString">

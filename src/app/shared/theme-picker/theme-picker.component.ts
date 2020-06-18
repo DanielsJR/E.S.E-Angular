@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { Theme } from './theme';
@@ -6,6 +6,7 @@ import { THEMESDARK, THEMESLIGHT } from './themes';
 import { ThemeService } from './theme.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { User } from '../../models/user';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { User } from '../../models/user';
   styleUrls: ['./theme-picker.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ThemePickerComponent implements OnInit {
+export class ThemePickerComponent implements OnInit, OnDestroy {
   themesLight = THEMESLIGHT;
   themesDark = THEMESDARK;
   themeArray: Theme[];
@@ -24,6 +25,8 @@ export class ThemePickerComponent implements OnInit {
   private savedTheme: Theme;
 
   isInstalled: boolean = !!this.sessionStorage.getTheme();
+
+  private subscriptions = new Subscription();
 
   user: User;
 
@@ -42,10 +45,15 @@ export class ThemePickerComponent implements OnInit {
   ngOnInit() {
     this.overlayContainer.getContainerElement().classList.add(this.theme().name);
     this.setThemeArray();
-    this.userLoggedService.userLogged$.subscribe(user => {
+    this.subscriptions.add(this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
-    });
+    }));
   }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
 
 
   theme(): Theme {

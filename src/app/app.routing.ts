@@ -1,6 +1,5 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { PageNotFoundComponent } from './error-pages/page-not-found.component';
 import { SelectivePreload } from './services/selective-preload.service';
 import { HomeResolverService } from './services/home-resolver.service';
 
@@ -8,9 +7,13 @@ import { HomeResolverService } from './services/home-resolver.service';
 const routes: Routes = [
 
     {
+        path: 'not-found',
+        loadChildren: () => import('./error-pages/error-pages.module').then(m => m.ErrorPagesModule),
+    },
+
+    {
         path: 'about',
         loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
-        data: { animation: 'about' },
     },
 
     {
@@ -19,13 +22,16 @@ const routes: Routes = [
         resolve: { theme: HomeResolverService }
     },
 
-    { path: '', redirectTo: '/welcome', pathMatch: 'full' },
+    {
+        path: '',
+        redirectTo: '/welcome',
+        pathMatch: 'full'
+    },
 
     {
-        path: '**',
-        component: PageNotFoundComponent,
-        data: { animation: 'not-found' },
-    } // wildcard route the last
+        path: '**', // wildcard route the last
+        redirectTo: 'not-found',
+    }
 
 ];
 

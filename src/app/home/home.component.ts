@@ -81,6 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   private subscriptions = new Subscription();
 
   animString: String;
+  toolbarColorAccent: boolean = false;
 
   constructor(
     private loginService: LoginService,
@@ -107,7 +108,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.getState();
 
   }
-//console.warn('subscribing!!!!');
+  //console.warn('subscribing!!!!');
   ngOnInit() {
     if (this.user) {
       if (this.user.username === '111') {
@@ -174,7 +175,9 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
       .subscribe((event: ActivationEnd) => {
         if (event.snapshot.parent.url.toString() === 'subjects,detail') {
           this.animString = event.snapshot.parent.data.animation;
+          setTimeout(() => this.toolbarColorAccent = true, 1500);
         } else {
+          this.toolbarColorAccent = false;
           this.animString = event.snapshot.data.animation;
         }
       }));

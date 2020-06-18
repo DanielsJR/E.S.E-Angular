@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { PageNotFoundComponent } from './error-pages/page-not-found.component';
 import { AppRoutingModule } from './app.routing';
 import { WelcomeModule } from './welcome/welcome.module';
 import { SharedModule } from './shared/shared.module';
@@ -45,7 +44,6 @@ import { MyStomp } from './my-rx-stomp.config';
 
   declarations: [
     AppComponent,
-    PageNotFoundComponent
 
   ],
 

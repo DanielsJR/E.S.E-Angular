@@ -41,7 +41,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     private cdRef: ChangeDetectorRef,) { }
 
   ngOnInit() {
-    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
+    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => this.isLoading = isLoadding));
 
     this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
