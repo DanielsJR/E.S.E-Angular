@@ -168,21 +168,6 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
     }));
   }
 
-  dinamicColorGrade(grade: Grade) {
-    if (grade.grade > 4.0) {
-      this.colorGrade = 'gradeColorHigh'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorHighDark'
-      }
-    } else {
-      this.colorGrade = 'gradeColorLow'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorLowDark'
-      }
-    }
-    return this.colorGrade;
-  }
-
   openDialogDetail(grade: Grade): void {
     let data = {
       grade: grade,

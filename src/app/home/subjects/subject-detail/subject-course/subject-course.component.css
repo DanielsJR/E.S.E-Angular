@@ -113,26 +113,6 @@ mat-list-item {
     color: darkgray;
 }
 
-.gradeColorHigh {
-    color: blue;
-    font-size: larger;
-}
-
-.gradeColorLow {
-    color: red;
-    font-size: larger;
-}
-
-.gradeColorHighDark {
-    color: skyblue;
-    font-size: larger;
-}
-
-.gradeColorLowDark {
-    color: tomato;
-    font-size: larger;
-}
-
 a {
     cursor: pointer;
     padding: 0 10px;

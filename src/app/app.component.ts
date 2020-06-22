@@ -6,7 +6,6 @@ import { mainRouteAnimations } from './shared/animations/animations';
 @Component({
   selector: 'nx-app',
   template: `
-
      <div class="animWrapper" [@mainRouteAnimations]= "getState(o)">
          <div class="routerWrapper">
              <router-outlet #o="outlet" id="mainOutlet"></router-outlet>
@@ -43,9 +42,10 @@ import { mainRouteAnimations } from './shared/animations/animations';
 export class AppComponent {
 
   // Diagnostic only: inspect router configuration
-  constructor(router: Router) {
+  constructor(router: Router,) {
     //console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
+
 
   getState(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];

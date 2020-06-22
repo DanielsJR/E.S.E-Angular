@@ -140,21 +140,6 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
     this.dataSource.data = filteredGrades;
   }
 
-  dinamicColorGrade(grade: Grade) {
-    if (grade.grade > 4.0) {
-      this.colorGrade = 'gradeColorHigh'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorHighDark'
-      }
-    } else {
-      this.colorGrade = 'gradeColorLow'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorLowDark'
-      }
-    }
-    return this.colorGrade;
-  }
-
   setQuizStudent(grade: Grade) {
     this.quizStudentGrade = grade;
   }

@@ -1,17 +1,23 @@
-mat-card {
-    padding: 0 0 1px 0;
-    margin: 20px;
-    height: fit-content;
-}
-
-mat-form-field {
-    font-size: 16px;
+.container {
+    position: relative;
 }
 
 .closeButton {
     position: absolute;
     top: -10px;
-    right: -10px;
+    right: 10px;
+    z-index: 1;
+}
+
+mat-card {
+    padding: 0 0 1px 0;
+    margin: 20px;
+    height: fit-content;
+    overflow: hidden;
+}
+
+mat-form-field {
+    font-size: 16px;
 }
 
 .imgEseToolbar {
@@ -150,24 +156,4 @@ mat-expansion-panel-header {
 
 mat-expansion-panel mat-form-field {
     font-family: monospace;
-}
-
-.gradeColorHigh {
-    color: blue;
-    font-size: larger;
-}
-
-.gradeColorLow {
-    color: red;
-    font-size: larger;
-}
-
-.gradeColorHighDark {
-    color: skyblue;
-    font-size: larger;
-}
-
-.gradeColorLowDark {
-    color: tomato;
-    font-size: larger;
 }

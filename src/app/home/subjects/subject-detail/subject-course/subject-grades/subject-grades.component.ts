@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER } from '../../../../../app.config';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER, GRADE_UPDATE_SUCCEED } from '../../../../../app.config';
 import { User } from '../../../../../models/user';
 import { Subject } from '../../../../../models/subject';
 import { Grade } from '../../../../../models/grade';
@@ -142,21 +142,6 @@ export class SubjectGradesComponent implements OnInit {
     this.grade = grade;
   }
 
-  dinamicColorGrade(grade: Grade) {
-    if (grade.grade > 4.0) {
-      this.colorGrade = 'gradeColorHigh'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorHighDark'
-      }
-    } else {
-      this.colorGrade = 'gradeColorLow'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorLowDark'
-      }
-    }
-    return this.colorGrade;
-  }
-
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
@@ -220,7 +205,7 @@ export class SubjectGradesComponent implements OnInit {
         this.snackbarService.openSnackBar(GRADE_UPDATE_ERROR, RESULT_ERROR);
       } else if (result === RESULT_SUCCEED) {
         console.log(RESULT_SUCCEED);
-        this.snackbarService.openSnackBar(GRADE_CREATE_SUCCEED, RESULT_SUCCEED);
+        this.snackbarService.openSnackBar(GRADE_UPDATE_SUCCEED, RESULT_SUCCEED);
       }
     }));
   }

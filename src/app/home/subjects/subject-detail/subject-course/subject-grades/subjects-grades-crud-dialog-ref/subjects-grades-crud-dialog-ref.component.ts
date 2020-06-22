@@ -190,21 +190,5 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
   }
 
-
-  dinamicColorGrade(grade: Grade) {
-    if (grade.grade > 4.0) {
-      this.colorGrade = 'gradeColorHigh'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorHighDark'
-      }
-    } else {
-      this.colorGrade = 'gradeColorLow'
-      if (this.isDark) {
-        this.colorGrade = 'gradeColorLowDark'
-      }
-    }
-    return this.colorGrade;
-  }
-
 }
 

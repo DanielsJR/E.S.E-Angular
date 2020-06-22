@@ -1,13 +1,19 @@
-mat-card {
-    padding: 0 0 1px 0;
-    margin: 20px;
-    height: fit-content;
+.container {
+    position: relative;
 }
 
 .closeButton {
     position: absolute;
     top: -10px;
-    right: -10px;
+    right: 10px;
+    z-index: 1;
+}
+
+mat-card {
+    padding: 0 0 1px 0;
+    margin: 20px;
+    height: fit-content;
+    overflow: hidden;
 }
 
 mat-form-field {

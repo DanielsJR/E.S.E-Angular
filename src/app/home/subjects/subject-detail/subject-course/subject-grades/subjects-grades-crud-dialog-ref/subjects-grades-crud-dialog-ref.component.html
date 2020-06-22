@@ -1,6 +1,5 @@
 <div *ngIf="data.type === 'create'">
 
-
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
     <span class="spacer-r"></span>
@@ -82,9 +81,6 @@
         </form>
       </mat-step>
 
-
-
-
     </mat-horizontal-stepper>
 
   </mat-dialog-content>
@@ -115,7 +111,6 @@
     <h1 mat-dialog-title>Detalles de Calificación</h1>
   </mat-toolbar>
 
-
   <div *ngIf="!isLoading" style="height: 5px;"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
@@ -134,7 +129,7 @@
 
       <mat-list-item>
         <mat-form-field appearance="outline">
-          <input matInput [value]="grade.grade | number : '1.1-1'" readonly [ngClass]="dinamicColorGrade(grade)">
+          <input matInput [value]="grade.grade | number : '1.1-1'" readonly nxColorGrade [grade]="grade?.grade" [isDark]="isDark">
           <mat-label>
             <i class="mdi mdi-star">&nbsp;</i>Calificación
           </mat-label>
@@ -142,8 +137,6 @@
       </mat-list-item>
     </div>
   </mat-list>
-
-
 
   <mat-divider></mat-divider>
 
@@ -162,7 +155,6 @@
         <i class="mdi mdi-file-document">&nbsp;</i>Tipo
       </mat-label>
     </mat-form-field>
-
 
     <mat-form-field appearance="fill">
       <input matInput [(ngModel)]="grade.evaluation.date" readonly>
@@ -231,7 +223,6 @@
       </mat-label>
     </mat-form-field>
 
-
   </mat-dialog-content>
 
   <mat-divider></mat-divider>
@@ -261,7 +252,6 @@
       <h1 mat-dialog-title>Editar Calificación</h1>
     </mat-toolbar>
 
-
     <div *ngIf="!isLoading" style="height: 5px;"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
@@ -284,7 +274,7 @@
 
     <mat-dialog-content>
       <mat-form-field appearance="standard">
-        <input matInput formControlName="grade" placeholder="7.0" [ngClass]="dinamicColorGrade(grade)"
+        <input matInput formControlName="grade" placeholder="7.0" nxColorGrade [grade]="grade?.grade" [isDark]="isDark"
           [value]="eGrade.value | number : '1.1-1'">
         <mat-label>
           <i class="mdi mdi-star">&nbsp;</i>Calificación
@@ -297,7 +287,6 @@
 
 
     </mat-dialog-content>
-
 
     <mat-divider></mat-divider>
 
