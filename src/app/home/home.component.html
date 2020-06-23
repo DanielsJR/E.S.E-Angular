@@ -40,7 +40,6 @@
     </mat-toolbar>
 
 
-
     <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
         class="sidenavContainer">
 
@@ -55,39 +54,39 @@
                         <mat-list-item>
                             <img matListAvatar
                                 [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
-                                alt="{{privilege | lowercase}}" (click)="imageZoom.openDialogImage()">
+                                alt="{{privilege | lowercase}}" [matMenuTriggerFor]="settings">
                             <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
                             <p matLine>
                                 <span *ngIf="user">{{user.roles | rolesToSpanish}}</span>
                             </p>
-                            <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
+                            <!--<nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>-->
                         </mat-list-item>
                     </mat-list>
 
                     <span class="spacer-r"></span>
 
-                    <div matTooltip="opciones">
+                   <!-- <div matTooltip="opciones" *ngIf="sideNavMenuState">
                         <button mat-icon-button [matMenuTriggerFor]="settings">
                             <mat-icon svgIcon="dots-vertical"></mat-icon>
                         </button>
-                    </div>
+                    </div>-->
 
                 </div>
             </mat-toolbar>
 
-            <mat-menu x-position="before" #settings="matMenu" [overlapTrigger]="false">
+            <mat-menu x-position="after" #settings="matMenu" [overlapTrigger]="false">
 
-                <button mat-menu-item (click)="sidenavMenuProfile.toggle()">
+                <button mat-menu-item (click)="openSideNavAsyc(sidenavMenuProfile)">
                     <mat-icon svgIcon="account-circle"></mat-icon>
                     <span> Perfil </span>
                 </button>
 
-                <button mat-menu-item (click)="sidenavSettings.toggle()">
+                <button mat-menu-item (click)="openSideNavAsyc(sidenavSettings)">
                     <mat-icon svgIcon="cogs"></mat-icon>
                     <span> Preferencias </span>
                 </button>
 
-                <button mat-menu-item (click)="sidenavSettings.toggle()">
+                <button mat-menu-item (click)="openSideNavAsyc(sidenavSettings)">
                     <mat-icon svgIcon="help-circle"></mat-icon>
                     <span> Ayuda </span>
                 </button>
@@ -118,10 +117,10 @@
             </mat-toolbar>
 
             <!-- sidenav user-menu-profile -->
-            <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="sidenav">
+            <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="drawer">
 
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="sidenavMenuProfile.toggle()" #btnMenuProfileBack>
+                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack  style="margin-left: 12px;">
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
@@ -158,7 +157,7 @@
                 </mat-nav-list>
 
                 <!-- sidenav user-profile -->
-                <mat-drawer mode="side" opened="false" #sidenavProfile class="sidenav">
+                <mat-drawer mode="side" opened="false" #sidenavProfile class="drawer">
 
                     <mat-toolbar color="accent" class="sidenavToolbar">
                         <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
@@ -172,7 +171,7 @@
                             </mat-list-item>
                         </mat-list>
                         <span class="spacer-r"></span>
-                        <!--<h3>{{profileTitle}}</h3>-->
+                        <h1>{{profileTitle}}</h1>
                         <span>&nbsp;&nbsp;</span>
                         <mat-icon svgIcon="account-edit"></mat-icon>
                     </mat-toolbar>
@@ -186,11 +185,11 @@
             </mat-drawer>
 
             <!-- sidenav settings -->
-            <mat-drawer mode="side" opened="false" #sidenavSettings class="sidenav">
+            <mat-drawer mode="side" opened="false" #sidenavSettings class="drawer">
 
                 <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="sidenavSettings.toggle()" #btnSettingsBack>
+                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavSettings)" #btnSettingsBack  style="margin-left: 12px;">
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>

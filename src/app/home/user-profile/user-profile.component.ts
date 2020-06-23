@@ -15,7 +15,7 @@ import { NAME_PATTERN, PHONE_PATTERN } from '../../shared/validators/patterns';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStoreService } from '../../services/user-store.service';
-import { RESULT_ERROR, USER_UPDATE_ERROR,DD_MM_YYYY, USER_UPDATE_SUCCEED, RESULT_SUCCEED } from '../../app.config';
+import { RESULT_ERROR, USER_UPDATE_ERROR, DD_MM_YYYY, USER_UPDATE_SUCCEED, RESULT_SUCCEED } from '../../app.config';
 import { Avatar } from '../../models/avatar';
 
 
@@ -29,6 +29,11 @@ export class UserProfileComponent implements OnInit {
     @Input()
     user: User;
 
+    @Output()
+    title = new EventEmitter<string>(true);
+
+    profileActionTitle: string = '';
+
     private _profileAction: string;
 
     get profileAction(): string { return this._profileAction; }
@@ -36,18 +41,9 @@ export class UserProfileComponent implements OnInit {
     @Input()
     set profileAction(profileAction: string) {
         this._profileAction = profileAction;
-
-        this.profileActionTitle = (this.profileAction === 'usuario') ? 'Datos de Usuario' :
-            (this.profileAction === 'personal') ? 'Datos Personales' : 'Datos de Contacto';
-
-        this.title.emit(this.profileActionTitle);
+        this.emitTitle();
     }
 
-
-    @Output()
-    title = new EventEmitter<string>();
-
-    profileActionTitle: string = '';
 
     @Input()
     set isSidenavProfileOpen(isSidenavProfileOpen) {
@@ -77,6 +73,13 @@ export class UserProfileComponent implements OnInit {
 
     ngOnInit() {
         this.buildForm();
+    }
+
+    emitTitle() {
+        this.profileActionTitle = (this.profileAction === 'usuario') ? 'Datos de Usuario' :
+            (this.profileAction === 'personal') ? 'Datos Personales' : 'Datos de Contacto';
+
+        this.title.emit(this.profileActionTitle);
     }
 
     buildForm() {

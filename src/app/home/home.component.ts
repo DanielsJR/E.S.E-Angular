@@ -11,7 +11,7 @@ import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
 
-import { MatSidenav, MatDrawerToggleResult } from '@angular/material/sidenav';
+import { MatSidenav, MatDrawerToggleResult, MatDrawer } from '@angular/material/sidenav';
 import { MatButton } from '@angular/material/button';
 import { MatMenu } from '@angular/material/menu';
 import { delay } from 'rxjs/internal/operators/delay';
@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   sideNavChatState: boolean;
   @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
   @ViewChild("sidenavChat") sidenavChat: MatSidenav;
+  @ViewChild("sidenavMenuProfile") sidenavMenuProfile: MatDrawer;
 
   private subscriptions = new Subscription();
 
@@ -192,4 +193,26 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   canDeactivate(): Observable<boolean> | boolean {
     return of(this.closeAllSidenav()).pipe(delay(300));
   }
+
+  wasSideNavOpenAsyc:boolean = false;
+  openSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
+    if (!this.sideNavMenuState) {
+      this.sideNavMenuState = true;
+      setTimeout(() => sidenav.toggle(), 500);
+      this.wasSideNavOpenAsyc = true;
+    } else {
+      sidenav.toggle();
+      this.wasSideNavOpenAsyc = false;
+    }
+  }
+
+  closeSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
+    if (this.sideNavMenuState && this.wasSideNavOpenAsyc) {
+      sidenav.toggle();
+      setTimeout(() => this.sideNavMenuState = false, 500);
+    } else {
+      sidenav.toggle();
+    }
+  }
+
 }
