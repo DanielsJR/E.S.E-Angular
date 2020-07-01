@@ -2,32 +2,32 @@
     *ngIf="!shortMenu && roles?.includes(roleTeacher)">
 
     <mat-list-item (click)="trigger = !trigger">
-        <mat-icon matListIcon svgIcon="file-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
-        <h3 matLine [class.primaryColor]="rla.isActive">Pruebas</h3>
-        <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
+        <mat-icon matListIcon svgIcon="file-multiple" [class.accentColor]= "rla.isActive"></mat-icon>
+        <h3 matLine [class.accentColor]= "rla.isActive" [animateText]="false">Pruebas</h3>
+        <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down" [animateText]="false"></mat-icon>
     </mat-list-item>
 
     <div [@tdCollapse]="(trigger || shortMenu) " [style.overflow]="'hidden'" id="collapsebleDiv">
 
         <mat-list-item [routerLink]="quizLinks[0].route" routerLinkActive #rlaQuizes="routerLinkActive"
             [routerLinkActiveOptions]="{exact: true}">
-            <mat-icon matListIcon svgIcon="file-search" [color]=" rlaQuizes.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaQuizes.isActive">Mis Pruebas</h3>
+            <mat-icon matListIcon svgIcon="file-search" [class.accentColor]="rlaQuizes.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaQuizes.isActive">Mis Pruebas</h3>
         </mat-list-item>
 
         <mat-list-item [routerLink]="quizLinks[1].route" routerLinkActive #rlaCreate="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-plus" [color]=" rlaCreate.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaCreate.isActive">Crear Prueba</h3>
+            <mat-icon matListIcon svgIcon="file-plus" [class.accentColor]="rlaCreate.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaCreate.isActive">Crear Prueba</h3>
         </mat-list-item>
 
         <mat-list-item [routerLink]="quizLinks[2].route" routerLinkActive #rlaImport="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-import" [color]=" rlaImport.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaImport.isActive">Importar Prueba</h3>
+            <mat-icon matListIcon svgIcon="file-import" [class.accentColor]="rlaImport.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaImport.isActive">Importar Prueba</h3>
         </mat-list-item>
 
         <mat-list-item [routerLink]="quizLinks[3].route" routerLinkActive #rlaReports="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-chart" [color]=" rlaReports.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaReports.isActive">Reportes de Pruebas</h3>
+            <mat-icon matListIcon svgIcon="file-chart" [class.accentColor]="rlaReports.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaReports.isActive">Reportes de Pruebas</h3>
         </mat-list-item>
 
     </div>
@@ -39,8 +39,8 @@
     *ngIf="shortMenu && roles?.includes(roleTeacher)">
 
     <mat-list-item [matMenuTriggerFor]="menuQuiz">
-        <mat-icon matListIcon svgIcon="file-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
-        <h3 matLine [class.primaryColor]="rla.isActive">Pruebas</h3>
+        <mat-icon matListIcon svgIcon="file-multiple" [class.accentColor]= "rla.isActive"></mat-icon>
+        <h3 matLine [class.accentColor]= "rla.isActive">Pruebas</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
     </mat-list-item>
 
@@ -48,24 +48,24 @@
 
         <button mat-menu-item [routerLink]="quizLinks[0].route" routerLinkActive #rlaQuizes="routerLinkActive"
             [routerLinkActiveOptions]="{exact: true}">
-            <mat-icon matListIcon svgIcon="file-search" [color]=" rlaQuizes.isActive ? activeColor : '' "></mat-icon>
-            <span [class.primaryColor]="rlaQuizes.isActive">Mis Pruebas</span>
+            <mat-icon matListIcon svgIcon="file-search" [class.accentColor]="rlaQuizes.isActive"></mat-icon>
+            <span [class.accentColor]="rlaQuizes.isActive">Mis Pruebas</span>
         </button>
 
         <button mat-menu-item [routerLink]="quizLinks[1].route" routerLinkActive #rlaCreate="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-plus" [color]=" rlaCreate.isActive ? activeColor : '' "></mat-icon>
-            <span [class.primaryColor]="rlaCreate.isActive">Crear Prueba</span>
+            <mat-icon matListIcon svgIcon="file-plus" [class.accentColor]="rlaCreate.isActive"></mat-icon>
+            <span [class.accentColor]="rlaCreate.isActive">Crear Prueba</span>
         </button>
 
         <button mat-menu-item [routerLink]="quizLinks[2].route" routerLinkActive #rlaImport="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-import" [color]=" rlaImport.isActive ? activeColor : '' "></mat-icon>
-            <span [class.primaryColor]="rlaImport.isActive">Importar Prueba</span>
+            <mat-icon matListIcon svgIcon="file-import" [class.accentColor]="rlaImport.isActive"></mat-icon>
+            <span [class.accentColor]="rlaImport.isActive">Importar Prueba</span>
         </button>
 
         <button mat-menu-item [routerLink]="quizLinks[3].route" routerLinkActive
             #rlaReports="routerLinkActive">
-            <mat-icon matListIcon svgIcon="file-chart" [color]=" rlaReports.isActive ? activeColor : '' "></mat-icon>
-            <span [class.primaryColor]="rlaReports.isActive">Reportes de Pruebas</span>
+            <mat-icon matListIcon svgIcon="file-chart" [class.accentColor]="rlaReports.isActive"></mat-icon>
+            <span [class.accentColor]="rlaReports.isActive">Reportes de Pruebas</span>
         </button>
 
     </mat-menu>

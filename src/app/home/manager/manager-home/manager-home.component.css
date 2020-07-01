@@ -1,7 +1,7 @@
-:host  {
-	display: block;
+:host {
+  display: block;
   width: 100%;
-} 
+}
 
 .container {
   display: flex;
@@ -26,4 +26,16 @@ mat-card {
 h1 {
   font-size: 27px;
   font-family: 'Roboto', sans-serif;
+}
+
+.bgColors {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: center;
+}
+
+ button {
+  margin: 3px;
 }

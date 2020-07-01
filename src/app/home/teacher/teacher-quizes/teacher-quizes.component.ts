@@ -4,7 +4,6 @@ import { Quiz } from '../../../models/quiz';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR } from '../../../app.config';
@@ -34,18 +33,17 @@ export class TeacherQuizesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   isLoading: boolean = false;
   private subscriptions = new Subscription();
 
   constructor(private quizBackendService: QuizBackendService,
     private sessionStorage: SessionStorageService,
-    public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    public dialog: MatDialog, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,
     private cdRef: ChangeDetectorRef,) { }
 
   ngOnInit() {
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
+
   }
 
   ngAfterViewInit() {

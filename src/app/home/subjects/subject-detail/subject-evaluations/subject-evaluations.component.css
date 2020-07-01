@@ -14,6 +14,7 @@ mat-card {
     margin: 20px;
     padding: 0;
     overflow: hidden;
+    background: unset !important;
 }
 
 mat-toolbar-row {
@@ -29,6 +30,11 @@ mat-form-field {
 .toolbar2 {
     padding-bottom: 5px !important;
     height: 59px !important;
+}
+
+.divToobar {
+    height: 5px;
+    width: inherit;
 }
 
 table {
@@ -52,42 +58,6 @@ td.mat-cell:last-of-type {
     text-align: end;
 }
 
-.fila:hover {
-    --cursor: pointer;
-    background: #f5f5f5;
-}
-
-.fila:active {
-    background: #eaeaea;
-}
-
-.fila-dark:hover {
-
-    background: #353535;
-}
-
-.fila-dark:active {
-    background: #292929;
-}
-
-mat-list {
-    padding: 0;
-}
-
-.mat-list-avatar {
-    opacity: 1;
-    transition: .5s ease;
-    backface-visibility: hidden;
-    cursor: pointer;
-}
-
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
-
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
 
 .role-style {
     color: darkgray;

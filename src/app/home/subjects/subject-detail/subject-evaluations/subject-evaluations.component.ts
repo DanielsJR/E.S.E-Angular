@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnDestroy, AfterViewInit, ViewChild } from '@
 import { Subject } from '../../../../models/subject';
 import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, CRUD_TYPE_DETAIL, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT, EVALUATION_UPDATE_ERROR, EVALUATION_CREATE_ERROR, RESULT_SUCCEED, EVALUATION_CREATE_SUCCEED, EVALUATION_UPDATE_SUCCEED, CRUD_TYPE_DELETE, EVALUATION_DELETE_ERROR, EVALUATION_DELETE_SUCCEED, RESULT_WARN, CANCEL_MESSAGE, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
@@ -41,7 +40,6 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
   btnDisabled = true;
@@ -51,7 +49,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
   private subscriptions = new Subscription();
 
 
-  constructor(private route: ActivatedRoute, private router: Router, public sanitizer: DomSanitizer,
+  constructor(private route: ActivatedRoute, private router: Router,
     private evaluationStoreService: EvaluationStoreService, private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService, private snackbarService: SnackbarService) {
 
@@ -71,8 +69,6 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     this.subscriptions.add(this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es));
 
     this.subscriptions.add(this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => this.isLoading = isLoadding));
-
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 

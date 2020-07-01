@@ -4,9 +4,13 @@ mat-dialog-content {
     margin: 0;
 }
 
+.divLoading {
+    height: 5px;
+    width: inherit;
+}
+
 .tab-content {
     padding: 16px 0;
-    --overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;

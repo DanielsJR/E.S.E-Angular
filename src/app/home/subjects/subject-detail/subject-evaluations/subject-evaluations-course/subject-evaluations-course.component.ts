@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../../../../services/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { shortNameSecondName } from '../../../../../shared/functions/shortName';
@@ -70,7 +69,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
     private gradeStoreService: GradeStoreService, private subjectStoreService: SubjectStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+    private sessionStorage: SessionStorageService, private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {

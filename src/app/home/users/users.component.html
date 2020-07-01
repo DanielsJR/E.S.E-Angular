@@ -22,7 +22,7 @@
 
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" class="divToobar"></div>
+    <div *ngIf="!isLoading" class="divToobar backgroundColorCard"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
@@ -34,7 +34,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl' "
                 alt="{{user?.username}}">
               <h3 matLine> {{user | shortNameLastname}} </h3>
               <p matLine>
@@ -85,7 +85,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let user; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+      <tr mat-row *matRowDef="let user; columns: displayedColumns;"
         (click)="dialogCardUserSubs(cardUserDialog.openDialogCardUser())" @rowAnimation>
 
         <nx-card-user-dialog #cardUserDialog [user]="user" [areaRole]="areaRole" [onlyRead]="isAdminEditingTeacher()">

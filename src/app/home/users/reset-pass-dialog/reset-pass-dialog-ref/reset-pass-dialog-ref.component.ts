@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
@@ -20,7 +19,6 @@ export class ResetPassDialogRefComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<ResetPassDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public sanitizer: DomSanitizer,
     private userBackendService: UserBackendService,
     private snackbarService: SnackbarService) {
 

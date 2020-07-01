@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject, Input, OnDestroy } from '@angular/core';
 import { User } from '../../../../models/user';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { startWith } from 'rxjs/internal/operators/startWith';
@@ -28,8 +27,7 @@ export class SearchUserDialogRefComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<SearchUserDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
-    private userStoreService: UserStoreService
+    @Inject(MAT_DIALOG_DATA) public data: any, private userStoreService: UserStoreService
   ) {
 
     //console.log('Dialog*** uriRol: ' + data.uriRole + ' type: ' + data.type);

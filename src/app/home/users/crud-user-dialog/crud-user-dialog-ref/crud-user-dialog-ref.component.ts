@@ -8,7 +8,6 @@ import {
 import * as moment from 'moment';
 import { COMMUNNES, Commune } from '../../../../models/communes';
 import { GENDERS, Gender } from '../../../../models/genders';
-import { DomSanitizer } from '@angular/platform-browser';
 import { PRIVILEGES } from '../../../../models/privileges';
 
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
@@ -55,7 +54,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     constructor(public dialogRefCrudUser: MatDialogRef<CrudUserDialogRefComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private userStoreService: UserStoreService, private userLoggedService: UserLoggedService,
-        private formBuilder: FormBuilder, public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+        private formBuilder: FormBuilder, private snackbarService: SnackbarService
 
     ) {
         this.user = Object.assign({}, data.user);

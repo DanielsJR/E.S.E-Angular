@@ -4,6 +4,7 @@ import { MaterialModule } from "../../material.module";
 import { SimpleDialogRefComponent } from "./simple-dialog-ref/simple-dialog-ref.component";
 import { SimpleDialogComponent } from "./simple-dialog.component";
 import { ImageZoomUserDialogModule } from "../image-zoom-user-dialog/image-zoom-user-dialog.module";
+import { PipeModule } from '../../pipes/pipe.module';
 
 
 
@@ -11,7 +12,8 @@ import { ImageZoomUserDialogModule } from "../image-zoom-user-dialog/image-zoom-
     imports: [
         CommonModule,
         MaterialModule,
-        ImageZoomUserDialogModule
+        ImageZoomUserDialogModule,
+        PipeModule,
     ],
 
     declarations: [

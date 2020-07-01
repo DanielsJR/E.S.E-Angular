@@ -6,7 +6,6 @@ import { Grade } from '../../../../../models/grade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../../../../services/snackbar.service';
 import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
@@ -61,7 +60,7 @@ export class SubjectGradesComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
     private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
+    private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Grade[]>();

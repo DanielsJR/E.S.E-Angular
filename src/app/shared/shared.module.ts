@@ -15,26 +15,24 @@ import { MatPaginatorIntlSpa } from './paginatorCustom/mat-paginator-intl-spa';
 import { ShortNameLastnamePipe } from './pipes/short-name-lastname.pipe';
 import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/image-zoom-user-dialog.module';
 import { ColorGradeDirective } from './directives/color-grade.directive';
+import { PipeModule } from './pipes/pipe.module';
+
 
 
 @NgModule({
   imports: [
     CommonModule,
-    
   ],
 
   declarations: [
     ScrollerDirective,
-    ShortNamePipe,
-    ShortNameLastnamePipe,
-    RolesToSpanishPipe,
     ColorGradeDirective,
 
   ],
 
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpa },
-  
+
   ],
 
 
@@ -48,13 +46,11 @@ import { ColorGradeDirective } from './directives/color-grade.directive';
     LogoModule,
     ScrollerDirective,
     SnackbarRefModule,
-    ShortNamePipe,
-    ShortNameLastnamePipe,
-    RolesToSpanishPipe,
     SimpleDialogModule,
     ImageZoomUserDialogModule,
     ColorGradeDirective,
-    
+    PipeModule,
+
   ]
 })
 export class SharedModule { }

@@ -1,0 +1,22 @@
+@import './assets/custom-themes/theme-color-grabber';
+
+
+// Define the light theme.
+$primary: mat-palette($mat-blue-grey);
+$accent: mat-palette($mat-light-blue, A200, A100, A400);
+$theme: mat-light-theme($primary, $accent);
+
+.bluegrey-light-blue {
+  @include angular-material-theme($theme);
+  @include theme-color-grabber($theme);
+}
+
+// Define the dark theme.
+$primary-dark: mat-palette($mat-blue-grey, 400);
+$accent-dark: mat-palette($mat-light-blue, A200, A100, A400);
+$theme-dark: mat-dark-theme($primary-dark, $accent-dark);
+
+.bluegrey-light-blue-dark {
+  @include angular-material-theme($theme-dark);
+  @include theme-color-grabber($theme-dark);
+}

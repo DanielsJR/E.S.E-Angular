@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { Subject } from '../../../models/subject';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../../app.config';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { EvaluationStoreService } from '../../../services/evaluation-store.service';
@@ -52,7 +51,7 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   userLogged: User;
 
   constructor(private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
+    private sessionStorage: SessionStorageService,
     private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
     private router: Router, private userLoggedService: UserLoggedService, private attendanceStoreService: AttendanceStoreService,
     private cdRef: ChangeDetectorRef,

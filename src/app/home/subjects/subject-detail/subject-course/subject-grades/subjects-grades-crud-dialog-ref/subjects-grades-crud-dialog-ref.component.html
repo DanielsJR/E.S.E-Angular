@@ -1,4 +1,4 @@
-<div *ngIf="data.type === 'create'">
+<ng-container *ngIf="data.type === 'create'">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -8,10 +8,10 @@
     <h1 mat-dialog-title>Agregar Evaluación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <h3 matLine> {{subject?.name}} </h3>
@@ -24,7 +24,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="listContainer backgroundColorCard">
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
 
@@ -100,9 +100,9 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'detail'">
+<ng-container *ngIf="data.type === 'detail'">
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
     <span class="spacer-r"></span>
@@ -111,14 +111,14 @@
     <h1 mat-dialog-title>Detalles de Calificación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <mat-list class="listContainer">
+  <mat-list class="listContainer backgroundColorAppBar">
     <div class="data">
       <mat-list-item>
         <img matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+          [src]=" 'data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data | safe: 'resourceUrl' "
           alt="studiante" (click)="imageZoom.openDialogImage()">
         <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
         <p matLine>
@@ -140,7 +140,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-form-field appearance="fill">
       <input matInput [(ngModel)]="grade.evaluation.title" readonly>
@@ -239,11 +239,13 @@
       <!-- <button type="button" mat-raised-button color="warn" (click)="openDialogDelete()">Borrar</button> -->
     </mat-toolbar>
   </mat-dialog-actions>
-</div>
 
-<div *ngIf="data.type === 'edit'">
+</ng-container>
+
+<ng-container *ngIf="data.type === 'edit'">
 
   <form [formGroup]="gradeEditGroup" (ngSubmit)="edit()">
+
     <mat-toolbar color="primary">
       <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
       <span class="spacer-r"></span>
@@ -252,14 +254,14 @@
       <h1 mat-dialog-title>Editar Calificación</h1>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <div class="listContainer">
+    <div class="listContainer backgroundColorAppBar">
       <mat-list>
         <mat-list-item>
           <img matListAvatar
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+            [src]=" 'data:'+grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data | safe: 'resourceUrl' "
             alt="estudiante" (click)="imageZoom.openDialogImage()">
           <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
           <p matLine>
@@ -272,7 +274,7 @@
 
     <mat-divider></mat-divider>
 
-    <mat-dialog-content>
+    <mat-dialog-content class="backgroundColorCard">
       <mat-form-field appearance="standard">
         <input matInput formControlName="grade" placeholder="7.0" nxColorGrade [grade]="grade?.grade" [isDark]="isDark"
           [value]="eGrade.value | number : '1.1-1'">
@@ -301,6 +303,7 @@
           [disabled]="gradeEditGroup.invalid || gradeEditGroup.pristine">Guardar</button>
       </mat-toolbar>
     </mat-dialog-actions>
+
   </form>
 
-</div>
+</ng-container>

@@ -8,12 +8,13 @@
     <h1 mat-dialog-title>Asignar Privilégios</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
-    <mat-form-field appearance="outline" class="centerField" floatLabel="always" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
+    <mat-form-field appearance="outline" class="centerField" floatLabel="always"
+      [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
 
       <mat-label>
         <i class="mdi mdi-shield-account app-input-icon"></i>
@@ -28,7 +29,8 @@
 
         <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
           <mat-chip-list>
-            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
+            <mat-chip class="chip-selection" selected="true"
+              [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
               Administrador
             </mat-chip>
           </mat-chip-list>
@@ -36,7 +38,8 @@
 
         <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
           <mat-chip-list>
-            <mat-chip class="chip-selection" selected="true" [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
+            <mat-chip class="chip-selection" selected="true"
+              [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
               Docente
             </mat-chip>
           </mat-chip-list>
@@ -59,6 +62,7 @@
   </mat-dialog-content>
 
   <mat-divider></mat-divider>
+
   <mat-dialog-actions>
     <mat-toolbar>
 
@@ -67,7 +71,8 @@
       </button>
 
       <span class="spacer-r"></span>
-      <button type="submit" mat-raised-button color="warn" tabindex="2" [disabled]="(!slideToggleManager.value && !slideToggleTeacher.value) || (setRolesForm.pristine)">
+      <button type="submit" mat-raised-button color="warn" tabindex="2"
+        [disabled]="(!slideToggleManager.value && !slideToggleTeacher.value) || (setRolesForm.pristine)">
         Asignar {{roles.length | i18nPlural: rolesMapping}}
       </button>
 

@@ -13,7 +13,7 @@
 
       </mat-toolbar>
 
-      <mat-list class="listContainer">
+      <mat-list class="listContainer backgroundColorCard">
         <mat-list-item>
           <mat-form-field appearance="standard" class="fullWith">
             <mat-label><i class="mdi mdi-text app-input-icon">&nbsp;</i>Titulo</mat-label>
@@ -33,8 +33,9 @@
 
           <mat-list-item>
             <img matListAvatar
-              [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data)"
-              alt="author">
+              [src]=" 'data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data | safe: 'resourceUrl' "
+              alt="author" (click)="imageZoom.openDialogImage()">
+            <nx-image-zoom-user #imageZoom [avatar]="quiz?.author?.avatar"></nx-image-zoom-user>
             <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
             <p matLine>
               <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
@@ -96,8 +97,6 @@
           <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
         </button>
       </mat-toolbar>
-
-
 
     </form>
   </mat-card>

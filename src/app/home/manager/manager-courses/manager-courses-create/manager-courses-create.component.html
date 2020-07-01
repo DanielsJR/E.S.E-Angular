@@ -3,6 +3,7 @@
   <mat-card class="mat-elevation-z8">
     
     <form [formGroup]="createForm" (ngSubmit)="createCourse()">
+      
       <mat-toolbar class="toolbar1" color="primary">
         <mat-form-field [floatLabel]=" 'never' ">
           <mat-select formControlName="name">
@@ -49,7 +50,7 @@
         <mat-list style="flex-grow: 1">
           <mat-list-item>
             <img matListAvatar *ngIf="(chiefTeacher) as t"
-              [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar?.type+';base64,' + t?.avatar?.data)"
+              [src]=" 'data:'+t?.avatar?.type+';base64,' + t?.avatar?.data | safe: 'resourceUrl' "
               alt="{{t?.username}}"
               (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
             <h3 matLine *ngIf="(chiefTeacher) as t">{{ t | shortName}}</h3>
@@ -80,7 +81,7 @@
           [onlyRead]="crudUserOnlyRead"></nx-card-user-dialog>
 
       </mat-toolbar>
-      <mat-divider style="position: relative;"></mat-divider>
+      <mat-divider></mat-divider>
 
       <table mat-table #table [dataSource]="dataSource" matSort>
 
@@ -91,7 +92,7 @@
             <mat-list>
               <mat-list-item>
                 <img matListAvatar
-                  [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar?.type+';base64,' + student?.avatar?.data)"
+                  [src]=" 'data:'+student?.avatar?.type+';base64,' + student?.avatar?.data | safe: 'resourceUrl' "
                   alt="{{student?.username}}"
                   (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
                 <h3 matLine *ngIf="student"> {{student | shortName}} </h3>
@@ -139,21 +140,22 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" @rowAnimation></tr>
 
       </table>
 
       <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
       </mat-paginator>
+  
+      <mat-divider></mat-divider>
 
-      <mat-divider style="position: relative;"></mat-divider>
       <mat-toolbar>
-        <button type="button" mat-stroked-button color="primary" tabindex="1" (click)="gotoCourses()"
+        <button type="button" mat-raised-button color="primary" tabindex="1" (click)="gotoCourses()"
           cdkFocusRegionstart>
           <!--<mat-icon svgIcon="arrow-left"></mat-icon>-->Volver
         </button>
         <span class="spacer-r"></span>
-        <button type="submit" mat-stroked-button color="accent" tabindex="2"
+        <button type="submit" mat-raised-button color="accent" tabindex="2"
           [disabled]="createForm.invalid || createForm.pristine">
           <!--<mat-icon svgIcon="content-save"></mat-icon>-->Guardar
         </button>

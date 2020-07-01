@@ -1,4 +1,4 @@
-<div matTooltip="Tema Oscuro" *ngIf="!isDark" style="display: inline">
+<!--<div matTooltip="Tema Oscuro" *ngIf="!isDark" style="display: inline">
     <button id="btnDark" mat-icon-button (click)="installDarkTheme()">
         <mat-icon svgIcon="brightness-7"></mat-icon>
     </button>
@@ -8,7 +8,15 @@
     <button id="btnLight" mat-icon-button (click)="installLightTheme()">
         <mat-icon svgIcon="brightness-5"></mat-icon>
     </button>
+</div>-->
+
+<div [matTooltip] =" (isDark) ? 'Tema Claro' : 'Tema Oscuro' " style="display: inline">
+    <button id="btnLight" mat-icon-button (click)=" (isDark) ? installLightTheme() : installDarkTheme() ">
+        <mat-icon svgIcon="theme-light-dark"></mat-icon>
+    </button>
 </div>
+
+
 
 <div matTooltip="Selecciona un Tema!" style="display: inline">
     <button id = "btnMenu" mat-icon-button [matMenuTriggerFor]="themeMenu">
@@ -22,8 +30,8 @@
         <mat-grid-tile *ngFor="let theme of themeArray">
             <div mat-menu-item (click)="installTheme(theme); saveThemeOnServer(user?.id,theme)" (mouseover)="mouseOverTheme(theme)" (mouseout)="mouseOutTheme()">
                 <div class="docs-theme-picker-swatch">
-                    <mat-icon svgIcon="checkbox-marked-circle" class="docs-theme-chosen-icon" *ngIf="themeName === theme.name"></mat-icon>
-                    <div class="docs-theme-picker-primary" [style.background]="theme.color"></div>
+                    <mat-icon svgIcon="checkbox-marked-circle" class="docs-theme-chosen-icon" *ngIf="themeName === theme.name" [style.color]="theme.accentColor"></mat-icon>
+                    <div class="docs-theme-picker-primary" [style.background]="theme.primaryColor"></div>
                 </div>
             </div>
         </mat-grid-tile>

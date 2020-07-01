@@ -5,12 +5,13 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 
 @Component({
+    selector: 'nx-teacher',
     template: `<router-outlet id="outerOutlet"></router-outlet>`,
     styles: [`
     :host {
         display: block;
         width: 100%;
-        height: 100%;
+        margin-bottom: 64px;
       }
   
     `],

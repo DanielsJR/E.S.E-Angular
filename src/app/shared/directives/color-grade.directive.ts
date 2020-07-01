@@ -37,14 +37,14 @@ export class ColorGradeDirective implements OnInit {
 
     setColor(grade: number, isDark: boolean) {
         if (grade >= 4.0) {
-            this.el.nativeElement.style.color = 'blue';
+            this.el.nativeElement.style.color = '#3f51b5';
             if (isDark) {
-                this.el.nativeElement.style.color = 'skyblue';
+                this.el.nativeElement.style.color = '#448aff';
             }
         } else {
-            this.el.nativeElement.style.color = 'red';
+            this.el.nativeElement.style.color = '#f44336';
             if (isDark) {
-                this.el.nativeElement.style.color = 'tomato';
+                this.el.nativeElement.style.color = '#f44336';
             }
         }
     }

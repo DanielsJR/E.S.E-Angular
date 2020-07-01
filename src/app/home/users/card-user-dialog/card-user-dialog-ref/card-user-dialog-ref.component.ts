@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_TEACHER } from '../../../../app.config';
 
@@ -15,8 +14,7 @@ export class CardUserDialogRefComponent implements OnInit {
   areaRole: string;
   onlyRead: boolean;
 
-  constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer,
+  constructor(public dialogRef: MatDialogRef<CardUserDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.user = data.user;
     this.userLoggedRoles.push(data.areaRole);

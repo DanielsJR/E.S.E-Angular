@@ -1,23 +1,25 @@
 <mat-dialog-content class="dialogContent">
+
   <mat-card class="card">
 
     <mat-card-header>
-      <mat-card-title class="title" >{{user | shortName}}</mat-card-title>
+      <mat-card-title class="title">{{user | shortName}}</mat-card-title>
       <mat-card-subtitle class="subtitle">{{user.roles | rolesToSpanish}}</mat-card-subtitle>
       <span class="spacer-r"></span>
       <img class="imgLogo " src="assets/images/logos/ese-logo2.png">
     </mat-card-header>
 
-    <img mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
+    <img mat-card-image [src]=" 'data:'+user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl' "
       alt="user" class="imageCard">
 
     <mat-card-actions>
       <button type="button" mat-button color="primary" tabindex="1" (click)="detail()">Detalles</button>
-      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-button color="accent"
-        tabindex="2" (click)="edit()">Editar</button>
-      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-button color="warn"
-        tabindex="3" (click)="delete()">Borrar</button>
+      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-button
+        color="accent" tabindex="2" (click)="edit()">Editar</button>
+      <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button" mat-button
+        color="warn" tabindex="3" (click)="delete()">Borrar</button>
     </mat-card-actions>
 
   </mat-card>
+
 </mat-dialog-content>

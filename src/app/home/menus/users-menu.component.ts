@@ -26,7 +26,7 @@ export class UsersMenuComponent implements OnInit {
   roleAdmin = ROLE_ADMIN;
   roleManager = ROLE_MANAGER;
   trigger = true;
-  activeColor = 'primary';
+  //activeColor = 'accent';
 
 
 

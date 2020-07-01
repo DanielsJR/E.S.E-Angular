@@ -1,12 +1,9 @@
 <div class="container">
 
-    <!-- *animIf="enableToolbar; info: { startAnim: 'fadeIn', endAnim: 'fadeOut', time: 1000 }"-->
     <mat-toolbar color="accent" class="toolbarSubjectMenu">
-
         <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route" routerLinkActive="active">{{m.name}}
         </button>
         <span class="spacer-r"></span>
-
     </mat-toolbar>
 
     <div class="routerWrapper" [@subjectRouteAnimations]="getState(o)">

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ImageZoomUserDialogRefComponent } from './image-zoom-user-dialog-ref/image-zoom-user-dialog-ref.component';
 import { ImageZoomUserDialogComponent } from './image-zoom-user-dialog.component';
 import { MaterialModule } from '../../material.module';
+import { PipeModule } from '../../pipes/pipe.module';
 
 
 
@@ -10,6 +11,7 @@ import { MaterialModule } from '../../material.module';
     imports: [
         CommonModule,
         MaterialModule,
+        PipeModule,
     ],
 
     declarations: [
@@ -23,7 +25,7 @@ import { MaterialModule } from '../../material.module';
 
     exports: [
         ImageZoomUserDialogComponent,
-        //ImageZoomUserDialogRefComponent,
+
     ]
 })
 export class ImageZoomUserDialogModule { }

@@ -19,7 +19,7 @@
 
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <div *ngIf="!isLoading" class="divToobar backgroundColorCard"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar" color="none">
@@ -43,7 +43,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data)"
+                [src]=" 'data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data | safe: 'resourceUrl' "
                 alt="{{grade?.student?.username}}"
                 (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <h3 matLine *ngIf="grade"> {{grade?.student | shortNameLastname}} </h3>

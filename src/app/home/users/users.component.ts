@@ -36,7 +36,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<User>();
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -59,8 +58,6 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
-
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
     if (this.uriRole === URI_MANAGERS) {
       this.userRole = ROLE_MANAGER_SPANISH;

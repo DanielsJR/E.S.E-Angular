@@ -21,9 +21,7 @@
 
     </mat-toolbar>
 
-
-    <mat-divider></mat-divider>
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="backgroundColorCard divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
@@ -77,7 +75,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" @rowAnimation>
       </tr>
 
     </table>

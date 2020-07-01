@@ -1,4 +1,5 @@
 <mat-dialog-content class="dialogContent">
+
   <mat-card>
     <mat-card-header>
       <mat-card-title class="title" *ngIf="user">{{user | shortName}}</mat-card-title>
@@ -8,6 +9,7 @@
     </mat-card-header>
 
     <form class="form">
+      
       <mat-form-field class="full-width">
         <input matInput aria-label="User" [matAutocomplete]="auto" [formControl]="stateCtrl">
         <mat-placeholder>
@@ -15,7 +17,7 @@
         </mat-placeholder>
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectedUser($event.option.value)">
           <mat-option *ngFor="let u of filteredUsers$ | async" [value]="u">
-            <img class="option-img" aria-hidden height="25" [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+u?.avatar.type+';base64,' + u?.avatar.data)">
+            <img class="option-img" aria-hidden height="25" [src]=" 'data:'+u?.avatar.type+';base64,' + u?.avatar.data | safe: 'resourceUrl' ">
             <span>{{u | shortNameLastname}}</span>
             <!-- | <small>{{u.roles[0] | lowercase}}</small>-->
           </mat-option>
@@ -23,7 +25,7 @@
       </mat-form-field>
 
 
-      <img *ngIf="user" mat-card-image [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+      <img *ngIf="user" mat-card-image [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl' "
         alt="user" class="imageCard">
 
     </form>

@@ -4,10 +4,6 @@ mat-dialog-content {
     max-height: 100%;
 }
 
-mat-card{
-    --padding: 24px 24px 15px;
-}
-
 .imgLogo {
     height: 40px;
 }
@@ -48,8 +44,6 @@ mat-form-field {
 }
 
 mat-card-actions {
-    --padding: 15px 0 0 !important;
-    --margin: 0;
     display: flex;
     justify-content: space-between;
 

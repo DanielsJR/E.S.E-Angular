@@ -1,19 +1,23 @@
-@import './assets/custom-themes/highlightjs/material-light';
-@import './assets/custom-themes/highlightjs/material-dark';
 @import './assets/custom-themes/theme-color-grabber';
 
+// light theme.
 $primary: mat-palette($mat-indigo);
 $accent: mat-palette($mat-pink, A200, A100, A400);
-// Define the light theme.
-$theme: mat-light-theme($primary, $accent);
+$warn: mat-palette($mat-red);
+$theme: mat-light-theme($primary, $accent, $warn);
+
 .indigo-pink {
     @include angular-material-theme($theme);
     @include theme-color-grabber($theme);
- }
+}
 
-// Define the dark theme.
-$theme: mat-dark-theme($primary, $accent);
+
+// dark theme.
+$primary-dark: mat-palette($mat-indigo, A400, A200, A700);
+$accent-dark: mat-palette($mat-pink, A200, A100, A400);
+$theme-dark: mat-dark-theme($primary-dark, $accent-dark);
+
 .indigo-pink-dark {
-    @include angular-material-theme($theme);
-    @include theme-color-grabber($theme);
+    @include angular-material-theme($theme-dark);
+    @include theme-color-grabber($theme-dark);
 }

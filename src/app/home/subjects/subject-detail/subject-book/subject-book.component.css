@@ -14,8 +14,17 @@ mat-card {
     padding: 0;
     min-width: 500px;
     overflow: hidden;
+    background: unset !important;
 }
 
+mat-divider {
+    position: relative;
+}
+
+.divToobar {
+    height: 5px;
+    width: inherit;
+}
 
 mat-toolbar-row {
     padding: 0;
@@ -35,6 +44,10 @@ mat-form-field {
 .toolbar2,
 .toolbar2 h3 {
     font: unset !important;
+}
+
+.toolbar2 ::ng-deep .mat-list-item-content {
+    padding: 0 !important;
 }
 
 table {
@@ -58,48 +71,25 @@ td.mat-cell:last-of-type {
     text-align: end;
 }
 
-.fila:hover {
-    cursor: pointer;
-    background: #f5f5f5;
-}
-
-.fila:active {
-    background: #eaeaea;
-}
-
-.fila-dark:hover {
-    cursor: pointer;
-    background: #353535;
-}
-
-.fila-dark:active {
-    background: #292929;
-}
-
-mat-list {
+td.mat-cell mat-list {
     padding: 0;
 }
 
-mat-list-item {
+td.mat-cell mat-list-item {
     height: 55px !important;
 }
 
-:host /deep/ .toolbar2 .mat-list-item-content {
+td.mat-cell mat-list mat-list-item ::ng-deep .mat-list-item-content {
     padding: 0 !important;
 }
 
-.mat-list-avatar {
+tr.mat-row .mat-list-avatar {
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
-    cursor: pointer;
 }
 
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
-
-.mat-list-avatar:hover {
+tr.mat-row .mat-list-avatar:hover {
     opacity: 0.3;
 }
 

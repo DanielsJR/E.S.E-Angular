@@ -5,12 +5,13 @@ import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 
 @Component({
+    selector: 'nx-manager',
     template: `<router-outlet></router-outlet>`,
     styles: [`
     :host {
         display: block;
         width: 100%;
-        height: 100%;
+        margin-bottom: 64px;
       }
     `],
 })

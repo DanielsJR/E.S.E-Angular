@@ -2,8 +2,8 @@
     *ngIf="!shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
     <mat-list-item (click)="trigger = !trigger">
-        <mat-icon matListIcon svgIcon="account-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
-        <h3 matLine [class.primaryColor]="rla.isActive">Usuarios</h3>
+        <mat-icon matListIcon svgIcon="account-multiple" [class.accentColor]="rla.isActive"></mat-icon>
+        <h3 matLine [class.accentColor]="rla.isActive">Usuarios</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
     </mat-list-item>
 
@@ -11,30 +11,27 @@
 
         <mat-list-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/managers']" routerLinkActive
             #rlaManagers="routerLinkActive">
-            <mat-icon matListIcon svgIcon="account-multiple-outline"
-                [color]=" rlaManagers.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaManagers.isActive">Administradores</h3>
+            <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaManagers.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaManagers.isActive">Administradores</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/teachers']" routerLinkActive
             #rlaATeachers="routerLinkActive">
-            <mat-icon matListIcon svgIcon="account-multiple-outline"
-                [color]=" rlaATeachers.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaATeachers.isActive">Docentes</h3>
+            <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaATeachers.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaATeachers.isActive">Docentes</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/teachers']" routerLinkActive
             #rlaMTeachers="routerLinkActive">
-            <mat-icon matListIcon svgIcon="account-multiple-outline"
-                [color]=" rlaMTeachers.isActive ? activeColor : '' "></mat-icon>
-            <h3 matLine [class.primaryColor]="rlaMTeachers.isActive">Docentes</h3>
+            <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaMTeachers.isActive"></mat-icon>
+            <h3 matLine [class.accentColor]="rlaMTeachers.isActive">Docentes</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/students']" routerLinkActive
             #rlaStudents="routerLinkActive">
-            <mat-icon matListIcon svgIcon="account-group-outline" [color]=" rlaStudents.isActive ? activeColor : '' ">
+            <mat-icon matListIcon svgIcon="account-group-outline" [class.accentColor]="rlaStudents.isActive">
             </mat-icon>
-            <h3 matLine [class.primaryColor]="rlaStudents.isActive">Estudiantes</h3>
+            <h3 matLine [class.accentColor]="rlaStudents.isActive">Estudiantes</h3>
         </mat-list-item>
 
     </div>
@@ -46,8 +43,8 @@
     *ngIf="shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
     <mat-list-item [matMenuTriggerFor]="menuUsers">
-        <mat-icon matListIcon svgIcon="account-multiple" [color]=" rla.isActive ? activeColor : '' "></mat-icon>
-        <h3 matLine [class.primaryColor]="rla.isActive">Usuarios</h3>
+        <mat-icon matListIcon svgIcon="account-multiple" [class.accentColor]="rla.isActive"></mat-icon>
+        <h3 matLine [class.accentColor]="rla.isActive">Usuarios</h3>
         <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
     </mat-list-item>
 
@@ -55,29 +52,29 @@
 
         <button mat-menu-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/managers']" routerLinkActive
             #rlaManagers="routerLinkActive">
-            <mat-icon svgIcon="account-multiple-outline" [color]=" rlaManagers.isActive ? activeColor : '' "></mat-icon>
-            <span [class.primaryColor]="rlaManagers.isActive">Administradores</span>
+            <mat-icon svgIcon="account-multiple-outline" [class.accentColor]="rlaManagers.isActive"></mat-icon>
+            <span [class.accentColor]="rlaManagers.isActive">Administradores</span>
         </button>
 
         <button mat-menu-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/teachers']" routerLinkActive
             #rlaATeachers="routerLinkActive">
-            <mat-icon svgIcon="account-multiple-outline" [color]=" rlaATeachers.isActive ? activeColor : '' ">
+            <mat-icon svgIcon="account-multiple-outline" [class.accentColor]="rlaATeachers.isActive">
             </mat-icon>
-            <span [class.primaryColor]="rlaATeachers.isActive">Docentes</span>
+            <span [class.accentColor]="rlaATeachers.isActive">Docentes</span>
         </button>
 
         <button mat-menu-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/teachers']"
             routerLinkActive #rlaMTeachers="routerLinkActive">
-            <mat-icon svgIcon="account-multiple-outline" [color]=" rlaMTeachers.isActive ? activeColor : '' ">
+            <mat-icon svgIcon="account-multiple-outline" [class.accentColor]="rlaMTeachers.isActive">
             </mat-icon>
-            <span [class.primaryColor]="rlaMTeachers.isActive">Docentes</span>
+            <span [class.accentColor]="rlaMTeachers.isActive">Docentes</span>
         </button>
 
         <button mat-menu-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/students']"
             routerLinkActive #rlaStudents="routerLinkActive">
-            <mat-icon svgIcon="account-group-outline" [color]=" rlaStudents.isActive ? activeColor : '' ">
+            <mat-icon svgIcon="account-group-outline" [class.accentColor]="rlaStudents.isActive">
             </mat-icon>
-            <span [class.primaryColor]="rlaStudents.isActive">Estudiantes</span>
+            <span [class.accentColor]="rlaStudents.isActive">Estudiantes</span>
         </button>
 
     </mat-menu>

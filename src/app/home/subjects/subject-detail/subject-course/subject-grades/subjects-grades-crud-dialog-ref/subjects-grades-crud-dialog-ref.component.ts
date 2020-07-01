@@ -5,7 +5,6 @@ import { Grade } from '../../../../../../models/grade';
 import { Course } from '../../../../../../models/course';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Avatar } from '../../../../../../models/avatar';
-import { DomSanitizer } from '@angular/platform-browser';
 import { GradeStoreService } from '../../../../../../services/grade-store.service';
 import * as moment from 'moment';
 import { finalize } from 'rxjs/operators';
@@ -50,7 +49,7 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
   isDark: boolean;
 
   constructor(public dialogRef: MatDialogRef<SubjectsGradesCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-    public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService ) {
 
     this.areaRole = this.data.areaRole;

@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
@@ -35,7 +34,7 @@ export class SetRolesDialogRefComponent implements OnInit {
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userStoreService: UserStoreService, private formBuilder: FormBuilder,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService
+    private snackbarService: SnackbarService
   ) {
 
     this.user = Object.assign({},data.user);

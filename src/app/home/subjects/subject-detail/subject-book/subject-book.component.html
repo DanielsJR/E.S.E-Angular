@@ -20,14 +20,14 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
+    <div *ngIf="!isLoading" class="divToobar" [ngClass]="(areaRole !== roleTeacher)? 'backgroundColorAppBar' : 'backgroundColorCard' "></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2" *ngIf="areaRole !== roleTeacher">
       <mat-list>
         <mat-list-item>
           <img matListAvatar *ngIf="(teacher) as t"
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
+            [src]=" 'data:'+t?.avatar.type+';base64,' + t?.avatar.data | safe: 'resourceUrl' "
             alt="{{t?.username}}"
             (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
           <nx-card-user-dialog #cardTeacherDialog [user]="teacher" [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
@@ -53,7 +53,7 @@
       </mat-list>
     </mat-toolbar>
 
-    <mat-divider *ngIf="areaRole !== roleTeacher" style="position: relative;"></mat-divider>
+    <mat-divider *ngIf="areaRole !== roleTeacher"></mat-divider>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
 
@@ -64,7 +64,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
+                [src]=" 'data:'+student?.avatar.type+';base64,' + student?.avatar.data | safe: 'resourceUrl' "
                 alt="{{student?.username}}"
                 (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"
@@ -104,7 +104,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"
         [routerLink]="['../../book-detail', subject.id, { username:row.username } ]"
-        [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
+        @rowAnimation>
 
       </tr>
 
@@ -113,7 +113,7 @@
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
-    <mat-divider style="position: relative;"></mat-divider>
+    <mat-divider></mat-divider>
 
   </mat-card>
 

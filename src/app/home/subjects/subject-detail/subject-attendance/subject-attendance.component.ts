@@ -5,7 +5,6 @@ import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENTS, URI_TEACHERS, R
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { Subscription, EMPTY, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { switchMap, finalize, tap } from 'rxjs/operators';
@@ -56,7 +55,6 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 40;
   pageSizeOptions = [10, 20, 40];
-  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
   btnDisabled = true;
@@ -70,7 +68,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   btnAction: string;
   attendance: Attendance;
 
-  constructor(private route: ActivatedRoute, public sanitizer: DomSanitizer,
+  constructor(private route: ActivatedRoute,
     private subjectStoreService: SubjectStoreService, private attendanceStoreService: AttendanceStoreService,
     private isLoadingService: IsLoadingService, private snackbarService: SnackbarService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService) {
@@ -117,7 +115,6 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
 
     this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
 
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {

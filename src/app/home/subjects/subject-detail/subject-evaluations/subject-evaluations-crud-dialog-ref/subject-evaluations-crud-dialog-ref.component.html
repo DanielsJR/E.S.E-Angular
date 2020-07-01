@@ -1,4 +1,4 @@
-<div *ngIf="data.type === 'create' ">
+<ng-container *ngIf="data.type === 'create' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -8,10 +8,10 @@
     <h1 mat-dialog-title>Agregar Evaluación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <h3 matLine> {{evaluation?.subject?.name}} </h3>
@@ -24,7 +24,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
 
@@ -119,9 +119,10 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'detail' ">
+<ng-container *ngIf="data.type === 'detail' ">
+
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
     <span class="spacer-r"></span>
@@ -130,14 +131,14 @@
     <h1 mat-dialog-title>Detalles de Evaluación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <img matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+evaluation?.subject?.course?.chiefTeacher?.avatar.type+';base64,' + evaluation?.subject?.course?.chiefTeacher?.avatar.data)">
+          [src]=" 'data:'+evaluation?.subject?.course?.chiefTeacher?.avatar.type+';base64,' + evaluation?.subject?.course?.chiefTeacher?.avatar.data | safe: 'resourceUrl' ">
         <h3 matLine> {{evaluation?.subject?.course?.name}} </h3>
         <p matLine>
           <span class="role-style">{{evaluation?.subject?.name}}</span>
@@ -150,7 +151,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-form-field appearance="fill">
       <input matInput [(ngModel)]="evaluation.title" readonly>
@@ -242,9 +243,9 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'edit' ">
+<ng-container *ngIf="data.type === 'edit' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -254,10 +255,10 @@
     <h1 mat-dialog-title>Editar Evaluación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <h3 matLine> {{evaluation?.subject?.name}} </h3>
@@ -269,7 +270,7 @@
   </div>
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
 
@@ -367,9 +368,9 @@
 
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'delete' ">
+<ng-container *ngIf="data.type === 'delete' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -379,10 +380,10 @@
     <h1 mat-dialog-title>Eliminar Evaluación</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainerDelete">
+  <div class="listContainerDelete backgroundColorCard">
     <mat-list>
       <mat-list-item>
         <h3 matLine>{{evaluation?.title}}</h3>
@@ -404,4 +405,4 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>

@@ -19,14 +19,14 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;" class="mat-toolbar"></div>
+    <div *ngIf="!isLoading" class="backgroundColorAppBar divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
       <mat-list>
         <mat-list-item>
           <img matListAvatar *ngIf="(student) as s"
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+s?.avatar.type+';base64,' + s?.avatar.data)"
+            [src]=" 'data:'+s?.avatar.type+';base64,' + s?.avatar.data | safe: 'resourceUrl' "
             alt="{{s?.username}}"
             (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
           <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
@@ -89,7 +89,7 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' ">
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
       </mat-row>
 
     </mat-table>

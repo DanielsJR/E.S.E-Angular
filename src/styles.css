@@ -44,6 +44,7 @@ body {
 .dialogService .mat-dialog-container {
     padding: 0 !important;
     overflow: hidden !important;
+    background: unset !important;
 }
 
 /*MATERIAL dialog*/
@@ -59,9 +60,7 @@ body {
 /*MATERIAL snackBar*/
 
 /*MATERIAL table.... mat-list in tables*/
-td.mat-cell mat-list mat-list-item .mat-list-item-content {
-    padding: 0 !important;
-}
+
 
 /*MATERIAL snackBar*/
 
@@ -81,6 +80,9 @@ a.mat-menu-item>mat-icon {
 
 /*MAT icons*/
 
+/*MAT CARD*/
+
+/*MAT divider*/
 
 
 /*scrollbar 

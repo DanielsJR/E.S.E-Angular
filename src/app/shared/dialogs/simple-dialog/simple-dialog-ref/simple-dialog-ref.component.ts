@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ACTION1, RESULT_ACTION3, RESULT_ACTION2 } from '../../../../app.config';
 import { Avatar } from '../../../../models/avatar';
 
@@ -27,8 +26,7 @@ export class SimpleDialogRefComponent implements OnInit {
   guiTypeClassic: string = 'classic';
   guiTypeCard: string = 'card';
 
-  constructor(public dialogRef: MatDialogRef<SimpleDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer) {
+  constructor(public dialogRef: MatDialogRef<SimpleDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,) {
 
     console.log('***SimpleDialog*** type: ' + data.type);
 

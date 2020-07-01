@@ -1,34 +1,151 @@
 @import '~@angular/material/theming';
+
 // Define a custom mixin that takes in the current theme
 @mixin theme-color-grabber($theme) {
     // Parse the theme and create variables for each color in the pallete
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
+    //$foreground: map-get($theme, foreground); not used here yet
     $background: map-get($theme, background); // Create theme specfic styles
+
+    //primary colors
     .primaryColorBG {
-        background-color: mat-color($primary);
-        color: mat-contrast($primary, 500); // color: mat-color($foreground, text);
+        background-color: mat-color($primary, default) !important;
+        color: mat-color($primary, default-contrast) !important; // color: mat-color($foreground, text);
     }
-    .accentColorBG {
-        background-color: mat-color($accent);
-        color: mat-contrast($accent, 500);
+
+    .primaryLighterColorBG {
+        background-color: mat-color($primary, lighter) !important;
+        color: mat-color($primary, lighter-contrast) !important;
     }
-    .warnColorBG {
-        background-color: mat-color($warn);
-        color: mat-contrast($warn, 500);
+
+    .primaryDarkerColorBG {
+        background-color: mat-color($primary, darker) !important;
+        color: mat-color($primary, darker-contrast) !important;
     }
+
+    .primaryAccentColorBG {
+        background-color: mat-color($primary, A200) !important;
+        color: mat-color($primary, A200-contrast) !important;
+    }
+
+    .primaryAccentLighterColorBG {
+        background-color: mat-color($primary, A100) !important;
+        color: mat-color($primary, A100-contrast) !important;
+    }
+
+    .primaryAccentDarkerColorBG {
+        background-color: mat-color($primary, A400) !important;
+        color: mat-color($primary, A400-contrast) !important;
+    }
+
     .primaryColor {
-        color: mat-color($primary);
+        color: mat-color($primary, default) !important;
     }
+
+    .primaryAccentColor {
+        color: mat-color($primary, A200) !important;
+    }
+
+    .primaryLighterColor {
+        color: mat-color($primary, lighter) !important;
+    }
+
+    .primaryDarkerColor {
+        color: mat-color($primary, darker) !important;
+    }
+
+    //accent colors
+    .accentColorBG {
+        background-color: mat-color($accent, default) !important;
+        color: mat-color($accent, default-contrast) !important;
+    }
+
+    .accentLighterColorBG {
+        background-color: mat-color($accent, lighter) !important;
+        color: mat-color($accent, lighter-contrast) !important;
+    }
+
+    .accentDarkerColorBG {
+        background-color: mat-color($accent, darker) !important;
+        color: mat-color($accent, darker-contrast) !important;
+    }
+
     .accentColor {
-        color: mat-color($accent);
+        color: mat-color($accent, default) !important;
     }
+
+    .accentLighterColor {
+        color: mat-color($accent, lighter) !important;
+    }
+
+    .accentDarkerColor {
+        color: mat-color($accent, darker) !important;
+    }
+
+    //warn colors
+    .warnColorBG {
+        background-color: mat-color($warn, default) !important;
+        color: mat-color($warn, default-contrast) !important;
+    }
+
+    .warnLighterColorBG {
+        background-color: mat-color($warn, lighter) !important;
+        color: mat-color($warn, lighter-contrast) !important;
+    }
+
+    .warnDarkerColorBG {
+        background-color: mat-color($warn, darker) !important;
+        color: mat-color($warn, darker-contrast) !important;
+    }
+
     .warnColor {
-        color: mat-color($warn);
+        color: mat-color($warn, default) !important;
+    }
+
+    .warnAccentColor {
+        color: mat-color($warn, A200) !important;
+    }
+
+    .warnLighterColor {
+        color: mat-color($warn, lighter) !important;
+    }
+
+    .warnDarkerColor {
+        color: mat-color($warn, darker) !important;
+    }
+
+
+    //app
+
+    .backgroundColor{
+        background: mat-color($background, background) !important;
+    }
+
+    .backgroundColorCard{
+        background: mat-color($background, card) !important;
+    }
+
+    .backgroundColorAppBar {
+        background: mat-color($background, app-bar) !important;
+    }
+
+
+    //mat table custom
+    .mat-row:hover {
+        cursor: pointer;
+        background: mat-color($background, hover) !important;
+    }
+
+    .mat-row:active {
+        background: mat-color($background, selected-row) !important;
+    }
+
+    //mat divider
+    mat-divider {
+        background: mat-color($background, card) !important;
     }
 
 
 }
-

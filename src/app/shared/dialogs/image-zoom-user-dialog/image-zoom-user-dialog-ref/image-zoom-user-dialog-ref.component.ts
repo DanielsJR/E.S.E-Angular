@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Avatar } from '../../../../models/avatar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -12,8 +11,7 @@ export class ImageZoomUserDialogRefComponent implements OnInit {
   avatar: Avatar;
 
   constructor(public dialogRef: MatDialogRef<ImageZoomUserDialogRefComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer
-  ) {
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     this.avatar = data.avatar;
   }
 

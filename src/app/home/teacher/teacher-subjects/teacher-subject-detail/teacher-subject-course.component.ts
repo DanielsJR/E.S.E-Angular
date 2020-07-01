@@ -8,6 +8,7 @@ import { ROLE_TEACHER } from '../../../../app.config';
     :host  {
     display: block;
     width: 100%;
+    margin-bottom: 64px;
   }
   `]
 })

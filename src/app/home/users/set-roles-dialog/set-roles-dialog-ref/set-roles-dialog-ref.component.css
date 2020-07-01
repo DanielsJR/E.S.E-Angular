@@ -11,6 +11,11 @@ mat-dialog-content {
     justify-content: space-around;
 }
 
+.divLoading {
+    height: 5px;
+    width: inherit;
+}
+
 mat-form-field {
     width: 100%;
 }

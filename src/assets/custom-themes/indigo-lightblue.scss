@@ -1,0 +1,23 @@
+@import './assets/custom-themes/theme-color-grabber';
+
+// Define a light theme.
+$primary: mat-palette($mat-indigo, 600, 200, 800);
+$accent: mat-palette($mat-light-blue);
+$warn: mat-palette($mat-pink, 600);
+$theme: mat-light-theme($primary, $accent, $warn);
+
+.indigo-lightblue {
+  @include angular-material-theme($theme);
+  @include theme-color-grabber($theme);
+}
+
+// Define a dark theme.
+$primary-dark: mat-palette($mat-indigo, A700);
+$accent-dark: mat-palette($mat-light-blue);
+$warn-dark: mat-palette($mat-pink);
+$theme-dark: mat-dark-theme($primary-dark, $accent-dark, $warn-dark);
+
+.indigo-lightblue-dark {
+  @include angular-material-theme($theme-dark);
+  @include theme-color-grabber($theme-dark);
+}

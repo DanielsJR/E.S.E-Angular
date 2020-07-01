@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
 .container {
     display: flex;
     flex-flow: row wrap;
@@ -27,42 +32,6 @@
     overflow: auto;
 }
 
-
-.mat-list-avatar {
-    opacity: 1;
-    transition: .5s ease;
-    backface-visibility: hidden;
-    cursor: pointer;
-}
-
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
-
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
-
-mat-list {
-    padding: 0;
-    flex-grow: 0 !important;
-}
-
-mat-list-item {
-    height: 60px !important;
-}
-
-mat-list-item h3 {
-    line-height: 17px !important;
-}
-
-mat-list-item p {
-    line-height: 20px !important;
-}
-
-.role-style {
-    color: darkgray;
-}
 
 .active {
     background: hsla(0, 0%, 0%, 0.1) !important;

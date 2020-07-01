@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { IsLoadingService } from '../../../../services/isLoadingService.service';
@@ -38,7 +37,7 @@ export class TeacherQuizesCreateComponent implements OnInit, OnDestroy {
 
 
   constructor(private quizBackendService: QuizBackendService, private router: Router,
-    private route: ActivatedRoute, public sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,) {
 

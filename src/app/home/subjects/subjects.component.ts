@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectsCrudDialogRefComponent } from './subjects-crud-dialog-ref/subjects-crud-dialog-ref.component';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../models/subject';
 import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_CREATE_SUCCEED, CRUD_TYPE_EDIT, SUBJECT_UPDATE_ERROR, SUBJECT_UPDATE_SUCCEED, SUBJECT_DELETE_SUCCEED, SUBJECT_DELETE_ERROR, CANCEL_MESSAGE, RESULT_WARN, CRUD_TYPE_DELETE, ROLE_STUDENT } from '../../app.config';
@@ -44,7 +43,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark: boolean = false;
   isLoading: boolean = false;
 
   isBtnAddDisabled: boolean = true;
@@ -65,16 +63,13 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private sessionStorage: SessionStorageService,
     private subjectStoreService: SubjectStoreService, private courseStoreService: CourseStoreService,
     private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
-    public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    public dialog: MatDialog, private snackbarService: SnackbarService,
     private cdRef: ChangeDetectorRef,
 
   ) { }
 
   ngOnInit() {
     this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(value => this.isLoading = value));
-
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
-
     this.currentUrl = this.router.url;
 
   }

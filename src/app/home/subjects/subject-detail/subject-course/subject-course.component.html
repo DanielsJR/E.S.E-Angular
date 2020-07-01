@@ -20,14 +20,14 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" class="divToobar" [class.mat-toolbar]="areaRole !== roleTeacher"></div>
+    <div *ngIf="!isLoading" class="divToobar" [ngClass]="(areaRole !== roleTeacher) ? 'backgroundColorAppBar' : 'backgroundColorCard' "></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2" *ngIf="areaRole !== roleTeacher">
       <mat-list>
         <mat-list-item>
           <img matListAvatar *ngIf="(teacher) as t"
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)"
+            [src]=" 'data:'+t?.avatar.type+';base64,' + t?.avatar.data | safe: 'resourceUrl' "
             alt="{{t?.username}}"
             (click)="openUserCardCrud(cardTeacherDialog.openDialogCardUser()); $event.stopPropagation()">
           <nx-card-user-dialog #cardTeacherDialog [user]="teacher" [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
@@ -64,7 +64,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ studentGrade?.student?.avatar.type+';base64,' + studentGrade?.student?.avatar.data)"
+                [src]=" 'data:'+ studentGrade?.student?.avatar.type+';base64,' + studentGrade?.student?.avatar.data | safe: 'resourceUrl' "
                 alt="{{studentGrade?.student?.username}}"
                 (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <nx-card-user-dialog #cardStudentDialog [user]="studentGrade?.student" [areaRole]="areaRole"
@@ -118,7 +118,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
       <!--[routerLink]="['../../grades', subject.id, { username:row.student.username } ]"-->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
         @rowAnimation>
 
       </tr>
@@ -129,7 +129,5 @@
     </mat-paginator>
 
   </mat-card>
-
-  <button color="primary" mat-raised-button [routerLink]="['/welcome']">WELCOME</button>
 
 </div>

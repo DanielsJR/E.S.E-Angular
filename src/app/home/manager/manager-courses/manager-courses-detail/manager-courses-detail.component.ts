@@ -7,7 +7,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { DomSanitizer } from '@angular/platform-browser';
 import { User } from '../../../../models/user';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { SnackbarService } from '../../../../services/snackbar.service';
@@ -53,7 +52,6 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark;
   rowClasses: {};
   isLoading: boolean = false;
 
@@ -61,7 +59,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
   constructor(
     private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer,
+    private sessionStorage: SessionStorageService,
     private snackbarService: SnackbarService, public dialog: MatDialog
   ) { }
 
@@ -88,9 +86,6 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
       }));
 
       this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => this.isLoading = isLoading));
-
-      this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(data => this.isDark = data));
-
   }
 
   ngAfterViewInit() {

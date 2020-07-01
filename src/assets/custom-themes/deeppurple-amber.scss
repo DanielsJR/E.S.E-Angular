@@ -1,21 +1,22 @@
-@import './assets/custom-themes/highlightjs/material-light';
-@import './assets/custom-themes/highlightjs/material-dark';
 @import './assets/custom-themes/theme-color-grabber';
 
+// light theme.
 $primary: mat-palette($mat-deep-purple);
-$accent:  mat-palette($mat-amber, A200, A100, A400);
-
-// Define a light theme.
+$accent: mat-palette($mat-amber, A700);
 $theme: mat-light-theme($primary, $accent);
-.deeppurple-amber{
+
+.deeppurple-amber {
   @include angular-material-theme($theme);
   @include theme-color-grabber($theme);
 }
 
-// Define a dark theme.
-$theme: mat-dark-theme($primary, $accent);
-.deeppurple-amber-dark{
-  @include angular-material-theme($theme);
-  @include theme-color-grabber($theme);
-}
 
+// dark theme.
+$primary-dark: mat-palette($mat-deep-purple, A200, A100, A400);
+$accent-dark: mat-palette($mat-amber, A700);
+$theme-dark: mat-dark-theme($primary-dark, $accent-dark);
+
+.deeppurple-amber-dark {
+  @include angular-material-theme($theme-dark);
+  @include theme-color-grabber($theme-dark);
+}

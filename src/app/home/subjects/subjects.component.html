@@ -47,7 +47,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
+                [src]=" 'data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data | safe: 'resourceUrl'"
                 alt="{{subject?.teacher?.username}}">
               <h3 matLine>{{subject?.name}} </h3>
               <p matLine>
@@ -100,7 +100,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+      <tr mat-row *matRowDef="let subject; columns: displayedColumns;"
         [routerLink]="['./detail/course', subject.id ]" @rowAnimation (mousedown)="subjectId= subject.id">
         <!-- (click)="routerInAnim.animate()"-->
 

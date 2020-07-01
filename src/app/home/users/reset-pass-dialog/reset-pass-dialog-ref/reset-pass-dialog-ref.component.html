@@ -6,10 +6,10 @@
   <h1 mat-dialog-title>Restablecer Contraseña</h1>
 </mat-toolbar>
 
-<div *ngIf="!isLoading" style="height: 5px;"></div>
+<div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-<mat-dialog-content>
+<mat-dialog-content class="backgroundColorCard">
   <mat-form-field appearance="outline">
     <input matInput [value]="this.resetedPass()" readonly>
     <mat-label>
@@ -20,6 +20,7 @@
 </mat-dialog-content>
 
 <mat-divider></mat-divider>
+
 <mat-dialog-actions>
   <mat-toolbar>
     <button type="button" mat-raised-button color="primary" tabindex="1" (click)="cancel()" cdkFocusRegionstart>

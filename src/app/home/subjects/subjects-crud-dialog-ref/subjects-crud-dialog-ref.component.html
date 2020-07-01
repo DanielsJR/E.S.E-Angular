@@ -1,5 +1,4 @@
-<div *ngIf="data.type === 'create' ">
-
+<ng-container *ngIf="data.type === 'create' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -9,16 +8,16 @@
     <h1 mat-dialog-title>Agregar Asignatura</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <img *ngIf="!teacher" matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ avatar?.type+';base64,' + avatar?.data)"
+          [src]=" 'data:'+ avatar?.type+';base64,' + avatar?.data | safe: 'resourceUrl' "
           alt="Profesor">
         <img *ngIf="teacher" matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data)"
+          [src]=" 'data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data | safe: 'resourceUrl' "
           alt="Profesor" (click)="imageZoom.openDialogImage()">
         <nx-image-zoom-user #imageZoom [avatar]="teacher?.avatar"></nx-image-zoom-user>
         <h3 matLine>{{subjectName?.viewValue}}</h3>
@@ -32,7 +31,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
 
@@ -63,7 +62,7 @@
             <mat-select formControlName="teacher" (selectionChange)="selectedUser($event.value)">
               <mat-option *ngFor="let t of teachers$ | async" [value]="t">
                 <img class="example-option-img" aria-hidden height="25"
-                  [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+t?.avatar.type+';base64,' + t?.avatar.data)">
+                  [src]=" 'data:'+t?.avatar.type+';base64,' + t?.avatar.data | safe: 'resourceUrl' ">
                 <span>{{t | shortNameLastname}}</span>
               </mat-option>
             </mat-select>
@@ -93,10 +92,9 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'edit' ">
-
+<ng-container *ngIf="data.type === 'edit' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -106,14 +104,14 @@
     <h1 mat-dialog-title>Editar Asignatura</h1>
   </mat-toolbar>
 
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainer">
+  <div class="listContainer backgroundColorAppBar">
     <mat-list>
       <mat-list-item>
         <img *ngIf="teacher" matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data)"
+          [src]=" 'data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data | safe: 'resourceUrl' "
           alt="Profesor" (click)="imageZoom.openDialogImage()">
         <nx-image-zoom-user #imageZoom [avatar]="teacher?.avatar"></nx-image-zoom-user>
         <h3 matLine>{{subjectName?.viewValue}}</h3>
@@ -127,7 +125,7 @@
 
   <mat-divider></mat-divider>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="backgroundColorCard">
 
     <mat-horizontal-stepper [linear]="'true'" #stepper>
 
@@ -140,7 +138,7 @@
               [compareWith]="compareTeacherFn">
               <mat-option *ngFor="let t of teachers$ | async" [value]="t">
                 <img class="example-option-img" aria-hidden height="25"
-                  [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ t?.avatar.type +';base64,' + t?.avatar.data)">
+                  [src]=" 'data:'+ t?.avatar.type +';base64,' + t?.avatar.data | safe: 'resourceUrl' ">
                 <span>{{t | shortNameLastname}}</span>
               </mat-option>
             </mat-select>
@@ -169,9 +167,9 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'delete' ">
+<ng-container *ngIf="data.type === 'delete' ">
 
   <mat-toolbar color="primary">
     <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -180,14 +178,15 @@
     <span>&nbsp;&nbsp;</span>
     <h1 mat-dialog-title>Eliminar Asignatura</h1>
   </mat-toolbar>
-  <div *ngIf="!isLoading" style="height: 5px;"></div>
+  
+  <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <div class="listContainerDelete">
+  <div class="listContainerDelete backgroundColorCard">
     <mat-list>
       <mat-list-item>
         <img matListAvatar
-          [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar?.type+';base64,' + subject?.teacher?.avatar?.data)"
+          [src]=" 'data:'+ subject?.teacher?.avatar?.type+';base64,' + subject?.teacher?.avatar?.data | safe: 'resourceUrl' "
           alt="Profesor" (click)="imageZoom.openDialogImage()">
         <nx-image-zoom-user #imageZoom [avatar]="subject.teacher.avatar"></nx-image-zoom-user>
         <h3 matLine>{{subject?.name}} {{subject?.course?.name}}</h3>
@@ -209,4 +208,4 @@
     </mat-toolbar>
   </mat-dialog-actions>
 
-</div>
+</ng-container>

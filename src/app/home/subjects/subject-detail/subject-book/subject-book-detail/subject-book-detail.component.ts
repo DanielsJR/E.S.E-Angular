@@ -8,7 +8,6 @@ import { Grade } from '../../../../../models/grade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../../../../services/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -48,7 +47,6 @@ export class SubjectBookDetailComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   isLoading: boolean = false;
 
   private subscriptions = new Subscription();
@@ -57,7 +55,7 @@ export class SubjectBookDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, public dialog: MatDialog,
     private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer, private snackbarService: SnackbarService) { }
+    private snackbarService: SnackbarService) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Grade[]>();
@@ -82,8 +80,6 @@ export class SubjectBookDetailComponent implements OnInit {
       .subscribe());
 
     this.subscriptions.add(this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => this.isLoading = isLoadding));
-
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
   }
 

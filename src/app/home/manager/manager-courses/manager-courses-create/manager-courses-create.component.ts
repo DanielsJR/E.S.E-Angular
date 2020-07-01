@@ -3,7 +3,6 @@ import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Course } from '../../../../models/course';
 import { User } from '../../../../models/user';
 import { MatSort } from '@angular/material/sort';
@@ -51,21 +50,19 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
 
   private subscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
-    private sessionStorage: SessionStorageService, public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
+    private sessionStorage: SessionStorageService, private formBuilder: FormBuilder,
     private snackbarService: SnackbarService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.buildForm();
     this.course = new Course();
     this.dataSource = new MatTableDataSource();
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {

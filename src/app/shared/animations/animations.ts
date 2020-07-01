@@ -55,6 +55,7 @@ export const routeAnimations = trigger('routeAnimations', [
   transition('home => manager-subjects', useAnimation(rotateCarouselToTop)),
   transition('home => manager-courses', useAnimation(rotateCarouselToTop)),
   transition('home => courses-create', useAnimation(rotateCarouselToTop)),
+  transition('home => courses-name', useAnimation(rotateCarouselToTop)),
   //---
   transition('home => teacher-subjects', useAnimation(rotateCarouselToTop)),
   transition('home => quizes', useAnimation(rotateCarouselToTop)),
@@ -295,11 +296,12 @@ export const routeAnimations = trigger('routeAnimations', [
   subjects-detail => quizes,
   subjects-detail => quizes-detail,
   subjects-detail => quizes-create,
-  subjects-detail => import,
-  subjects-detail => historical`, [
+  subjects-detail => quizes-import,
+  subjects-detail => quizes-historical`, [
     query(':enter, :leave #subjectDetailOutlet ~ *', style(sharedStyles), { optional: true }),
     group([
       query(':enter', [
+        style({ 'z-index': 999 }),
         animate('0.6s 0s ease', moveFromLeftKeyframes),
       ], { optional: true }),
 
@@ -371,7 +373,7 @@ export const onSideNavChange = trigger('onSideNavChange', [
   state('true',
     style({ 'width': '351px' })
   ),
-  transition('* <=> *', animate('250ms ease-in')),
+  transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)'))
 ]);
 
 export const onMainContentChangeLeft = trigger('onMainContentChangeLeft', [
@@ -381,7 +383,7 @@ export const onMainContentChangeLeft = trigger('onMainContentChangeLeft', [
   state('true',
     style({ 'margin-left': '351px' })
   ),
-  transition('* <=> *', animate('250ms ease-in')),
+  transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)')),
 ]);
 
 export const onMainContentChangeRight = trigger('onMainContentChangeRight', [
@@ -391,40 +393,36 @@ export const onMainContentChangeRight = trigger('onMainContentChangeRight', [
   state('true',
     style({ 'margin-right': '351px' })
   ),
-  transition('* <=> *', animate('250ms ease-in')),
+  transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)'))
+]);
+
+export const logoNavChange = trigger('logoNavChange', [
+  state('false',
+    style({ 'margin-left': '0' })
+  ),
+  state('true',
+    style({ 'margin-left': '131px' })
+  ),
+  transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)'))
 ]);
 
 export const animateText = trigger('animateText', [
-  state('hide',
+  state('false',
     style({
       'display': 'none',
-      opacity: 0,
+      'opacity': '0'
     })
   ),
-  state('show',
+  state('true',
     style({
       'display': 'block',
-      opacity: 1,
+      'opacity': '1'
     })
   ),
-  transition('close => open', animate('350ms ease-in')),
-  transition('open => close', animate('200ms ease-out')),
+  transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)'))
+
 ]);
 
-export const onLogoChange = trigger('onLogoChange', [
-  state('close',
-    style({
-      'margin-left': '8px'
-    })
-  ),
-  state('open',
-    style({
-      'margin-left': '155px'
-    })
-  ),
-  transition('close => open', animate('250ms ease-in')),
-  transition('open => close', animate('250ms ease-in')),
-]);
 
 export const fadeAnimation = trigger('fadeAnimation', [
 

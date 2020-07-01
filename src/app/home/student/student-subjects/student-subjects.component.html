@@ -21,7 +21,7 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="backgroundColorCard divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
@@ -33,7 +33,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data)"
+                [src]=" 'data:'+ subject?.teacher?.avatar.type+';base64,' + subject?.teacher?.avatar.data | safe: 'resourceUrl'"
                 alt="{{subject?.teacher?.username}}">
               <h3 matLine>{{subject?.name}} </h3>
               <p matLine>
@@ -58,7 +58,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let subject; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' "
+      <tr mat-row *matRowDef="let subject; columns: displayedColumns;"
         [routerLink]="['./detail/course', subject.id ]" @rowAnimation>
 
       </tr>

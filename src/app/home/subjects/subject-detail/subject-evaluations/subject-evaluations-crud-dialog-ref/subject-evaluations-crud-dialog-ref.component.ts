@@ -4,7 +4,6 @@ import { finalize, switchMap, take } from 'rxjs/operators';
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, CRUD_TYPE_DETAIL, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT, DD_MM_YYYY, EVALUATION_CREATE_ERROR, RESULT_SUCCEED, EVALUATION_UPDATE_ERROR, CRUD_TYPE_DELETE, EVALUATION_DELETE_ERROR } from '../../../../../app.config';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { EvaluationStoreService } from '../../../../../services/evaluation-store.service';
 import { Evaluation } from '../../../../../models/evaluation';
 import { EVALUATION_TYPES } from '../../../../../models/evaluation-types';
@@ -22,7 +21,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 
 export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestroy {
-
 
   areaRole: string;
   roleManager = ROLE_MANAGER;
@@ -53,7 +51,7 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
 
   constructor(public dialogRef: MatDialogRef<SubjectEvaluationsCrudDialogRefComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private evaluationStoreService: EvaluationStoreService,
     private userLoggedService: UserLoggedService, private quizBackendService: QuizBackendService,) {
 

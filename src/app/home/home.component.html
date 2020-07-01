@@ -4,31 +4,46 @@
 
     <!-- toolbar 1 -->
     <mat-toolbar color="primary" class="mainToolbar">
-        <button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
+
+        <img class="imgLogo" alt="E.S.E"
+            [src]=" 'assets/images/logos/ese-' + (this.sideNavMenuState ? 'logo' : 'logo2')   + '.png'  "
+            [@logoNavChange]="sideNavMenuState">
+
+        <!-- [@logoNavChange]="(sidenavMenu.opened && sideNavMenuState) ? true : false "
+          (click)="sidenavMenu.toggle()"-->
+        <!--<button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
             <mat-icon svgIcon="backburger" [@tdRotate]="!sidenavMenu.opened"></mat-icon>
         </button>
-
-        <img class="imgLogo" alt="E.S.E" src="assets/images/logos/ese-logo.png" [@tdBounce]="sideNavMenuState">
-
 
         <div matTooltip="Favoritos">
             <button type="button" mat-icon-button>
                 <mat-icon svgIcon="star"></mat-icon>
             </button>
-        </div>
+        </div>-->
 
         <!-- <span class="spacer-r"></span>
          <nx-logo [jelloState]=isScrolled></nx-logo>-->
 
         <span class="spacer-r"></span>
 
+
+
+        <!--<button color="accent" type="button" mat-raised-button (click)="style3 = !style3">accent header</button>
+        <button color="accent" type="button" mat-raised-button (click)="style4 = !style4">accent footer</button>-->
+
         <div matTooltip="Notificaciones">
             <button type="button" mat-icon-button>
-                <mat-icon svgIcon="bell"></mat-icon>
+                <mat-icon svgIcon="bell" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+                </mat-icon>
             </button>
         </div>
 
+        
         <nx-full-screen></nx-full-screen>
+
+        <!--<button type="button" mat-icon-button>
+            <mat-icon svgIcon="spray" (click)="fillToolbar = !fillToolbar"></mat-icon>
+        </button>-->
         <nx-theme-picker #themePicker></nx-theme-picker>
 
         <div matTooltip="Chat">
@@ -37,23 +52,23 @@
                 <!--<mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon> -->
             </button>
         </div>
+
     </mat-toolbar>
 
 
-    <mat-sidenav-container [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "
-        class="sidenavContainer">
+    <mat-sidenav-container class="sidenavContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
         <!-- sidenavMenu -->
         <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
             [@onSideNavChange]="sideNavMenuState">
 
-            <!-- sidenav toobar -->
-            <mat-toolbar class="sidenavToolbar">
+            <!-- sidenav header toobar -->
+            <mat-toolbar class="sidenavToolbar" [ngClass]="{'primaryDarkerColorBG': !themePicker.isDark}">
                 <div class="profileMini">
                     <mat-list>
                         <mat-list-item>
                             <img matListAvatar
-                                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                                [src]=" 'data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl'"
                                 alt="{{privilege | lowercase}}" [matMenuTriggerFor]="settings">
                             <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
                             <p matLine>
@@ -65,7 +80,7 @@
 
                     <span class="spacer-r"></span>
 
-                   <!-- <div matTooltip="opciones" *ngIf="sideNavMenuState">
+                    <!-- <div matTooltip="opciones" *ngIf="sideNavMenuState">
                         <button mat-icon-button [matMenuTriggerFor]="settings">
                             <mat-icon svgIcon="dots-vertical"></mat-icon>
                         </button>
@@ -108,7 +123,7 @@
             </mat-nav-list>
 
             <!-- sidenav menu footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter">
+            <mat-toolbar class="sidenavToolbarFooter" [ngClass]="{'primaryDarkerColorBG': !themePicker.isDark}">
                 <span class="spacer-r"></span>
                 <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState">
                     <mat-icon *ngIf="sideNavMenuState" svgIcon="arrow-collapse-horizontal"></mat-icon>
@@ -120,7 +135,8 @@
             <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="drawer">
 
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack  style="margin-left: 12px;">
+                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack
+                        style="margin-left: 12px;">
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
@@ -129,11 +145,10 @@
                     <h1>Perfil</h1>
                 </mat-toolbar>
 
-                <mat-list class="listAvatarContainer"
-                    [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+                <mat-list class="listAvatarContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
                     <mat-list-item>
                         <img matListAvatar
-                            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                            [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
                             alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
                     </mat-list-item>
                     <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
@@ -166,7 +181,7 @@
                         <mat-list style="flex-grow: 8">
                             <mat-list-item>
                                 <img matListAvatar
-                                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar.type+';base64,' + user?.avatar.data)"
+                                    [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
                                     alt="{{privilege | lowercase}}">
                             </mat-list-item>
                         </mat-list>
@@ -189,7 +204,8 @@
 
                 <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavSettings)" #btnSettingsBack  style="margin-left: 12px;">
+                    <button mat-icon-button (click)="closeSideNavAsyc(sidenavSettings)" #btnSettingsBack
+                        style="margin-left: 12px;">
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
@@ -208,8 +224,8 @@
         <mat-sidenav #sidenavChat mode="side" opened="false" class="sidenavChat" [position]=" 'end' "
             [@onSideNavChange]="sideNavChatState">
 
-            <!-- sidenavChat toobar -->
-            <mat-toolbar class="sidenavToolbar" color="accent">
+            <!-- sidenavChat header toobar -->
+            <mat-toolbar class="sidenavToolbar" [ngClass]="{'primaryDarkerColorBG': !themePicker.isDark}">
             </mat-toolbar>
 
             <!-- sidenavChat content -->
@@ -217,7 +233,7 @@
             </mat-nav-list>
 
             <!-- sidenavChat footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter">
+            <mat-toolbar class="sidenavToolbarFooter" [ngClass]="{'primaryDarkerColorBG': !themePicker.isDark}">
                 <button mat-icon-button (click)="sideNavChatState = !sideNavChatState" style="margin-right: 12px;">
                     <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
                     <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
@@ -229,7 +245,7 @@
                     [style.visibility]="!sideNavChatState? 'hidden': 'visible'">
                     <input matInput autocomplete="off" placeholder="Escribe un mensaje">
                     <button matSuffix mat-icon-button color="primary">
-                        <mat-icon svgIcon="send" ></mat-icon>
+                        <mat-icon svgIcon="send"></mat-icon>
                     </button>
                 </mat-form-field>
 
@@ -241,8 +257,9 @@
         <mat-sidenav-content [@onMainContentChangeLeft]="sideNavMenuState"
             [@onMainContentChangeRight]="sideNavChatState">
 
-            <!-- toolbar2 -->
-            <mat-toolbar class="toolbar2" [color]="(toolbarColorAccent) ? 'accent':''"></mat-toolbar>
+            <!-- header toolbar2 -->
+            <mat-toolbar class="toolbar2" [ngClass]="{'primaryDarkerColorBG': !toolbarColorAccent && !themePicker.isDark}">
+            </mat-toolbar><!-- [color]="(toolbarColorAccent) ? 'accent':''"-->
 
             <div class="mainContent">
                 <div class="animWrapper" [@routeAnimations]="animString">
@@ -251,6 +268,19 @@
                     </div>
                 </div>
             </div>
+
+            <!-- footer toolbar -->
+            <mat-toolbar class="toolbarFooter" [ngClass]="{'primaryDarkerColorBG': !themePicker.isDark}">
+                <img style="height:30px; padding:13px" alt="logo" src="assets/images/logos/ese-logo.png">
+                <span style="font-size:12px; padding-top: 10px;">Enseñanza Sistemática Estimulante</span>
+
+                <span class="spacer-r"></span>
+
+                <span style="font-size:11px; padding-top: 10px;">Powered by NivelXtremo &nbsp; </span>
+                <!--<img style="height:37px; padding:13px" alt="logo" src="assets/images/logos/NX.svg">
+                <img src= "assets/images/logos/NX.svg" width="80px" height="80px" class="accentColor">-->
+                <span style="font-size:11px; padding-top: 10px;"> Company &copy; &nbsp; 2017-{{year}}.</span>
+            </mat-toolbar>
 
         </mat-sidenav-content>
 

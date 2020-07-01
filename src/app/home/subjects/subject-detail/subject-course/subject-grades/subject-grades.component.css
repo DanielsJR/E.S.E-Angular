@@ -8,17 +8,13 @@
 }
 
 mat-card {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-content: flex-start;
-
     width: 100%;
     min-width: 500px;
     height: fit-content;
     margin: 20px;
     padding: 0;
     overflow: hidden;
+    background: unset !important;
 }
 
 mat-toolbar-row {
@@ -41,6 +37,10 @@ mat-form-field {
     height: 59px !important;
 }
 
+.toolbar2 ::ng-deep .mat-list-item-content {
+    padding: 0 !important;
+}
+
 .toolbar2,
 .toolbar2 h3 {
     font: unset !important;
@@ -51,6 +51,7 @@ table {
     height: 100%;
     padding: 0 20px;
 }
+
 th.mat-header-cell,
 td.mat-cell {
     padding-left: 20px;
@@ -66,33 +67,15 @@ td.mat-cell:last-of-type {
     text-align: end;
 }
 
-.fila:hover {
-    --cursor: pointer;
-    background: #f5f5f5;
-}
-
-.fila:active {
-    background: #eaeaea;
-}
-
-.fila-dark:hover {
-    background: #353535;
-}
-
-.fila-dark:active {
-    background: #292929;
-}
-
-
-mat-list {
+td.mat-cell mat-list {
     padding: 0;
 }
 
-mat-list-item {
+td.mat-cell mat-list-item {
     height: 55px !important;
 }
 
-:host /deep/ .toolbar2 .mat-list-item-content {
+td.mat-cell mat-list mat-list-item ::ng-deep .mat-list-item-content {
     padding: 0 !important;
 }
 
@@ -100,14 +83,10 @@ mat-list-item {
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
+}
+
+.mat-list-avatar:hover {
     cursor: pointer;
-}
-
-.mat-list-avatar:hover {
-    opacity: 0.3;
-}
-
-.mat-list-avatar:hover {
     opacity: 0.3;
 }
 

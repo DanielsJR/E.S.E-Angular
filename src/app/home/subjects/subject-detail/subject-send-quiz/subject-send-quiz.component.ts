@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ROLE_MANAGER, ROLE_TEACHER, CRUD_TYPE_DETAIL, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT } from '../../../../app.config';
 import { Subject } from '../../../../models/subject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { EvaluationStoreService } from '../../../../services/evaluation-store.service';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
@@ -44,7 +43,6 @@ export class SubjectSendQuizComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isDark: boolean;
   rowClasses: {};
   isLoading: boolean = false;
   btnDisabled = true;
@@ -55,7 +53,7 @@ export class SubjectSendQuizComponent implements OnInit {
   gradeToTeacher: Grade;
   private subscriptions = new Subscription();
 
-  constructor(private route: ActivatedRoute, private router: Router, public sanitizer: DomSanitizer,
+  constructor(private route: ActivatedRoute, private router: Router,
     private evaluationStoreService: EvaluationStoreService, private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService, private snackbarService: SnackbarService,
     private rxStompService: RxStompService, private gradeBackendService: GradeBackendService,) {
@@ -82,9 +80,8 @@ export class SubjectSendQuizComponent implements OnInit {
 
     this.subscriptions.add(this.evaluationStoreService.evaluations$.subscribe(es => this.dataSource.data = es));
 
-    this.subscriptions.add(this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
+    this.subscriptions.add(this.evaluationStoreService.isLoadingGetEvaluations$.subscribe(isLoadding =>  this.isLoading = isLoadding));
 
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
   }
 
   ngAfterViewInit() {

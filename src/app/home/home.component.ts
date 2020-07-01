@@ -1,26 +1,23 @@
 import { Component, OnInit, ViewChild, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
-import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdPulseAnimation } from '@covalent/core/common';
-import { DomSanitizer } from '@angular/platform-browser';
+import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdHeadshakeAnimation } from '@covalent/core/common';
 import { SnackbarService } from '../services/snackbar.service';
-import { Router, ActivatedRoute, NavigationStart, RouterOutlet, NavigationEnd, ActivationEnd, ActivationStart, ChildActivationEnd } from '@angular/router';
+import { Router, ActivatedRoute, ActivationEnd, } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
 
-import { MatSidenav, MatDrawerToggleResult, MatDrawer } from '@angular/material/sidenav';
-import { MatButton } from '@angular/material/button';
-import { MatMenu } from '@angular/material/menu';
+import { MatSidenav, MatDrawer } from '@angular/material/sidenav';
 import { delay } from 'rxjs/internal/operators/delay';
 import { QuizNotificationService } from '../services/quiz-notification.service';
-import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, onLogoChange, routeAnimations, rowAnimation, waitAnimation, } from '../shared/animations/animations';
+import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, routeAnimations, rowAnimation, waitAnimation, logoNavChange, } from '../shared/animations/animations';
 import { Subscription, Observable, of } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
-import { switchMap } from 'rxjs/operators';
+
 
 
 @Component({
@@ -36,9 +33,10 @@ import { switchMap } from 'rxjs/operators';
     onSideNavChange,
     animateText,
 
-    onLogoChange,
     tdBounceAnimation,
+    tdHeadshakeAnimation,
     routeAnimations,
+    logoNavChange,
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -84,13 +82,17 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   animString: String;
   toolbarColorAccent: boolean = false;
 
+  get year() { return new Date().getFullYear(); }
+
+  headshakeState = false;
+  //fillToolbar = false;
+
   constructor(
     private loginService: LoginService,
     private userLoggedService: UserLoggedService,
     private router: Router,
     private route: ActivatedRoute,
     private snackbarService: SnackbarService,
-    public sanitizer: DomSanitizer,
     private isLoadingService: IsLoadingService,
     //private quizNotificationService: QuizNotificationService,
     private cdRef: ChangeDetectorRef,
@@ -135,7 +137,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         setTimeout(() => {
           this.sidenavMenu.open();
           this.sidenavChat.open();
-          this.sideNavMenuState = true;
+          this.sideNavMenuState = false;
           this.sideNavChatState = false;
           this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCEED);
         }, 1000);
@@ -185,6 +187,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   }
 
   closeAllSidenav(): boolean {
+    this.sideNavMenuState = false;
     this.sidenavMenu.close();
     this.sidenavChat.close();
     return (!this.sidenavMenu.opened && !this.sidenavChat.opened);
@@ -194,7 +197,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     return of(this.closeAllSidenav()).pipe(delay(300));
   }
 
-  wasSideNavOpenAsyc:boolean = false;
+  wasSideNavOpenAsyc: boolean = false;
   openSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
     if (!this.sideNavMenuState) {
       this.sideNavMenuState = true;
@@ -214,5 +217,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
       sidenav.toggle();
     }
   }
+
 
 }

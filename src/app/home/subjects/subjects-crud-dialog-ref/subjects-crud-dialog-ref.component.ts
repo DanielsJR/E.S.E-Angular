@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { startWith, map, finalize, filter } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../models/subject';
 import { User } from '../../../models/user';
 import { Course } from '../../../models/course';
@@ -46,7 +45,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
   compareTeacherFn: ((a1: any, a2: any) => boolean) | null = this.compareById;
 
   constructor(public dialogRef: MatDialogRef<SubjectsCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-    public sanitizer: DomSanitizer, private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private userStoreService: UserStoreService, private subjectStoreService: SubjectStoreService,
     private snackbarService: SnackbarService,
   ) {

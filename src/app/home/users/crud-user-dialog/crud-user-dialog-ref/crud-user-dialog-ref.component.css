@@ -1,4 +1,3 @@
-
 mat-dialog-content {
     overflow-x: hidden;
     padding: 10px 30px;
@@ -13,6 +12,12 @@ mat-dialog-content {
     justify-content: space-between;
     align-items: flex-end;
 }
+
+.divLoading {
+    height: 5px;
+    width: inherit;
+}
+
 
 mat-dialog-content mat-form-field {
     width: 45%;
@@ -113,6 +118,6 @@ mat-dialog-actions {
     margin: 0;
 }
 
-.photo{
+.photo {
     cursor: pointer;
 }

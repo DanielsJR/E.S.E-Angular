@@ -6,7 +6,6 @@ import { SessionStorageService } from '../../../services/session-storage.service
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '../../../services/snackbar.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from '../../../models/subject';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -42,7 +41,6 @@ export class StudentSubjectsComponent implements OnInit {
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isDark: boolean;
   isLoading: boolean = false;
 
   isStlDisabled: boolean = true;
@@ -56,7 +54,7 @@ export class StudentSubjectsComponent implements OnInit {
   constructor(private sessionStorage: SessionStorageService,
     private subjectStoreService: SubjectStoreService,
     private route: ActivatedRoute, private router: Router,
-    public dialog: MatDialog, private snackbarService: SnackbarService, public sanitizer: DomSanitizer,
+    public dialog: MatDialog, private snackbarService: SnackbarService,
   ) { }
 
   ngOnInit() {
@@ -70,9 +68,7 @@ export class StudentSubjectsComponent implements OnInit {
       }));
 
 
-    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
-
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
+    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
 
   }
 

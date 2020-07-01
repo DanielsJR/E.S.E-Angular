@@ -1,17 +1,23 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ROLE_TEACHER, ROLE_MANAGER } from '../../app.config';
 import { tdRotateAnimation, tdCollapseAnimation } from '@covalent/core/common';
-import { RouterLinkActive } from '@angular/router';
+import { animateText } from '../../shared/animations/animations';
 
 @Component({
   selector: 'nx-quiz-menu',
   templateUrl: 'quiz-menu.component.html',
   styles: [
-    ' ::ng-deep #collapsebleDiv mat-list-item .mat-list-item-content { padding-left: 30px !important;} #collapsebleDiv mat-list-item h3 {  font-weight:normal !important; }'
+    ` ::ng-deep #collapsebleDiv mat-list-item .mat-list-item-content {
+       padding-left: 30px !important;
+      }
+     #collapsebleDiv mat-list-item h3 {
+         font-weight:normal !important;
+         }`
   ],
   animations: [
     tdRotateAnimation,
     tdCollapseAnimation,
+    animateText,
   ],
 
 })
@@ -24,7 +30,6 @@ export class QuizMenuComponent implements OnInit {
   roleTeacher = ROLE_TEACHER;
   roleManager = ROLE_MANAGER;
   trigger = true;
-  activeColor = 'primary';
   rolePath: string;
   quizLinks = []
 

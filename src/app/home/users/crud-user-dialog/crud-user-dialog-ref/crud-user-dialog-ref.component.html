@@ -1,4 +1,4 @@
-<div *ngIf="data.type === 'detail'">
+<ng-container *ngIf="data.type === 'detail'">
    
     <mat-toolbar color="primary">
         <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
@@ -8,14 +8,14 @@
         <h1 mat-dialog-title>Detalles de {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <div class="listContainer">
+    <div class="listContainer backgroundColorAppBar">
         <mat-list>
             <mat-list-item>
                 <img matListAvatar
-                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                    [src]=" 'data:'+user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl' "
                     alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
                 <h3 matLine> {{user | shortNameLastname}} </h3>
                 <p matLine>
@@ -29,7 +29,7 @@
 
     <mat-divider></mat-divider>
 
-    <mat-dialog-content>
+    <mat-dialog-content class="backgroundColorCard">
         <mat-tab-group dynamicHeight="true">
 
             <mat-tab label="Información Personal">
@@ -138,9 +138,9 @@
                 mat-raised-button color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
         </mat-toolbar>
     </mat-dialog-actions>
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'create'">
+<ng-container *ngIf="data.type === 'create'">
     <form [formGroup]="createForm" (ngSubmit)="create()">
 
         <mat-toolbar color="primary">
@@ -151,13 +151,13 @@
             <h1 mat-dialog-title>Agregar {{usersRoleToSpanish(usersRole)}}</h1>
         </mat-toolbar>
 
-        <div *ngIf="!isLoading" style="height: 5px;"></div>
+        <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
         <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-        <div class="listContainer">
+        <div class="listContainer backgroundColorAppBar">
             <mat-list>
                 <mat-list-item>
                     <img matListAvatar
-                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data)"
+                        [src]=" 'data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data | safe: 'resourceUrl' "
                         alt="{{usersRole}}" (click)="fileInput.inputElement.click()"
                         (keyup.enter)="fileInput.inputElement.click()">
                     <h3 matLine> {{cFirstName.value}} {{ cLastName.value}}</h3>
@@ -170,7 +170,7 @@
 
         <mat-divider></mat-divider>
 
-        <mat-dialog-content>
+        <mat-dialog-content class="backgroundColorCard">
             <mat-tab-group dynamicHeight="true">
                 <mat-tab label="Información Personal">
                     <div class="tab-content">
@@ -339,9 +339,9 @@
             </mat-toolbar>
         </mat-dialog-actions>
     </form>
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'edit'">
+<ng-container *ngIf="data.type === 'edit'">
     <form [formGroup]="editForm" (ngSubmit)="save()">
 
         <mat-toolbar color="primary">
@@ -352,14 +352,14 @@
             <h1 mat-dialog-title>Editar {{usersRoleToSpanish(usersRole)}}</h1>
         </mat-toolbar>
 
-        <div *ngIf="!isLoading" style="height: 5px;"></div>
+        <div *ngIf="!isLoading" class="backgroundColorAppBar divLoading"></div>
         <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-        <div class="listContainer">
+        <div class="listContainer backgroundColorAppBar">
             <mat-list>
                 <mat-list-item>
                     <img matListAvatar
-                        [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data)"
+                        [src]=" 'data:'+eAvatar?.value?.type+';base64,' + eAvatar?.value?.data | safe: 'resourceUrl' "
                         alt="{{usersRole}}" [matMenuTriggerFor]="avatarMenu">
                     <h3 matLine> {{user | shortNameLastname}} </h3>
                     <p matLine>
@@ -389,7 +389,7 @@
 
         <mat-divider></mat-divider>
 
-        <mat-dialog-content>
+        <mat-dialog-content class="backgroundColorCard">
             <mat-tab-group dynamicHeight="true">
 
 
@@ -596,7 +596,6 @@
             </mat-tab-group>
         </mat-dialog-content>
 
-
         <mat-divider></mat-divider>
 
         <mat-dialog-actions>
@@ -612,9 +611,10 @@
         </mat-dialog-actions>
     </form>
 
-</div>
+</ng-container>
 
-<div *ngIf="data.type === 'delete'">
+<ng-container *ngIf="data.type === 'delete'">
+    
     <mat-toolbar color="primary">
         <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
         <span class="spacer-r"></span>
@@ -622,14 +622,14 @@
         <span>&nbsp;&nbsp;</span>
         <h1 mat-dialog-title>Borrar {{usersRoleToSpanish(usersRole)}}</h1>
     </mat-toolbar>
-    <div *ngIf="!isLoading" style="height: 5px;"></div>
+    <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-    <div class="listContainerDelete">
+    <div class="listContainerDelete backgroundColorCard">
         <mat-list>
             <mat-list-item>
                 <img matListAvatar
-                    [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+user?.avatar?.type+';base64,' + user?.avatar?.data)"
+                    [src]=" 'data:'+user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl' "
                     alt="{{usersRole}}" (click)="imageZoom.openDialogImage()">
                 <h3 matLine> {{user | shortNameLastname}}</h3>
                 <p matLine>
@@ -650,4 +650,5 @@
             <button type="button" mat-raised-button color="warn" (click)="delete()" tabindex="2">Borrar</button>
         </mat-toolbar>
     </mat-dialog-actions>
-</div>
+
+</ng-container>

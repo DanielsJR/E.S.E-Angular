@@ -20,7 +20,7 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" class="mat-toolbar divToobar"></div>
+    <div *ngIf="!isLoading" class="backgroundColorAppBar divToobar"></div>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
@@ -37,7 +37,7 @@
 
     </mat-toolbar>
 
-    <mat-divider style="position: relative;"></mat-divider>
+    <mat-divider></mat-divider>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
 
@@ -65,7 +65,7 @@
           <mat-list>
             <mat-list-item>
               <img matListAvatar
-                [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+student?.avatar.type+';base64,' + student?.avatar.data)"
+                [src]=" 'data:'+student?.avatar.type+';base64,' + student?.avatar.data | safe: 'resourceUrl'"
                 alt="{{student?.username}}"
                 (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole"
@@ -98,7 +98,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]=" isDark ? 'fila-dark' : 'fila' " @rowAnimation>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"  @rowAnimation>
       </tr>
 
     </table>
@@ -106,11 +106,11 @@
     <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
     </mat-paginator>
 
-    <mat-divider style="position: relative;"></mat-divider>
+    <mat-divider></mat-divider>
 
     <mat-toolbar>
       <span class="spacer-r"></span>
-      <button *ngIf="btnAction" type="button" mat-stroked-button [color]=" isCreating ? 'primary' : 'accent' "
+      <button *ngIf="btnAction" type="button" mat-raised-button [color]=" isCreating ? 'primary' : 'accent' "
         (click)="updateAttendanceDialog(updateDialog.openSimpleDialog())" cdkFocusRegionstart
         style="margin-right: 5px;">
         <!--<mat-icon svgIcon="content-save"></mat-icon>-->{{btnAction}}
@@ -121,7 +121,7 @@
         [type]=" 'card' ">
       </nx-simple-dialog>
 
-      <button *ngIf="btnAction && !isCreating" type="button" mat-stroked-button [color]=" 'warn' "
+      <button *ngIf="btnAction && !isCreating" type="button" mat-raised-button [color]=" 'warn' "
         (click)="deleteAttendanceDialog(deleteDialog.openSimpleDialog())">
         <!--<mat-icon svgIcon="content-save"></mat-icon>-->Borrar
       </button>

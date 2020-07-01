@@ -10,12 +10,13 @@ import { empty, EMPTY } from 'rxjs/internal/observable/empty';
 
 
 @Component({
+    selector: 'nx-student',
     template: `<router-outlet></router-outlet>`,
     styles: [`
     :host {
         display: block;
         width: 100%;
-        height: 100%;
+        margin-bottom: 64px;
       }
     
     `],

@@ -6,7 +6,6 @@ import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_MANAGERS, URI_TEACHERS, U
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../../../models/subject';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
@@ -62,7 +61,7 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
 
   private subscriptions = new Subscription();
 
-  constructor(private route: ActivatedRoute, public sanitizer: DomSanitizer,
+  constructor(private route: ActivatedRoute,
     private subjectStoreService: SubjectStoreService, private gradeStoreService: GradeStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService) {
 
