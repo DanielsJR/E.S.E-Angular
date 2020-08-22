@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, EventEmitter, OnDestroy, ChangeDetectorRe
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdHeadshakeAnimation } from '@covalent/core/common';
-import { SnackbarService } from '../services/snackbar.service';
+import { SnackbarService } from '../shared/snackbars-ref/snackbar.service';
 import { Router, ActivatedRoute, ActivationEnd, } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';

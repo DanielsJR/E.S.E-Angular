@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_GRADES, URI_TITLE, URI_STUDENT, URI_EVALUATIONS, URI_SUBJECTS } from "../app.config";
+import { API_BACKEND_SERVER, URI_GRADE, URI_TITLE, URI_STUDENT, URI_EVALUATION, URI_SUBJECT } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -16,7 +16,7 @@ export class GradeBackendService {
 
 
 
-    private gradeURL = API_SERVER + URI_GRADES;
+    private gradeURL = API_BACKEND_SERVER + URI_GRADE;
 
     constructor(private httpCli: HttpClient) { }
 
@@ -88,7 +88,7 @@ export class GradeBackendService {
     }
 
     getGradesByEvaluation(id: string): Observable<Grade[]> {
-        const url = `${this.gradeURL}${URI_EVALUATIONS}/${id}`;
+        const url = `${this.gradeURL}${URI_EVALUATION}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Grade[]>(url)
             .pipe(retry(3),
@@ -97,7 +97,7 @@ export class GradeBackendService {
     }
 
     getGradesBySubject(id: string): Observable<Grade[]> {
-        const url = `${this.gradeURL}${URI_SUBJECTS}/${id}`;
+        const url = `${this.gradeURL}${URI_SUBJECT}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Grade[]>(url)
             .pipe(retry(3),

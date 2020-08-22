@@ -1,5 +1,5 @@
 
-import { API_SERVER, URI_ATTENDANCES, URI_SUBJECT } from "../app.config";
+import { API_BACKEND_SERVER, URI_ATTENDANCE, URI_SUBJECT } from "../app.config";
 import { Attendance } from "../models/attendance";
 import { Injectable } from '@angular/core';
 
@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 export class AttendanceBackendService {
 
 
-    private attendanceURL = API_SERVER + URI_ATTENDANCES;
+    private attendanceURL = API_BACKEND_SERVER + URI_ATTENDANCE;
 
     constructor(private httpCli: HttpClient) { }
 

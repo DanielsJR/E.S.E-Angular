@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 // Http testing module and mocking controller
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { API_SERVER, URI_TOKEN_AUTH } from '../../app.config';
+import { API_BACKEND_SERVER, URI_TOKEN_AUTH } from '../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginService } from './login.service';
@@ -10,7 +10,7 @@ import { Token } from '../../models/token';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SessionStorageService } from '../../services/session-storage.service';
 
-const loginUrl = API_SERVER + URI_TOKEN_AUTH;
+const loginUrl = API_BACKEND_SERVER + URI_TOKEN_AUTH;
 
 describe('Login Service', () => {
   let httpTestingController: HttpTestingController;

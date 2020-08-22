@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EvaluationStoreService } from '../../../../services/evaluation-store.service';
 import { SubjectStoreService } from '../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { Evaluation } from '../../../../models/evaluation';
 import { SubjectEvaluationsCrudDialogRefComponent } from '../subject-evaluations/subject-evaluations-crud-dialog-ref/subject-evaluations-crud-dialog-ref.component';

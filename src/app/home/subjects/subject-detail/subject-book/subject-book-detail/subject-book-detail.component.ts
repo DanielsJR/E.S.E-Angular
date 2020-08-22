@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Subject } from '../../../../../models/subject';
-import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENTS, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, CRUD_TYPE_DETAIL, RESULT_ERROR, CRUD_TYPE_EDIT, GRADE_UPDATE_ERROR, RESULT_SUCCEED, GRADE_CREATE_SUCCEED } from '../../../../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENT, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, CRUD_TYPE_DETAIL, RESULT_ERROR, CRUD_TYPE_EDIT, GRADE_UPDATE_ERROR, RESULT_SUCCEED, GRADE_CREATE_SUCCEED } from '../../../../../app.config';
 import { User } from '../../../../../models/user';
 import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,7 @@ import { Grade } from '../../../../../models/grade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { SnackbarService } from '../../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../../shared/snackbars-ref/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { SubjectsGradesCrudDialogRefComponent } from '../../subject-course/subject-grades/subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
@@ -35,7 +35,7 @@ export class SubjectBookDetailComponent implements OnInit {
   studentName: string;
   subjectId: string;
 
-  uriStudents = URI_STUDENTS
+  uriStudents = URI_STUDENT
   @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
   crudUserOnlyRead: boolean = true;
 

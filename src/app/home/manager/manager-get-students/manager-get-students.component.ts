@@ -1,5 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
-import { ROLE_MANAGER, URI_STUDENTS } from '../../../app.config';
+import { ROLE_MANAGER, URI_STUDENT } from '../../../app.config';
 
 @Component({
   selector: 'nx-manager-students',
@@ -14,7 +14,7 @@ import { ROLE_MANAGER, URI_STUDENTS } from '../../../app.config';
 
 export class ManagerGetStudentsComponent implements OnInit {
 
-  uriRole = URI_STUDENTS;
+  uriRole = URI_STUDENT;
   areaRole = ROLE_MANAGER;
 
   constructor() { }

@@ -7,7 +7,7 @@ import { CourseStoreService } from '../../../services/course-store.service';
 import { Course } from '../../../models/course';
 import { finalize, delay } from 'rxjs/operators';
 import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_DELETE_ERROR, COURSE_DELETE_SUCCEED, CANCEL_MESSAGE, RESULT_WARN } from '../../../app.config';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -68,7 +68,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   dialogAction(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
-    this.subscriptions.add(dialogRef.afterClosed()
+    dialogRef.afterClosed()
       .subscribe(result => {
         if (result === RESULT_CANCELED) {
           this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
@@ -78,7 +78,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
           console.log(RESULT_ACTION1);
           this.deleteCourse(dialogRef);
         }
-      }));
+      });
 
   }
 
@@ -86,12 +86,9 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.isLoading = true;
     this.subscriptions.add(this.courseStoreService.delete(dialogRef.componentInstance.obj)
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe((c: Course) => {
-        this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED);
-      }, err => {
-        this.snackbarService.openSnackBar(COURSE_DELETE_ERROR, RESULT_ERROR);
-        console.error(COURSE_DELETE_ERROR + ' ' + err);
-      }));
+      .subscribe(_ => this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED),
+        err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_DELETE_ERROR, RESULT_ERROR)
+      ));
   }
 
 }

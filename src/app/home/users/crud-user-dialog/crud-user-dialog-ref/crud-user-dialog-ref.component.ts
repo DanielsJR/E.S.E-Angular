@@ -2,8 +2,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { User } from '../../../../models/user';
 import {
-    URI_TEACHERS, URI_MANAGERS, URI_STUDENTS, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
-    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, DD_MM_YYYY, RESULT_SUCCEED, USER_DELETE_SUCCEED, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT
+    URI_TEACHER, URI_MANAGER, URI_STUDENT, ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT,
+    ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, DD_MM_YYYY, RESULT_SUCCEED, USER_DELETE_SUCCEED, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT, USER_UPDATE_SUCCEED, USER_CREATE_SUCCEED, USER_UPDATE_ERROR, USER_DELETE_ERROR, USER_CREATE_ERROR
 } from '../../../../app.config';
 import * as moment from 'moment';
 import { COMMUNNES, Commune } from '../../../../models/communes';
@@ -18,10 +18,11 @@ import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 
 import { SetRolesDialogRefComponent } from '../../set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { UserLoggedService } from '../../../../services/user-logged.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Observable, EMPTY } from 'rxjs';
 
 
 @Component({
@@ -59,7 +60,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     ) {
         this.user = Object.assign({}, data.user);
         this.uriRole = data.uriRole;
-        this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 2);
+        this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 1);
         this.userLoggedRoles.push(data.areaRole);
         this.onlyRead = data.onlyRead;//(data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
 
@@ -301,7 +302,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     private createBirthday(): string {
-        return (this.createForm.value.birthday != null) ? moment(this.createForm.value.birthday).format(DD_MM_YYYY) : null;
+        return (this.createForm.value.birthday != null) ? moment(this.cBirthday.value).format(DD_MM_YYYY) : null;
     }
 
     editRolesSubscription(dialogRefSetRoles: MatDialogRef<SetRolesDialogRefComponent>) {
@@ -311,9 +312,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             } else if (result === RESULT_SUCCEED) {
                 this.user = dialogRefSetRoles.componentInstance.user;
                 this.eAvatar.setValue(this.user.avatar);
-                if (this.uriRole === URI_MANAGERS) {
+                if (this.uriRole === URI_MANAGER) {
                     if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRefCrudUser.close();
-                } else if (this.uriRole === URI_TEACHERS) {
+                } else if (this.uriRole === URI_TEACHER) {
                     if (!this.user.roles.includes(ROLE_TEACHER)) this.dialogRefCrudUser.close();
                 } else {
                     console.error('NO uriRole');
@@ -327,7 +328,6 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     }
 
-
     cancel(): void {
         this.dialogRefCrudUser.close(RESULT_CANCELED);
     }
@@ -340,6 +340,19 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         this.dialogRefCrudUser.close(RESULT_DELETE);
     }
 
+    createUser(user: User): Observable<User> {
+        if (this.uriRole === URI_MANAGER) return this.userStoreService.createManager(user)
+
+        else if (this.uriRole === URI_TEACHER) return this.userStoreService.createTeacher(user)
+
+        else if (this.uriRole === URI_STUDENT) return this.userStoreService.createStudent(user)
+
+        else {
+            console.error('NO uriRole');
+            return EMPTY;
+        }
+    }
+
     create(): void {
         this.createForm.value.username = this.createAutoUsername();
         this.createForm.value.password = this.createAutoPassword();
@@ -347,135 +360,74 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
         let userCreate: User = this.createForm.value;
 
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.createManager(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error creating manager: " + err);
-                });
-
-
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.createTeacher(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error creating teacher: " + err);
-                });
-
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.createStudent(userCreate)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error creating student: " + err);
-                });
-
-        } else {
-            console.error('NO uriRole');
-        }
-
+        this.isLoading = true;
+        this.createUser(userCreate)
+            .pipe(finalize(() => this.isLoading = false))
+            .subscribe(_ => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar(USER_CREATE_SUCCEED, RESULT_SUCCEED);
+            }, err => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : USER_CREATE_ERROR, RESULT_ERROR);
+            });
     }
 
-    save(): void {
+    updateUser(user: User): Observable<User> {
+        if (this.uriRole === URI_MANAGER) return this.userStoreService.updateManager(user)
+
+        else if (this.uriRole === URI_TEACHER) return this.userStoreService.updateTeacher(user)
+
+        else if (this.uriRole === URI_STUDENT) return this.userStoreService.updateStudent(user)
+
+        else {
+            console.error('NO uriRole');
+            return EMPTY;
+        }
+    }
+
+    update(): void {
         this.editForm.value.username = this.eUsername.value;
         this.editForm.value.birthday = (this.eBirthday.value != null) ? moment(this.eBirthday.value).format(DD_MM_YYYY) : null;
 
         let userEdit: User = this.editForm.value;
 
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.updateManager(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error editing manager: " + err);
-                });
+        this.isLoading = true;
+        this.updateUser(userEdit)
+            .pipe(finalize(() => this.isLoading = false))
+            .subscribe(_ => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar(USER_UPDATE_SUCCEED, RESULT_SUCCEED);
+            }, err => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : USER_UPDATE_ERROR, RESULT_ERROR);
+            });
+    }
 
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.updateTeacher(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error editing teacher: " + err);
-                });
+    deleteUser(user: User): Observable<boolean> {
+        if (this.uriRole === URI_MANAGER) return this.userStoreService.deleteManager(user)
 
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.updateStudent(userEdit)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                }, err => {
-                    console.error("Error editing student: " + err);
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                });
+        else if (this.uriRole === URI_TEACHER) return this.userStoreService.deleteTeacher(user)
 
-        } else {
+        else if (this.uriRole === URI_STUDENT) return this.userStoreService.deleteStudent(user)
+
+        else {
             console.error('NO uriRole');
+            return EMPTY;
         }
 
     }
 
     delete(): void {
-        if (this.uriRole === URI_MANAGERS) {
-            this.isLoading = true;
-            this.userStoreService.deleteManager(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                    this.snackbarService.openSnackBar(USER_DELETE_SUCCEED, RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error deleting manager: " + err);
-                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
-                });
-
-        } else if (this.uriRole === URI_TEACHERS) {
-            this.isLoading = true;
-            this.userStoreService.deleteTeacher(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                    this.snackbarService.openSnackBar(USER_DELETE_SUCCEED, RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error deleting teacher: " + err);
-                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
-                });
-
-        } else if (this.uriRole === URI_STUDENTS) {
-            this.isLoading = true;
-            this.userStoreService.deleteStudent(this.user)
-                .pipe(finalize(() => this.isLoading = false))
-                .subscribe(_ => {
-                    this.dialogRefCrudUser.close(RESULT_SUCCEED);
-                    this.snackbarService.openSnackBar(USER_DELETE_SUCCEED, RESULT_SUCCEED);
-                }, err => {
-                    this.dialogRefCrudUser.close(RESULT_ERROR);
-                    console.error("Error deleting student: " + err);
-                    this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
-                });
-
-        } else {
-            console.error('NO uriRole');
-        }
-
+        this.isLoading = true;
+        this.deleteUser(this.user)
+            .pipe(finalize(() => this.isLoading = false))
+            .subscribe(_ => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar(USER_DELETE_SUCCEED, RESULT_SUCCEED);
+            }, err => {
+                this.dialogRefCrudUser.close();
+                this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : USER_DELETE_ERROR, RESULT_ERROR);
+            });
     }
 
 

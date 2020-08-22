@@ -1,7 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { User } from "../models/user";
-import { URI_MANAGERS, ROLE_MANAGER, URI_TEACHERS, ROLE_TEACHER, URI_STUDENTS, ROLE_STUDENT } from "../app.config";
+import { URI_MANAGER, ROLE_MANAGER, URI_TEACHER, ROLE_TEACHER, URI_STUDENT, ROLE_STUDENT } from "../app.config";
 import { UserBackendService } from "./user-backend.service";
 import { Observable } from "rxjs/internal/Observable";
 import { tap } from "rxjs/internal/operators/tap";
@@ -20,17 +20,17 @@ export class UserStoreService {
     private dataStore: { managers: User[], teachers: User[], students: User[] };
 
     private managersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    private managerUriRole: string = URI_MANAGERS;
+    private managerUriRole: string = URI_MANAGER;
     private managerRole: string = ROLE_MANAGER;
     private isLoadingGetManagers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     private teachersSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    private teacherUriRole: string = URI_TEACHERS;
+    private teacherUriRole: string = URI_TEACHER;
     private teacherRole: string = ROLE_TEACHER;
     private isLoadingGetTeachers = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
     private studentsSource = <BehaviorSubject<User[]>>new BehaviorSubject([]);
-    private studentUriRole: string = URI_STUDENTS;
+    private studentUriRole: string = URI_STUDENT;
     private studentRole: string = ROLE_STUDENT;
     private isLoadingGetStudents = <BehaviorSubject<boolean>>new BehaviorSubject(false);
 
@@ -91,9 +91,7 @@ export class UserStoreService {
             tap(data => {
                 this.dataStore.managers.push(data);
                 this.managersSource.next(Object.assign({}, this.dataStore).managers);
-            }, err => console.error("Error creating Manager" + err.message)
-            ));
-
+            }));
     }
 
     updateManager(user: User): Observable<User> {
@@ -101,9 +99,7 @@ export class UserStoreService {
             tap(data => {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);
-
-            }, err => console.error('Error updating Manager', err.message)
-            ));
+            }));
     }
 
     deleteManager(user: User): Observable<boolean> {
@@ -111,9 +107,7 @@ export class UserStoreService {
             tap(_ => {
                 this.deleteInManagerDataStore(user);
                 this.deleteInTeacherDataStore(user);
-
-            }, err => console.error("Error deleting Manager" + err.message)
-            ));
+            }));
     }
 
     setManagerRoles(user: User): Observable<User> {
@@ -202,8 +196,7 @@ export class UserStoreService {
             tap(data => {
                 this.dataStore.teachers.push(data);
                 this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-            }, err => console.error("Error creating teacher")
-            ));
+            }));
     }
 
     updateTeacher(user: User): Observable<User> {
@@ -211,9 +204,7 @@ export class UserStoreService {
             tap(data => {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);
-
-            }, err => console.error("Error updating teacher", err.message)
-            ));
+            }));
     }
 
     deleteTeacher(user: User): Observable<boolean> {
@@ -221,9 +212,7 @@ export class UserStoreService {
             tap(_ => {
                 this.deleteInTeacherDataStore(user);
                 this.deleteInManagerDataStore(user);
-
-            }, err => console.error('Error deleting teacher', err.message)
-            ));
+            }));
     }
 
     setTeacherRoles(user: User): Observable<User> {
@@ -319,25 +308,17 @@ export class UserStoreService {
             tap(data => {
                 this.dataStore.students.push(data);
                 this.studentsSource.next(Object.assign({}, this.dataStore).students);
-            }, err => console.error("Error creating student")
-            ));
+            }));
     }
 
     updateStudent(user: User): Observable<User> {
         return this.userBackendService.update(user, this.studentUriRole).pipe(
-            tap(data => {
-                this.updateInStudentDataStore(data);
-
-            }, err => console.error('Error updating student', err.message)
-            ));
+            tap(data => this.updateInStudentDataStore(data)));
     }
 
     deleteStudent(user: User): Observable<boolean> {
         return this.userBackendService.delete(user, this.studentUriRole).pipe(
-            tap(_ => {
-                this.deleteInStudentDataStore(user);
-            }, err => console.error('Error deleting student', err.message)
-            ));
+            tap(_ => this.deleteInStudentDataStore(user)));
     }
 
     updateInStudentDataStore(user: User): void {

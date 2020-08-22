@@ -3,7 +3,7 @@ import { tap, retry, share } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { API_SERVER, URI_USERS, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
+import { API_BACKEND_SERVER, URI_USER, URI_USERNAME, URI_PASS, URI_ROLE } from '../app.config';
 import { Avatar } from '../models/avatar';
 
 
@@ -13,7 +13,7 @@ import { Avatar } from '../models/avatar';
 export class UserBackendService {
 
 
-    private userURL = API_SERVER + URI_USERS;
+    private userURL = API_BACKEND_SERVER + URI_USER;
 
     constructor(private httpCli: HttpClient) { }
 
@@ -31,8 +31,8 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}`;
         //console.log(`resource called:  ${url}`);
         return this.httpCli.post<User>(url, user).pipe(
-            tap(resp => console.log(`created user name=${resp.firstName}`))
-        );
+            tap(resp => console.log(`created user name=${resp.firstName}`)
+                , err => console.error('Error creating user', err.error.exception)));
     }
 
     update(user: User, uriRole: string): Observable<User> {
@@ -40,8 +40,8 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${username}`;
         //console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user).pipe(
-            tap(resp => console.log(`edited user username=${resp.username}`))
-        );
+            tap(resp => console.log(`edited user username=${resp.username}`)
+                , err => console.error('Error updating user', err.error.exception)));
     }
 
     delete(user: User, uriRole: string): Observable<boolean> {
@@ -49,8 +49,8 @@ export class UserBackendService {
         const url = `${this.userURL}${uriRole}/${username}`;
         //console.log(`resource called:  ${url}`);
         return this.httpCli.delete<boolean>(url).pipe(
-            tap(_ => console.log(`deleted user username=${username}`))
-        );
+            tap(_ => console.log(`deleted user username=${username}`)
+                , err => console.error('Error deleting user', err.error.exception)));
     }
 
     getUserById(id: string, uriRole: string): Observable<User> {

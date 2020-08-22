@@ -7,7 +7,7 @@ import { SessionStorageService } from '../../../../services/session-storage.serv
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { EvaluationStoreService } from '../../../../services/evaluation-store.service';
 import { Evaluation } from '../../../../models/evaluation';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { SubjectEvaluationsCrudDialogRefComponent } from './subject-evaluations-crud-dialog-ref/subject-evaluations-crud-dialog-ref.component';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -72,7 +72,6 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
 
   }
 
-
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -116,7 +115,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
 
@@ -127,7 +126,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         console.log(RESULT_EDIT);
         this.openDialogEdit(dialogRef.componentInstance.evaluation);
       }
-    }));
+    });
   }
 
   openDialogCreate(): void {
@@ -147,7 +146,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -160,7 +159,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_CREATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
   openDialogEdit(evaluation: Evaluation): void {
@@ -178,7 +177,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -191,7 +190,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_UPDATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
   openDialogDelete(evaluation: Evaluation): void {
@@ -209,7 +208,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectEvaluationsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -222,7 +221,7 @@ export class SubjectEvaluationsComponent implements OnInit, OnDestroy, AfterView
         this.snackbarService.openSnackBar(EVALUATION_DELETE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
 

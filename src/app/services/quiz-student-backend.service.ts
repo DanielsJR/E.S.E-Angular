@@ -1,5 +1,5 @@
 import { Injectable } from "../../../node_modules/@angular/core";
-import { API_SERVER, URI_QUIZES_STUDENT } from "../app.config";
+import { API_BACKEND_SERVER, URI_QUIZ_STUDENT } from "../app.config";
 import { HttpClient } from "../../../node_modules/@angular/common/http";
 import { Observable } from "../../../node_modules/rxjs";
 
@@ -13,7 +13,7 @@ import { QuizStudent } from "../models/quiz-student";
 })
 export class QuizStudentBackendService {
 
-    private quizURL = API_SERVER + URI_QUIZES_STUDENT;
+    private quizURL = API_BACKEND_SERVER + URI_QUIZ_STUDENT;
 
     constructor(private httpCli: HttpClient) { }
 

@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { COMMUNNES } from '../../models/communes';
 import * as moment from 'moment';
 import { UserBackendService } from '../../services/user-backend.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { TdFileInputComponent } from '@covalent/core/file';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
@@ -154,9 +154,12 @@ export class UserProfileComponent implements OnInit {
                 this.userLoggedService.userLoggedNext(user);
                 if (this.fileInput) this.fileInput.clear();
                 this.editProfileForm.markAsPristine();
+
+                //TODO
                 this.userStoreService.updateInManagerDataStore(user);
                 this.userStoreService.updateInTeacherDataStore(user);
                 this.userStoreService.updateInStudentDataStore(user);
+
             }, error => {
                 if (error instanceof HttpErrorResponse) {
                     this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);

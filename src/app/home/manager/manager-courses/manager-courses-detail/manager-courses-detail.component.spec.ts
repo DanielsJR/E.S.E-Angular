@@ -6,7 +6,7 @@ import { httpStub, routerStub, routerLinkStub, activatedRouteStub, ActivatedRout
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CourseStoreService } from '../../../../services/course-store.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { of } from 'rxjs';
 import { courseTest, courseTest2, studentTest3, studentTest, teacherTest2, simpleError, httpError403 } from '../../../../testing/models';
 import { MatDialogRef } from '@angular/material/dialog';

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN } from '../../app.config';
+import { URI_MANAGER, URI_TEACHER, URI_STUDENT, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_DETAIL, ROLE_ADMIN } from '../../app.config';
 import { User } from '../../models/user';
 import { CardUserDialogRefComponent } from './card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
 import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.component';
@@ -59,15 +59,15 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-    if (this.uriRole === URI_MANAGERS) {
+    if (this.uriRole === URI_MANAGER) {
       this.userRole = ROLE_MANAGER_SPANISH;
       this.usersRole = ROLE_MANAGER_SPANISH + 'res';
 
-    } else if (this.uriRole === URI_TEACHERS) {
+    } else if (this.uriRole === URI_TEACHER) {
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
 
-    } else if (this.uriRole === URI_STUDENTS) {
+    } else if (this.uriRole === URI_STUDENT) {
       this.userRole = ROLE_STUDENT_SPANISH;
       this.usersRole = ROLE_STUDENT_SPANISH + 's';
 
@@ -86,15 +86,15 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setDataSource() {
-    if (this.uriRole === URI_MANAGERS) {
+    if (this.uriRole === URI_MANAGER) {
       this.subscriptions.add(this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.managers$.subscribe(data => this.dataSource.data = data));
 
-    } else if (this.uriRole === URI_TEACHERS) {
+    } else if (this.uriRole === URI_TEACHER) {
       this.subscriptions.add(this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data));
 
-    } else if (this.uriRole === URI_STUDENTS) {
+    } else if (this.uriRole === URI_STUDENT) {
       this.subscriptions.add(this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.students$.subscribe(data => this.dataSource.data = data));
 
@@ -115,26 +115,28 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dialogCardUserSubs(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
-      if (result === RESULT_CANCELED) {
-        console.log(RESULT_CANCELED);
-      } else if (result === RESULT_DETAIL) {
-        this.crudUserDialog.openDialogDetail(user);
-      } else if (result === RESULT_EDIT) {
-        this.crudUserDialog.openDialogEdit(user);
-      } else if (result === RESULT_DELETE) {
-        this.crudUserDialog.openDialogDelete(user);
-      }
-    }));
-  }
+    dialogRef.afterClosed().subscribe(result => {
+      
+      if (result === RESULT_CANCELED) console.log(RESULT_CANCELED);
 
+      else if (result === RESULT_DETAIL) this.crudUserDialog.openDialogDetail(user);
+
+      else if (result === RESULT_EDIT) this.crudUserDialog.openDialogEdit(user);
+
+      else if (result === RESULT_DELETE) this.crudUserDialog.openDialogDelete(user);
+
+      else {
+        console.error('NO Result');
+      }
+    });
+  }
 
   checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
     return userLoggedRoles.every(role => userDbRoles.includes(role));
   }
 
   isAdminEditingTeacher() {
-    if (this.isAdmin() && this.uriRole === URI_TEACHERS) return true;
+    if (this.isAdmin() && this.uriRole === URI_TEACHER) return true;
     return false;
   }
 

@@ -90,13 +90,14 @@ td.mat-cell mat-list mat-list-item ::ng-deep .mat-list-item-content {
     padding: 0 !important;
 }
 
-tr.mat-row .mat-list-avatar {
+.mat-list-avatar {
     opacity: 1;
     transition: .5s ease;
     backface-visibility: hidden;
 }
 
-tr.mat-row .mat-list-avatar:hover {
+.mat-list-avatar:hover {
+    cursor: pointer;
     opacity: 0.3;
 }
 

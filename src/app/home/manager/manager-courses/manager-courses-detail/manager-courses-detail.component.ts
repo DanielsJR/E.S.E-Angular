@@ -9,8 +9,8 @@ import { SessionStorageService } from '../../../../services/session-storage.serv
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from '../../../../models/user';
 import { finalize } from 'rxjs/internal/operators/finalize';
-import { SnackbarService } from '../../../../services/snackbar.service';
-import { RESULT_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_TEACHERS, URI_STUDENTS, URI_MANAGERS, RESULT_SUCCEED, COURSE_UPDATE_SUCCEED, COURSE_UPDATE_ERROR } from '../../../../app.config';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
+import { RESULT_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_TEACHER, URI_STUDENT, URI_MANAGER, RESULT_SUCCEED, COURSE_UPDATE_SUCCEED, COURSE_UPDATE_ERROR } from '../../../../app.config';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
@@ -34,8 +34,8 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   listStudents: User[] = [];
 
   areaRole = ROLE_MANAGER;
-  uriStudents = URI_STUDENTS
-  uriTeachers = URI_TEACHERS;
+  uriStudents = URI_STUDENT
+  uriTeachers = URI_TEACHER;
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 
@@ -85,7 +85,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         }
       }));
 
-      this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => this.isLoading = isLoading));
+    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoading => this.isLoading = isLoading));
   }
 
   ngAfterViewInit() {
@@ -110,29 +110,21 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_DETAIL) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDetail(user);
-        } else {
-          this.crudTeacherDialog.openDialogDetail();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDetail(user) : this.crudTeacherDialog.openDialogDetail();
+
       } else if (result === RESULT_EDIT) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogEdit(user);
-        } else {
-          this.crudTeacherDialog.openDialogEdit();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogEdit(user) : this.crudTeacherDialog.openDialogEdit();
+
       } else if (result === RESULT_DELETE) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDelete(user);
-        } else {
-          this.crudTeacherDialog.openDialogDelete();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDelete(user) : this.crudTeacherDialog.openDialogDelete();
+
       }
-    }));
+    });
   }
 
   addStudentToDataSource(student: User) {
@@ -150,18 +142,21 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
         this.deleteStudentFromDataSource(dialogRef.componentInstance.obj.id);
+
       } else if (result === RESULT_ACTION2) {
         console.log(RESULT_ACTION2);
+
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    }));
+    });
   }
 
   changeTeacher(teacher: User) {
@@ -176,14 +171,9 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
     this.subscriptions.add(this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
-      .subscribe(_ => this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED)
-        , error => {
-          if (error instanceof HttpErrorResponse) {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          } else {
-            this.snackbarService.openSnackBar(COURSE_UPDATE_ERROR, RESULT_ERROR);
-          }
-        }));
+      .subscribe(_ => this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED),
+        err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_UPDATE_ERROR, RESULT_ERROR)
+      ));
 
   }
 

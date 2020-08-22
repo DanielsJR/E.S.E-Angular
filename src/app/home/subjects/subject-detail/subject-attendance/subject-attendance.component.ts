@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject } from '../../../../models/subject';
 import { User } from '../../../../models/user';
-import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENTS, URI_TEACHERS, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, RESULT_SUCCEED, RESULT_ERROR, QUIZ_CREATE_ERROR, ATTENDANCE_CREATE_ERROR, ATTENDANCE_CREATE_SUCCEED, DD_MM_YYYY, BTN_ACTION_CREATE, BTN_ACTION_UPDATE, ATTENDANCE_UPDATE_SUCCEED, ATTENDANCE_UPDATE_ERROR, ATTENDANCE_DELETE_SUCCEED, ATTENDANCE_DELETE_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENT, URI_TEACHER, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, RESULT_SUCCEED, RESULT_ERROR, QUIZ_CREATE_ERROR, ATTENDANCE_CREATE_ERROR, ATTENDANCE_CREATE_SUCCEED, DD_MM_YYYY, BTN_ACTION_CREATE, BTN_ACTION_UPDATE, ATTENDANCE_UPDATE_SUCCEED, ATTENDANCE_UPDATE_ERROR, ATTENDANCE_DELETE_SUCCEED, ATTENDANCE_DELETE_ERROR, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3 } from '../../../../app.config';
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { Subscription, EMPTY, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +15,7 @@ import { Attendance, StudentAtendance } from '../../../../models/attendance';
 import { AttendanceStoreService } from '../../../../services/attendance-store.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IsLoadingService } from '../../../../services/isLoadingService.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import * as moment from 'moment';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { MatSort } from '@angular/material/sort';
@@ -41,8 +41,8 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
 
-  uriStudents = URI_STUDENTS
-  uriTeachers = URI_TEACHERS;
+  uriStudents = URI_STUDENT
+  uriTeachers = URI_TEACHER;
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 

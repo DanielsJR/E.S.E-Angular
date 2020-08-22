@@ -13,7 +13,7 @@ import { SubjectStoreService } from '../../../services/subject-store.service';
 import { shortNameSecondName } from '../../../shared/functions/shortName';
 import { RESULT_CANCELED, RESULT_ERROR, CRUD_TYPE_EDIT, CRUD_TYPE_CREATE, RESULT_SUCCEED, SUBJECT_CREATE_ERROR, SUBJECT_UPDATE_ERROR, SUBJECT_DELETE_ERROR } from '../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 
 
 @Component({

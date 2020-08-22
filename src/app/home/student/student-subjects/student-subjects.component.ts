@@ -5,7 +5,7 @@ import { Course } from '../../../models/course';
 import { SessionStorageService } from '../../../services/session-storage.service';
 import { SubjectStoreService } from '../../../services/subject-store.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subject } from '../../../models/subject';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';

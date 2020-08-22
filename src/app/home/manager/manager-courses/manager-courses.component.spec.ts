@@ -13,7 +13,7 @@ import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/
 import { By } from '@angular/platform-browser';
 import { SimpleDialogComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog.component';
 import { RESULT_ACTION1, RESULT_SUCCEED, RESULT_CANCELED } from '../../../app.config';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { of } from 'rxjs/internal/observable/of';
 import { DebugElement } from '@angular/core';
 import { click } from '../../../testing/helper-utilities';

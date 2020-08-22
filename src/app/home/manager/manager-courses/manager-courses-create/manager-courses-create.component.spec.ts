@@ -6,7 +6,7 @@ import { httpStub, routerLinkStub, ActivatedRouteStub } from '../../../../testin
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CourseStoreService } from '../../../../services/course-store.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { studentTest, teacherTest, httpError403, simpleError } from '../../../../testing/models';
 import { asyncData, asyncError } from '../../../../testing/async-helpers';

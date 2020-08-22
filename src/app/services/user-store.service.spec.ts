@@ -6,7 +6,7 @@ import { asyncData } from '../testing/async-helpers';
 import { UserStoreService } from './user-store.service';
 import { UserBackendService } from './user-backend.service';
 import { User } from '../models/user';
-import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TEACHERS, URI_MANAGERS, URI_STUDENTS } from '../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_TEACHER, URI_MANAGER, URI_STUDENT } from '../app.config';
 import { deepCopy } from '../shared/functions/deepCopy';
 import { CourseStoreService } from './course-store.service';
 import { GENDERS } from '../models/genders';
@@ -73,7 +73,7 @@ describe('User Store Service', () => {
     expect(users).toEqual(managersTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
-    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_MANAGERS);
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_MANAGER);
 
     userStoreService.loadAllManagers();
     expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache
@@ -294,7 +294,7 @@ describe('User Store Service', () => {
     expect(users).toEqual(teachersTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
-    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_TEACHERS);
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_TEACHER);
 
     userStoreService.loadAllTeachers();
     expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache
@@ -522,7 +522,7 @@ describe('User Store Service', () => {
     expect(users).toEqual(studentsTest);
     expect(users.length).toEqual(2);
     expect(isLoading).toBeFalsy();
-    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_STUDENTS);
+    expect(userBackendServiceSpy.getUsers).toHaveBeenCalledWith(URI_STUDENT);
 
     userStoreService.loadAllStudents();
     expect(userBackendServiceSpy.getUsers).toHaveBeenCalledTimes(1);//cache

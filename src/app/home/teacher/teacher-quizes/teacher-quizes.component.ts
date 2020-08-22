@@ -3,7 +3,7 @@ import { QuizBackendService } from '../../../services/quiz-backend.service';
 import { Quiz } from '../../../models/quiz';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { SessionStorageService } from '../../../services/session-storage.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR } from '../../../app.config';
@@ -77,9 +77,8 @@ export class TeacherQuizesComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-
   deleteQuizDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ACTION1) {
@@ -90,7 +89,7 @@ export class TeacherQuizesComponent implements OnInit {
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    }));
+    });
   }
 
   deleteQuizFromDataSource(id: string) {

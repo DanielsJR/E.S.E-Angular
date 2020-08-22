@@ -33,7 +33,7 @@ export class StudentComponent implements OnInit, OnDestroy {
             .pipe(
                 switchMap(student => (student) ? this.courseBackendService.getCourseIdByStudent(student.username, '2018') : EMPTY)
             )
-            .subscribe(courseId => this.subjectStoreService.loadSubjects(courseId)));
+            .subscribe(courseId => this.subjectStoreService.loadSubjectsByCourseAndYear(courseId, '2018')));
 
         this.quizNotificationService.getNotification();
     }

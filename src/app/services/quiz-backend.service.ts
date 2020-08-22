@@ -1,4 +1,4 @@
-import { API_SERVER, URI_QUIZES } from "../app.config";
+import { API_BACKEND_SERVER, URI_QUIZ } from "../app.config";
 import { Quiz } from "../models/quiz";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 })
 export class QuizBackendService {
 
-    private quizURL = API_SERVER + URI_QUIZES;
+    private quizURL = API_BACKEND_SERVER + URI_QUIZ;
 
     constructor(private httpCli: HttpClient) { }
 

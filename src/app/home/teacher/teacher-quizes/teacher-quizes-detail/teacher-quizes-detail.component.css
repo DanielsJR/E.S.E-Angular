@@ -1,5 +1,5 @@
-:host  {
-	display: block;
+:host {
+    display: block;
     width: 100%;
 }
 
@@ -19,6 +19,7 @@ mat-card {
     margin: 20px;
     padding: 0;
     overflow: hidden;
+    background: unset !important;
 }
 
 table {
@@ -56,20 +57,23 @@ mat-form-field {
 .listContainer {
     display: flex;
     flex-direction: column;
-    padding-top: 0;
+    padding: 16px;
 }
 
 .listContainer .mat-list-item {
-    min-height: 90px;
+    padding: 0;
     height: 100%;
+    min-height: 88px;
 }
 
+
+
 .listContainer .mat-list-item:first-of-type {
-    margin-top: 10px;
+    --margin-top: 10px;
 }
 
 .listContainer .mat-list-item:last-of-type {
-    padding-bottom: 21.5px;
+    --padding-bottom: 21.5px;
 }
 
 .listContainer .mat-list-item .mat-list-item {
@@ -78,7 +82,8 @@ mat-form-field {
     width: fit-content;
 }
 
-::ng-deep .listContainer .mat-list-item:last-of-type .mat-list-item-content {
+::ng-deep .listContainer .mat-list-item .mat-list-item-content {
+    min-height: inherit;
     justify-content: space-between;
 }
 
@@ -112,6 +117,17 @@ mat-form-field {
     padding: 0;
 }
 
+.listContainer2 {
+    padding: 0 16px;
+
+}
+
+.listContainer2 .mat-list-item {
+    padding: 0;
+    height: 100%;
+    min-height: 90px;
+}
+
 .level {
     font-size: 17px;
     color: darkgray;
@@ -139,7 +155,8 @@ mat-form-field {
 }
 
 .mat-action-row {
-    padding: 16px 8px 0 24px;
+    justify-content: space-between !important;
+    padding: 16px 24px !important;
 }
 
 mat-accordion mat-toolbar button {
@@ -182,6 +199,17 @@ mat-action-row button {
 
 mat-expansion-panel-header {
     height: 64px;
+
+}
+
+.mat-accordion .mat-expansion-panel:first-of-type{
+    margin-top: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type{
+    margin-bottom: 0 !important;
 }
 
 mat-expansion-panel mat-form-field {

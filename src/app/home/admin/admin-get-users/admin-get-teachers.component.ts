@@ -1,5 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
-import { ROLE_ADMIN, URI_MANAGERS, URI_TEACHERS } from '../../../app.config';
+import { ROLE_ADMIN, URI_MANAGER, URI_TEACHER } from '../../../app.config';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { ROLE_ADMIN, URI_MANAGERS, URI_TEACHERS } from '../../../app.config';
 
 export class AdminGetTeachersComponent implements OnInit {
   
-  uriRole = URI_TEACHERS;
+  uriRole = URI_TEACHER;
   areaRole = ROLE_ADMIN;
 
   constructor() { }

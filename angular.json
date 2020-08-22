@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "E.S.E": {
+    "ese": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "E.S.E:build"
+            "browserTarget": "ese:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "E.S.E:build:production"
+              "browserTarget": "ese:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "E.S.E:build"
+            "browserTarget": "ese:build"
           }
         },
         "test": {
@@ -112,7 +112,7 @@
         }
       }
     },
-    "E.S.E-e2e": {
+    "ese-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -121,7 +121,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "E.S.E:serve"
+            "devServerTarget": "ese:serve"
           }
         },
         "lint": {
@@ -138,7 +138,7 @@
       }
     }
   },
-  "defaultProject": "E.S.E",
+  "defaultProject": "ese",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "nx",

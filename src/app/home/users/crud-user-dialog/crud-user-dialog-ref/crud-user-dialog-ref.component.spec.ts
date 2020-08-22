@@ -6,7 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { httpStub } from '../../../../testing/stubs';
 import { studentTest } from '../../../../testing/models';
-import { URI_STUDENTS, ROLE_TEACHER } from '../../../../app.config';
+import { URI_STUDENT, ROLE_TEACHER } from '../../../../app.config';
 
 describe('CrudUserDialogRefComponent', () => {
     let component: CrudUserDialogRefComponent;
@@ -14,7 +14,7 @@ describe('CrudUserDialogRefComponent', () => {
 
     let data = {
         user: studentTest,
-        uriRole: URI_STUDENTS,
+        uriRole: URI_STUDENT,
         type: 'detail',
         areaRole: ROLE_TEACHER,
         onlyRead: true,

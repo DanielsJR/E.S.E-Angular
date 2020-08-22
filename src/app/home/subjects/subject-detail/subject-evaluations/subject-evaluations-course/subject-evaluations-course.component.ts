@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { SnackbarService } from '../../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../../shared/snackbars-ref/snackbar.service';
 import { switchMap } from 'rxjs/operators';
 import { shortNameSecondName } from '../../../../../shared/functions/shortName';
 import { Evaluation } from '../../../../../models/evaluation';

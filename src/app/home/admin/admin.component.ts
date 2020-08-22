@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
         if (this.userLoggedService.isManager()) {
             this.userStoreService.loadAllStudents();
             this.courseStoreService.loadAllCourses('2018');
-            this.subjectStoreService.loadSubjects();
+            this.subjectStoreService.loadSubjectsByYear('2018');
         }
 
     }

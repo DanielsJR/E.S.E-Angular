@@ -10,7 +10,7 @@ import { User } from '../../models/user';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { Course } from '../../models/course';
 import { CourseStoreService } from '../../services/course-store.service';
 import { MatSort } from '@angular/material/sort';
@@ -209,7 +209,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -222,7 +222,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.snackbarService.openSnackBar(SUBJECT_CREATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
   openDialogEdit(subject: Subject): void {
@@ -238,7 +238,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -251,7 +251,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.snackbarService.openSnackBar(SUBJECT_UPDATE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
   openDialogDelete(subject: Subject): void {
@@ -268,7 +268,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         this.snackbarService.openSnackBar(CANCEL_MESSAGE, RESULT_WARN);
         console.log(RESULT_CANCELED);
@@ -281,7 +281,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.snackbarService.openSnackBar(SUBJECT_DELETE_SUCCEED, RESULT_SUCCEED);
         console.log(RESULT_SUCCEED);
       }
-    }));
+    });
   }
 
 

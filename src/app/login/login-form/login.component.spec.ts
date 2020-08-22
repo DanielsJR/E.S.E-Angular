@@ -15,7 +15,7 @@ import { DebugElement } from '@angular/core';
 import { newEvent, click } from '../../testing/helper-utilities';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { httpError401, httpError500 } from '../../testing/models';
 import { IsLoadingService } from '../../services/isLoadingService.service';
 

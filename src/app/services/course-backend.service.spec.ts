@@ -2,12 +2,12 @@ import { TestBed, inject } from '@angular/core/testing';
 // Http testing module and mocking controller
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpErrorResponse } from '@angular/common/http';
-import { API_SERVER, URI_COURSES, URI_YEAR, URI_NAME } from '../app.config';
+import { API_BACKEND_SERVER, URI_COURSE, URI_YEAR, URI_NAME } from '../app.config';
 import { Course } from '../models/course';
 import { CourseBackendService } from './course-backend.service';
 import { courseTest, courseTest2 } from '../testing/models';
 
-const courseURL = API_SERVER + URI_COURSES;
+const courseURL = API_BACKEND_SERVER + URI_COURSE;
 
 describe('Course Backend Service', () => {
   let httpTestingController: HttpTestingController;

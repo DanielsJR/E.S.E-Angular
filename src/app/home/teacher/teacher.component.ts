@@ -25,7 +25,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscriptions.add(this.userLoggedService.userLogged$
-            .subscribe(teacher => this.subjectStoreService.loadSubjects(teacher.id)));
+            .subscribe(teacher => this.subjectStoreService.loadSubjectsByTeacherAndYear(teacher.username, '2018')));
     }
 
     ngOnDestroy() {

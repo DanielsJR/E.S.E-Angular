@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject } from '../../../../models/subject';
 import { User } from '../../../../models/user';
-import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENTS, URI_TEACHERS, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE } from '../../../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_STUDENT, URI_TEACHER, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE } from '../../../../app.config';
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -33,8 +33,8 @@ export class SubjectBookComponent implements OnInit, OnDestroy, AfterViewInit {
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
 
-  uriStudents = URI_STUDENTS
-  uriTeachers = URI_TEACHERS;
+  uriStudents = URI_STUDENT
+  uriTeachers = URI_TEACHER;
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 

@@ -1,3 +1,4 @@
+import { environment } from '../environments/environment';
 
 //*******************AUTH*************************/
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
@@ -9,13 +10,13 @@ export const SESSION_STORAGE_THEME_KEY = 'theme';
 
 export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
+
 //*******************WEB-SOCKET*************************/
-export const BROKER_URL = 'ws://192.168.1.40:8080/api/v0/socket';
+export const BROKER_URL = environment.SOCKET
 
 
 //*******************REST*************************/
-export const API_SERVER = 'http://192.168.1.40:8080/api/v0';
-export const API_GENERIC_URI = '/api/v0';
+export const API_BACKEND_SERVER = environment.API
 
 export const URI_TOKEN_AUTH = '/token/generate-token';
 
@@ -25,7 +26,7 @@ export const URI_WELCOME = '/welcome';
 export const URI_HOME = '/home';
 export const URI_LOGIN= '/login';
 
-export const URI_USERS = '/users';
+export const URI_USER = '/user';
 
 export const URI_TOKEN = '/token';
 export const URI_ID = '/id';
@@ -33,30 +34,26 @@ export const URI_USERNAME = '/username';
 export const URI_PASS = '/pass';
 export const URI_ROLE = '/role';
 
-export const URI_ADMINS = '/admins';
-export const URI_MANAGERS = '/managers';
-export const URI_TEACHERS = '/teachers';
-export const URI_STUDENTS = '/students';
+export const URI_ADMIN = '/admin';
+export const URI_MANAGER = '/manager';
+export const URI_TEACHER = '/teacher';
+export const URI_STUDENT = '/student';
 
-export const URI_COURSES = '/courses';
+export const URI_COURSE = '/course';
 export const URI_YEAR = '/year';
 export const URI_NAME = '/name';
 
-export const URI_SUBJECTS = '/subjects';
-export const URI_TEACHER = '/teacher';
-export const URI_COURSE = '/course';
-
-export const URI_GRADES = '/grades';
-export const URI_TITLE = '/title';
-export const URI_STUDENT = '/student';
-
-export const URI_EVALUATIONS = '/evaluations';
-
-export const URI_ATTENDANCES = '/attendances';
 export const URI_SUBJECT = '/subject';
 
-export const URI_QUIZES = '/quizes';
-export const URI_QUIZES_STUDENT = '/quizes-student';
+export const URI_GRADE = '/grade';
+export const URI_TITLE = '/title';
+
+export const URI_EVALUATION = '/evaluation';
+
+export const URI_ATTENDANCE = '/attendance';
+
+export const URI_QUIZ = '/quiz';
+export const URI_QUIZ_STUDENT = '/quiz-student';
 
 export const URI_PREFERENCES = '/preferences';
 export const URI_THEME = '/theme';

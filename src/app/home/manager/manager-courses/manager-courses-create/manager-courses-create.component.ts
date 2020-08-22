@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Course } from '../../../../models/course';
 import { User } from '../../../../models/user';
@@ -12,7 +12,7 @@ import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { COURSE_NAMES_GROUPS } from '../../../../models/course-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_CREATE_SUCCEED, COURSE_CREATE_ERROR } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGER, URI_TEACHER, URI_STUDENT, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_CREATE_SUCCEED, COURSE_CREATE_ERROR } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -28,8 +28,8 @@ import { rowAnimation } from '../../../../shared/animations/animations';
 export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   areaRole = ROLE_MANAGER;
-  uriStudents = URI_STUDENTS
-  uriTeachers = URI_TEACHERS;
+  uriStudents = URI_STUDENT
+  uriTeachers = URI_TEACHER;
 
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
@@ -111,62 +111,51 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
       .subscribe(_ => {
         this.snackbarService.openSnackBar(COURSE_CREATE_SUCCEED, RESULT_SUCCEED);
         this.gotoCourses();
-      }, error => {
-        if (error instanceof HttpErrorResponse) {
-          this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-        } else {
-          this.snackbarService.openSnackBar(COURSE_CREATE_ERROR, RESULT_ERROR);
-        }
-      }));
+      }, err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_CREATE_ERROR, RESULT_ERROR)
+      ));
 
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_DETAIL) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDetail(user);
-        } else {
-          this.crudTeacherDialog.openDialogDetail();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDetail(user) : this.crudTeacherDialog.openDialogDetail();
+
       } else if (result === RESULT_EDIT) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogEdit(user);
-        } else {
-          this.crudTeacherDialog.openDialogEdit();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogEdit(user) : this.crudTeacherDialog.openDialogEdit();
+
       } else if (result === RESULT_DELETE) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDelete(user);
-        } else {
-          this.crudTeacherDialog.openDialogDelete();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDelete(user) : this.crudTeacherDialog.openDialogDelete();
+
       }
-    }));
+    });
   }
 
   private deleteStudentFromDataSource(id: string) {
     this.listStudents = this.listStudents.filter(s => s.id !== (id));
     this.dataSource.data = this.listStudents;
-    // this.btnDisabled = false;
   }
 
   deleteStudent(dialogRef: MatDialogRef<SimpleDialogRefComponent>): void {
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
         this.deleteStudentFromDataSource(dialogRef.componentInstance.obj.id);
+
       } else if (result === RESULT_ACTION2) {
         console.log(RESULT_ACTION2);
+
       } else if (result === RESULT_ACTION3) {
         console.log(RESULT_ACTION3);
       }
-    }));
+    });
   }
 
 

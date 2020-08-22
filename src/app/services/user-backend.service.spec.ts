@@ -5,11 +5,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { UserBackendService } from './user-backend.service';
 import { User } from '../models/user';
-import { URI_MANAGERS, API_SERVER, URI_USERS, URI_USERNAME, URI_ROLE, URI_PASS, ROLE_MANAGER } from '../app.config';
+import { URI_MANAGER, API_BACKEND_SERVER, URI_USER, URI_USERNAME, URI_ROLE, URI_PASS, ROLE_MANAGER } from '../app.config';
 import { managerTest, managerTest2 } from '../testing/models';
 
-const userURL = API_SERVER + URI_USERS;
-const uriRole = URI_MANAGERS;
+const userURL = API_BACKEND_SERVER + URI_USER;
+const uriRole = URI_MANAGER;
 
 describe('User Backend Service', () => {
   let httpTestingController: HttpTestingController;
@@ -49,7 +49,7 @@ describe('User Backend Service', () => {
         expect(data.length).toEqual(2);
       });
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS);
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER);
 
     expect(req.request.method).toEqual('GET');
 
@@ -61,7 +61,7 @@ describe('User Backend Service', () => {
     userBackendService.create(managerTest, uriRole)
       .subscribe(data => expect(data).toEqual(managerTest));
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS);
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER);
 
     expect(req.request.method).toEqual('POST');
 
@@ -73,7 +73,7 @@ describe('User Backend Service', () => {
     userBackendService.update(managerTest, uriRole)
       .subscribe(data => expect(data).toEqual(managerTest));
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + '/manager01');
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + '/manager01');
 
     expect(req.request.method).toEqual('PUT');
 
@@ -85,7 +85,7 @@ describe('User Backend Service', () => {
     userBackendService.delete(managerTest, uriRole)
       .subscribe(data => expect(data).toBeTruthy());
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + '/manager01');
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + '/manager01');
 
     expect(req.request.method).toEqual('DELETE');
 
@@ -97,7 +97,7 @@ describe('User Backend Service', () => {
     userBackendService.getUserById('m01', uriRole)
       .subscribe(data => expect(data).toEqual(managerTest));
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + '/m01');
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + '/m01');
 
     expect(req.request.method).toEqual('GET');
 
@@ -109,7 +109,7 @@ describe('User Backend Service', () => {
     userBackendService.getUserByUsername('manager01', uriRole)
       .subscribe(data => expect(data).toEqual(managerTest));
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + URI_USERNAME + '/manager01');
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + URI_USERNAME + '/manager01');
 
     expect(req.request.method).toEqual('GET');
 
@@ -126,7 +126,7 @@ describe('User Backend Service', () => {
         expect(data.length).toEqual(2);
       });
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + '/'+ ROLE_MANAGER);
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + '/'+ ROLE_MANAGER);
 
     expect(req.request.method).toEqual('GET');
 
@@ -138,7 +138,7 @@ describe('User Backend Service', () => {
     userBackendService.resetUserPassword('manager01', 'manager01@ESE1', uriRole)
       .subscribe(data => expect(data).toBeTruthy());
 
-    const req = httpTestingController.expectOne(`${userURL}${URI_MANAGERS}${URI_PASS}/manager01`);
+    const req = httpTestingController.expectOne(`${userURL}${URI_MANAGER}${URI_PASS}/manager01`);
 
     expect(req.request.method).toEqual('PATCH');
 
@@ -159,7 +159,7 @@ describe('User Backend Service', () => {
         expect(data.roles.length).toEqual(2);
       });
 
-    const req = httpTestingController.expectOne(userURL + URI_MANAGERS + URI_ROLE + '/manager01');
+    const req = httpTestingController.expectOne(userURL + URI_MANAGER + URI_ROLE + '/manager01');
 
     expect(req.request.method).toEqual('PATCH');
 

@@ -3,7 +3,7 @@ import { User } from '../../../../models/user';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserBackendService } from '../../../../services/user-backend.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 

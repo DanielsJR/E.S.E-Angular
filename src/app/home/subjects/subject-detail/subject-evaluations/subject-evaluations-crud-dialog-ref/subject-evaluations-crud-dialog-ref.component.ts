@@ -111,8 +111,6 @@ export class SubjectEvaluationsCrudDialogRefComponent implements OnInit, OnDestr
   get cTitle() { return this.titleGroup.get('title'); }
   get cDate() { return this.dateGroup.get('date'); }
 
-
-
   buildEditForm() {
     this.typeEditGroup = this.formBuilder.group({
       type: [this.evaluation.type],

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, Input } from '@
 import { User } from '../../../../models/user';
 import { shortNameSecondName } from '../../../../shared/functions/shortName';
 import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
-import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, CRUD_TYPE_DETAIL, RESULT_ERROR } from '../../../../app.config';
+import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_MANAGER, URI_TEACHER, URI_STUDENT, RESULT_CANCELED, RESULT_DETAIL, RESULT_EDIT, RESULT_DELETE, CRUD_TYPE_DETAIL, RESULT_ERROR } from '../../../../app.config';
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from '../../../../models/subject';
@@ -37,8 +37,8 @@ export class SubjectCourseComponent implements OnInit, OnDestroy, AfterViewInit 
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
 
-  uriStudents = URI_STUDENTS
-  uriTeachers = URI_TEACHERS;
+  uriStudents = URI_STUDENT
+  uriTeachers = URI_TEACHER;
   @ViewChild('crudTeacherDialog') crudTeacherDialog: CrudUserDialogComponent;
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 

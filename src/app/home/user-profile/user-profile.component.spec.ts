@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { UserProfileComponent } from './user-profile.component';
 import { SharedModule } from '../../shared/shared.module';
 import { UserStoreService } from '../../services/user-store.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserBackendService } from '../../services/user-backend.service';
 import { HttpClient } from '@angular/common/http';

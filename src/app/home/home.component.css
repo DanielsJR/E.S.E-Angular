@@ -110,6 +110,8 @@
     top: 64px;
     bottom: 64px;
     overflow-x: hidden;
+
+    padding: 0;
 }
 
 ::ng-deep .sidenavMainMenu h3 {
@@ -178,6 +180,8 @@
     position: absolute;
     top: 192px;
     bottom: 0;
+
+    padding: 0;
 
 }
 

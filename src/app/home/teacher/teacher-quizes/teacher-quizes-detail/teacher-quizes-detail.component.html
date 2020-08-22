@@ -2,128 +2,20 @@
 
   <mat-card class="mat-elevation-z8">
 
-    <form [formGroup]="editDataQuizForm">
-
-      <mat-toolbar color="primary" style="height: 90px;">
-
-        <div class="toolbarDiv">
-
-          <mat-form-field appearance="standard" class="fullWith">
-            <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Titulo</mat-label>
-            <input matInput formControlName="title" required id="idTitle">
-            <button mat-icon-button matSuffix *ngIf="title.pristine">
-              <mat-icon type="button" svgIcon="pencil"></mat-icon>
-            </button>
-            <button mat-icon-button matSuffix color="accent" *ngIf="!title.pristine"
-              [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
-              <mat-icon svgIcon="content-save"></mat-icon>
-            </button>
-          </mat-form-field>
-
-        </div>
-
-        <span class="spacer-r"></span>
-
-        <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
-
-      </mat-toolbar>
-
-      <mat-list class="listContainer">
-
-        <mat-list-item>
-          <mat-form-field appearance="fill" class="fullWith">
-            <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Descripción</mat-label>
-            <textarea matInput formControlName="description" id="idDescription" [matTextareaAutosize]="true"></textarea>
-            <button mat-icon-button matSuffix *ngIf="description.pristine">
-              <mat-icon type="button" svgIcon="pencil"></mat-icon>
-            </button>
-            <button mat-icon-button matSuffix color="accent" *ngIf="!description.pristine"
-              [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
-              <mat-icon svgIcon="content-save"></mat-icon>
-            </button>
-          </mat-form-field>
-
-        </mat-list-item>
-
-        <mat-list-item>
-
-          <mat-list-item>
-            <img matListAvatar
-              [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data)"
-              alt="author" (click)="imageZoom.openDialogImage()">
-            <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
-            <p matLine>
-              <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
-              <span class="role-style">Autor</span>
-            </p>
-          </mat-list-item>
-
-          <div class="data">
-
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>
-                <i class="mdi app-input-icon"
-                  [ngClass]="st.checked ? 'mdi-lock-open-variant-outline' : 'mdi-lock' ">&nbsp;</i>
-                {{ st.checked ? 'compartido' : 'no compartido'  }}
-              </mat-label>
-              <input matInput hidden>
-              <mat-slide-toggle #st [checked]="shareQuiz">
-                Compartir Prueba
-              </mat-slide-toggle>
-            </mat-form-field>
-
-            <mat-form-field appearance="standard">
-              <mat-select formControlName="subjectName" required (selectionChange)="saveDataQuiz()"
-                [disabled]="editDataQuizForm.invalid" #idSubjectName>
-                <mat-option *ngFor="let sn of subjectNames" [value]="sn.viewValue">
-                  {{ sn.viewValue }}
-                </mat-option>
-              </mat-select>
-              <mat-label>
-                <i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura
-              </mat-label>
-            </mat-form-field>
-
-            <mat-form-field appearance="standard">
-              <mat-select formControlName="quizLevel" required (selectionChange)="saveDataQuiz()"
-                [disabled]="editDataQuizForm.invalid" #idQuizLevel>
-                <mat-option *ngFor="let ql of quizLevels" [value]="ql.viewValue">
-                  {{ ql.viewValue }}
-                </mat-option>
-              </mat-select>
-              <mat-label>
-                <i class="mdi mdi-chart-bar app-input-icon">&nbsp;</i>Nivel
-              </mat-label>
-            </mat-form-field>
-
-          </div>
-
-        </mat-list-item>
-
-        <nx-image-zoom-user #imageZoom [avatar]="quiz?.author?.avatar"></nx-image-zoom-user>
-
-      </mat-list>
-
-    </form>
-
-    <mat-divider></mat-divider>
-
-  </mat-card>
-
-  <mat-card class="mat-elevation-z8">
-
-    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
+    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight mat-align-tabs="center"
+     (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
        multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()" animationDuration="0">
 
       <mat-tab>
+
         <ng-template mat-tab-label>
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Correspondencia</span>
         </ng-template>
 
-        <form [formGroup]="editCorrespondItemsForm">
-
+        <form [formGroup]="editCorrespondItemsForm"  class="backgroundColorCard">
           <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
+
             <mat-toolbar color="accent">
 
               <mat-icon svgIcon="format-list-bulleted"></mat-icon>
@@ -147,28 +39,31 @@
 
               <button type="button" mat-mini-fab color="primary"
                 (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
-               <!-- <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i> -->
+                <!-- <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i> -->
               </button>
             </mat-toolbar>
 
             <div formArrayName="correspondItems">
-
               <mat-expansion-panel #mep *ngFor="let ci of correspondItems['controls']; let i=index;"
                 [expanded]="ci.get('open').value" (opened)="panelOpenCorrespondItems = true"
                 (closed)="panelOpenCorrespondItems = false">
 
                 <mat-expansion-panel-header>
+
                   <mat-panel-title>
                     <button mat-mini-fab color="primary" class="miniFabMini">
                       {{ i + 1 }}
                     </button>
                   </mat-panel-title>
+
                   <mat-panel-description>
                     <span *ngIf="!mep.expanded"> {{ci.get('item').value}} </span>
                   </mat-panel-description>
+
                 </mat-expansion-panel-header>
 
                 <div [formGroupName]="i">
+
                   <mat-form-field appearance="outline" class="fullWith">
                     <mat-label>
                       Item
@@ -189,15 +84,19 @@
                   </mat-form-field>
 
                   <mat-action-row>
+
                     <button type="button" mat-mini-fab color="accent"
                       [disabled]="correspondItems.invalid || correspondItems.pristine" (click)="saveCorrespondItems()">
                       <mat-icon svgIcon="content-save"></mat-icon>
                     </button>
+
                     <button type="button" mat-mini-fab color="warn"
                       (click)="deleteCorrespondItemDialog(deleteDialog.openSimpleDialog(),i)">
                       <mat-icon svgIcon="delete"></mat-icon>
                     </button>
+
                   </mat-action-row>
+
                   <nx-simple-dialog #deleteDialog [obj]="ci" [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' "
                     [subtitle]=" 'Items Correspondientes' " [dialogTitle]=" 'Eliminar Item' "
                     [cancelButton]=" 'Descartar' " [type]=" 'classic' " [icon]=" 'delete' ">
@@ -206,22 +105,22 @@
                 </div>
 
               </mat-expansion-panel>
-
+              
             </div>
-          </mat-accordion>
 
+          </mat-accordion>
         </form>
 
       </mat-tab>
 
       <mat-tab>
+
         <ng-template mat-tab-label>
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Verdadero o Falso</span>
         </ng-template>
 
-        <form [formGroup]="editTrueFalseItemsForm">
-
+        <form [formGroup]="editTrueFalseItemsForm" class="backgroundColorCard">
           <mat-accordion #trueFalseItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
             <mat-toolbar color="accent">
 
@@ -310,20 +209,18 @@
               </mat-expansion-panel>
             </div>
           </mat-accordion>
-
         </form>
 
       </mat-tab>
 
       <mat-tab>
+
         <ng-template mat-tab-label>
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Seleción Múltiple</span>
         </ng-template>
 
-
-        <form [formGroup]="editMultipleSelectionItemsForm">
-
+        <form [formGroup]="editMultipleSelectionItemsForm" class="backgroundColorCard">
           <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true"
             [displayMode]="accordionDisplayMode">
             <mat-toolbar color="accent">
@@ -458,21 +355,21 @@
               </mat-expansion-panel>
             </div>
           </mat-accordion>
-
         </form>
 
       </mat-tab>
 
       <mat-tab>
+
         <ng-template mat-tab-label>
           <mat-icon svgIcon="format-list-bulleted"></mat-icon>
           <span>&nbsp;&nbsp;Respuesta Corta</span>
         </ng-template>
 
-        <form [formGroup]="editIncompleteTextItemsForm">
-
+        <form [formGroup]="editIncompleteTextItemsForm" class="backgroundColorCard">
           <mat-accordion #incompleteTextItemsAccordion="matAccordion" [multi]="true"
             [displayMode]="accordionDisplayMode">
+
             <mat-toolbar color="accent">
 
               <mat-icon svgIcon="format-list-bulleted"></mat-icon>
@@ -555,13 +452,128 @@
                 </div>
               </mat-expansion-panel>
             </div>
-          </mat-accordion>
 
+          </mat-accordion>
         </form>
 
       </mat-tab>
 
     </mat-tab-group>
+
+  </mat-card>
+
+
+
+
+
+  <mat-card class="mat-elevation-z8">
+
+    <form [formGroup]="editDataQuizForm">
+
+      <mat-toolbar color="primary">
+        {{title.value}}
+        <span class="spacer-r"></span>
+        <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+      </mat-toolbar>
+
+      <mat-list class="listContainer backgroundColorAppBar">
+
+        <mat-list-item>
+
+          <mat-list-item>
+            <img matListAvatar
+              [src]=" 'data:'+ quiz?.author?.avatar?.type+';base64,' + quiz?.author?.avatar?.data | safe: 'resourceUrl' "
+              alt="author" (click)="imageZoom.openDialogImage()">
+            <h3 matLine> {{quiz?.author | shortNameLastname}} </h3>
+            <p matLine>
+              <i class="mdi mdi-account-edit app-input-icon">&nbsp;</i>
+              <span class="role-style">Autor</span>
+            </p>
+          </mat-list-item>
+
+          <div class="data">
+
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>
+                <i class="mdi app-input-icon"
+                  [ngClass]="st.checked ? 'mdi-lock-open-variant-outline' : 'mdi-lock' ">&nbsp;</i>
+                {{ st.checked ? 'compartido' : 'no compartido'  }}
+              </mat-label>
+              <input matInput hidden>
+              <mat-slide-toggle #st [checked]="shareQuiz">
+                Compartir Prueba
+              </mat-slide-toggle>
+            </mat-form-field>
+
+            <mat-form-field appearance="standard">
+              <mat-select formControlName="subjectName" required (selectionChange)="saveDataQuiz()"
+                [disabled]="editDataQuizForm.invalid" #idSubjectName>
+                <mat-option *ngFor="let sn of subjectNames" [value]="sn.viewValue">
+                  {{ sn.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-label>
+                <i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura
+              </mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="standard">
+              <mat-select formControlName="quizLevel" required (selectionChange)="saveDataQuiz()"
+                [disabled]="editDataQuizForm.invalid" #idQuizLevel>
+                <mat-option *ngFor="let ql of quizLevels" [value]="ql.viewValue">
+                  {{ ql.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-label>
+                <i class="mdi mdi-chart-bar app-input-icon">&nbsp;</i>Nivel
+              </mat-label>
+            </mat-form-field>
+
+          </div>
+
+        </mat-list-item>
+        <nx-image-zoom-user #imageZoom [avatar]="quiz?.author?.avatar"></nx-image-zoom-user>
+
+      </mat-list>
+
+      <mat-divider></mat-divider>
+
+      <mat-list class="listContainer2 backgroundColorCard">
+
+        <mat-list-item>
+          <mat-form-field appearance="standard" class="fullWith">
+            <mat-label><i class="mdi mdi-book app-input-icon">&nbsp;</i>Titulo</mat-label>
+            <input matInput formControlName="title" required id="idTitle">
+            <button mat-icon-button matSuffix *ngIf="title.pristine">
+              <mat-icon type="button" svgIcon="pencil"></mat-icon>
+            </button>
+            <button mat-icon-button matSuffix color="accent" *ngIf="!title.pristine"
+              [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
+              <mat-icon svgIcon="content-save"></mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="fill" class="fullWith">
+            <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Descripción</mat-label>
+            <textarea matInput formControlName="description" id="idDescription" [matTextareaAutosize]="true"></textarea>
+            <button mat-icon-button matSuffix *ngIf="description.pristine">
+              <mat-icon type="button" svgIcon="pencil"></mat-icon>
+            </button>
+            <button mat-icon-button matSuffix color="accent" *ngIf="!description.pristine"
+              [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
+              <mat-icon svgIcon="content-save"></mat-icon>
+            </button>
+          </mat-form-field>
+
+        </mat-list-item>
+
+      </mat-list>
+
+    </form>
+
+    <mat-divider></mat-divider>
 
   </mat-card>
 

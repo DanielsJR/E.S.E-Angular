@@ -8,7 +8,7 @@ import { deepCopy } from '../../shared/functions/deepCopy';
 import { IsLoadingService } from '../../services/isLoadingService.service';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { QuizStudentBackendService } from '../../services/quiz-student-backend.service';
 import { QUIZ_CREATE_SUCCEED, RESULT_SUCCEED, RESULT_ERROR, QUIZ_CREATE_ERROR, GRADE_CREATE_ERROR, GRADE_CREATE_SUCCEED } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';

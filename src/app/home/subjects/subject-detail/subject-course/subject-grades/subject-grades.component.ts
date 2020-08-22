@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENTS, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER, GRADE_UPDATE_SUCCEED } from '../../../../../app.config';
+import { ROLE_TEACHER, RESULT_CANCELED, RESULT_ERROR, RESULT_EDIT, URI_STUDENT, RESULT_DETAIL, RESULT_DELETE, RESULT_SUCCEED, GRADE_UPDATE_ERROR, GRADE_CREATE_SUCCEED, CRUD_TYPE_EDIT, CRUD_TYPE_DETAIL, ROLE_STUDENT, ROLE_MANAGER, GRADE_UPDATE_SUCCEED } from '../../../../../app.config';
 import { User } from '../../../../../models/user';
 import { Subject } from '../../../../../models/subject';
 import { Grade } from '../../../../../models/grade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SessionStorageService } from '../../../../../services/session-storage.service';
-import { SnackbarService } from '../../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../../shared/snackbars-ref/snackbar.service';
 import { SubjectsGradesCrudDialogRefComponent } from './subjects-grades-crud-dialog-ref/subjects-grades-crud-dialog-ref.component';
 import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
 import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
@@ -38,7 +38,7 @@ export class SubjectGradesComponent implements OnInit {
   studentName: string;
   subjectId: string;
 
-  uriStudents = URI_STUDENTS
+  uriStudents = URI_STUDENT
   @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
   crudUserOnlyRead: boolean = true;
 
@@ -142,7 +142,7 @@ export class SubjectGradesComponent implements OnInit {
   }
 
   openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_DETAIL) {
@@ -152,7 +152,7 @@ export class SubjectGradesComponent implements OnInit {
       } else if (result === RESULT_DELETE) {
         this.crudUserDialog.openDialogDelete();
       }
-    }));
+    });
   }
 
   openDialogDetail(grade: Grade): void {
@@ -170,7 +170,7 @@ export class SubjectGradesComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -179,7 +179,7 @@ export class SubjectGradesComponent implements OnInit {
         console.log(RESULT_EDIT);
         this.openDialogEdit(dialogRef.componentInstance.grade);
       }
-    }));
+    });
   }
 
   openDialogEdit(grade: Grade): void {
@@ -196,7 +196,7 @@ export class SubjectGradesComponent implements OnInit {
     config.disableClose = true;
 
     let dialogRef = this.dialog.open(SubjectsGradesCrudDialogRefComponent, config);
-    this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
       } else if (result === RESULT_ERROR) {
@@ -206,10 +206,8 @@ export class SubjectGradesComponent implements OnInit {
         console.log(RESULT_SUCCEED);
         this.snackbarService.openSnackBar(GRADE_UPDATE_SUCCEED, RESULT_SUCCEED);
       }
-    }));
+    });
   }
-
-
 
 
 }

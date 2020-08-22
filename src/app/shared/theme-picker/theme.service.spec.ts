@@ -2,12 +2,12 @@ import { TestBed, inject } from '@angular/core/testing';
 // Http testing module and mocking controller
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpErrorResponse } from '@angular/common/http';
-import { API_SERVER, URI_PREFERENCES, URI_THEME } from '../../app.config';
+import { API_BACKEND_SERVER, URI_PREFERENCES, URI_THEME } from '../../app.config';
 import { ThemeService } from './theme.service';
 import { themeLightTest, themeDarkTest } from '../../testing/models';
 
 
-const themeURL = API_SERVER + URI_PREFERENCES + URI_THEME;
+const themeURL = API_BACKEND_SERVER + URI_PREFERENCES + URI_THEME;
 
 describe('Theme Backend Service', () => {
   let httpTestingController: HttpTestingController;

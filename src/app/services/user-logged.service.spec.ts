@@ -7,7 +7,7 @@ import { asyncData } from '../testing/async-helpers';
 import { adminTest } from '../testing/models';
 import { User } from '../models/user';
 import { LocalStorageService } from './local-storage.service';
-import { ROLE_MANAGER, ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, URI_ADMINS, URI_STUDENTS, URI_MANAGERS, URI_TEACHERS } from '../app.config';
+import { ROLE_MANAGER, ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, URI_ADMIN, URI_STUDENT, URI_MANAGER, URI_TEACHER } from '../app.config';
 
 
 describe('User Logged Service', () => {
@@ -123,16 +123,16 @@ describe('User Logged Service', () => {
 
   it('should getUriRole', () => {
     let spy = spyOn(localStorageService, 'getTokenRoles').and.returnValue([ROLE_ADMIN, ROLE_MANAGER]);
-    expect(userLoggedService.getUriRole()).toEqual(URI_ADMINS);
+    expect(userLoggedService.getUriRole()).toEqual(URI_ADMIN);
 
     spy.and.returnValue([ROLE_MANAGER]);
-    expect(userLoggedService.getUriRole()).toEqual(URI_MANAGERS);
+    expect(userLoggedService.getUriRole()).toEqual(URI_MANAGER);
 
     spy.and.returnValue([ROLE_TEACHER]);
-    expect(userLoggedService.getUriRole()).toEqual(URI_TEACHERS);
+    expect(userLoggedService.getUriRole()).toEqual(URI_TEACHER);
 
     spy.and.returnValue([ROLE_STUDENT]);
-    expect(userLoggedService.getUriRole()).toEqual(URI_STUDENTS);
+    expect(userLoggedService.getUriRole()).toEqual(URI_STUDENT);
 
   });
 

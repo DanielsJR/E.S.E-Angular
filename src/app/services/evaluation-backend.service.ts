@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_TITLE, URI_EVALUATIONS, URI_SUBJECTS } from "../app.config";
+import { API_BACKEND_SERVER, URI_TITLE, URI_EVALUATION, URI_SUBJECT } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -14,7 +14,7 @@ import { Evaluation } from "../models/evaluation";
 })
 export class EvaluationBackendService {
 
-    private evaluationURL = API_SERVER + URI_EVALUATIONS;
+    private evaluationURL = API_BACKEND_SERVER + URI_EVALUATION;
 
     constructor(private httpCli: HttpClient) { }
 
@@ -77,7 +77,7 @@ export class EvaluationBackendService {
 
 
     getEvaluationsBySubject(id: string): Observable<Evaluation[]> {
-        const url = `${this.evaluationURL}${URI_SUBJECTS}/${id}`;
+        const url = `${this.evaluationURL}${URI_SUBJECT}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Evaluation[]>(url)
             .pipe(retry(3),

@@ -1,5 +1,5 @@
 
-import { API_SERVER, URI_COURSES, URI_YEAR, URI_NAME } from "../app.config";
+import { API_BACKEND_SERVER, URI_COURSE, URI_YEAR, URI_NAME } from "../app.config";
 
 import { Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
@@ -14,7 +14,7 @@ import { Injectable } from '@angular/core';
 })
 export class CourseBackendService {
 
-    private courseURL = API_SERVER + URI_COURSES;
+    private courseURL = API_BACKEND_SERVER + URI_COURSE;
 
     constructor(private httpCli: HttpClient) { }
 

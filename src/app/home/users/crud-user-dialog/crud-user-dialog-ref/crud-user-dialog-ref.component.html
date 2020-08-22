@@ -342,7 +342,7 @@
 </ng-container>
 
 <ng-container *ngIf="data.type === 'edit'">
-    <form [formGroup]="editForm" (ngSubmit)="save()">
+    <form [formGroup]="editForm" (ngSubmit)="update()">
 
         <mat-toolbar color="primary">
             <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">

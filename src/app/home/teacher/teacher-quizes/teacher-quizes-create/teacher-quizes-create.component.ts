@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { IsLoadingService } from '../../../../services/isLoadingService.service';
 import { Quiz, QUIZ_LEVELS, TRUE_FALSES } from '../../../../models/quiz';
 import { RESULT_ERROR, RESULT_SUCCEED, QUIZ_CREATE_SUCCEED, QUIZ_CREATE_ERROR } from '../../../../app.config';

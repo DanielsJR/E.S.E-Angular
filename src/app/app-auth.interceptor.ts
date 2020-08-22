@@ -4,10 +4,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
-import { RESULT_ERROR, URI_TOKEN_AUTH, API_SERVER, URI_LOGIN } from './app.config';
+import { RESULT_ERROR, URI_TOKEN_AUTH, API_BACKEND_SERVER, URI_LOGIN } from './app.config';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { SnackbarService } from './services/snackbar.service';
+import { SnackbarService } from './shared/snackbars-ref/snackbar.service';
 
 
 @Injectable()
@@ -19,8 +19,8 @@ export class AppAuthInterceptor implements HttpInterceptor {
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const loginUrl = API_SERVER + URI_TOKEN_AUTH;
-        const csrfUrl = API_SERVER + '/csrf';
+        const loginUrl = API_BACKEND_SERVER + URI_TOKEN_AUTH;
+        const csrfUrl = API_BACKEND_SERVER + '/csrf';
 
         if (!req.headers.has('Authorization') && (req.url.search(loginUrl) === -1)) {
             if ((!this.localStorageService.isTokenExpired())) {

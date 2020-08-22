@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { finalize } from 'rxjs/operators';
 import { RESULT_ERROR, RESULT_SUCCEED } from '../../../../app.config';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -42,14 +42,12 @@ export class ResetPassDialogRefComponent implements OnInit {
     this.userBackendService.resetUserPassword(this.user.username, resetedPass, this.uriRole)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(response => {
-        if (response) {
-          this.dialogRef.close();
-          setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCEED));
-        } else {
-          this.dialogRef.close();
+        (response) ? setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCEED)) :
           setTimeout(() => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR));
-        }
-      }, error => this.snackbarService.openSnackBar('Error al restablecer contraseña', RESULT_ERROR)
+
+        this.dialogRef.close();
+
+      }, err => this.snackbarService.openSnackBar(err.error.errors, RESULT_ERROR)
       );
 
   }

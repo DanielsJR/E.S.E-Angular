@@ -41,65 +41,70 @@ export class SubjectStoreService {
         return this.isLoadingGet.asObservable();
     }
 
-    loadSubjects(id?: string) {
+    loadSubjectsByYear(year: string) {
         if (this.subjectsSource.getValue().length) {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
-            console.log(`********GET-Subjects-FROM-BACKEND********`);
-            this.isLoadingGet.next(true);
+            this.subjectBackendService.getSubjectsByYear(year)
+                .pipe(finalize(() => this.isLoadingGet.next(false)))
+                .subscribe(data => {
+                    if (data.length) {
+                        this.dataStore.subjects = data;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    } else {
+                        data = null;
+                        console.error('Lista de subjects vacia');
+                    }
+                }, error => console.error('error retrieving all subjects, ' + error.message));
+        }
+    }
 
-            if (this.userLoggedService.isManager()) {
-                this.subjectBackendService.getAllSubjects()
-                    .pipe(finalize(() => this.isLoadingGet.next(false)))
-                    .subscribe(data => {
-                        if (data.length) {
-                            this.dataStore.subjects = data;
-                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        } else {
-                            data = null;
-                            console.error('Lista de subjects vacia');
-                        }
-                    }, error => console.error('error retrieving all subjects, ' + error.message));
+    loadSubjectsByTeacherAndYear(username: string, year: string) {
+        if (this.subjectsSource.getValue().length) {
+            console.log(`********GET-Subjects-FROM-CACHE********`);
+            this.subjectsSource.next(this.dataStore.subjects);
+        } else {
+            this.subjectBackendService.getSubjectsByTeacherAndYear(username, year)
+                .pipe(
+                    take(1),
+                    finalize(() => this.isLoadingGet.next(false))
+                )
+                .subscribe(data => {
+                    if (data.length) {
+                        this.dataStore.subjects = data;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    } else {
+                        data = null;
+                        console.error('Lista de subjects vacia');
+                    }
+                }, error => console.error('error retrieving subjects by teacher, ' + error.message));
+        }
+    }
 
-            } else if (this.userLoggedService.isTeacher()) {
-                this.subjectBackendService.getSubjectsByTeacher(id)
-                    .pipe(
-                        take(1),
-                        finalize(() => this.isLoadingGet.next(false))
-                    )
-                    .subscribe(data => {
-                        if (data.length) {
-                            this.dataStore.subjects = data;
-                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        } else {
-                            data = null;
-                            console.error('Lista de subjects vacia');
-                        }
-                    }, error => console.error('error retrieving subjects by teacher, ' + error.message));
-
-            } else if (this.userLoggedService.isStudent()) {
-                this.subjectBackendService.getSubjectsByCourse(id)
-                    .pipe(
-                        take(1),
-                        finalize(() => this.isLoadingGet.next(false))
-                    )
-                    .subscribe(data => {
-                        if (data.length) {
-                            this.dataStore.subjects = data;
-                            this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        } else {
-                            data = null;
-                            console.error('Lista de subjects vacia');
-                        }
-                    }, error => console.error('error retrieving SubjectsByCourse, ' + error.message));
-
-            } else {
-                console.error('No Role!!')
-            }
+    loadSubjectsByCourseAndYear(courseId: string, year: string) {
+        if (this.subjectsSource.getValue().length) {
+            console.log(`********GET-Subjects-FROM-CACHE********`);
+            this.subjectsSource.next(this.dataStore.subjects);
+        } else {
+            this.subjectBackendService.getStudentSubjectsByCourse(courseId, year)
+                .pipe(
+                    take(1),
+                    finalize(() => this.isLoadingGet.next(false))
+                )
+                .subscribe(data => {
+                    if (data.length) {
+                        this.dataStore.subjects = data;
+                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    } else {
+                        data = null;
+                        console.error('Lista de subjects vacia');
+                    }
+                }, error => console.error('error retrieving SubjectsByCourse, ' + error.message));
         }
 
     }
+
 
     loadOneSubject(id: string) {
         return this.subjects$

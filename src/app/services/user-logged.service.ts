@@ -5,7 +5,7 @@ import { UserBackendService } from './user-backend.service';
 import { tap } from 'rxjs/operators';
 import { IsLoadingService } from './isLoadingService.service';
 import { LocalStorageService } from './local-storage.service';
-import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_ADMINS, URI_MANAGERS, URI_TEACHERS, URI_STUDENTS } from '../app.config';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_ADMIN, URI_MANAGER, URI_TEACHER, URI_STUDENT } from '../app.config';
 import { Token } from '../models/token';
 
 @Injectable({
@@ -94,10 +94,10 @@ export class UserLoggedService {
     }
 
     getUriRole(): string {
-        if (this.getPrivilege() === ROLE_ADMIN) return URI_ADMINS;
-        if (this.getPrivilege() === ROLE_MANAGER) return URI_MANAGERS;
-        if (this.getPrivilege() === ROLE_TEACHER) return URI_TEACHERS;
-        if (this.getPrivilege() === ROLE_STUDENT) return URI_STUDENTS;
+        if (this.getPrivilege() === ROLE_ADMIN) return URI_ADMIN;
+        if (this.getPrivilege() === ROLE_MANAGER) return URI_MANAGER;
+        if (this.getPrivilege() === ROLE_TEACHER) return URI_TEACHER;
+        if (this.getPrivilege() === ROLE_STUDENT) return URI_STUDENT;
         console.error('error no role');
         return 'no role';
     }

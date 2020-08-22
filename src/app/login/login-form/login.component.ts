@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { SnackbarService } from '../../services/snackbar.service';
+import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
 import { RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';

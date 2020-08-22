@@ -3,13 +3,13 @@ import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Theme } from './theme';
-import { API_SERVER, URI_THEME, URI_PREFERENCES } from '../../app.config';
+import { API_BACKEND_SERVER, URI_THEME, URI_PREFERENCES } from '../../app.config';
 
 
 @Injectable()
 export class ThemeService {
 
-    private themeURL = API_SERVER + URI_PREFERENCES + URI_THEME;
+    private themeURL = API_BACKEND_SERVER + URI_PREFERENCES + URI_THEME;
 
     constructor(private httpCli: HttpClient) { }
 

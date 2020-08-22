@@ -54,18 +54,7 @@ export class SimpleDialogComponent {
         config.height = 'auto';
 
         return this.dialog.open(SimpleDialogRefComponent, config);
-    /* let  dialogRef = this.dialog.open(SimpleDialogRefComponent, config);  
-     dialogRef.afterClosed().subscribe(result => {
-            if (result === RESULT_CANCELED) {
-                console.log(RESULT_CANCELED);
-            } else if (result === RESULT_ACCEPT) {
-                this.objSelected.emit(dialogRef.componentInstance.obj);
-                console.log(RESULT_ACCEPT);
-            } else if (result === RESULT_ERROR) {
-                console.log(RESULT_ERROR);
 
-            }
-        });*/
     }
     
 

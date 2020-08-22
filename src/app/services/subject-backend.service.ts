@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_SERVER, URI_SUBJECTS, URI_NAME, URI_TEACHER, URI_YEAR, URI_COURSE } from "../app.config";
+import { API_BACKEND_SERVER, URI_SUBJECT, URI_NAME, URI_TEACHER, URI_YEAR, URI_COURSE, URI_USER, URI_USERNAME } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -12,13 +12,13 @@ import { Subject } from "../models/subject";
 })
 export class SubjectBackendService {
 
-    private subjectURL = API_SERVER + URI_SUBJECTS;
+    private subjectURL = API_BACKEND_SERVER + URI_SUBJECT;
 
     constructor(private httpCli: HttpClient) { }
 
 
-    getAllSubjects(): Observable<Subject[]> {
-        const url = `${this.subjectURL}`;
+    getSubjectsByYear(year: string): Observable<Subject[]> {
+        const url = `${this.subjectURL}${URI_YEAR}/${year}`;
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Subject[]>(url)
             .pipe(retry(3),
@@ -73,8 +73,8 @@ export class SubjectBackendService {
             );
     }
 
-    getSubjectsByTeacher(id: string): Observable<Subject[]> {
-        const url = `${this.subjectURL}${URI_TEACHER}/${id}`;
+    getSubjectsByTeacherAndYear(username: string, year: string): Observable<Subject[]> {
+        const url = `${this.subjectURL}${URI_TEACHER}/${username}/${year}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Subject[]>(url)
             .pipe(retry(3),
@@ -82,8 +82,8 @@ export class SubjectBackendService {
             );
     }
 
-    getSubjectsByCourse(id: string): Observable<Subject[]> {
-        const url = `${this.subjectURL}${URI_COURSE}/${id}`;
+    getStudentSubjectsByCourse(id: string, username: string,): Observable<Subject[]> {
+        const url = `${this.subjectURL}${URI_COURSE}/${id}/${username}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Subject[]>(url)
             .pipe(retry(3),

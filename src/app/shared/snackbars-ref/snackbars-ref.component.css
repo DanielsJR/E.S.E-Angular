@@ -2,18 +2,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 64px;
+    height: auto;
+    min-height: 64px;
     opacity: 0.75;
-    --box-shadow: 10px 10px 5px grey;
-    --font-size: 0.95em;
 }
 
 .logoItem {
-    padding: 0 20px;
+    padding-left: 20px
 }
 
 .messageItem {
-    padding: 0 20px;
+    padding: 20px;
+    overflow: hidden;
 }
 
 .btnItem {

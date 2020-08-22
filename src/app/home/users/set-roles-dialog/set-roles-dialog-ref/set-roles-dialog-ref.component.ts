@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { URI_MANAGERS, URI_TEACHERS, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
+import { URI_MANAGER, URI_TEACHER, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { UserStoreService } from '../../../../services/user-store.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { Avatar } from '../../../../models/avatar';
-import { SnackbarService } from '../../../../services/snackbar.service';
+import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
@@ -81,7 +81,7 @@ export class SetRolesDialogRefComponent implements OnInit {
 
   private setRoles(): void {
     this.sortRoles();
-    if (this.uriRole === URI_MANAGERS) {
+    if (this.uriRole === URI_MANAGER) {
       this.isLoading = true;
       this.userStoreService.setManagerRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
@@ -95,7 +95,7 @@ export class SetRolesDialogRefComponent implements OnInit {
           this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
         });
 
-    } else if (this.uriRole === URI_TEACHERS) {
+    } else if (this.uriRole === URI_TEACHER) {
       this.isLoading = true;
       this.userStoreService.setTeacherRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
