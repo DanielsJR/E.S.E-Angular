@@ -1,13 +1,9 @@
 
 import { Component, OnInit, Input, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { SubjectStoreService } from '../../../services/subject-store.service';
-import { SessionStorageService } from '../../../services/session-storage.service';
-import { Subject } from '../../../models/subject';
 import { ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT } from '../../../app.config';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { EvaluationStoreService } from '../../../services/evaluation-store.service';
-import { Course } from '../../../models/course';
 import { GradeStoreService } from '../../../services/grade-store.service';
 import { UserLoggedService } from '../../../services/user-logged.service';
 import { User } from '../../../models/user';
@@ -31,15 +27,6 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   roleStudent = ROLE_STUDENT;
 
   subjectId: string;
-  subject: Subject;
-  isDark: boolean;
-  isLoading: boolean = false;
-
-  subjectsTeacher: Subject[];
-  coursesTeacher: Course[];
-
-  subjects: Subject[];
-  coursesSubjects: Course[];
 
   toolbarMenus: any[] = [];
 
@@ -48,86 +35,67 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   enableToolbar: boolean;
   currentUrl: string;
   dinamicStyles = {};
-  userLogged: User;
 
-  constructor(private route: ActivatedRoute, private subjectStoreService: SubjectStoreService,
-    private sessionStorage: SessionStorageService,
-    private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService,
-    private router: Router, private userLoggedService: UserLoggedService, private attendanceStoreService: AttendanceStoreService,
+  constructor(private route: ActivatedRoute, private router: Router,
+    private evaluationStoreService: EvaluationStoreService, private gradeStoreService: GradeStoreService, private attendanceStoreService: AttendanceStoreService,
+    private userLoggedService: UserLoggedService,
     private cdRef: ChangeDetectorRef,
   ) { }
 
 
   ngOnInit() {
-    this.evaluationStoreService.clearStore();
-    this.gradeStoreService.clearStore();
-    this.attendanceStoreService.clearStore();
-
-    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(isLoadding => this.isLoading = isLoadding));
-    this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
+    this.clearStores();
     this.currentUrl = this.router.url;
   }
 
   ngAfterViewInit(): void {
     if (this.route.snapshot.firstChild) {
       this.subscriptions.add(this.route.firstChild.params
-        .pipe(
-          switchMap(params => {
-            this.subjectId = params.id;
-            this.evaluationStoreService.getEvaluationsBySubject(this.subjectId);
-            this.gradeStoreService.getGradesBySubject(this.subjectId);
-            this.attendanceStoreService.getAttendancesBySubject(this.subjectId);
-            return this.userLoggedService.userLogged$
-          }),
-
-          switchMap(user => {
-            this.userLogged = user;
-            this.setToolbarMenus(this.subjectId);
-            return this.subjectStoreService.loadOneSubject(this.subjectId);
-          }),
-
-          switchMap(s => {
-            this.subject = s;
-            return this.subjectStoreService.subjects$;
-          })
-        )
-        .subscribe(sbjs => {
-          this.subjects = sbjs;
-          this.coursesSubjects = this.subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-          this.subjectsTeacher = sbjs.filter(sj => sj.teacher.id.indexOf(this.subject.teacher.id) === 0);
-          this.coursesTeacher = this.subjectsTeacher.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+        .subscribe(params => {
+          this.subjectId = params.id;
+          this.getStoresByRole(this.subjectId, this.userLoggedService.getTokenUsername());
+          this.setToolbarMenus(this.subjectId, this.userLoggedService.getTokenUsername());
         }));
-
     }
 
     this.cdRef.detectChanges();
-
   }
-
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  getSubjectsTeacherByCourse(course: Course) {
-    return this.subjectsTeacher.filter(sj => sj.course.name.indexOf(course.name) === 0);
+  clearStores() {
+    this.evaluationStoreService.clearStore();
+    this.gradeStoreService.clearStore();
+    this.attendanceStoreService.clearStore();
   }
 
-  getSubjectsByCourse(course: Course) {
-    return this.subjects.filter(sj => sj.course.name.indexOf(course.name) === 0);
+  getStoresByRole(subjectId: string, username: string): void {
+    if (this.areaRole === this.roleManager) {
+      this.gradeStoreService.getGradesBySubject(subjectId);
+      this.evaluationStoreService.getEvaluationsBySubject(subjectId);
+      this.attendanceStoreService.getAttendancesBySubject(subjectId);
+
+    } else if (this.areaRole === this.roleTeacher) {
+      this.gradeStoreService.getTeacherGradesBySubject(subjectId, username);
+      this.evaluationStoreService.getTeacherEvaluationsBySubject(subjectId, username);
+      this.attendanceStoreService.getAttendancesBySubject(subjectId);//TODO teacher
+
+    } else if (this.areaRole === this.roleStudent) {
+      this.gradeStoreService.getStudentGradesBySubject(subjectId, username);
+      //this.attendanceStoreService.getAttendancesBySubject(this.subjectId);//TODO student
+
+    } else { console.error("No Area Role!"); }
   }
 
-  getState(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
-  }
-
-  setToolbarMenus(subjectId): string[] {
+  setToolbarMenus(subjectId: string, username: string): string[] {
     if (this.areaRole === this.roleManager) {
       this.toolbarMenus = [
         { name: 'Curso', route: ['./course', subjectId] },
         { name: 'Evaluaciones', route: ['./evaluations', subjectId] },
         { name: 'Asistencia', route: ['./attendance', subjectId] },
-        { name: 'Libro de Clases', route: ['./book', subjectId] },
+        //{ name: 'Libro de Clases', route: ['./book', subjectId] },
       ];
 
     } else if (this.areaRole === this.roleTeacher) {
@@ -141,17 +109,16 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     } else if (this.areaRole === this.roleStudent) {
       this.toolbarMenus = [
-        { name: 'Curso', route: ['./course', subjectId, { username: this.userLogged.username }] },
-        { name: 'Mis Asistencias', route: ['./attendance', subjectId, { username: this.userLogged.username }] },
-        { name: 'Libro de Clases', route: ['./book', subjectId, { username: this.userLogged.username }] },
-        { name: 'Mis Notas', route: ['./grades', subjectId, { username: this.userLogged.username }] },
-        { name: 'Rendir Prueba', route: ['./quiz', subjectId, { username: this.userLogged.username }] },
+        { name: 'Curso', route: ['./course', subjectId, { username: username }] },
+        { name: 'Mis Asistencias', route: ['./attendance', subjectId, { username: username }] },
+        { name: 'Libro de Clases', route: ['./book', subjectId, { username: username }] },
+        { name: 'Mis Notas', route: ['./grades', subjectId, { username: username }] },
+        { name: 'Rendir Prueba', route: ['./quiz', subjectId, { username: username }] },
       ];
 
     } else {
       this.toolbarMenus = [];
       console.error('No areaRol!!');
-
     }
 
     return this.toolbarMenus;
@@ -177,6 +144,10 @@ export class SubjectDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     }
 
+  }
+
+  getState(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
 

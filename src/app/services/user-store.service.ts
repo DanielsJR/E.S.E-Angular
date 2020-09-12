@@ -43,7 +43,6 @@ export class UserStoreService {
 
     ) {
         this.dataStore = { managers: [], teachers: [], students: [] }
-
     }
 
 
@@ -68,15 +67,10 @@ export class UserStoreService {
             this.userBackendService.getUsers(this.managerUriRole).pipe(
                 finalize(() => this.isLoadingGetManagers.next(false)))
                 .subscribe(users => {
-                    if (users.length) {
-                        this.dataStore.managers = users;
-                        this.managersSource.next(Object.assign({}, this.dataStore).managers);
-                    } else {
-                        users = null;
-                        console.error('Lista de Managers vacia');
-                    }
-                }, err => console.error("Error retrieving Manager" + err.message)
-                );
+                    this.dataStore.managers = users;
+                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
+                    if (users.length == 0) console.error('manager list empty');
+                });
         }
 
     }
@@ -102,11 +96,11 @@ export class UserStoreService {
             }));
     }
 
-    deleteManager(user: User): Observable<boolean> {
+    deleteManager(user: User): Observable<User> {
         return this.userBackendService.delete(user, this.managerUriRole).pipe(
-            tap(_ => {
-                this.deleteInManagerDataStore(user);
-                this.deleteInTeacherDataStore(user);
+            tap(data => {
+                this.deleteInManagerDataStore(data);
+                this.deleteInTeacherDataStore(data);
             }));
     }
 
@@ -115,9 +109,7 @@ export class UserStoreService {
             tap(data => {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);
-
-            }, err => console.error('Error setting Roles Manager', err.message)
-            ));
+            }));
     }
 
     updateInManagerDataStore(user: User): void {
@@ -180,8 +172,8 @@ export class UserStoreService {
                 .subscribe(users => {
                     this.dataStore.teachers = users;
                     this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-                }, err => console.error("Error retrieving teacher")
-                );
+                    if (users.length == 0) console.error('teacher list empty');
+                });
         }
 
     }
@@ -207,11 +199,11 @@ export class UserStoreService {
             }));
     }
 
-    deleteTeacher(user: User): Observable<boolean> {
+    deleteTeacher(user: User): Observable<User> {
         return this.userBackendService.delete(user, this.teacherUriRole).pipe(
-            tap(_ => {
-                this.deleteInTeacherDataStore(user);
-                this.deleteInManagerDataStore(user);
+            tap(data => {
+                this.deleteInTeacherDataStore(data);
+                this.deleteInManagerDataStore(data);
             }));
     }
 
@@ -221,8 +213,7 @@ export class UserStoreService {
                 this.updateInManagerDataStore(data);
                 this.updateInTeacherDataStore(data);
 
-            }, err => console.error('Error setting Roles teacher', err.message)
-            ));
+            }));
     }
 
     updateInTeacherDataStore(user: User): void {
@@ -292,8 +283,8 @@ export class UserStoreService {
                 .subscribe(users => {
                     this.dataStore.students = users;
                     this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                }, err => console.error("Error retrieving student")
-                );
+                    if (users.length == 0) console.error('student list empty');
+                });
         }
 
     }
@@ -316,9 +307,9 @@ export class UserStoreService {
             tap(data => this.updateInStudentDataStore(data)));
     }
 
-    deleteStudent(user: User): Observable<boolean> {
+    deleteStudent(user: User): Observable<User> {
         return this.userBackendService.delete(user, this.studentUriRole).pipe(
-            tap(_ => this.deleteInStudentDataStore(user)));
+            tap(data => this.deleteInStudentDataStore(data)));
     }
 
     updateInStudentDataStore(user: User): void {

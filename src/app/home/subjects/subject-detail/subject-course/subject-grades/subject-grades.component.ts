@@ -203,8 +203,8 @@ export class SubjectGradesComponent implements OnInit {
         console.error(RESULT_ERROR);
         this.snackbarService.openSnackBar(GRADE_UPDATE_ERROR, RESULT_ERROR);
       } else if (result === RESULT_SUCCEED) {
-        console.log(RESULT_SUCCEED);
-        this.snackbarService.openSnackBar(GRADE_UPDATE_SUCCEED, RESULT_SUCCEED);
+        //console.log(RESULT_SUCCEED);
+        //this.snackbarService.openSnackBar(GRADE_UPDATE_SUCCEED, RESULT_SUCCEED);
       }
     });
   }

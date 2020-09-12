@@ -37,6 +37,7 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   courseName: string;
   course: Course;
   courses: Course[] = [];
+  subjects: Subject[];
 
   // mat table
   displayedColumns = ['name', 'crud'];
@@ -87,105 +88,56 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  setDataSource(matSelect: MatSelect) {
-    //console.error("*****************setDataSource()*******************")
-
-    if (this.areaRole === this.roleManager) {
-      this.subscriptions.add(this.courseStoreService.courses$
-        .subscribe(data => {
-          this.courses = data;
+  setDataSourceManagerTeacher(matSelect: MatSelect) {
+    this.subscriptions.add(this.userLoggedService.userLogged$
+      .pipe(
+        switchMap(user => {
+          this.user = user;
+          return this.subjectStoreService.subjects$
+        }),
+        switchMap(subjects => {
+          this.subjects = subjects;
+          let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
+          this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
           this.isSelectCourseDisabled = this.courses.length < 1;
-        }));
+          return matSelect.valueChange;
+        }))
+      .subscribe((value: any) => {
+        this.courseName = value;
+        let subjectsByCourse = this.subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
+        this.dataSource.data = subjectsByCourse;
+        if (subjectsByCourse.length) {
+          this.isSeachDisabled = false;
+          this.isBtnAddDisabled = false;
+        }
+      }));
+  }
 
-      this.subscriptions.add(matSelect.valueChange
-        .pipe(
-          switchMap(value => {
-            this.courseName = value;
-            return this.courseStoreService.courses$;
-          }),
-          switchMap(cs => {
-            this.course = cs.find(c => c.name.indexOf(this.courseName) === 0);
-            return this.subjectStoreService.subjects$;
-          })
-        )
-        .subscribe(subjects => {
-          let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
-          this.dataSource.data = filteredSubjects;
-          if (filteredSubjects.length) {
-            this.isSeachDisabled = false;
-            this.isBtnAddDisabled = false;
-          }
-        }));
+  setDataSourceManagerOrTeacher(matSelect: MatSelect) {
+    this.subscriptions.add(this.subjectStoreService.subjects$
+      .pipe(
+        switchMap(subjects => {
+          this.subjects = subjects;
+          this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+          this.isSelectCourseDisabled = this.courses.length < 1;
+          return matSelect.valueChange;
+        }))
+      .subscribe((value: string) => {
+        this.courseName = value;
+        let subjectsByCourse = this.subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0);
+        this.dataSource.data = subjectsByCourse;
+        if (subjectsByCourse.length) {
+          this.isSeachDisabled = false;
+          this.isBtnAddDisabled = false;
+        }
+      }));
+  }
 
-    } else if (this.areaRole === this.roleTeacher) {
+  setDataSource(matSelect: MatSelect) {
+    this.setDataSourceManagerOrTeacher(matSelect);
 
-      if (this.userLoggedService.isManager) {
+    if (this.areaRole === this.roleTeacher && this.userLoggedService.isManager) this.setDataSourceManagerTeacher(matSelect)
 
-        this.subscriptions.add(this.userLoggedService.userLogged$
-          .pipe(
-            switchMap(user => {
-              this.user = user;
-              return this.subjectStoreService.subjects$
-            }))
-          .subscribe(subjects => {
-            if (subjects) {
-              let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
-              this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-              this.isSelectCourseDisabled = this.courses.length < 1;
-            }
-          }));
-
-        this.subscriptions.add(this.userLoggedService.userLogged$
-          .pipe(
-            switchMap(user => {
-              this.user = user;
-              return matSelect.valueChange;
-            }),
-            switchMap((value: any) => {
-              this.courseName = value;
-              return this.subjectStoreService.subjects$
-            })
-
-          )
-          .subscribe(subjects => {
-            let filteredSubjects = subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
-            this.dataSource.data = filteredSubjects;
-            if (filteredSubjects.length) {
-              this.isSeachDisabled = false;
-              this.isBtnAddDisabled = false;
-            }
-          }));
-
-      } else {
-
-        this.subscriptions.add(this.subjectStoreService.subjects$
-          .subscribe(subjects => {
-            this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-            this.isSelectCourseDisabled = this.courses.length < 1;
-          }));
-
-
-        this.subscriptions.add(matSelect.valueChange
-          .pipe(
-            switchMap(value => {
-              this.courseName = value;
-              return this.subjectStoreService.subjects$;
-            }
-            ))
-          .subscribe(subjects => {
-            let filteredSubjects = subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0)
-            this.dataSource.data = filteredSubjects;
-            if (filteredSubjects.length) {
-              this.isSeachDisabled = false;
-              this.isBtnAddDisabled = false;
-            }
-          }));
-
-      }
-
-    } else {
-      console.error('Area role: ', this.areaRole);
-    }
   }
 
   applyFilter(filterValue: string) {

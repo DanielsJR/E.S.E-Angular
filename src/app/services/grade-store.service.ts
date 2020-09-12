@@ -6,9 +6,9 @@ import { IsLoadingService } from "./isLoadingService.service";
 
 import { Grade } from "../models/grade";
 import { GradeBackendService } from "./grade-backend.service";
-import { Subject } from "../models/subject";
 import { User } from "../models/user";
 import { map } from "rxjs/internal/operators/map";
+import { Evaluation } from '../models/evaluation';
 
 
 
@@ -45,15 +45,46 @@ export class GradeStoreService {
             this.gradeBackendService.getGradesBySubject(id)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.grades = data;
-                        this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                    } else {
-                        data = null;
-                        console.error('Lista de Notas vacia');
-                    }
-                }, error => console.error('error retrieving Grades, ' + error.message)
-                );
+                    this.dataStore.grades = data;
+                    this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+                    if (data.length == 0) console.error('grade list empty');
+                });
+        }
+
+    }
+
+    getTeacherGradesBySubject(subjectId: string, username: string) {
+        if (this.gradesSource.getValue().length) {
+            console.log(`********GET-TeacherGrades-FROM-CACHE********`);
+            this.gradesSource.next(this.dataStore.grades);
+        } else {
+            console.log(`********GET-TeacherGrades-FROM-BACKEND********`);
+            this.isLoadingGet.next(true);
+            this.gradeBackendService.getTeacherGradesBySubject(subjectId, username)
+                .pipe(finalize(() => this.isLoadingGet.next(false)))
+                .subscribe(data => {
+                    this.dataStore.grades = data;
+                    this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+                    if (data.length == 0) console.error('grade list empty');
+                });
+        }
+
+    }
+
+    getStudentGradesBySubject(subjectId: string, username: string) {
+        if (this.gradesSource.getValue().length) {
+            console.log(`********GET-StudentGrades-FROM-CACHE********`);
+            this.gradesSource.next(this.dataStore.grades);
+        } else {
+            console.log(`********GET-StudentGrades-FROM-BACKEND********`);
+            this.isLoadingGet.next(true);
+            this.gradeBackendService.getStudentGradesBySubject(subjectId, username)
+                .pipe(finalize(() => this.isLoadingGet.next(false)))
+                .subscribe(data => {
+                    this.dataStore.grades = data;
+                    this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+                    if (data.length == 0) console.error('grade list empty');
+                });
         }
 
     }
@@ -63,21 +94,20 @@ export class GradeStoreService {
             .pipe(map(grades => grades.find(g => g.id === id)));
     }
 
-    create(grade: Grade): Observable<Grade> {
+    create(grade: Grade, teacherUsername: string): Observable<Grade> {
         this.isLoadingService.isLoadingTrue();
-        return this.gradeBackendService.create(grade)
+        return this.gradeBackendService.create(grade, teacherUsername)
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     this.dataStore.grades.push(data);
                     this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-                }, error => console.error('could not create Grades, ' + error.message)
-                ));
+                }));
     }
 
-    update(grade: Grade): Observable<Grade> {
+    update(grade: Grade, teacherUsername: string): Observable<Grade> {
         this.isLoadingService.isLoadingTrue();
-        return this.gradeBackendService.update(grade)
+        return this.gradeBackendService.update(grade, teacherUsername)
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
@@ -87,12 +117,11 @@ export class GradeStoreService {
                         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
                     }
 
-                }, err => console.error("Error updating Grade" + err.message)
-                ));
+                }));
     }
 
-    delete(grade: Grade | string): Observable<Grade> {
-        return this.gradeBackendService.delete(grade)
+    delete(grade: Grade | string, teacherUsername: string): Observable<Grade> {
+        return this.gradeBackendService.delete(grade, teacherUsername)
             .pipe(
                 tap(_ => {
                     let index = this.dataStore.grades.findIndex((g: Grade) => g.id === ((typeof grade === 'string') ? grade : grade.id));
@@ -100,8 +129,7 @@ export class GradeStoreService {
                         this.dataStore.grades.splice(index, 1);
                         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
                     }
-                }, err => console.error("Error deleting Grade" + err.message)
-                ));
+                }));
     }
 
     clearStore() {
@@ -109,7 +137,6 @@ export class GradeStoreService {
         this.dataStore.grades = [];
         this.gradesSource.next(Object.assign({}, this.dataStore).grades);
     }
-
 
     updateGradeInDataStore(grade: Grade): void {
         let index = this.dataStore.grades.findIndex((g: Grade) => g.id === grade.id);
@@ -132,17 +159,17 @@ export class GradeStoreService {
 
     //*****subjectStore******** */
 
-    updateSubjectInGradeStore(subject: Subject) {
-        /* if (this.dataStore.grades.find(g => g.subject.id === subject.id)) {
-             this.dataStore.grades.forEach((item, index) => {
-                 if (item.subject.id === subject.id) {
-                     item.subject = subject;
-                     this.dataStore.grades[index] = item;
-                 }
-             });
-             this.gradesSource.next(Object.assign({}, this.dataStore).grades);
-         }
-     */
+    updateEvaluationInGradeStore(evaluation: Evaluation) {
+        if (this.dataStore.grades.find(g => g.evaluation.id === evaluation.id)) {
+            this.dataStore.grades.forEach((item, index) => {
+                if (item.evaluation.id === evaluation.id) {
+                    item.evaluation = evaluation;
+                    this.dataStore.grades[index] = item;
+                }
+            });
+            this.gradesSource.next(Object.assign({}, this.dataStore).grades);
+        }
+
 
     }
 

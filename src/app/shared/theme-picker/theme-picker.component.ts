@@ -67,7 +67,7 @@ export class ThemePickerComponent implements OnInit, OnDestroy {
   }
 
   get isDark(): boolean {
-    if (this.theme()) return this.theme().isDark;
+    if (this.theme()) return this.theme().dark;
     return false;
   }
 
@@ -102,7 +102,7 @@ export class ThemePickerComponent implements OnInit, OnDestroy {
       const darkThemeName = this.themeName + '-dark';
       const darkTheme = this.themesDark.find(t => t.name === darkThemeName);
       this.installTheme(darkTheme);
-      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, darkTheme);
+      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.username, darkTheme);
     }
   }
 
@@ -111,14 +111,14 @@ export class ThemePickerComponent implements OnInit, OnDestroy {
       const lightThemeName = this.themeName.slice(0, -5);
       const lightTheme = this.themesLight.find(t => t.name === lightThemeName);
       this.installTheme(lightTheme);
-      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.id, lightTheme);
+      if (this.userLoggedService.hasPrivileges()) this.saveThemeOnServer(this.user.username, lightTheme);
     }
   }
 
 
-  private saveThemeOnServer(userId: string, theme: Theme) {
+  private saveThemeOnServer(username: string, theme: Theme) {
     if (this.userLoggedService.hasPrivileges()) {
-      this.themeService.saveTheme(userId, theme).subscribe();
+      this.themeService.saveTheme(username, theme).subscribe();
     }
 
   }

@@ -26,10 +26,8 @@ export class SubjectStoreService {
     constructor(
         private subjectBackendService: SubjectBackendService,
         private gradeStoreService: GradeStoreService,
-        private isLoadingService: IsLoadingService,
-        private userLoggedService: UserLoggedService,
+        private isLoadingService: IsLoadingService) {
 
-    ) {
         this.dataStore = { subjects: [] };
     }
 
@@ -46,17 +44,14 @@ export class SubjectStoreService {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
+            this.isLoadingGet.next(true);
             this.subjectBackendService.getSubjectsByYear(year)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.subjects = data;
-                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        data = null;
-                        console.error('Lista de subjects vacia');
-                    }
-                }, error => console.error('error retrieving all subjects, ' + error.message));
+                    this.dataStore.subjects = data;
+                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    if (data.length == 0) console.error('Lista de asignaturas vacia');
+                });
         }
     }
 
@@ -65,42 +60,36 @@ export class SubjectStoreService {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
+            this.isLoadingGet.next(true);
             this.subjectBackendService.getSubjectsByTeacherAndYear(username, year)
                 .pipe(
                     take(1),
                     finalize(() => this.isLoadingGet.next(false))
                 )
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.subjects = data;
-                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        data = null;
-                        console.error('Lista de subjects vacia');
-                    }
-                }, error => console.error('error retrieving subjects by teacher, ' + error.message));
+                    this.dataStore.subjects = data;
+                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    if (data.length == 0) console.error('Lista de asignaturas vacia');
+                });
         }
     }
 
-    loadSubjectsByCourseAndYear(courseId: string, year: string) {
+    loadStudentSubjectsByCourse(courseId: string, username: string) {
         if (this.subjectsSource.getValue().length) {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
-            this.subjectBackendService.getStudentSubjectsByCourse(courseId, year)
+            this.isLoadingGet.next(true);
+            this.subjectBackendService.getStudentSubjectsByCourse(courseId, username)
                 .pipe(
                     take(1),
                     finalize(() => this.isLoadingGet.next(false))
                 )
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.subjects = data;
-                        this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                    } else {
-                        data = null;
-                        console.error('Lista de subjects vacia');
-                    }
-                }, error => console.error('error retrieving SubjectsByCourse, ' + error.message));
+                    this.dataStore.subjects = data;
+                    this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
+                    if (data.length == 0) console.error('subject list empty');
+                });
         }
 
     }
@@ -119,10 +108,7 @@ export class SubjectStoreService {
                 tap(data => {
                     this.dataStore.subjects.push(data);
                     this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                }, error => {
-                    console.error('could not create subject, ' + error.message);
-                }
-                ));
+                }));
     }
 
     update(subject: Subject): Observable<Subject> {
@@ -135,10 +121,9 @@ export class SubjectStoreService {
                     if (index != -1) {
                         this.dataStore.subjects[index] = data;
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
-                        this.gradeStoreService.updateSubjectInGradeStore(data);
+                        this.gradeStoreService.updateEvaluationInGradeStore(data);
                     }
-                }, err => console.error("Error updating subject" + err.message)
-                ));
+                }));
     }
 
     delete(subject: Subject | string): Observable<Subject> {
@@ -152,8 +137,7 @@ export class SubjectStoreService {
                         this.dataStore.subjects.splice(index, 1);
                         this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
                     }
-                }, err => console.error("Error deleting subject" + err.message)
-                ));
+                }));
     }
 
 

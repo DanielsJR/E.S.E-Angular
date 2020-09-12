@@ -104,17 +104,6 @@ describe('Grade Backend Service', () => {
 
   });
 
-  it('should get grade by title', () => {
-    gradeBackendService.getGradeByTitle('examen01')
-      .subscribe(data => expect(data).toEqual(gradeTest));
-
-    const req = httpTestingController.expectOne(gradeURL + URI_TITLE + '/examen01');
-
-    expect(req.request.method).toEqual('GET');
-
-    req.flush(gradeTest);
-
-  });
 
   it('should get grade by student', () => {
     const gradesTest: Grade[] = [gradeTest];

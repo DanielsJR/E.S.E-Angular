@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { TOPIC_NOTIFICATION, APP_NOTIFICATION } from '../../../../app.config';
 
 @Component({
   selector: 'nx-teacher-quizes-send-quiz',
@@ -17,7 +18,7 @@ export class TeacherQuizesSendQuizComponent implements OnInit {
   constructor(private rxStompService: RxStompService) { }
 
   ngOnInit() {
-    this.notificationSubscription = this.rxStompService.watch('/topic/notification').subscribe((message: Message) => {
+    this.notificationSubscription = this.rxStompService.watch(`${TOPIC_NOTIFICATION}`).subscribe((message: Message) => {
       this.notifications = JSON.parse(message.body).count;
     });
   }
@@ -27,9 +28,7 @@ export class TeacherQuizesSendQuizComponent implements OnInit {
   }
 
   sendNotification() {
-    //const message = `Message generated at ${new Date}`;
-    this.rxStompService.publish({ destination: '/app/notification', body: this.notifications });
-
+    this.rxStompService.publish({ destination: `${APP_NOTIFICATION}`, body: this.notifications });
   }
 
 }

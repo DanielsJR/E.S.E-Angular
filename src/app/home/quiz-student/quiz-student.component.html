@@ -23,11 +23,11 @@
 
         <mat-list-item>
           <img matListAvatar
-            [src]="sanitizer.bypassSecurityTrustResourceUrl('data:'+ grade?.student?.avatar?.type+';base64,' + grade?.student?.avatar?.data)"
+            [src]="'data:'+ student?.avatar?.type+';base64,' + student?.avatar?.data | safe: 'resourceUrl'"
             alt="student" (click)="imageZoom.openDialogImage()">
-          <nx-image-zoom-user #imageZoom [avatar]="grade?.student?.avatar"></nx-image-zoom-user>
+          <nx-image-zoom-user #imageZoom [avatar]="student?.avatar"></nx-image-zoom-user>
 
-          <h3 matLine> {{grade?.student | shortNameLastname}} </h3>
+          <h3 matLine *ngIf="student"> {{student | shortNameLastname}} </h3>
 
           <p matLine>
             <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>
@@ -146,7 +146,7 @@
                 </button>
 
               </mat-toolbar>
-              
+
               <mat-expansion-panel *ngFor="let tf of trueFalseItems['controls']; let i=index;"
                 [expanded]="tf.get('expanded').value" (opened)="panelOpenTrueFalseItems = true"
                 (closed)="panelOpenTrueFalseItems = false">
@@ -365,8 +365,7 @@
   <mat-divider></mat-divider>
   <mat-toolbar>
     <span class="spacer-r"></span>
-    <button type="button" mat-raised-button color="accent" (click)="sendQuiz()"
-    [disabled]="(correspondItemsForm.invalid)
+    <button type="button" mat-raised-button color="accent" (click)="sendQuiz()" [disabled]="(correspondItemsForm.invalid)
       || (trueFalseItemsForm.invalid || trueFalseItemsForm.pristine)
       || (multipleSelectionItemsForm.invalid || multipleSelectionItemsForm.pristine)
       || (incompleteTextItemsForm.invalid || incompleteTextItemsForm.pristine)">

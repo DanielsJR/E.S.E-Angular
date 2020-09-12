@@ -12,11 +12,16 @@ export const NOT_AUTHENTICATED_MESSAGE = 'Not Authenticated';
 
 
 //*******************WEB-SOCKET*************************/
-export const BROKER_URL = environment.SOCKET
+export const BROKER_URL = environment.SOCKET;
+export const APP_NOTIFICATION = '/app/notification';
+export const TOPIC_NOTIFICATION ='/topic/notification';
+export const TOPIC_SEND_QUIZ = '/topic/send-quiz/course';
+export const TOPIC_GRADE_TO_STUDENT = '/topic/grade-to-student/student';
+
 
 
 //*******************REST*************************/
-export const API_BACKEND_SERVER = environment.API
+export const API_BACKEND_SERVER = environment.API;
 
 export const URI_TOKEN_AUTH = '/token/generate-token';
 
@@ -134,6 +139,9 @@ export const ATTENDANCE_DELETE_SUCCEED = 'Asistencia Eliminada';
 
 
 export const CANCEL_MESSAGE = 'Operación Cancelada';
+
+export const SET_PASS_ERROR = 'Error al Actualizar Contraseña';
+export const SET_PASS_SUCCEED = 'Contraseña Actualizada';
 
 //*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';

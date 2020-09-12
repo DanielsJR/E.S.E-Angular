@@ -33,7 +33,7 @@ export class ManagerComponent implements OnInit {
         this.userStoreService.loadAllTeachers();
         this.userStoreService.loadAllStudents();
 
-        this.courseStoreService.loadAllCourses('2018');
+        this.courseStoreService.loadCoursesByYear('2018');
 
         this.subjectStoreService.loadSubjectsByYear('2018');
 

@@ -20,6 +20,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { rowAnimation } from '../../../../shared/animations/animations';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { EMPTY } from 'rxjs';
+import { UserLoggedService } from '../../../../services/user-logged.service';
 
 @Component({
   selector: 'nx-subject-send-quiz',
@@ -56,7 +57,8 @@ export class SubjectSendQuizComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router,
     private evaluationStoreService: EvaluationStoreService, private subjectStoreService: SubjectStoreService,
     public dialog: MatDialog, private sessionStorage: SessionStorageService, private snackbarService: SnackbarService,
-    private rxStompService: RxStompService, private gradeBackendService: GradeBackendService,) {
+    private rxStompService: RxStompService, private gradeBackendService: GradeBackendService,
+    private userLoggedService: UserLoggedService) {
 
     this.subscriptions.add(this.route.paramMap
       .pipe(
@@ -70,7 +72,7 @@ export class SubjectSendQuizComponent implements OnInit {
         }),
         switchMap((message: Message) => {
           this.gradeToTeacher = JSON.parse(message.body);
-          return this.gradeBackendService.create(this.gradeToTeacher)
+          return this.gradeBackendService.create(this.gradeToTeacher, this.userLoggedService.getTokenUsername())
         })
       ).subscribe(g => this.sendGradeToStudent(g)));
   }

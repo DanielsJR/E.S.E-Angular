@@ -45,15 +45,10 @@ export class AttendanceStoreService {
             this.attendanceBackendService.getAttendances(subjectId)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.attendances = data;
-                        this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
-                    } else {
-                        data = null;
-                        console.error('Lista de attendances vacia');
-                    }
-                }, error => console.error('error retrieving attendances, ' + error.message)
-                );
+                    this.dataStore.attendances = data;
+                    this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
+                    if (data.length == 0) console.error('attendance list empty');
+                });
         }
 
     }
@@ -71,8 +66,7 @@ export class AttendanceStoreService {
                 tap(data => {
                     this.dataStore.attendances.push(data);
                     this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
-                }, error => console.error('could not create attendance, ' + error.message)
-                ));
+                }));
     }
 
     update(attendance: Attendance): Observable<Attendance> {
@@ -86,8 +80,7 @@ export class AttendanceStoreService {
                         this.dataStore.attendances[index] = data;
                         this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
                     }
-                }, err => console.error("Error updating attendance" + err.message)
-                ));
+                }));
     }
 
     delete(attendance: Attendance | string): Observable<Attendance> {
@@ -101,8 +94,7 @@ export class AttendanceStoreService {
                         this.dataStore.attendances.splice(index, 1);
                         this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
                     }
-                }, err => console.error("Error deleting attendance" + err.message)
-                ));
+                }));
     }
 
 

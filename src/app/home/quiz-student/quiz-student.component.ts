@@ -6,17 +6,19 @@ import { QuizStudent } from '../../models/quiz-student';
 import { TRUE_FALSES } from '../../models/quiz';
 import { deepCopy } from '../../shared/functions/deepCopy';
 import { IsLoadingService } from '../../services/isLoadingService.service';
-import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { QuizStudentBackendService } from '../../services/quiz-student-backend.service';
-import { QUIZ_CREATE_SUCCEED, RESULT_SUCCEED, RESULT_ERROR, QUIZ_CREATE_ERROR, GRADE_CREATE_ERROR, GRADE_CREATE_SUCCEED } from '../../app.config';
+import { RESULT_SUCCEED, RESULT_ERROR, QUIZ_CREATE_ERROR } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';
-import { Subscription } from 'rxjs';
 import { User } from '../../models/user';
-import { RxStompService } from '@stomp/ng2-stompjs';
-import { LocalStorageService } from '../../services/local-storage.service';
+
+
 import { MatButton } from '@angular/material/button';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { finalize } from 'rxjs/internal/operators/finalize';
+
 
 @Component({
   selector: 'nx-quiz-student',
@@ -98,7 +100,6 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
     this.incompleteTextItemsForm = this.formBuilder.group({
       incompleteTextItems: this.formBuilder.array([]),
     });
-
 
 
     this.setCorrespondItems(this.grade.quizStudent);

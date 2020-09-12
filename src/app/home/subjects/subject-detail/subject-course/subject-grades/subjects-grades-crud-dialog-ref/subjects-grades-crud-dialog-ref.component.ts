@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy, Input } from '@angular/core';
 import { Subject } from '../../../../../../models/subject';
-import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCEED, GRADE_CREATE_ERROR, GRADE_UPDATE_ERROR, DD_MM_YYYY, CRUD_TYPE_CREATE, CRUD_TYPE_DETAIL, CRUD_TYPE_EDIT } from '../../../../../../app.config';
+import { ROLE_MANAGER, ROLE_TEACHER, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCEED, GRADE_CREATE_ERROR, GRADE_UPDATE_ERROR, DD_MM_YYYY, CRUD_TYPE_CREATE, CRUD_TYPE_DETAIL, CRUD_TYPE_EDIT, GRADE_UPDATE_SUCCEED } from '../../../../../../app.config';
 import { Grade } from '../../../../../../models/grade';
 import { Course } from '../../../../../../models/course';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -11,6 +11,8 @@ import { finalize } from 'rxjs/operators';
 import { SessionStorageService } from '../../../../../../services/session-storage.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackbarService } from '../../../../../../shared/snackbars-ref/snackbar.service';
+import { UserLoggedService } from '../../../../../../services/user-logged.service';
 
 
 @Component({
@@ -50,27 +52,27 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
   constructor(public dialogRef: MatDialogRef<SubjectsGradesCrudDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService ) {
+    private snackbarService: SnackbarService,
+    private gradeStoreService: GradeStoreService, private sessionStorage: SessionStorageService,
+    private userLoggedService: UserLoggedService) {
 
     this.areaRole = this.data.areaRole;
 
     console.log('***DialogGrade*** type: ' + data.type);
 
-    if (data.type === CRUD_TYPE_CREATE) {
-      this.grade = this.data.grade;
-      this.grade.evaluation.subject = this.data.grade.evaluation.subject;
-      this.subject = this.data.grade.evaluation.subject;
+    this.grade = this.data.grade;
+    this.subject = this.data.grade.evaluation.subject;
 
+    if (data.type === CRUD_TYPE_CREATE) {
+      this.grade.evaluation.subject = this.data.grade.evaluation.subject;
     }
 
     if (data.type === CRUD_TYPE_DETAIL) {
-      this.grade = this.data.grade;
-      this.subject = this.data.grade.evaluation.subject;
+
     }
 
     if (data.type === CRUD_TYPE_EDIT) {
-      this.grade = this.data.grade;
-      this.subject = this.data.grade.evaluation.subject;
+
     }
 
   }
@@ -117,8 +119,6 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   get cType() { return this.typeGroup.get('type'); }
   get cTitle() { return this.titleGroup.get('title'); }
   get cDate() { return this.dateGroup.get('date'); }
@@ -152,7 +152,7 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
       this.grade.student = student;
 
       this.isLoading = true;
-      this.gradeStoreService.create(this.grade)
+      this.gradeStoreService.create(this.grade, this.userLoggedService.getTokenUsername())
         .pipe(finalize(() => this.isLoading = false))
         .subscribe(_ =>
           this.dialogRef.close(RESULT_SUCCEED)
@@ -173,13 +173,15 @@ export class SubjectsGradesCrudDialogRefComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.grade.grade = g;
 
-    this.gradeStoreService.update(this.grade)
+    this.gradeStoreService.update(this.grade, this.userLoggedService.getTokenUsername())
       .pipe(finalize(() => this.isLoading = false))
-      .subscribe(_ =>
-        this.dialogRef.close(RESULT_SUCCEED)
+      .subscribe(_ => {
+        this.dialogRef.close();
+        this.snackbarService.openSnackBar(GRADE_UPDATE_SUCCEED, RESULT_SUCCEED);
+      }
         , err => {
-          this.dialogRef.close(RESULT_ERROR)
-          console.error(GRADE_UPDATE_ERROR, ' ', err);
+          this.dialogRef.close()
+          this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : GRADE_UPDATE_ERROR, RESULT_ERROR)
         }
 
       );

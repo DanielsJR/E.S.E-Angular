@@ -39,7 +39,7 @@ export class CourseStoreService {
         return this.isLoadingGet.asObservable();
     }
 
-    loadAllCourses(year: string) {
+    loadCoursesByYear(year: string) {
         if (this.coursesSource.getValue().length) {
             console.log(`********GET-Courses-FROM-CACHE********`);
             this.coursesSource.next(this.dataStore.courses);
@@ -49,15 +49,10 @@ export class CourseStoreService {
             this.courseBackendService.getCourses(year)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.courses = data;
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                    } else {
-                        data = null;
-                        console.error('Lista de Cursos vacia');
-                    }
-                }, error => console.error('error retrieving cursos, ' + error.message)
-                );
+                    this.dataStore.courses = data;
+                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                    if (data.length == 0) console.error('course list empty');
+                });
         }
 
     }
@@ -75,8 +70,7 @@ export class CourseStoreService {
                 tap(data => {
                     this.dataStore.courses.push(data);
                     this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                }, error => console.error('could not create User, ' + error.message)
-                ));
+                }));
     }
 
     update(course: Course): Observable<Course> {
@@ -91,8 +85,7 @@ export class CourseStoreService {
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                         this.subjectStoreService.updateCourseInSubjectStore(data);
                     }
-                }, err => console.error("Error updating Manager" + err.message)
-                ));
+                }));
     }
 
     delete(course: Course | string): Observable<Course> {
@@ -106,8 +99,7 @@ export class CourseStoreService {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                     }
-                }, err => console.error("Error deleting Manager" + err.message)
-                ));
+                }));
     }
 
 

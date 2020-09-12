@@ -57,7 +57,7 @@ export class SessionStorageService {
     }
 
     isDarkTheme(): boolean {
-        return (this.getTheme()) ? this.getTheme().isDark : false;
+        return (this.getTheme()) ? this.getTheme().dark : false;
     }
 
     get isThemeDark$(): Observable<boolean> {
@@ -65,7 +65,7 @@ export class SessionStorageService {
     }
 
     darkThemeNext() {
-        this.isThemeDarkSource.next(this.getTheme().isDark);
+        this.isThemeDarkSource.next(this.getTheme().dark);
     }
 
     get isThemeInstalled$(): Observable<boolean> {

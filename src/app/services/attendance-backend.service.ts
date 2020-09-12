@@ -25,8 +25,8 @@ export class AttendanceBackendService {
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Attendance[]>(url)
             .pipe(retry(3),
-                tap(attendances => console.log(`N° Attendances: ${attendances.length}`))
-            );
+                tap(attendances => console.log(`N° Attendances: ${attendances.length}`)
+                    , err => console.error('Error getting atendances', err.error.exception)));
     }
 
     create(attendance: Attendance): Observable<Attendance> {
@@ -34,8 +34,8 @@ export class AttendanceBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Attendance>(url, attendance)
             .pipe(
-                tap(resp => console.log(`created Attendance id =${resp.id}`))
-            );
+                tap(a => console.log(`created Attendance id =${a.id}`)
+                    , err => console.error('Error creating atendance', err.error.exception)));
     }
 
     update(attendance: Attendance): Observable<Attendance> {
@@ -44,8 +44,8 @@ export class AttendanceBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Attendance>(url, attendance)
             .pipe(
-                tap(resp => console.log(`edited Attendance id =${resp.id}`))
-            );
+                tap(a => console.log(`edited Attendance id =${a.id}`)
+                    , err => console.error('Error updating atendance', err.error.exception)));
     }
 
     delete(attendance: Attendance | string): Observable<Attendance> {
@@ -54,8 +54,8 @@ export class AttendanceBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Attendance>(url)
             .pipe(
-                tap(_ => console.log(`deleted Attendance id =${attendanceId}`))
-            );
+                tap(a => console.log(`deleted Attendance id =${a.id}`)
+                    , err => console.error('Error deleting atendance', err.error.exception)));
     }
 
     getAttendanceById(id: string): Observable<Attendance> {
@@ -63,8 +63,8 @@ export class AttendanceBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Attendance>(url)
             .pipe(retry(3),
-                tap(a => console.log(`fetched Attendance id =${a.id}`))
-            );
+                tap(a => console.log(`fetched Attendance id =${a.id}`)
+                    , err => console.error('Error getting atendance', err.error.exception)));
     }
 
 }

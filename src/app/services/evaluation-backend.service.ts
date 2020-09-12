@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { API_BACKEND_SERVER, URI_TITLE, URI_EVALUATION, URI_SUBJECT } from "../app.config";
+import { API_BACKEND_SERVER, URI_TITLE, URI_EVALUATION, URI_SUBJECT, URI_TEACHER } from "../app.config";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { retry } from "rxjs/internal/operators/retry";
@@ -24,8 +24,8 @@ export class EvaluationBackendService {
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Evaluation[]>(url)
             .pipe(retry(3),
-                tap(resp => console.log(`N° Evaluations: ${resp.length}`))
-            );
+                tap(resp => console.log(`N° Evaluations: ${resp.length}`)
+                    , err => console.error('Error getting evaluations', err.error.exception)));
     }
 
     create(evaluation: Evaluation): Observable<Evaluation> {
@@ -33,8 +33,8 @@ export class EvaluationBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Evaluation>(url, evaluation)
             .pipe(
-                tap(resp => console.log(`created Evaluation title=${resp.title}`))
-            );
+                tap(e => console.log(`created Evaluation title=${e.title}`)
+                    , err => console.error('Error creating evaluation', err.error.exception)));
     }
 
     update(evaluation: Evaluation): Observable<Evaluation> {
@@ -43,8 +43,8 @@ export class EvaluationBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Evaluation>(url, evaluation)
             .pipe(
-                tap(resp => console.log(`edited Evaluation title=${resp.title}`))
-            );
+                tap(e => console.log(`edited Evaluation title=${e.title}`)
+                    , err => console.error('Error updating evaluation', err.error.exception)));
     }
 
     delete(evaluation: Evaluation | string): Observable<Evaluation> {
@@ -53,8 +53,8 @@ export class EvaluationBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Evaluation>(url)
             .pipe(
-                tap(_ => console.log(`deleted Evaluation id=${evaluationId}`))
-            );
+                tap(e => console.log(`deleted Evaluation id=${e.id}`)
+                    , err => console.error('Error deleting evaluation', err.error.exception)));
     }
 
     getEvaluationById(id: string): Observable<Evaluation> {
@@ -62,8 +62,8 @@ export class EvaluationBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Evaluation>(url)
             .pipe(retry(3),
-                tap(_ => console.log(`fetched Evaluation id=${id}`))
-            );
+                tap(e => console.log(`fetched Evaluation id=${e.id}`)
+                    , err => console.error('Error getting evaluation', err.error.exception)));
     }
 
     getEvaluationByTitle(title: string): Observable<Evaluation> {
@@ -71,17 +71,25 @@ export class EvaluationBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Evaluation>(url)
             .pipe(retry(3),
-                tap(_ => console.log(`fetched Evaluation title=${title}`))
-            );
+                tap(e => console.log(`fetched Evaluation title=${e.title}`)
+                    , err => console.error('Error getting evaluation', err.error.exception)));
     }
-
 
     getEvaluationsBySubject(id: string): Observable<Evaluation[]> {
         const url = `${this.evaluationURL}${URI_SUBJECT}/${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Evaluation[]>(url)
             .pipe(retry(3),
-                tap(resp => console.log(`N° Evaluation: ${resp.length}`))
-            );
+                tap(resp => console.log(`N° Evaluation: ${resp.length}`)
+                    , err => console.error('Error getting evaluations', err.error.exception)));
+    }
+
+    getTeacherEvaluationsBySubject(id: string, username: string): Observable<Evaluation[]> {
+        const url = `${this.evaluationURL}${URI_SUBJECT}/${id}${URI_TEACHER}/${username}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Evaluation[]>(url)
+            .pipe(retry(3),
+                tap(resp => console.log(`N° Evaluation: ${resp.length}`)
+                    , err => console.error('Error getting evaluations', err.error.exception)));
     }
 }

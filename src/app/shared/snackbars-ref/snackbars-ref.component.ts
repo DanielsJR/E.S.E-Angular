@@ -19,7 +19,7 @@ export class SnackbarsRefComponent {
   constructor(public snackBarRef: MatSnackBarRef<SnackbarsRefComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: any) {
     this.message = data.message;
     this.type = data.type;
-    console.log('***SnackBar*** message: ' + data.message + ' type: ' + data.type);
+    //console.log('***SnackBar*** message: ' + data.message + ' type: ' + data.type);
   }
 
   close() {

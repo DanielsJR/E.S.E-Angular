@@ -403,7 +403,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             });
     }
 
-    deleteUser(user: User): Observable<boolean> {
+    deleteUser(user: User): Observable<User> {
         if (this.uriRole === URI_MANAGER) return this.userStoreService.deleteManager(user)
 
         else if (this.uriRole === URI_TEACHER) return this.userStoreService.deleteTeacher(user)

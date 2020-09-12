@@ -1,19 +1,19 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { ReplaySubject, BehaviorSubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { UserBackendService } from './user-backend.service';
 import { tap } from 'rxjs/operators';
 import { IsLoadingService } from './isLoadingService.service';
 import { LocalStorageService } from './local-storage.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_ADMIN, URI_MANAGER, URI_TEACHER, URI_STUDENT } from '../app.config';
-import { Token } from '../models/token';
+ 
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserLoggedService {
 
-    private userLoggedSource = new ReplaySubject<User>(1);//<BehaviorSubject<User>>new BehaviorSubject(null);// new Subject<User>();
+    private userLoggedSource = new ReplaySubject<User>(1);
 
     redirectUrl: string;
     redirectUser: string;
@@ -39,11 +39,8 @@ export class UserLoggedService {
         this.isLoadingService.isLoadingTrue();
         return this.userBackendService.getUserByUsernameSecured(this.getTokenUsername())
             .pipe(
-                tap(user => {
-                    this.userLoggedNext(user);
-                }, error => {
-                    console.error(`could not load user, ${error.message}`);
-                })
+                tap(user => this.userLoggedNext(user)
+                    , err => console.error(`could not load user, ${err.error.errors}`))
             );
     }
 

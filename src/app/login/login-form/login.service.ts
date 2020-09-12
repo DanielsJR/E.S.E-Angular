@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SessionStorageService } from '../../services/session-storage.service';
@@ -17,9 +17,15 @@ export class LoginService {
         private httpCli: HttpClient
     ) { }
 
+
     login(username: string, password: string): Observable<Token> {
-        const credentials = { username: username, password: password };
-        return this.httpCli.post<Token>(this.endpoint, credentials);
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa(username + ':' + password)
+            })
+        };
+        return this.httpCli.post<Token>(this.endpoint, null, httpOptions);
     }
 
     logout(): void {

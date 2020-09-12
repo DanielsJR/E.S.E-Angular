@@ -43,15 +43,28 @@ export class EvaluationStoreService {
             this.evaluationBackendService.getEvaluationsBySubject(id)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
                 .subscribe(data => {
-                    if (data.length) {
-                        this.dataStore.evaluations = data;
-                        this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
-                    } else {
-                        data = null;
-                        console.error('Lista de Evaluations vacia');
-                    }
-                }, error => console.error('error retrieving Evaluations, ' + error.message)
-                );
+                    this.dataStore.evaluations = data;
+                    this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
+                    if (data.length == 0) console.error('evaluation list empty');
+                });
+        }
+
+    }
+
+    getTeacherEvaluationsBySubject(id: string, username: string) {
+        if (this.evaluationsSource.getValue().length) {
+            console.log(`********GET-TeacherEvaluations-FROM-CACHE********`);
+            this.evaluationsSource.next(this.dataStore.evaluations);
+        } else {
+            console.log(`********GET-TeacherEvaluations-FROM-BACKEND********`);
+            this.isLoadingGet.next(true);
+            this.evaluationBackendService.getTeacherEvaluationsBySubject(id, username)
+                .pipe(finalize(() => this.isLoadingGet.next(false)))
+                .subscribe(data => {
+                    this.dataStore.evaluations = data;
+                    this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
+                    if (data.length == 0) console.error('evaluation list empty');
+                });
         }
 
     }
@@ -69,8 +82,7 @@ export class EvaluationStoreService {
                 tap(data => {
                     this.dataStore.evaluations.push(data);
                     this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
-                }, error => console.error('could not create Evaluations, ' + error.message)
-                ));
+                }));
     }
 
     update(evaluation: Evaluation): Observable<Evaluation> {
@@ -84,9 +96,7 @@ export class EvaluationStoreService {
                         this.dataStore.evaluations[index] = data;
                         this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
                     }
-
-                }, err => console.error("Error updating Evaluation" + err.message)
-                ));
+                }));
     }
 
     delete(evaluation: Evaluation | string): Observable<Evaluation> {
@@ -98,8 +108,7 @@ export class EvaluationStoreService {
                         this.dataStore.evaluations.splice(index, 1);
                         this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
                     }
-                }, err => console.error("Error deleting Evaluation" + err.message)
-                ));
+                }));
     }
 
     clearStore() {

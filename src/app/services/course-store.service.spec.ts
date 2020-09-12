@@ -61,7 +61,7 @@ describe('Course Store Service', () => {
 
     const coursesTest: Course[] = [courseTest, courseTest2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
 
     expect(isLoading).toBeTruthy();
     expect(courses.length).toEqual(0);
@@ -72,7 +72,7 @@ describe('Course Store Service', () => {
     expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledWith('2019');
     expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledTimes(1);
 
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
     expect(courseBackendServiceSpy.getCourses).toHaveBeenCalledTimes(1);//cache
 
   }));
@@ -83,7 +83,7 @@ describe('Course Store Service', () => {
 
     const coursesTest: Course[] = [courseTest, courseTest2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
 
     let course: Course;
     courseStoreService.loadOneCourse(courseTest.name).subscribe(data => course = data);
@@ -100,7 +100,7 @@ describe('Course Store Service', () => {
 
     const coursesTest: Course[] = [courseTest];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
     tick();
 
     let isLoading;
@@ -125,7 +125,7 @@ describe('Course Store Service', () => {
 
     const coursesTest: Course[] = [courseTest];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
     tick();
 
     let isLoading;
@@ -152,7 +152,7 @@ describe('Course Store Service', () => {
 
     const coursesTest: Course[] = [courseTest];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses('2019');
+    courseStoreService.loadCoursesByYear('2019');
     tick();
 
     courseBackendServiceSpy.delete.and.returnValue(asyncData(courseTest));
@@ -176,7 +176,7 @@ describe('Course Store Service', () => {
     courseModified2.chiefTeacher = teacherTest;
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
     
@@ -211,7 +211,7 @@ describe('Course Store Service', () => {
     courseModified2.chiefTeacher = teacherTest;
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
  
@@ -244,7 +244,7 @@ describe('Course Store Service', () => {
     courseModified2.students[0] = courseModified.students[0];
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
     spyOn(subjectStoreService, 'updateCourseInSubjectStore');
@@ -275,7 +275,7 @@ describe('Course Store Service', () => {
     courseModified2.students[0] = courseModified.students[0];
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
     spyOn(subjectStoreService, 'updateCourseInSubjectStore');
@@ -308,7 +308,7 @@ describe('Course Store Service', () => {
     courseModified2.students[0] = courseModified.students[0];
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
     spyOn(subjectStoreService, 'updateCourseInSubjectStore');
@@ -343,7 +343,7 @@ describe('Course Store Service', () => {
     courseModified2.students[0] = courseModified.students[0];
     const coursesTest: Course[] = [courseModified, courseModified2];
     courseBackendServiceSpy.getCourses.and.returnValue(asyncData(coursesTest));
-    courseStoreService.loadAllCourses(courseModified.year);
+    courseStoreService.loadCoursesByYear(courseModified.year);
     tick();
 
     spyOn(subjectStoreService, 'updateCourseInSubjectStore');

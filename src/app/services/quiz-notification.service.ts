@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Subject } from 'rxjs/internal/Subject';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { empty } from 'rxjs/internal/observable/empty';
+import { TOPIC_SEND_QUIZ, TOPIC_GRADE_TO_STUDENT } from '../app.config';
 
 
 @Injectable({
@@ -34,36 +34,28 @@ export class QuizNotificationService {
         return this.quizSentSource.asObservable();
     }
 
-    getNotification() {
+    getNotification(courseId: string) {
         console.log(`********GET-getQuizNotification*******`);
-        this.userLoggedService.userLogged$
+        this.rxStompService.watch(`${TOPIC_SEND_QUIZ}/${courseId}`)
             .pipe(
-                switchMap(user => {
-                    this.student = user;
-                    return (this.student) ? this.courseBackendService.getCourseIdByStudent(this.student.username, '2018') : empty();
-                }),
-                switchMap(courseId => {
-                    return this.rxStompService.watch(`/topic/send-quiz/course/${courseId}`);
-                }),
-
                 switchMap((message: Message) => {
                     let grade: Grade;
                     grade = JSON.parse(message.body);
                     grade.student = this.student;
                     this.notificationSource.next(grade);
 
-                    return this.rxStompService.watch(`/topic/grade-to-student/student/${this.student.id}`);
+                    return this.rxStompService.watch(`${TOPIC_GRADE_TO_STUDENT}/${this.student.id}`);
                 }),
             )
             .subscribe((message: Message) => {
                 this.gradeToStudent = JSON.parse(message.body);
                 this.gradeStoreService.updateGradeInDataStore(this.gradeToStudent);
                 this.setQuizSent(true);
-            }, error => console.error('error retrieving notification, ' + error.message)
+            }, err => console.error('error retrieving notification, ' + err.error.errors)
             );
     }
 
-    setQuizSent(value:boolean) {
+    setQuizSent(value: boolean) {
         console.log("****************setQuizSent******************");
         this.quizSentSource.next(value);
 

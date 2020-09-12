@@ -29,7 +29,7 @@ export class HomeResolverService implements Resolve<Theme> {
 
         return this.userLoggedService.getUserFromBackEnd()
             .pipe(
-                switchMap(user => this.themeService.getTheme(user.id)),
+                switchMap(user => this.themeService.getTheme(user.username)),
                 take(1),
                 mergeMap(theme => {
                     if (theme) {

@@ -1,5 +1,5 @@
 
-import { API_BACKEND_SERVER, URI_COURSE, URI_YEAR, URI_NAME } from "../app.config";
+import { API_BACKEND_SERVER, URI_COURSE, URI_YEAR, URI_NAME, URI_STUDENT, URI_TEACHER } from "../app.config";
 
 import { Observable } from "../../../node_modules/rxjs";
 import { Course } from "../models/course";
@@ -18,14 +18,13 @@ export class CourseBackendService {
 
     constructor(private httpCli: HttpClient) { }
 
-    getCourses(year:string): Observable<Course[]> {
+    getCourses(year: string): Observable<Course[]> {
         const url = `${this.courseURL}${URI_YEAR}/${year}`;
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Course[]>(url)
             .pipe(retry(3),
-                tap(courses => console.log(`N° courses: ${courses.length}`))
-                // ,catchError(this.handleError('getcourses', []))
-            );
+                tap(cs => console.log(`N° courses: ${cs.length}`)
+                    , err => console.error('Error getting courses', err.error.exception)));
     }
 
     create(course: Course): Observable<Course> {
@@ -33,9 +32,8 @@ export class CourseBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Course>(url, course)
             .pipe(
-                tap(resp => console.log(`created course name=${resp.name}`))
-                // ,catchError(this.handleError<User>(`createUser`))
-            );
+                tap(c => console.log(`created course name=${c.name}`)
+                    , err => console.error('Error creating course', err.error.exception)));
     }
 
     update(course: Course): Observable<Course> {
@@ -44,20 +42,18 @@ export class CourseBackendService {
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Course>(url, course)
             .pipe(
-                tap(resp => console.log(`edited course coursename=${resp.name}`))
-                // ,catchError(this.handleError<course>(`updatecourse`))
-            );
+                tap(c => console.log(`edited course coursename=${c.name}`)
+                    , err => console.error('Error editing course', err.error.exception)));
     }
 
     delete(course: Course | string): Observable<Course> {
-        const courseId= (typeof course === 'string') ? course : course.id;
+        const courseId = (typeof course === 'string') ? course : course.id;
         const url = `${this.courseURL}/${courseId}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Course>(url)
             .pipe(
-                tap(_ => console.log(`deleted course id=${courseId}`))
-                // ,catchError(this.handleError<{}>(`deletecourse`))
-            );
+                tap(c => console.log(`deleted course id=${c.id}`)
+                    , err => console.error('Error deleting course', err.error.exception)));
     }
 
     getCourseById(id: string): Observable<Course> {
@@ -65,9 +61,8 @@ export class CourseBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Course>(url)
             .pipe(retry(3),
-                tap(_ => console.log(`fetched course id=${id}`))
-                // ,catchError(this.handleError<course>(`getcourse id=${id}`))
-            );
+                tap(c => console.log(`fetched course id=${c.id}`)
+                    , err => console.error('Error getting course', err.error.exception)));
     }
 
     getCourseByName(name: string, year: string): Observable<Course> {
@@ -75,17 +70,25 @@ export class CourseBackendService {
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Course>(url)
             .pipe(retry(3),
-                tap(_ => console.log(`fetched course name=${name}`))
-                // ,catchError(this.handleError<course>(`getcourse id=${id}`))
-            );
+                tap(c => console.log(`fetched course name=${c.name}`)
+                    , err => console.error('Error getting course', err.error.exception)));
     }
 
-    getCourseIdByStudent(studentName: string, year: string): Observable<string> {
-        const url = `${this.courseURL}/studentName/${studentName}/${year}`;
+    getCourseByChiefTeacherAndYear(username: string, year: string): Observable<Course> {
+        const url = `${this.courseURL}${URI_TEACHER}/${username}/${year}`;
         console.log(`resource called: ${url}`);
-        return this.httpCli.get(url, {responseType: 'text'})
+        return this.httpCli.get<Course>(url)
             .pipe(retry(3),
-                tap(id => console.log(`fetched course id=${id}`))
-            );
+                tap(c => console.log(`fetched course name=${c.name}`)
+                    , err => console.error('Error getting course', err.error.exception)));
+    }
+
+    getCourseIdByStudent(username: string, year: string): Observable<string> {
+        const url = `${this.courseURL}${URI_STUDENT}/${username}/${year}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get(url, { responseType: 'text' })
+            .pipe(retry(3),
+                tap(id => console.log(`fetched course id=${id}`)
+                    , err => console.error('Error getting course', err.error.exception)));
     }
 }

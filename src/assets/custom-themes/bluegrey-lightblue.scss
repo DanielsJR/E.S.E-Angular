@@ -6,7 +6,7 @@ $primary: mat-palette($mat-blue-grey);
 $accent: mat-palette($mat-light-blue, A200, A100, A400);
 $theme: mat-light-theme($primary, $accent);
 
-.bluegrey-light-blue {
+.bluegrey-lightblue {
   @include angular-material-theme($theme);
   @include theme-color-grabber($theme);
 }
@@ -16,7 +16,7 @@ $primary-dark: mat-palette($mat-blue-grey, 400);
 $accent-dark: mat-palette($mat-light-blue, A200, A100, A400);
 $theme-dark: mat-dark-theme($primary-dark, $accent-dark);
 
-.bluegrey-light-blue-dark {
+.bluegrey-lightblue-dark {
   @include angular-material-theme($theme-dark);
   @include theme-color-grabber($theme-dark);
 }

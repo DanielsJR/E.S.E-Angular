@@ -50,14 +50,14 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.username.value, this.password.value)
       .subscribe(token => {
         this.localStorageService.setToken(token.token);
-        const endPoint = '/' + this.userLoggedService.getPrivilege().toLowerCase();
-        this.router.navigate([URI_HOME + endPoint]);
+        const endPoint = this.userLoggedService.getPrivilege().toLowerCase();
+        this.router.navigate([`${URI_HOME}/${endPoint}`]);
 
-      }, error => {
-        console.error('message: ' + error.message + '   status: ' + error.status);
+      }, err => {
+        //console.error('message: ' + err.error.errors + '   status: ' + err.status);
         this.isLoadingService.isLoadingFalse();
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 401) {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
             this.loginForm.reset();
             this.badCredencialsError();
             this.snackbarService.openSnackBar('Usuario o Contraseña Incorrecta', RESULT_ERROR);
@@ -66,7 +66,6 @@ export class LoginComponent implements OnInit {
             this.snackbarService.openSnackBar('Login fallido, intente nuevamente', RESULT_ERROR);
             this.router.navigate([URI_LOGIN]);
           }
-
 
         }
       });

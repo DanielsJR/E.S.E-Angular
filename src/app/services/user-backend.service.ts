@@ -29,98 +29,98 @@ export class UserBackendService {
 
     create(user: User, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.post<User>(url, user).pipe(
-            tap(resp => console.log(`created user name=${resp.firstName}`)
+            tap(u => console.log(`created user name=${u.firstName}`)
                 , err => console.error('Error creating user', err.error.exception)));
     }
 
     update(user: User, uriRole: string): Observable<User> {
         const username = user.username;
         const url = `${this.userURL}${uriRole}/${username}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user).pipe(
-            tap(resp => console.log(`edited user username=${resp.username}`)
+            tap(u => console.log(`edited user username=${u.username}`)
                 , err => console.error('Error updating user', err.error.exception)));
     }
 
-    delete(user: User, uriRole: string): Observable<boolean> {
+    delete(user: User, uriRole: string): Observable<User> {
         const username = user.username;
         const url = `${this.userURL}${uriRole}/${username}`;
-        //console.log(`resource called:  ${url}`);
-        return this.httpCli.delete<boolean>(url).pipe(
-            tap(_ => console.log(`deleted user username=${username}`)
+        console.log(`resource called:  ${url}`);
+        return this.httpCli.delete<User>(url).pipe(
+            tap(u => console.log(`deleted user username=${u.username}`)
                 , err => console.error('Error deleting user', err.error.exception)));
     }
 
     getUserById(id: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}/${id}`;
-        //console.log(`resource called: ${url}`);
+        console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url).pipe(
             retry(3),
-            tap(_ => console.log(`fetched user id=${id}`))
-        );
+            tap(u => console.log(`fetched user id=${u.id}`)
+                , err => console.error('Error getting user', err.error.exception)));
     }
 
     getUserByUsername(name: string, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_USERNAME}/${name}`;
-        //console.log(`resource called: ${url}`);
+        console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url).pipe(
             retry(3),
-            tap(resp => console.log(`fetched user username=${resp.username}`))
-        );
+            tap(u => console.log(`fetched user username=${u.username}`)
+                , err => console.error('Error getting user', err.error.exception)));
     }
 
     getUsersByRole(role: string, uriRole: string): Observable<User[]> {
         const url = `${this.userURL}${uriRole}/${role}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.get<User[]>(url).pipe(
             retry(3),
-            tap(_ => console.log(`fetched users by role=${role}`))
-        );
+            tap(_ => console.log(`fetched users by role=${role}`)
+                , err => console.error('Error getting user', err.error.exception)));
     }
 
     resetUserPassword(username: string, resetedPass: string, uriRole: string): Observable<boolean> {
         const url = `${this.userURL}${uriRole}${URI_PASS}/${username}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, resetedPass).pipe(
-            tap(result => console.log(`pass reseted: ${result}`))
-        );
+            tap(result => console.log(`pass reseted: ${result}`)
+                , err => console.error('Error setting user pass', err.error.exception)));
 
     }
 
     setRoles(user: User, uriRole: string): Observable<User> {
         const url = `${this.userURL}${uriRole}${URI_ROLE}/${user.username}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.patch<User>(url, user).pipe(
-            tap(user => console.log(`fetched user username=${user.username} new roles=${user.roles}`))
-        );
+            tap(u => console.log(`fetched user username=${u.username} new roles=${u.roles}`)
+                , err => console.error('Error setting user roles', err.error.exception)));
     }
 
     getUserByUsernameSecured(name: string): Observable<User> {
         const url = `${this.userURL}/${name}`;
-        //console.log(`resource called: ${url}`);
+        console.log(`resource called: ${url}`);
         return this.httpCli.get<User>(url).pipe(
             retry(3),
-            tap(resp => console.log(`fetched user username=${resp.username}`))
-        );
+            tap(u => console.log(`fetched user username=${u.username}`)
+                , err => console.error('Error getting user', err.error.exception)));
     }
 
     updateSecured(user: User): Observable<User> {
         const username = user.username;
         const url = `${this.userURL}/${username}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.put<User>(url, user).pipe(
-            tap(resp => console.log(`edited user username=${resp.username}`))
-        );
+            tap(u => console.log(`edited user username=${u.username}`)
+                , err => console.error('Error updating user', err.error.exception)));
     }
 
     setUserPasswordSecured(username: string, pass: string[]): Observable<boolean> {
         const url = `${this.userURL}/${username}`;
-        //console.log(`resource called:  ${url}`);
+        console.log(`resource called:  ${url}`);
         return this.httpCli.patch<boolean>(url, pass).pipe(
-            tap(result => console.log(`pass set: ${result}`))
-        );
+            tap(result => console.log(`pass set: ${result}`)
+                , err => console.error('Error setting user pass', err.error.exception)));
     }
 
 

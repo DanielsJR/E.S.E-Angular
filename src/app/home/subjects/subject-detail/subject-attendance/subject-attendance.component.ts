@@ -139,24 +139,15 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
     this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_DETAIL) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDetail(user);
-        } else {
-          this.crudTeacherDialog.openDialogDetail();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDetail(user) : this.crudTeacherDialog.openDialogDetail();
+
       } else if (result === RESULT_EDIT) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogEdit(user);
-        } else {
-          this.crudTeacherDialog.openDialogEdit();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogEdit(user) : this.crudTeacherDialog.openDialogEdit();
+
       } else if (result === RESULT_DELETE) {
-        if (user.roles.includes(ROLE_STUDENT)) {
-          this.crudStudentDialog.openDialogDelete(user);
-        } else {
-          this.crudTeacherDialog.openDialogDelete();
-        }
+        (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDelete(user) : this.crudTeacherDialog.openDialogDelete();
       }
     }));
   }
@@ -264,9 +255,11 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
     this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
         this.deleteAttendance();
+
       } else {
         console.log('no result');
       }
@@ -277,9 +270,11 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
     this.subscriptions.add(dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
         console.log(RESULT_CANCELED);
+
       } else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
         this.saveAttendance();
+        
       } else {
         console.log('no result');
       }

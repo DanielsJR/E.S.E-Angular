@@ -47,7 +47,7 @@ export class TeacherGuard implements CanActivate, CanActivateChild, CanLoad {
         } else {
             console.error('checkLogin: false');
             this.userLoggedService.redirectUrl = url;
-            this.userLoggedService.redirectUser= this.userLoggedService.getTokenUsername();
+            this.userLoggedService.redirectUser = this.userLoggedService.getTokenUsername();
             console.log('TeacherGuard attempted url: ' + url + ' tokenUsername: ' + this.userLoggedService.redirectUser);
             this.router.navigate([URI_LOGIN]);
             return false;

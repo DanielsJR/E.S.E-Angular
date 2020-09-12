@@ -38,7 +38,7 @@ export class AppAuthInterceptor implements HttpInterceptor {
                     }
                 }, (err: any) => {
                     if (err instanceof HttpErrorResponse) {
-                        console.error('**from interceptor** message: ' + err.message + '   status: ' + err.status);
+                        //console.error('**from interceptor** message: ' + err.message + '   status: ' + err.status);
 
                         if (err.status === 403) {
                            // this.snackbarService.openSnackBar('Role Insuficiente', RESULT_ERROR);

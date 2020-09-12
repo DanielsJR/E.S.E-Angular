@@ -5,7 +5,6 @@ mat-dialog-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    
 }
 
 mat-form-field {
@@ -16,6 +15,11 @@ mat-form-field {
 mat-dialog-actions {
     margin: 0;
     padding: 0;
+}
+
+.divLoading {
+    height: 5px;
+    width: inherit;
 }
 
 .app-input-icon {

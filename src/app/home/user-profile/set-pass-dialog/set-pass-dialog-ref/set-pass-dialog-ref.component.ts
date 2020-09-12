@@ -8,8 +8,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
 
 import { finalize } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
-import { RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
+import { RESULT_ERROR, RESULT_SUCCEED, SET_PASS_ERROR, SET_PASS_SUCCEED } from '../../../../app.config';
 
 @Component({
   selector: 'nx-set-pass-dialog-ref',
@@ -43,7 +42,6 @@ export class SetPassDialogRefComponent implements OnInit {
   }
 
   buildForm() {
-
     this.setPassForm = this.formBuilder.group({
       currentPass: ['', [Validators.required, noWhitespaceValidator]],
       newPass1: ['', [Validators.required, noWhitespaceValidator]],
@@ -57,7 +55,6 @@ export class SetPassDialogRefComponent implements OnInit {
   get newPass2() { return this.setPassForm.get('newPass2'); }
 
   comparePass() {
-
     if ((!this.newPass1.hasError('required') && !this.newPass2.hasError('required'))
       && (!this.newPass1.hasError('minlength') && !this.newPass2.hasError('minlength'))
     ) {
@@ -88,16 +85,11 @@ export class SetPassDialogRefComponent implements OnInit {
     this.userBackendService.setUserPasswordSecured(this.user.username, pass)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => {
-        this.snackbarService.openSnackBar('Contraseña cambiada', RESULT_SUCCEED);
+        this.snackbarService.openSnackBar(SET_PASS_SUCCEED, RESULT_SUCCEED);
         this.dialogRef.close();
-      }, error => {
-        if (error instanceof HttpErrorResponse) {
-          this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          this.dialogRef.close();
-        } else {
-          this.snackbarService.openSnackBar('Error al cambiar contraseña', RESULT_ERROR);
-          this.dialogRef.close();
-        }
+      }, err => {
+        this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : SET_PASS_ERROR, RESULT_ERROR)
+        this.dialogRef.close();
       });
 
   }

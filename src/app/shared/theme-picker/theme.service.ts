@@ -13,22 +13,22 @@ export class ThemeService {
 
     constructor(private httpCli: HttpClient) { }
 
-    getTheme(userId: string): Observable<Theme> {
-        const url = `${this.themeURL}/${userId}`;
+    getTheme(username: string): Observable<Theme> {
+        const url = `${this.themeURL}/${username}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Theme>(url)
             .pipe(
-                tap(theme => console.log(`fetched theme: ${theme.name}`))
-            );
+                tap(theme => console.log(`fetched theme: ${theme.name}`),
+                    err => console.error('Error getting Theme', err.error.exception)));
     }
 
-    saveTheme(userId: string, theme: Theme): Observable<boolean> {
-        const url = `${this.themeURL}/${userId}`;
+    saveTheme(username: string, theme: Theme): Observable<Theme> {
+        const url = `${this.themeURL}/${username}`;
         console.log(`resource called:  ${url}`);
-        return this.httpCli.put<boolean>(url, theme)
+        return this.httpCli.put<Theme>(url, theme)
             .pipe(
-                tap(resp => console.log(`theme ${theme.name} saved: ${resp}`))
-            );
+                tap(resp => console.log(`saved: ${resp.name}`)
+                    , err => console.error('Error saving Theme', err.error.exception)));
     }
 
 }
