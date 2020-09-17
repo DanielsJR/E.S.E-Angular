@@ -132,9 +132,9 @@
                 <mat-icon svgIcon="arrow-left"></mat-icon>
             </button>
             <span class="spacer-r"></span>
-            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button"
+            <button *ngIf="!checkEqualOrGreaterPrivileges(areaRole, user.roles) && !onlyRead" type="button"
                 mat-raised-button color="accent" tabindex="2" (click)="detailEdit()">Editar</button>
-            <button *ngIf="!checkEqualOrGreaterPrivileges(userLoggedRoles, user.roles) && !onlyRead" type="button"
+            <button *ngIf="!checkEqualOrGreaterPrivileges(areaRole, user.roles) && !onlyRead" type="button"
                 mat-raised-button color="warn" tabindex="3" (click)="detailDelete()">Borrar</button>
         </mat-toolbar>
     </mat-dialog-actions>
@@ -156,7 +156,8 @@
         <div class="listContainer backgroundColorAppBar">
             <mat-list>
                 <mat-list-item>
-                    <img matListAvatar
+                    <mat-spinner *ngIf="!cAvatar?.value?.data" color="accent" [diameter]="40">  </mat-spinner>
+                    <img *ngIf="cAvatar?.value?.data" matListAvatar
                         [src]=" 'data:'+cAvatar?.value?.type+';base64,' + cAvatar?.value?.data | safe: 'resourceUrl' "
                         alt="{{usersRole}}" (click)="fileInput.inputElement.click()"
                         (keyup.enter)="fileInput.inputElement.click()">
@@ -255,10 +256,13 @@
                             </button>
 
                             <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files"
-                                [ngModelOptions]="{standalone:true}" (select)="selectEventCreate($event)">
+                                [ngModelOptions]="{standalone:true}" (change)="imgCropper.openCropperChangeEvent($event)">
                                 <mat-icon svgIcon="folder-upload"></mat-icon>
                                 <span class="text-upper">Buscar...</span>
                             </td-file-input>
+
+                            <nx-img-cropper-dialog #imgCropper (croppedImage)="changeEventCreateAvatar($event)" (canceled)="fileInput.clear();resetCreateAvatar()">
+                            </nx-img-cropper-dialog>
                         </mat-form-field>
                     </div>
                 </mat-tab>
@@ -371,14 +375,18 @@
                             <mat-icon svgIcon="eye"></mat-icon>
                             <span> Ver Imagen </span>
                         </button>
+                        <button mat-menu-item (click)="imgCropper.openCropperImageBase64(eAvatar?.value?.data)">
+                            <mat-icon svgIcon="camera-retake"></mat-icon>
+                            <span> Editar Imagen </span>
+                        </button>
                         <button mat-menu-item (click)="fileInput.inputElement.click()"
                             (keyup.enter)="fileInput.inputElement.click()">
-                            <mat-icon svgIcon="camera-retake"></mat-icon>
+                            <mat-icon svgIcon="camera"></mat-icon>
                             <span> Cambiar Imagen </span>
                         </button>
                         <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()"
                             (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
-                            <mat-icon svgIcon="camera-retake-outline"></mat-icon>
+                            <mat-icon svgIcon="camera-outline"></mat-icon>
                             <span> Imagen por defecto </span>
                         </button>
                     </mat-menu>
@@ -528,7 +536,6 @@
                     </div>
                 </mat-tab>
 
-
                 <mat-tab label="Información de Usuario">
                     <div class="tab-content">
 
@@ -557,10 +564,14 @@
                             </button>
 
                             <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files"
-                                [ngModelOptions]="{standalone:true}" (select)="selectEventEdit($event)">
+                                [ngModelOptions]="{standalone:true}" (change)="imgCropper.openCropperChangeEvent($event)">
                                 <mat-icon svgIcon="folder-upload"></mat-icon>
                                 <span class="text-upper">Buscar...</span>
                             </td-file-input>
+
+                            <nx-img-cropper-dialog #imgCropper (croppedImage)="changeEventEditAvatar($event)" (canceled)="fileInput.clear();resetEditAvatar()">
+                            </nx-img-cropper-dialog>
+
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" floatLabel="always">
@@ -572,7 +583,7 @@
                                 (click)="resetPass.openDialogResetPass()">
                                 <mat-icon svgIcon="lock-reset"></mat-icon>&nbsp; Restablecer Contraseña
                             </button>
-                            <nx-reset-pass-dialog #resetPass [user]="user" [uriRole]="uriRole"></nx-reset-pass-dialog>
+                            <nx-reset-pass-dialog #resetPass [user]="user" [uriUsersRole]="uriUsersRole"></nx-reset-pass-dialog>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" floatLabel="always"
@@ -585,7 +596,7 @@
                                 (click)="editRolesSubscription(setRoles.openDialogSetRoles())">
                                 <mat-icon svgIcon="shield-account"></mat-icon>&nbsp; Añadir o Remover Privilegios
                             </button>
-                            <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
+                            <nx-set-roles-dialog #setRoles [user]="user" [uriUsersRole]="uriUsersRole"></nx-set-roles-dialog>
                         </mat-form-field>
 
                     </div>

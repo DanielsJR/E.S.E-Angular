@@ -151,7 +151,9 @@
                             [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
                             alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
                     </mat-list-item>
-                    <nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>
+
+                    <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
+
                 </mat-list>
 
                 <mat-nav-list class="sideToolbarProfileMenu">
@@ -178,13 +180,7 @@
                         <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
                             <mat-icon svgIcon="arrow-left"></mat-icon>
                         </button>
-                        <mat-list style="flex-grow: 8">
-                            <mat-list-item>
-                                <img matListAvatar
-                                    [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
-                                    alt="{{privilege | lowercase}}">
-                            </mat-list-item>
-                        </mat-list>
+
                         <span class="spacer-r"></span>
                         <h1>{{profileTitle}}</h1>
                         <span>&nbsp;&nbsp;</span>
@@ -192,7 +188,8 @@
                     </mat-toolbar>
 
                     <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
-                        [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event"></nx-user-profile>
+                        [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event">
+                    </nx-user-profile>
 
                 </mat-drawer>
 

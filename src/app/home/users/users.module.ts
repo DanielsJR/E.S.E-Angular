@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { CovalentFileModule } from '@covalent/core/file';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog/reset-pass-dialog-ref/reset-pass-dialog-ref.component';
 import { SetRolesDialogRefComponent } from './set-roles-dialog/set-roles-dialog-ref/set-roles-dialog-ref.component';
 import { SetRolesDialogComponent } from './set-roles-dialog/set-roles-dialog.component';
@@ -12,12 +11,17 @@ import { CrudUserDialogComponent } from './crud-user-dialog/crud-user-dialog.com
 import { SearchUserDialogRefComponent } from './search-user-dialog/search-user-dialog-ref/search-user-dialog-ref.component';
 import { SearchUserDialogComponent } from './search-user-dialog/search-user-dialog.component';
 import { UsersComponent } from './users.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { ImgCropperDialogComponent } from './img-cropper-dialog/img-cropper-dialog.component';
+import { ImgCropperDialogRefComponent } from './img-cropper-dialog/img-cropper-dialog-ref/img-cropper-dialog-ref.component';
+
+
 
 
 @NgModule({
   imports: [
     SharedModule,
-    CovalentFileModule,
+    ImageCropperModule,
         
   ],
 
@@ -38,23 +42,28 @@ import { UsersComponent } from './users.component';
 
     SearchUserDialogComponent,
     SearchUserDialogRefComponent,
+
+    ImgCropperDialogComponent,
+    ImgCropperDialogRefComponent,
     
   ],
 
 
   entryComponents: [
     CrudUserDialogRefComponent,
+    CardUserDialogRefComponent,
     ResetPassDialogRefComponent,
     SetRolesDialogRefComponent,
-    CardUserDialogRefComponent,
     SearchUserDialogRefComponent,
+    ImgCropperDialogRefComponent,
   ],
 
   exports: [
     UsersComponent,
-    SearchUserDialogComponent,
     CrudUserDialogComponent,
     CardUserDialogComponent,
+    SearchUserDialogComponent,
+    ImgCropperDialogComponent,
 
   ]
 

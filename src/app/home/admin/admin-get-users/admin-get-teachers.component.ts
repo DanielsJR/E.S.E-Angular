@@ -3,7 +3,7 @@ import { ROLE_ADMIN, URI_MANAGER, URI_TEACHER } from '../../../app.config';
 
 
 @Component({
-  template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
+  template: `<nx-users [uriUsersRole] ="uriUsersRole" [areaRole] ="areaRole"></nx-users>`,
   styles: [`
     :host  {
     display: block;
@@ -14,7 +14,7 @@ import { ROLE_ADMIN, URI_MANAGER, URI_TEACHER } from '../../../app.config';
 
 export class AdminGetTeachersComponent implements OnInit {
   
-  uriRole = URI_TEACHER;
+  uriUsersRole = URI_TEACHER;
   areaRole = ROLE_ADMIN;
 
   constructor() { }

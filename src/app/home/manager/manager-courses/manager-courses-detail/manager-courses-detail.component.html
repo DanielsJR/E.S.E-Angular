@@ -40,7 +40,7 @@
           <button mat-icon-button color="primary" (click)="crudTeacherDialog.openDialogDetail()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
-          <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriRole]="uriTeachers" [areaRole]="areaRole">
+          <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriUsersRole]="uriTeachers" [areaRole]="areaRole">
           </nx-crud-user-dialog>
 
           <button mat-icon-button color="accent" matTooltip="Cambiar Profesor"
@@ -100,7 +100,7 @@
             (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
-          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole">
+          <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriUsersRole]="uriStudents" [areaRole]="areaRole">
           </nx-crud-user-dialog>
 
           <button mat-icon-button color="warn"

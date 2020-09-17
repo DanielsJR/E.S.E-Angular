@@ -45,7 +45,7 @@
           (click)="crudTeacherDialog.openDialogDetail(); $event.stopPropagation()">
           <mat-icon svgIcon="eye"></mat-icon>
         </button> -->
-          <nx-crud-user-dialog #crudTeacherDialog [user]="teacher" [uriRole]="uriTeachers" [areaRole]="areaRole"
+          <nx-crud-user-dialog #crudTeacherDialog [user]="teacher" [uriUsersRole]="uriTeachers" [areaRole]="areaRole"
             [onlyRead]="crudUserOnlyRead">
           </nx-crud-user-dialog>
         </mat-list-item>
@@ -104,7 +104,7 @@
           (click)="crudStudentDialog.openDialogDetail(); $event.stopPropagation()">
           <mat-icon svgIcon="eye"></mat-icon>
         </button> -->
-          <nx-crud-user-dialog #crudStudentDialog [user]="studentGrade.student" [uriRole]="uriStudents"
+          <nx-crud-user-dialog #crudStudentDialog [user]="studentGrade.student" [uriUsersRole]="uriStudents"
             [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
           </nx-crud-user-dialog>
 

@@ -17,7 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class SetRolesDialogRefComponent implements OnInit {
 
-  uriRole: any;
+  uriUsersRole: any;
   user: User;
   rolesList = PRIVILEGES;
   setRolesForm: FormGroup;
@@ -38,12 +38,12 @@ export class SetRolesDialogRefComponent implements OnInit {
   ) {
 
     this.user = Object.assign({},data.user);
-    this.uriRole = data.uriRole;
+    this.uriUsersRole = data.uriUsersRole;
 
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
     if (this.user.roles.includes(ROLE_TEACHER)) this.roles.push(ROLE_TEACHER);
 
-    console.log('***DialogSetRoles*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    console.log('***DialogSetRoles*** userName: ' + data.user.firstName + ' uriUsersRole: ' + data.uriUsersRole + ' type: ' + data.type);
   }
 
   ngOnInit() {
@@ -81,7 +81,7 @@ export class SetRolesDialogRefComponent implements OnInit {
 
   private setRoles(): void {
     this.sortRoles();
-    if (this.uriRole === URI_MANAGER) {
+    if (this.uriUsersRole === URI_MANAGER) {
       this.isLoading = true;
       this.userStoreService.setManagerRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
@@ -95,7 +95,7 @@ export class SetRolesDialogRefComponent implements OnInit {
           this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
         });
 
-    } else if (this.uriRole === URI_TEACHER) {
+    } else if (this.uriUsersRole === URI_TEACHER) {
       this.isLoading = true;
       this.userStoreService.setTeacherRoles(this.user)
         .pipe(finalize(() => this.isLoading = false))
@@ -110,7 +110,7 @@ export class SetRolesDialogRefComponent implements OnInit {
         });
 
     } else {
-      console.error('NO uriRole');
+      console.error('NO uriUsersRole');
     }
 
   }

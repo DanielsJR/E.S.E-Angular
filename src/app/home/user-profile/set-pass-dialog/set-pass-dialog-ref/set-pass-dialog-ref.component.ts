@@ -18,7 +18,6 @@ import { RESULT_ERROR, RESULT_SUCCEED, SET_PASS_ERROR, SET_PASS_SUCCEED } from '
 export class SetPassDialogRefComponent implements OnInit {
 
   setPassForm: FormGroup;
-  uriRole: any;
   user: User;
   hideCurrentPass = true;
   hideNewPass = true;
@@ -33,8 +32,7 @@ export class SetPassDialogRefComponent implements OnInit {
   ) {
 
     this.user = data.user;
-    this.uriRole = this.data.uriRole;
-    console.log('***DialogSetPass*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    console.log('***DialogSetPass*** user: ' + data.user.firstName  + ' type: ' + data.type);
   }
 
   ngOnInit() {

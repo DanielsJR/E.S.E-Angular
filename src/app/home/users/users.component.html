@@ -70,7 +70,7 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriRole]="uriRole" [areaRole]="areaRole"
+          <nx-crud-user-dialog #crudUserDialog [user]="user" [uriUsersRole]="uriUsersRole" [areaRole]="areaRole"
             [onlyRead]="isAdminEditingTeacher()">
           </nx-crud-user-dialog>
 
@@ -79,7 +79,7 @@
             <mat-icon svgIcon="shield-account"></mat-icon>
           </button>
 
-          <nx-set-roles-dialog #setRoles [user]="user" [uriRole]="uriRole"></nx-set-roles-dialog>
+          <nx-set-roles-dialog #setRoles [user]="user" [uriUsersRole]="uriUsersRole"></nx-set-roles-dialog>
 
         </td>
       </ng-container>

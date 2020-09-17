@@ -1,10 +1,10 @@
 <div class="profileSideNav">
-  
+
   <div *ngIf="!isLoading" style="height: 5px;"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
 
   <form [formGroup]="editProfileForm" (ngSubmit)="save()" [ngSwitch]="profileAction">
-    
+
     <div *ngSwitchCase="'usuario'">
       <mat-form-field appearance="standard">
         <mat-label>
@@ -13,12 +13,47 @@
         <input matInput formControlName="username">
       </mat-form-field>
 
+
+
+
+      <mat-list class="listAvatarContainer backgroundColorAppBar">
+        <mat-list-item>
+          <img matListAvatar [src]=" 'data:'+ avatar.value.type+';base64,' + avatar.value.data | safe: 'resourceUrl'"
+            alt="{{privilege}}" [matMenuTriggerFor]="avatarMenu">
+
+          <mat-menu x-position="before" #avatarMenu="matMenu" [overlapTrigger]="false">
+            <button mat-menu-item (click)="imageZoom.openDialogImage()">
+              <mat-icon svgIcon="eye"></mat-icon>
+              <span> Ver Imagen </span>
+            </button>
+            <button mat-menu-item (click)="imgCropper.openCropperImageBase64(avatar?.value?.data)">
+              <mat-icon svgIcon="camera-retake"></mat-icon>
+              <span> Editar Imagen </span>
+            </button>
+            <button mat-menu-item (click)="fileInput.inputElement.click()"
+              (keyup.enter)="fileInput.inputElement.click()">
+              <mat-icon svgIcon="camera"></mat-icon>
+              <span> Cambiar Imagen </span>
+            </button>
+            <button mat-menu-item (click)="setAvatarEditDefaultMenu(); fileInput.clear()"
+              (keyup.enter)="setAvatarEditDefaultMenu(); fileInput.clear()">
+              <mat-icon svgIcon="camera-outline"></mat-icon>
+              <span> Imagen por defecto </span>
+            </button>
+          </mat-menu>
+
+        </mat-list-item>
+
+        <nx-image-zoom-user #imageZoom [avatar]="avatar.value"></nx-image-zoom-user>
+
+      </mat-list>
+
       <mat-form-field class="photo" appearance="fill" tdFileDrop (fileDrop)="files = $event"
         (click)="fileInput.inputElement.click()" (keyup.enter)="fileInput.inputElement.click()"
         (keyup.delete)="fileInput.clear();resetAvatar()" (keyup.backspace)="fileInput.clear();resetAvatar()" flex>
 
         <mat-label>
-          <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Foto de Perfil
+          <i class="mdi mdi-camera app-input-icon">&nbsp;</i>Cambiar Foto de Perfil
         </mat-label>
         <input matInput [value]="files?.length ? (files?.length + ' files') : files?.name" style="cursor:pointer"
           readonly>
@@ -30,10 +65,15 @@
         </button>
 
         <td-file-input hidden class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files"
-          [ngModelOptions]="{standalone:true}" (select)="selectEventEdit($event)">
+          [ngModelOptions]="{standalone:true}" (change)="imgCropper.openCropperChangeEvent($event)">
           <mat-icon svgIcon="folder-upload"></mat-icon>
           <span class="text-upper">Buscar...</span>
         </td-file-input>
+
+        <nx-img-cropper-dialog #imgCropper (croppedImage)="changeEventEditAvatar($event)"
+          (canceled)="fileInput.clear();resetAvatar()">
+        </nx-img-cropper-dialog>
+
       </mat-form-field>
 
       <mat-form-field appearance="outline" floatLabel="always">

@@ -3,7 +3,7 @@ import { ROLE_MANAGER, URI_TEACHER } from '../../../app.config';
 
 @Component({
   selector: 'nx-manager-teachers',
-  template: `<nx-users [uriRole] ="uriRole" [areaRole] ="areaRole"></nx-users>`,
+  template: `<nx-users [uriUsersRole] ="uriUsersRole" [areaRole] ="areaRole"></nx-users>`,
   styles: [`:host  {
     display: block;
     width: 100%;
@@ -14,7 +14,7 @@ import { ROLE_MANAGER, URI_TEACHER } from '../../../app.config';
 
 export class ManagerGetTeachersComponent implements OnInit {
 
-  uriRole = URI_TEACHER;
+  uriUsersRole = URI_TEACHER;
   areaRole = ROLE_MANAGER;
 
   constructor() { }

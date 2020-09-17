@@ -1,10 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { RESULT_ERROR, RESULT_SUCCEED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { UserBackendService } from '../../../../services/user-backend.service';
 import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
-import { finalize } from 'rxjs/operators';
-import { RESULT_ERROR, RESULT_SUCCEED } from '../../../../app.config';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ResetPassDialogRefComponent implements OnInit {
 
-  uriRole: any;
+  uriUsersRole: any;
   user: User;
   isLoading = false;
 
@@ -23,8 +23,8 @@ export class ResetPassDialogRefComponent implements OnInit {
     private snackbarService: SnackbarService) {
 
     this.user = data.user;
-    this.uriRole = this.data.uriRole;
-    console.log('***DialogResetPass*** userName: ' + data.user.firstName + ' uriRol: ' + data.uriRole + ' type: ' + data.type);
+    this.uriUsersRole = this.data.uriUsersRole;
+    console.log('***DialogResetPass*** userName: ' + data.user.firstName + ' uriUsersRole: ' + data.uriUsersRole + ' type: ' + data.type);
   }
 
   ngOnInit() { }
@@ -39,7 +39,7 @@ export class ResetPassDialogRefComponent implements OnInit {
     this.isLoading = true;
     const resetedPass = this.resetedPass();
 
-    this.userBackendService.resetUserPassword(this.user.username, resetedPass, this.uriRole)
+    this.userBackendService.resetUserPassword(this.user.username, resetedPass, this.uriUsersRole)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(response => {
         (response) ? setTimeout(() => this.snackbarService.openSnackBar('Contraseña restablecida', RESULT_SUCCEED)) :

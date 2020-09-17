@@ -143,6 +143,9 @@ export const CANCEL_MESSAGE = 'Operación Cancelada';
 export const SET_PASS_ERROR = 'Error al Actualizar Contraseña';
 export const SET_PASS_SUCCEED = 'Contraseña Actualizada';
 
+export const IMAGE_CHANGE_EVENT = 'imageChangeEvent';
+export const IMAGE_BASE64 = 'imageBase64';
+
 //*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';
 
@@ -150,14 +153,18 @@ export const WELCOME_ADMIN = 'Bienvenido Sr. ';
 //*******************DATE-FORMAT*************************/
 export const DD_MM_YYYY ='DD/MM/YYYY';
 
-
-//*******************CRUD_TYPE*************************/
-export const CRUD_TYPE_DETAIL = 'detail';
-export const CRUD_TYPE_EDIT = 'edit';
-export const CRUD_TYPE_CREATE = 'create';
-export const CRUD_TYPE_DELETE = 'delete';
-
 //*******************BTN-ACTIONS*************************/
 export const BTN_ACTION_CREATE = 'Crear';
 export const BTN_ACTION_UPDATE = 'Actualizar';
 export const BTN_ACTION_DELETE = 'Borrar';
+
+//*******************DIALOG-TYPES*************************/
+export const IMAGE_ZOOM = 'imageZoom';
+export const CARD_USER = 'cardUser'
+export const CRUD_TYPE_DETAIL = 'detail';
+export const CRUD_TYPE_EDIT = 'edit';
+export const CRUD_TYPE_CREATE = 'create';
+export const CRUD_TYPE_DELETE = 'delete';
+export const RESET_PASS = 'resetPass'
+export const SEARCH_USER = 'searchUser'
+export const SET_ROLES = 'setRoles'

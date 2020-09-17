@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // mat dialog
   user: User;
-  @Input() uriRole;
+  @Input() uriUsersRole;
   @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
 
   private subscriptions = new Subscription();
@@ -59,20 +59,20 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       user.firstName.toLowerCase().indexOf(filterValue) === 0 || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-    if (this.uriRole === URI_MANAGER) {
+    if (this.uriUsersRole === URI_MANAGER) {
       this.userRole = ROLE_MANAGER_SPANISH;
       this.usersRole = ROLE_MANAGER_SPANISH + 'res';
 
-    } else if (this.uriRole === URI_TEACHER) {
+    } else if (this.uriUsersRole === URI_TEACHER) {
       this.userRole = ROLE_TEACHER_SPANISH;
       this.usersRole = ROLE_TEACHER_SPANISH + 's';
 
-    } else if (this.uriRole === URI_STUDENT) {
+    } else if (this.uriUsersRole === URI_STUDENT) {
       this.userRole = ROLE_STUDENT_SPANISH;
       this.usersRole = ROLE_STUDENT_SPANISH + 's';
 
     } else {
-      console.error('NO uriRole');
+      console.error('NO uriUsersRole');
     }
 
   }
@@ -86,20 +86,20 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setDataSource() {
-    if (this.uriRole === URI_MANAGER) {
+    if (this.uriUsersRole === URI_MANAGER) {
       this.subscriptions.add(this.userStoreService.isLoadingGetManagers$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.managers$.subscribe(data => this.dataSource.data = data));
 
-    } else if (this.uriRole === URI_TEACHER) {
+    } else if (this.uriUsersRole === URI_TEACHER) {
       this.subscriptions.add(this.userStoreService.isLoadingGetTeachers$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.teachers$.subscribe(data => this.dataSource.data = data));
 
-    } else if (this.uriRole === URI_STUDENT) {
+    } else if (this.uriUsersRole === URI_STUDENT) {
       this.subscriptions.add(this.userStoreService.isLoadingGetStudents$.subscribe(isLoadding => this.isLoading = isLoadding));
       this.subscriptions.add(this.userStoreService.students$.subscribe(data => this.dataSource.data = data));
 
     } else {
-      console.error('NO uriRole');
+      console.error('NO uriUsersRole');
     }
   }
 
@@ -136,7 +136,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isAdminEditingTeacher() {
-    if (this.isAdmin() && this.uriRole === URI_TEACHER) return true;
+    if (this.isAdmin() && this.uriUsersRole === URI_TEACHER) return true;
     return false;
   }
 

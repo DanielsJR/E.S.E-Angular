@@ -1,0 +1,50 @@
+mat-dialog-content {
+    margin: 0;
+    padding: 0;
+    max-height: 100%;
+}
+
+mat-card {
+    padding: 0;
+    overflow: hidden;
+    width: 450px;
+}
+
+mat-card-title {
+    margin-bottom: 10px;
+}
+
+.imgEseDialog {
+    height: 40px;
+}
+
+.title {
+    font-size: 16px !important;
+}
+
+.subtitle {
+    font-size: 14px !important;
+}
+
+.imgContent {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+image-cropper {
+    --cropper-overlay-color: auto;
+}
+
+.imgToCrop {
+    width: 200px;
+    height: 200px;
+}
+
+.imgCropped {
+    width: 200px;
+    height: 200px;
+    padding: 0;
+    align-items: center;
+}

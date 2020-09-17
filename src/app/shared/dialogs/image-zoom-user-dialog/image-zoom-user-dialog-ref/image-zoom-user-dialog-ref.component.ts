@@ -3,8 +3,10 @@ import { Avatar } from '../../../../models/avatar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  templateUrl: './image-zoom-user-dialog-ref.component.html',
-  styleUrls: ['./image-zoom-user-dialog-ref.component.css']
+  template: `<img [src]= " 'data:'+ avatar?.type+';base64,' + avatar?.data | safe: 'resourceUrl' ">`,
+  styles: [`img {
+    width: 100%;
+}`]
 })
 export class ImageZoomUserDialogRefComponent implements OnInit {
 

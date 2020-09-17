@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { SearchUserDialogRefComponent } from './search-user-dialog-ref/search-user-dialog-ref.component';
-import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ERROR } from '../../../app.config';
+import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ERROR, SEARCH_USER } from '../../../app.config';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class SearchUserDialogComponent implements OnInit {
             user: (this.user) ? this.user : null,
             actionButton: this.actionButton,
             userRole: this.userRole,
-            type: 'searchUser'
+            type: SEARCH_USER
         };
         let config = new MatDialogConfig();
         config.data = data;

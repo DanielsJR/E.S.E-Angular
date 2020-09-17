@@ -1,0 +1,75 @@
+<mat-dialog-content class="dialogContent">
+    <mat-card class="card">
+
+        <mat-toolbar color="primary">
+            <button mat-icon-button (click)="zoomOut()">
+                <mat-icon svgIcon="magnify-minus-outline"></mat-icon>
+            </button>
+            <button mat-icon-button (click)="zoomIn()">
+                <mat-icon svgIcon="magnify-plus-outline"></mat-icon>
+            </button>
+            <button mat-icon-button (click)="resetImage()">
+                <mat-icon svgIcon="image-filter-center-focus-weak"></mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="rotateLeft()">
+                <mat-icon svgIcon="rotate-left"></mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="rotateRight()">
+                <mat-icon svgIcon="rotate-right"></mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="flipHorizontal()">
+                <mat-icon svgIcon="flip-horizontal"></mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="flipVertical()">
+                <mat-icon svgIcon="flip-vertical"></mat-icon>
+            </button>
+     
+            <span class="spacer-r"></span>
+            <img class="imgEseDialog" alt="logo" title="logo" src="assets/images/logos/ese-logo2.png">
+            
+
+        </mat-toolbar>
+        <mat-divider></mat-divider>
+
+        <div class="imgContent backgroundColorCard">
+            <image-cropper #imgCropper class="imgToCrop"
+               [imageChangedEvent]="imageChangedEvent"
+               [imageBase64]="imageBase64"
+
+               [maintainAspectRatio]="true"
+               [containWithinAspectRatio]="containWithinAspectRatio"
+               [aspectRatio]="1 / 1"
+               [resizeToWidth]="256"
+               [cropperMinWidth]="128"
+               [onlyScaleDown]="true"
+               [roundCropper]="false"
+               [canvasRotation]="canvasRotation"
+               [transform]="transform"
+               [alignImage]="'center'"
+               [style.display]="showCropper ? null : 'none'"
+
+               format="png"
+
+               (imageCropped)="imageCropped($event)"
+               (imageLoaded)="imageLoaded()"
+               (cropperReady)="cropperReady($event)"
+               (loadImageFailed)="loadImageFailed()">
+            </image-cropper>
+
+            <mat-spinner *ngIf="!croppedImage" class="imgCropped" color="accent" [diameter]="40">  </mat-spinner>
+            <img *ngIf="croppedImage" class="imgCropped" [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+        </div>
+
+        <mat-divider></mat-divider>
+        <mat-toolbar>
+            <span class="spacer-r"></span>
+            <button type="button" mat-button color="primary" (click)=cancel() tabindex="1" cdkFocusRegionstart>Cancelar</button>
+            <button type="button" mat-button color="accent" (click)=crop() tabindex="2">Aceptar</button>
+        </mat-toolbar>
+
+    </mat-card>
+</mat-dialog-content>

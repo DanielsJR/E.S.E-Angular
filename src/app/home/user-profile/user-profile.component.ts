@@ -106,22 +106,19 @@ export class UserProfileComponent implements OnInit {
     get firstName() { return this.editProfileForm.get('firstName'); }
     get lastName() { return this.editProfileForm.get('lastName'); }
     get birthday() { return this.editProfileForm.get('birthday'); }
+    get gender() { return this.editProfileForm.get('gender'); }
     get dni() { return this.editProfileForm.get('dni'); }
     get email() { return this.editProfileForm.get('email'); }
     get mobile() { return this.editProfileForm.get('mobile'); }
     get address() { return this.editProfileForm.get('address'); }
     get avatar() { return this.editProfileForm.get('avatar'); }
 
-    selectEventEdit(file: File): void {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            this.avatar.setValue(new Avatar(
-                file.name,
-                file.type,
-                (reader.result as string).split(',')[1])
-            )
-        };
+    changeEventEditAvatar(imageCropped: string): void {
+        this.avatar.setValue(new Avatar(
+            this.username.value,
+            imageCropped.split(':')[1].split(';')[0],
+            imageCropped.split(',')[1])
+        );
 
         this.avatar.markAsDirty();
     }
@@ -129,6 +126,33 @@ export class UserProfileComponent implements OnInit {
     resetAvatar() {
         this.avatar.setValue(this.user.avatar);
         this.avatar.markAsPristine();
+    }
+
+    setAvatarEditDefaultMenu(): void {
+        let imageName: string = this.avatar.value.name;
+        console.log('imageName: ' + imageName)
+        if (!imageName.startsWith('default-')) {
+            let userHightPrivilege = this.user.roles[0].toLowerCase();
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `../assets/images/users/default-${this.gender.value.toLowerCase()}-${userHightPrivilege}.png`, true);
+            xhr.responseType = "blob";
+            xhr.onload = () => {
+                let reader = new FileReader();
+                let file = xhr.response;
+                file.name = `default-${this.gender.value.toLowerCase()}-${userHightPrivilege}.png`;
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    this.avatar.setValue(new Avatar(
+                        file.name,
+                        file.type,
+                        (reader.result as string).split(',')[1])
+                    )
+                    console.log('setAvatarEditDefaultMenu: ' + file.name)
+                };
+            };
+            xhr.send()
+            this.avatar.markAsDirty();
+        }
     }
 
     compareByViewValue(a1: any, a2: any): boolean {

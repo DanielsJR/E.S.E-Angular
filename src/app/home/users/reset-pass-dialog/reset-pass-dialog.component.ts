@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ResetPassDialogRefComponent } from './reset-pass-dialog-ref/reset-pass-dialog-ref.component';
+import { RESET_PASS } from '../../../app.config';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class ResetPassDialogComponent implements OnInit {
     user: User;
 
     @Input()
-    uriRole: string;
+    uriUsersRole: string;
 
 
     constructor(public dialog: MatDialog) { }
@@ -26,8 +27,8 @@ export class ResetPassDialogComponent implements OnInit {
     openDialogResetPass(): void {
         let data = {
             user: this.user,
-            uriRole: this.uriRole,
-            type: 'resetPass'
+            uriUsersRole: this.uriUsersRole,
+            type: RESET_PASS
         };
 
         let config = new MatDialogConfig();

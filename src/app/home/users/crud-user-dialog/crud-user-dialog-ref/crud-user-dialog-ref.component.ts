@@ -6,8 +6,8 @@ import {
     ROLE_ADMIN_SPANISH, ROLE_MANAGER_SPANISH, ROLE_TEACHER_SPANISH, ROLE_STUDENT_SPANISH, RESULT_ERROR, RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, DD_MM_YYYY, RESULT_SUCCEED, USER_DELETE_SUCCEED, CRUD_TYPE_CREATE, CRUD_TYPE_EDIT, USER_UPDATE_SUCCEED, USER_CREATE_SUCCEED, USER_UPDATE_ERROR, USER_DELETE_ERROR, USER_CREATE_ERROR
 } from '../../../../app.config';
 import * as moment from 'moment';
-import { COMMUNNES, Commune } from '../../../../models/communes';
-import { GENDERS, Gender } from '../../../../models/genders';
+import { COMMUNNES } from '../../../../models/communes';
+import { GENDERS } from '../../../../models/genders';
 import { PRIVILEGES } from '../../../../models/privileges';
 
 import { noWhitespaceValidator } from '../../../../shared/validators/no-white-space-validator';
@@ -36,19 +36,20 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     createForm: FormGroup;
     editForm: FormGroup;
     user: User;
-    uriRole: string;
+    uriUsersRole: string;
     usersRole: string;
     communes = COMMUNNES;
     genders = GENDERS;
     rolesList = PRIVILEGES;
     files: File | FileList;
     isAdmin = false;
-    userLoggedRoles: String[] = [];
+    areaRole: String[] = [];
     userHightPrivilege: string;
     oldAvatar: Avatar;
 
     isLoading = false;
     onlyRead: boolean;
+
 
     private subscriptions = new Subscription();
 
@@ -59,13 +60,13 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     ) {
         this.user = Object.assign({}, data.user);
-        this.uriRole = data.uriRole;
-        this.usersRole = this.uriRole.replace('/', '').slice(0, this.uriRole.length - 1);
-        this.userLoggedRoles.push(data.areaRole);
-        this.onlyRead = data.onlyRead;//(data.areaRole === ROLE_TEACHER) ? true : data.onlyRead;
+        this.uriUsersRole = data.uriUsersRole;
+        this.usersRole = this.uriUsersRole.split('/')[1];
+        this.areaRole.push(data.areaRole);
+        this.onlyRead = data.onlyRead;
 
-        console.log('***DialogUser*** userName: ' + data.user.firstName + ' uriRol: '
-            + data.uriRole + ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead + ' userRole ' + this.usersRole);
+        console.log('***DialogUser*** firstName: ' + data.user.firstName + ' uriUsersRol: ' + data.uriUsersRole +
+            ' type: ' + data.type + ' areaRole: ' + data.areaRole + ' onlyRead ' + data.onlyRead + ' usersRole ' + this.usersRole);
     }
 
     ngOnInit(): void {
@@ -75,6 +76,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
         } else if (this.data.type === CRUD_TYPE_EDIT) {
             this.buildEditForm();
+            this.oldAvatar = Object.assign({}, this.eAvatar.value);
         }
 
         this.isAdmin = this.userLoggedService.isAdmin();
@@ -122,6 +124,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
     }
 
+    get cUsername() { return this.createForm.get('username'); }
     get cFirstName() { return this.createForm.get('firstName'); }
     get cLastName() { return this.createForm.get('lastName'); }
     get cDni() { return this.createForm.get('dni'); }
@@ -151,6 +154,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             roles: [this.user.roles]
 
         });
+
 
     }
 
@@ -191,17 +195,12 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectEventCreate(file: File): void {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            this.cAvatar.setValue(new Avatar(
-                file.name,
-                file.type,
-                (reader.result as string).split(',')[1])
-            )
-            console.log('selectEventCreate: ' + file.name)
-        };
+    changeEventCreateAvatar(imageCropped: string): void {
+        this.cAvatar.setValue(new Avatar(
+            this.usersRole,
+            imageCropped.split(':')[1].split(';')[0],
+            imageCropped.split(',')[1])
+        );
 
         this.cAvatar.markAsDirty();
     }
@@ -265,19 +264,12 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         }
     }
 
-    selectEventEdit(file: File): void {
-        this.oldAvatar = Object.assign({}, this.eAvatar.value);
-
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            this.eAvatar.setValue(new Avatar(
-                file.name,
-                file.type,
-                (reader.result as string).split(',')[1])
-            )
-            console.log('selectEventEdit: ' + file.name)
-        };
+    changeEventEditAvatar(imageCropped: string): void {
+        this.eAvatar.setValue(new Avatar(
+            this.usersRole,
+            imageCropped.split(':')[1].split(';')[0],
+            imageCropped.split(',')[1])
+        );
 
         this.eAvatar.markAsDirty();
     }
@@ -287,8 +279,9 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
         this.eAvatar.markAsPristine();
     }
 
-    checkEqualOrGreaterPrivileges(userLoggedRoles: string[], userDbRoles: string[]): boolean {
-        return userLoggedRoles.every(role => userDbRoles.includes(role));
+
+    checkEqualOrGreaterPrivileges(areaRole: string[], userDbRoles: string[]): boolean {
+        return areaRole.every(role => userDbRoles.includes(role));
     }
 
     private createAutoUsername(): string {
@@ -312,12 +305,12 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
             } else if (result === RESULT_SUCCEED) {
                 this.user = dialogRefSetRoles.componentInstance.user;
                 this.eAvatar.setValue(this.user.avatar);
-                if (this.uriRole === URI_MANAGER) {
+                if (this.uriUsersRole === URI_MANAGER) {
                     if (!this.user.roles.includes(ROLE_MANAGER)) this.dialogRefCrudUser.close();
-                } else if (this.uriRole === URI_TEACHER) {
+                } else if (this.uriUsersRole === URI_TEACHER) {
                     if (!this.user.roles.includes(ROLE_TEACHER)) this.dialogRefCrudUser.close();
                 } else {
-                    console.error('NO uriRole');
+                    console.error('NO uriUsersRole');
                 }
 
             } else if (result === RESULT_ERROR) {
@@ -327,6 +320,7 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
 
 
     }
+
 
     cancel(): void {
         this.dialogRefCrudUser.close(RESULT_CANCELED);
@@ -341,14 +335,14 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     createUser(user: User): Observable<User> {
-        if (this.uriRole === URI_MANAGER) return this.userStoreService.createManager(user)
+        if (this.uriUsersRole === URI_MANAGER) return this.userStoreService.createManager(user)
 
-        else if (this.uriRole === URI_TEACHER) return this.userStoreService.createTeacher(user)
+        else if (this.uriUsersRole === URI_TEACHER) return this.userStoreService.createTeacher(user)
 
-        else if (this.uriRole === URI_STUDENT) return this.userStoreService.createStudent(user)
+        else if (this.uriUsersRole === URI_STUDENT) return this.userStoreService.createStudent(user)
 
         else {
-            console.error('NO uriRole');
+            console.error('NO uriUsersRole');
             return EMPTY;
         }
     }
@@ -373,14 +367,14 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     updateUser(user: User): Observable<User> {
-        if (this.uriRole === URI_MANAGER) return this.userStoreService.updateManager(user)
+        if (this.uriUsersRole === URI_MANAGER) return this.userStoreService.updateManager(user)
 
-        else if (this.uriRole === URI_TEACHER) return this.userStoreService.updateTeacher(user)
+        else if (this.uriUsersRole === URI_TEACHER) return this.userStoreService.updateTeacher(user)
 
-        else if (this.uriRole === URI_STUDENT) return this.userStoreService.updateStudent(user)
+        else if (this.uriUsersRole === URI_STUDENT) return this.userStoreService.updateStudent(user)
 
         else {
-            console.error('NO uriRole');
+            console.error('NO uriUsersRole');
             return EMPTY;
         }
     }
@@ -404,14 +398,14 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
     }
 
     deleteUser(user: User): Observable<User> {
-        if (this.uriRole === URI_MANAGER) return this.userStoreService.deleteManager(user)
+        if (this.uriUsersRole === URI_MANAGER) return this.userStoreService.deleteManager(user)
 
-        else if (this.uriRole === URI_TEACHER) return this.userStoreService.deleteTeacher(user)
+        else if (this.uriUsersRole === URI_TEACHER) return this.userStoreService.deleteTeacher(user)
 
-        else if (this.uriRole === URI_STUDENT) return this.userStoreService.deleteStudent(user)
+        else if (this.uriUsersRole === URI_STUDENT) return this.userStoreService.deleteStudent(user)
 
         else {
-            console.error('NO uriRole');
+            console.error('NO uriUsersRole');
             return EMPTY;
         }
 
@@ -429,7 +423,6 @@ export class CrudUserDialogRefComponent implements OnInit, OnDestroy {
                 this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : USER_DELETE_ERROR, RESULT_ERROR);
             });
     }
-
 
 
 }

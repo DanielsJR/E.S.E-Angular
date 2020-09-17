@@ -22,7 +22,6 @@ export class SetPassDialogComponent implements OnInit {
     openDialogSetPass(): void {
         let data = {
             user: this.user,
-            uriRole: 'none',
             type: 'setPass'
         };
 

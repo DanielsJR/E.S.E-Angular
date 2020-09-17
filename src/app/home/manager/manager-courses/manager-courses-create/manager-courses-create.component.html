@@ -73,7 +73,7 @@
           </mat-list-item>
         </mat-list>
 
-        <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriRole]="uriTeachers" [areaRole]="areaRole"
+        <nx-crud-user-dialog #crudTeacherDialog [user]="chiefTeacher" [uriUsersRole]="uriTeachers" [areaRole]="areaRole"
           [onlyRead]="crudUserOnlyRead"></nx-crud-user-dialog>
         <nx-search-user-dialog #changeTeacherDialog [userRole]="'TEACHER'" (userSelected)="addTeacher($event)">
         </nx-search-user-dialog>
@@ -133,7 +133,7 @@
               [avatar]="student?.avatar" [cancelButton]="'Descartar'" [type]="'card'">
             </nx-simple-dialog>
 
-            <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriRole]="uriStudents" [areaRole]="areaRole"
+            <nx-crud-user-dialog #crudStudentDialog [user]="student" [uriUsersRole]="uriStudents" [areaRole]="areaRole"
               [onlyRead]="crudUserOnlyRead"></nx-crud-user-dialog>
 
           </td>

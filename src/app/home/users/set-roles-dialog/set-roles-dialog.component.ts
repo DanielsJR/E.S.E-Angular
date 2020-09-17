@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../models/user';
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dialog-ref.component';
+import { SET_ROLES } from '../../../app.config';
 
 
 
@@ -13,7 +14,7 @@ import { SetRolesDialogRefComponent } from './set-roles-dialog-ref/set-roles-dia
 export class SetRolesDialogComponent implements OnInit {
 
     @Input() user: User;
-    @Input() uriRole: string;
+    @Input() uriUsersRole: string;
 
     //@Output() userEditedRoles = new EventEmitter<User>();
     // plantilla(userEditedRoles)="afterEditRoles($event)"
@@ -25,8 +26,8 @@ export class SetRolesDialogComponent implements OnInit {
     openDialogSetRoles(): MatDialogRef<SetRolesDialogRefComponent> {
         let data = {
             user: this.user,
-            uriRole: this.uriRole,
-            type: 'setRoles'
+            uriUsersRole: this.uriUsersRole,
+            type: SET_ROLES
         };
         let config = new MatDialogConfig();
         config.data = data;

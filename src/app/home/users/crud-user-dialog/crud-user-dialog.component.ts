@@ -15,7 +15,7 @@ import { RESULT_CANCELED, RESULT_EDIT, RESULT_DELETE, RESULT_ERROR, RESULT_SUCCE
 export class CrudUserDialogComponent implements OnInit {
 
     @Input() user: User;
-    @Input() uriRole: string;
+    @Input() uriUsersRole: string;
     @Input() areaRole: string;
     @Input() onlyRead: boolean;
 
@@ -27,7 +27,7 @@ export class CrudUserDialogComponent implements OnInit {
     openDialogDetail(user?: User): void {
         let data = {
             user: (user) ? user : this.user,
-            uriRole: this.uriRole,
+            uriUsersRole: this.uriUsersRole,
             type: CRUD_TYPE_DETAIL,
             areaRole: this.areaRole,
             onlyRead: (this.onlyRead != null) ? this.onlyRead : false
@@ -57,7 +57,7 @@ export class CrudUserDialogComponent implements OnInit {
     openDialogCreate(): void {
         let data = {
             user: new User(),
-            uriRole: this.uriRole,
+            uriUsersRole: this.uriUsersRole,
             type: CRUD_TYPE_CREATE,
             areaRole: this.areaRole,
             onlyRead: (this.onlyRead != null) ? this.onlyRead : false
@@ -94,7 +94,7 @@ export class CrudUserDialogComponent implements OnInit {
     openDialogEdit(user?: User): void {
         let data = {
             user: (user) ? user : this.user,
-            uriRole: this.uriRole,
+            uriUsersRole: this.uriUsersRole,
             type: CRUD_TYPE_EDIT,
             areaRole: this.areaRole,
             onlyRead: (this.onlyRead != null) ? this.onlyRead : false
@@ -132,7 +132,7 @@ export class CrudUserDialogComponent implements OnInit {
     openDialogDelete(user?: User): void {
         let data = {
             user: (user) ? user : this.user,
-            uriRole: this.uriRole,
+            uriUsersRole: this.uriUsersRole,
             type: CRUD_TYPE_DELETE,
             areaRole: this.areaRole,
             onlyRead: (this.onlyRead != null) ? this.onlyRead : false
