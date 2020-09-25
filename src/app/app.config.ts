@@ -168,3 +168,5 @@ export const CRUD_TYPE_DELETE = 'delete';
 export const RESET_PASS = 'resetPass'
 export const SEARCH_USER = 'searchUser'
 export const SET_ROLES = 'setRoles'
+export const SIMPLE_DIALOG_CLASSIC = 'classic'
+export const SIMPLE_DIALOG_CARD = 'card'

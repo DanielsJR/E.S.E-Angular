@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { COURSE_NAMES_GROUPS } from '../../../../models/course-names';
+import { COURSE_LETTERS, COURSE_NUMBERS } from '../../../../models/course-names';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RESULT_ERROR, RESULT_CANCELED, RESULT_DETAIL, URI_MANAGER, URI_TEACHER, URI_STUDENT, RESULT_EDIT, RESULT_DELETE, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_CREATE_SUCCEED, COURSE_CREATE_ERROR } from '../../../../app.config';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card
 import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-user-dialog.component';
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { rowAnimation } from '../../../../shared/animations/animations';
+import { SimpleDialogComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog.component';
 
 @Component({
   templateUrl: './manager-courses-create.component.html',
@@ -37,7 +38,8 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
 
   course: Course;
-  coursesNamesGroups = COURSE_NAMES_GROUPS;
+  courseNumbers = COURSE_NUMBERS;
+  courseLetters = COURSE_LETTERS;
 
   createForm: FormGroup;
 
@@ -55,9 +57,15 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   private subscriptions = new Subscription();
 
+  currentDate: Date = new Date();
+  @ViewChild('duplicatedDialog') duplicatedDialog: SimpleDialogComponent;
+
+
   constructor(private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
     private sessionStorage: SessionStorageService, private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService, public dialog: MatDialog) { }
+    private snackbarService: SnackbarService, public dialog: MatDialog) {
+
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -77,30 +85,45 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   buildForm() {
     this.createForm = this.formBuilder.group({
-      name: [null, Validators.required],
-      year: [null, Validators.required]
+      num: [null, Validators.required],
+      letter: [null, Validators.required],
+      year: [this.currentDate, Validators.required],
+      teacher: [null, Validators.required]
     });
+
   }
 
-  get name() { return this.createForm.get('name'); }
+  get num() { return this.createForm.get('num'); }
+  get letter() { return this.createForm.get('letter'); }
   get year() { return this.createForm.get('year'); }
+  get teacher() { return this.createForm.get('teacher'); }
 
   gotoCourses() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
+  onDateChange(date: Date) {
+    this.year.setValue(date.getFullYear().toString());
+  }
+
   addStudent(student: User) {
-    this.listStudents.push(student);
-    this.dataSource.data = this.listStudents;
+    let index = this.listStudents.findIndex(s => s.id === student.id);
+    if (index == -1) {
+      this.listStudents.push(student);
+      this.dataSource.data = this.listStudents;
+    } else {
+      this.duplicatedDialog.openSimpleDialog(student, student.avatar);
+    }
   }
 
   addTeacher(teacher: User) {
     this.chiefTeacher = teacher;
+    this.teacher.setValue(teacher);
   }
 
   private setCourse() {
-    this.course.name = this.createForm.value.name;
-    this.course.year = this.createForm.value.year;
+    this.course.name = `${this.num.value}-${this.letter.value}`;
+    this.course.year = this.year.value.getFullYear().toString();
     this.course.students = this.listStudents;
     this.course.chiefTeacher = (this.chiefTeacher) ? this.chiefTeacher : null;
   }
@@ -111,7 +134,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
       .subscribe(_ => {
         this.snackbarService.openSnackBar(COURSE_CREATE_SUCCEED, RESULT_SUCCEED);
         this.gotoCourses();
-      }, err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_CREATE_ERROR, RESULT_ERROR)
+      }, err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : COURSE_CREATE_ERROR, RESULT_ERROR)
       ));
 
   }
@@ -120,7 +143,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
       if (result === RESULT_CANCELED) {
-        console.log(RESULT_CANCELED);
+        console.log(result);
 
       } else if (result === RESULT_DETAIL) {
         (user.roles.includes(ROLE_STUDENT)) ? this.crudStudentDialog.openDialogDetail(user) : this.crudTeacherDialog.openDialogDetail();

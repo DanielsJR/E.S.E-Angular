@@ -19,6 +19,7 @@ import { CardUserDialogRefComponent } from '../../../users/card-user-dialog/card
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../../../shared/animations/animations';
+import { SimpleDialogComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog.component';
 
 
 @Component({
@@ -56,6 +57,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   isLoading: boolean = false;
 
   private subscriptions = new Subscription();
+  @ViewChild('duplicatedDialog') duplicatedDialog: SimpleDialogComponent;
 
   constructor(
     private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
@@ -128,11 +130,19 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   }
 
   addStudentToDataSource(student: User) {
-    let list = this.listStudents.slice();
-    list.push(student);
-    this.listStudents = list;
-    this.dataSource.data = this.listStudents;
-    this.btnDisabled = false;
+    let index = this.listStudents.findIndex(s => s.id === student.id);
+    if (index == -1) {
+      let list = this.listStudents.slice();
+      list.push(student);
+
+      this.listStudents = list;
+      this.dataSource.data = this.listStudents;
+
+      this.btnDisabled = false;
+    } else {
+      this.duplicatedDialog.openSimpleDialog(student, student.avatar);
+    }
+
   }
 
   private deleteStudentFromDataSource(id: string) {

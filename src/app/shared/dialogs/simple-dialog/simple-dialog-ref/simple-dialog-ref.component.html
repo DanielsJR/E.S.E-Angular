@@ -15,11 +15,14 @@
 
             <mat-card-actions>
                 <button *ngIf="cancelButton" type="button" mat-button color="accent" tabindex="1" (click)="cancel()"
-                    cdkFocusRegionstart>Cancelar</button>
-                <button type="button" mat-button color="primary" tabindex="2"
+                    cdkFocusRegionstart>{{cancelButton}}</button>
+
+                <button *ngIf="actionButton1" type="button" mat-button color="primary" tabindex="2"
                     (click)="action1()">{{actionButton1}}</button>
+
                 <button *ngIf="actionButton2" type="button" mat-button color="accent" tabindex="3"
                     (click)="action2()">{{actionButton2}}</button>
+
                 <button *ngIf="actionButton3" type="button" mat-button color="warn" tabindex="3"
                     (click)="action3()">{{actionButton3}}</button>
             </mat-card-actions>

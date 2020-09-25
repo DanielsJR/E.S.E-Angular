@@ -5,18 +5,31 @@
     <mat-toolbar color="primary">
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off">
         <mat-placeholder>
-          <i class="mdi mdi-magnify"></i>Buscar
+          <i class="mdi mdi-magnify"></i>Buscar por Nombre
         </mat-placeholder>
       </mat-form-field>
+
+      &nbsp;&nbsp;
+
+      <nx-multi-date-picker mode="YEAR" label="Buscar por Año" [max]="2020" floatLabel = "auto" [(ngModel)]="courseYear"
+       customFormFieldClass="customFormField" (dateChange)="onDateChange($event)">
+      </nx-multi-date-picker>
 
       <span class="spacer-r"></span>
 
       <mat-chip-list>
         <mat-chip color="accent" selected="true">
           <mat-icon svgIcon="book-multiple"></mat-icon>
-          &nbsp; Cursos / <span>{{courseYear?.year}}</span>
+          &nbsp; Cursos
+        </mat-chip>
+      </mat-chip-list>
+      &nbsp;&nbsp;
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">
+          <mat-icon svgIcon="calendar"></mat-icon>
+          &nbsp; {{courseYear | date: 'y'}}
         </mat-chip>
       </mat-chip-list>
     </mat-toolbar>
@@ -64,9 +77,16 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteDialog [obj]="course" [icon]=" 'book' " [dialogTitle]=" 'Eliminar Curso' "
-            [title]="course.name" [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
-            [message]=" '¿Eliminar este Curso?' " [avatar]="course?.chiefTeacher?.avatar" [type]=" 'classic' ">
+          <nx-simple-dialog #deleteDialog
+             [obj]="course"
+             [icon]=" 'book' "
+             [dialogTitle]=" 'Eliminar Curso' "
+             [title]="course.name"
+             [subtitle]="(course.chiefTeacher | shortName) + ', Profesor Jefe' "
+             [message]=" '¿Eliminar este Curso?' "
+             [avatar]="course?.chiefTeacher?.avatar"
+             [actionButton1]="'Aceptar'"
+             [type]=" 'classic' ">
           </nx-simple-dialog>
 
 
@@ -74,8 +94,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course?.name]"
-      @rowAnimation>
+      <tr mat-row *matRowDef="let course; columns: displayedColumns;" [routerLink]="['./',course?.name]" @rowAnimation>
 
       </tr>
 
@@ -85,5 +104,13 @@
     </mat-paginator>
 
   </mat-card>
+
+  <nx-simple-dialog #emptyCoursesDialog
+     [title]="'Cursos'"
+     [subtitle]="courseYear | date: 'y'"
+     [message]="'No hay Cursos registrados'"
+     [cancelButton]="'Cerrar'"
+     [type]="'card'">
+ </nx-simple-dialog>
 
 </div>

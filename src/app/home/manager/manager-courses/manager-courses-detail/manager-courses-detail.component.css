@@ -72,6 +72,10 @@ td.mat-cell:last-of-type {
     text-align: end;
 }
 
+mat-list {
+    padding: 0 25px 0 0;
+}
+
 td.mat-cell mat-list {
     padding: 0;
 }

@@ -40,7 +40,7 @@ export class CourseStoreService {
     }
 
     loadCoursesByYear(year: string) {
-        if (this.coursesSource.getValue().length) {
+        if (this.coursesSource.getValue().length && this.coursesSource.getValue()[0]?.year == year) {
             console.log(`********GET-Courses-FROM-CACHE********`);
             this.coursesSource.next(this.dataStore.courses);
         } else {
@@ -68,8 +68,10 @@ export class CourseStoreService {
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
-                    this.dataStore.courses.push(data);
-                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                    if (!this.coursesSource.getValue().length || this.coursesSource.getValue()[0]?.year == course.year) {
+                        this.dataStore.courses.push(data);
+                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                    }
                 }));
     }
 
@@ -80,7 +82,7 @@ export class CourseStoreService {
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     let index = this.dataStore.courses.findIndex(c => c.id === data.id);
-                    if (index != -1) {
+                    if (index != -1 && this.coursesSource.getValue()[0].year == course.year) {
                         this.dataStore.courses[index] = data;
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                         this.subjectStoreService.updateCourseInSubjectStore(data);
@@ -88,14 +90,14 @@ export class CourseStoreService {
                 }));
     }
 
-    delete(course: Course | string): Observable<Course> {
+    delete(course: Course): Observable<Course> {
         this.isLoadingService.isLoadingTrue();
         return this.courseBackendService.delete(course)
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(_ => {
-                    let index = this.dataStore.courses.findIndex((c: Course) => c.id === ((typeof course === 'string') ? course : course.id));
-                    if (index != -1) {
+                    let index = this.dataStore.courses.findIndex((c: Course) => c.id === course.id);
+                    if (index != -1 && this.coursesSource.getValue()[0].year == course.year) {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                     }

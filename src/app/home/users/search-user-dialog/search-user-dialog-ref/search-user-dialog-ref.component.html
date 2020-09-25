@@ -24,7 +24,6 @@
         </mat-autocomplete>
       </mat-form-field>
 
-
       <img *ngIf="user" mat-card-image [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl' "
         alt="user" class="imageCard">
 

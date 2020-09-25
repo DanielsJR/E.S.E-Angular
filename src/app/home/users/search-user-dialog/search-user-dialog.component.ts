@@ -33,8 +33,8 @@ export class SearchUserDialogComponent implements OnInit {
         let config = new MatDialogConfig();
         config.data = data;
         config.panelClass = 'dialogService';
-        config.width = '320px';
-        config.height = 'auto';
+        config.width = '280px';
+        //config.height = 'auto';
 
         let dialogRef = this.dialog.open(SearchUserDialogRefComponent, config);
         dialogRef.afterClosed().subscribe(result => {

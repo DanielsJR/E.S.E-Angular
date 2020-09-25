@@ -14,6 +14,7 @@ import { ImageZoomUserDialogModule } from './dialogs/image-zoom-user-dialog/imag
 import { ColorGradeDirective } from './directives/color-grade.directive';
 import { PipeModule } from './pipes/pipe.module';
 import { CovalentFileModule } from '@covalent/core/file';
+import { MultiDatePickerModule } from './multi-date-picker/multi-date-picker.module';
 
 
 
@@ -49,6 +50,7 @@ import { CovalentFileModule } from '@covalent/core/file';
     ImageZoomUserDialogModule,
     ColorGradeDirective,
     PipeModule,
+    MultiDatePickerModule,
   ]
 })
 export class SharedModule { }

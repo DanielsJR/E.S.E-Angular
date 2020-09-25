@@ -1,0 +1,25 @@
+<mat-form-field [ngClass]="customFormFieldClass" [floatLabel]="floatLabel" appearance="legacy">
+
+  <input matInput
+         (click)="_openDatepickerOnClick(datepicker)"
+         (keydown.arrowdown)="_openDatepickerOnClick(datepicker)"
+         (keydown.enter)="_openDatepickerOnClick(datepicker)"
+         [formControl]="_inputCtrl"
+         [matDatepicker]="datepicker"
+         [max]="_max"
+         [min]="_min"
+         readonly>
+
+  <mat-label>
+     <i class="mdi mdi-calendar-range app-input-icon">&nbsp;</i>{{label}}
+  </mat-label>
+
+</mat-form-field>
+
+<mat-datepicker #datepicker
+                (closed)="_takeFocusAway(datepicker)"
+                (yearSelected)="_yearSelectedHandler($event,datepicker)"
+                [touchUi]="touchUi"
+                panelClass="nx-year-picker"
+                startView="multi-year">
+</mat-datepicker>

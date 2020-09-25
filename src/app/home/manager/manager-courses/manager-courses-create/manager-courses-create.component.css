@@ -36,7 +36,7 @@ mat-toolbar-row {
 
 mat-form-field {
     font-size: 14px;
-    width: 35%;
+    width: 15%;
 }
 
 .toolbar2 {
@@ -79,8 +79,9 @@ td.mat-cell:last-of-type {
 }
 
 mat-list {
-    padding: 0;
+    padding: 0 25px 0 0;
 }
+
 
 mat-list-item {
     height: 55px !important;
@@ -107,5 +108,11 @@ td.mat-cell mat-list mat-list-item ::ng-deep .mat-list-item-content {
 
 
 .role-style {
+    color: darkgray;
+}
+
+.teacher {
+    padding-left: 10px;
+    font-size: 14px;
     color: darkgray;
 }

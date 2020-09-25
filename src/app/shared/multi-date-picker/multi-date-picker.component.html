@@ -1,0 +1,30 @@
+<nx-year-picker *ngIf="mode === 'YEAR'"
+                 [formControl]="_yearPickerCtrl"
+                 [customFormFieldClass]="customFormFieldClass"
+                 [label]="label"
+                 [floatLabel]="floatLabel"
+                 [max]="max"
+                 [min]="min"
+                 [touchUi]="touchUi">
+</nx-year-picker>
+
+<nx-month-picker *ngIf="_showMonthPicker"
+                  [formControl]="_monthPickerCtrl"
+                  [customFormFieldClass]="customFormFieldClass"
+                  [label]="label"
+                  [max]="max"
+                  [min]="min"
+                  [mode]="mode"
+                  [touchUi]="touchUi">
+</nx-month-picker>
+
+<nx-regular-date-picker *ngIf="_showRegularDatepicker"
+                        [formControl]="_regularPickerCtrl"
+                        [customFormFieldClass]="customFormFieldClass"
+                        [label]="label"
+                        [max]="max"
+                        [min]="min"
+                        [mode]="mode"
+                        [touchUi]="touchUi">
+</nx-regular-date-picker>
+

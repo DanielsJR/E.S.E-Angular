@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ACTION1, RESULT_ACTION3, RESULT_ACTION2 } from '../../../../app.config';
+import { RESULT_CANCELED, RESULT_ACCEPT, RESULT_ACTION1, RESULT_ACTION3, RESULT_ACTION2, SIMPLE_DIALOG_CLASSIC, SIMPLE_DIALOG_CARD } from '../../../../app.config';
 import { Avatar } from '../../../../models/avatar';
 
 @Component({
@@ -10,21 +10,20 @@ import { Avatar } from '../../../../models/avatar';
 export class SimpleDialogRefComponent implements OnInit {
 
   obj: any;
-
-  dialogTitle;
-  title;
-  subtitle;
-  message;
+  dialogTitle: any;
+  title: any;
+  subtitle: any;
+  message: any;
   avatar: Avatar;
-  icon;
-  type;
+  icon: any;
+  type: any;
   actionButton1: any;
   actionButton2: any;
   actionButton3: any;
   cancelButton: any;
 
-  guiTypeClassic: string = 'classic';
-  guiTypeCard: string = 'card';
+  guiTypeClassic: string = SIMPLE_DIALOG_CLASSIC;
+  guiTypeCard: string = SIMPLE_DIALOG_CARD;
 
   constructor(public dialogRef: MatDialogRef<SimpleDialogRefComponent>, @Inject(MAT_DIALOG_DATA) public data: any,) {
 
@@ -37,7 +36,7 @@ export class SimpleDialogRefComponent implements OnInit {
     this.subtitle = this.data.subtitle;
     this.message = this.data.message;
     this.avatar = this.data.avatar;
-    this.actionButton1 = this.data.actionButton1 ? this.data.actionButton1 : 'Aceptar';
+    this.actionButton1 = this.data.actionButton1;
     this.actionButton2 = this.data.actionButton2;
     this.actionButton3 = this.data.actionButton3;
     this.cancelButton = (this.data.cancelButton) ? this.data.cancelButton : 'Cancelar';

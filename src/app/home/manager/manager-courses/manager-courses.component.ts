@@ -9,9 +9,13 @@ import { finalize, delay } from 'rxjs/operators';
 import { RESULT_ERROR, RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_SUCCEED, COURSE_DELETE_ERROR, COURSE_DELETE_SUCCEED, CANCEL_MESSAGE, RESULT_WARN } from '../../../app.config';
 import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+
 import { MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../../shared/animations/animations';
+import * as moment from 'moment';
+import { SimpleDialogComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog.component';
+import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+
 
 
 @Component({
@@ -30,16 +34,21 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isLoading: boolean = false;
-  courseYear;
+  courseYear: Date = new Date(new Date().getFullYear(), 0);
 
   private subscriptions = new Subscription();
+  dialogRef: MatDialogRef<SimpleDialogComponent>;
 
-  constructor(private sessionStorage: SessionStorageService, private courseStoreService: CourseStoreService,
+  @ViewChild('emptyCoursesDialog') emptyCoursesDialog: SimpleDialogComponent;
+
+  constructor(private courseStoreService: CourseStoreService,
     private snackbarService: SnackbarService,
     private cdRef: ChangeDetectorRef,) { }
 
   ngOnInit() {
     this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => this.isLoading = isLoadding));
+    this.dataSource.filterPredicate = (course: Course, filterValue: string) =>
+      course.name.toString().toLowerCase().indexOf(filterValue) === 0;
   }
 
   ngAfterViewInit() {
@@ -47,10 +56,17 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.dataSource.paginator = this.paginator;
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
+    let emissions = 0;//first emission from BehaviorSubject []
     this.subscriptions.add(this.courseStoreService.courses$
-      .subscribe(data => {
-        this.courseYear = data[0];
-        this.dataSource.data = data;
+      .subscribe(courses => {
+        emissions++;
+        if (courses.length > 0) {
+          this.courseYear = new Date(+courses[0].year, 0);
+        } else {
+          if (emissions == 1) this.courseStoreService.loadCoursesByYear(this.courseYear.getFullYear().toString());//default
+          if (emissions > 1 && !this.emptyCoursesDialog.isOpen()) this.emptyCoursesDialog.openSimpleDialog();
+        }
+        this.dataSource.data = courses;
       }));
 
     this.cdRef.detectChanges();
@@ -89,6 +105,11 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe(_ => this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED),
         err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_DELETE_ERROR, RESULT_ERROR)
       ));
+  }
+
+
+  onDateChange(date: Date) {
+    this.courseStoreService.loadCoursesByYear(date.getFullYear().toString());
   }
 
 }

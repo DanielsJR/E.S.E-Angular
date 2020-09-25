@@ -18,25 +18,21 @@ import { UserLoggedService } from '../../services/user-logged.service';
 
 export class ManagerComponent implements OnInit {
 
+    date: Date;
+
     constructor(
-        private courseStoreService: CourseStoreService,
         private subjectStoreService: SubjectStoreService,
         private userStoreService: UserStoreService,
-        private userLoggedService: UserLoggedService,
 
-    ) { }
+    ) {
+        this.date = new Date();
+    }
 
     ngOnInit(): void {
-        if (this.userLoggedService.isAdmin()) {
-            this.userStoreService.loadAllManagers();
-        }
         this.userStoreService.loadAllTeachers();
         this.userStoreService.loadAllStudents();
 
-        this.courseStoreService.loadCoursesByYear('2018');
-
         this.subjectStoreService.loadSubjectsByYear('2018');
-
     }
 
 }

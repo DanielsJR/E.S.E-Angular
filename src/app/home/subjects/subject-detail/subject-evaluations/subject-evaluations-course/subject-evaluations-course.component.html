@@ -45,17 +45,22 @@
               <img matListAvatar
                 [src]=" 'data:'+ grade?.student?.avatar.type+';base64,' + grade?.student?.avatar.data | safe: 'resourceUrl' "
                 alt="{{grade?.student?.username}}"
-                (click)="userCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
+                (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
               <h3 matLine *ngIf="grade"> {{grade?.student | shortNameLastname}} </h3>
               <p matLine>
                 <span class="role-style">{{grade?.student.roles | rolesToSpanish}}</span>
               </p>
             </mat-list-item>
           </mat-list>
-          <!--@ViewChild
-        <nx-crud-user-dialog></nx-crud-user-dialog>
-        <nx-card-user-dialog #cardStudentDialog [user]="grade?.student" [areaRole]="areaRole"></nx-card-user-dialog>
-       <nx-image-zoom-user #imageZoomS [avatar]="grade?.student?.avatar"></nx-image-zoom-user>-->
+          
+          <nx-card-user-dialog #cardStudentDialog [user]="grade.student" [areaRole]="areaRole"
+            [onlyRead]="crudUserOnlyRead">
+          </nx-card-user-dialog>
+
+          <!--@ViewChild-->
+          <nx-crud-user-dialog #crudStudentDialog [uriUsersRole]="uriStudents" [areaRole]="areaRole"
+            [onlyRead]="crudUserOnlyRead">
+          </nx-crud-user-dialog>
 
         </td>
       </ng-container>

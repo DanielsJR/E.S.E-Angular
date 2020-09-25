@@ -1,0 +1,10 @@
+.nx-year-picker,
+.nx-month-picker {
+  .mat-calendar-period-button {
+    pointer-events: none;
+  }
+
+  .mat-calendar-arrow {
+    display: none;
+  }
+}

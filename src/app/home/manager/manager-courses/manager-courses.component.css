@@ -49,7 +49,6 @@ td.mat-cell:last-of-type {
 
 mat-toolbar mat-form-field {
     font-size: 14px;
-    width: 50%;
     padding-top: 10px;
 }
 

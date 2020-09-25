@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angu
 import { Subject } from '../../../../../models/subject';
 import { User } from '../../../../../models/user';
 import { Grade } from '../../../../../models/grade';
-import { ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER } from '../../../../../app.config';
+import { CRUD_TYPE_DETAIL, RESULT_CANCELED, RESULT_DELETE, RESULT_DETAIL, RESULT_EDIT, RESULT_ERROR, ROLE_MANAGER, ROLE_STUDENT, ROLE_TEACHER, URI_STUDENT } from '../../../../../app.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradeStoreService } from '../../../../../services/grade-store.service';
 import { SubjectStoreService } from '../../../../../services/subject-store.service';
@@ -13,9 +13,11 @@ import { shortNameSecondName } from '../../../../../shared/functions/shortName';
 import { Evaluation } from '../../../../../models/evaluation';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { CardUserDialogRefComponent } from '../../../../users/card-user-dialog/card-user-dialog-ref/card-user-dialog-ref.component';
+import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud-user-dialog.component';
 
 @Component({
   selector: 'nx-subject-evaluations-course',
@@ -41,6 +43,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   subject: Subject;
 
   @Input() areaRole;
+  uriStudents = URI_STUDENT
   student: User;
   //@Input() subject: Subject;
   grades: Grade[];
@@ -63,6 +66,10 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   isDark;
   rowClasses: {};
   isLoading: boolean = false;
+
+  crudUserOnlyRead= true;
+
+  @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 
   private subscriptions = new Subscription();
 
@@ -145,6 +152,19 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
 
   closeButton() {
     this.closeEvaluationCourseDetail.emit(null);
+  }
+
+
+  openUserCardCrud(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
+    let user = dialogRef.componentInstance.user;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === RESULT_CANCELED) {
+        console.log(RESULT_CANCELED);
+
+      } else if (result === RESULT_DETAIL) {
+        this.crudStudentDialog.openDialogDetail(user);
+      }
+    });
   }
 
 

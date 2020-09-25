@@ -26,12 +26,14 @@
       <mat-list>
         <mat-list-item>
           <img matListAvatar *ngIf="(student) as s"
-            [src]=" 'data:'+s?.avatar.type+';base64,' + s?.avatar.data | safe: 'resourceUrl' "
-            alt="{{s?.username}}"
+            [src]=" 'data:'+s?.avatar.type+';base64,' + s?.avatar.data | safe: 'resourceUrl' " alt="{{s?.username}}"
             (click)="openUserCardCrud(cardStudentDialog.openDialogCardUser()); $event.stopPropagation()">
           <nx-card-user-dialog #cardStudentDialog [user]="student" [areaRole]="areaRole" [onlyRead]="crudUserOnlyRead">
           </nx-card-user-dialog>
-          <!--<nx-image-zoom-user #imageZoom [avatar]="student?.avatar"></nx-image-zoom-user>-->
+
+          <nx-crud-user-dialog #crudUserDialog [user]="student" [uriUsersRole]="uriStudents" [areaRole]="areaRole"
+            [onlyRead]="crudUserOnlyRead">
+          </nx-crud-user-dialog>
 
           <h3 matLine>
             <ng-container *ngIf="(student) as s">{{ s | shortNameLastname}}</ng-container>
@@ -41,9 +43,7 @@
           </p>
           <span class="spacer-r"></span>
 
-          <nx-crud-user-dialog #crudUserDialog [user]="student" [uriUsersRole]="uriStudents" [areaRole]="areaRole"
-            [onlyRead]="crudUserOnlyRead">
-          </nx-crud-user-dialog>
+
 
         </mat-list-item>
       </mat-list>
@@ -105,7 +105,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"  @rowAnimation>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" @rowAnimation>
       </tr>
 
     </table>

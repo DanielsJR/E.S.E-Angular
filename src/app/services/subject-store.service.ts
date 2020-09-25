@@ -44,6 +44,7 @@ export class SubjectStoreService {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
+            console.log(`********GET-Subjects-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
             this.subjectBackendService.getSubjectsByYear(year)
                 .pipe(finalize(() => this.isLoadingGet.next(false)))
@@ -60,6 +61,7 @@ export class SubjectStoreService {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
+            console.log(`********GET-Subjects-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
             this.subjectBackendService.getSubjectsByTeacherAndYear(username, year)
                 .pipe(
@@ -79,6 +81,7 @@ export class SubjectStoreService {
             console.log(`********GET-Subjects-FROM-CACHE********`);
             this.subjectsSource.next(this.dataStore.subjects);
         } else {
+            console.log(`********GET-Subjects-FROM-BACKEND********`);
             this.isLoadingGet.next(true);
             this.subjectBackendService.getStudentSubjectsByCourse(courseId, username)
                 .pipe(
