@@ -50,12 +50,12 @@ import { ImgCropperDialogRefComponent } from './img-cropper-dialog/img-cropper-d
 
 
   entryComponents: [
-    CrudUserDialogRefComponent,
+    /*CrudUserDialogRefComponent,
     CardUserDialogRefComponent,
     ResetPassDialogRefComponent,
     SetRolesDialogRefComponent,
     SearchUserDialogRefComponent,
-    ImgCropperDialogRefComponent,
+    ImgCropperDialogRefComponent, */
   ],
 
   exports: [

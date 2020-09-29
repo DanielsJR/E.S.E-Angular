@@ -25,8 +25,9 @@
          <nx-logo [jelloState]=isScrolled></nx-logo>-->
 
         <span class="spacer-r"></span>
-
-
+        <nx-multi-date-picker mode="YEAR" label="Año" [max]="currentYear" floatLabel="auto" [(ngModel)]="year"
+            customFormFieldClass="customFormField">
+        </nx-multi-date-picker>
 
         <!--<button color="accent" type="button" mat-raised-button (click)="style3 = !style3">accent header</button>
         <button color="accent" type="button" mat-raised-button (click)="style4 = !style4">accent footer</button>-->
@@ -38,7 +39,7 @@
             </button>
         </div>
 
-        
+
         <nx-full-screen></nx-full-screen>
 
         <!--<button type="button" mat-icon-button>
@@ -56,7 +57,8 @@
     </mat-toolbar>
 
 
-    <mat-sidenav-container class="sidenavContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+    <mat-sidenav-container class="sidenavContainer"
+        [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
         <!-- sidenavMenu -->
         <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
@@ -145,7 +147,8 @@
                     <h1>Perfil</h1>
                 </mat-toolbar>
 
-                <mat-list class="listAvatarContainer" [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+                <mat-list class="listAvatarContainer"
+                    [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
                     <mat-list-item>
                         <img matListAvatar
                             [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
@@ -267,7 +270,7 @@
             </div>
 
             <!-- footer toolbar -->
-            <mat-toolbar class="toolbarFooter" >
+            <mat-toolbar class="toolbarFooter">
                 <img style="height:30px; padding:13px" alt="logo" src="assets/images/logos/ese-logo.png">
                 <span style="font-size:12px; padding-top: 10px;">Enseñanza Sistemática Estimulante</span>
 
@@ -276,7 +279,7 @@
                 <span style="font-size:11px; padding-top: 10px;">Powered by NivelXtremo &nbsp; </span>
                 <!--<img style="height:37px; padding:13px" alt="logo" src="assets/images/logos/NX.svg">
                 <img src= "assets/images/logos/NX.svg" width="80px" height="80px" class="accentColor">-->
-                <span style="font-size:11px; padding-top: 10px;"> Company &copy; &nbsp; 2017-{{year}}.</span>
+                <span style="font-size:11px; padding-top: 10px;"> Company &copy; &nbsp; 2017-{{currentYear | date: 'y'}}.</span>
             </mat-toolbar>
 
         </mat-sidenav-content>

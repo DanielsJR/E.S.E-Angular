@@ -144,14 +144,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.subjectStoreService.create(subject)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
-        , error => {
-          if (error instanceof HttpErrorResponse) {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          } else {
-            this.snackbarService.openSnackBar(SUBJECT_CREATE_ERROR, RESULT_ERROR);
-          }
-        }
-
+        , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : SUBJECT_CREATE_ERROR, RESULT_ERROR)
       );
   }
 
@@ -164,14 +157,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.subjectStoreService.update(subject)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
-        , error => {
-          if (error instanceof HttpErrorResponse) {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          } else {
-            this.snackbarService.openSnackBar(SUBJECT_UPDATE_ERROR, RESULT_ERROR);
-          }
-        }
-
+        , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : SUBJECT_UPDATE_ERROR, RESULT_ERROR)
       );
   }
 
@@ -180,14 +166,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     this.subjectStoreService.delete(this.subject)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(_ => this.dialogRef.close(RESULT_SUCCEED)
-        , error => {
-          if (error instanceof HttpErrorResponse) {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-          } else {
-            this.snackbarService.openSnackBar(SUBJECT_DELETE_ERROR, RESULT_ERROR);
-          }
-        }
-
+        , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : SUBJECT_DELETE_ERROR, RESULT_ERROR)
       );
   }
 

@@ -18,6 +18,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { rowAnimation } from '../../shared/animations/animations';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { SimpleDialogComponent } from '../../shared/dialogs/simple-dialog/simple-dialog.component';
+import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-date-picker.service';
+import { skip } from 'rxjs/internal/operators/skip';
+import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 
 
 @Component({
@@ -44,11 +48,11 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
-  isLoading: boolean = false;
+  isLoadingGet: boolean = false;
 
   isBtnAddDisabled: boolean = true;
   isSelectCourseDisabled: boolean = true;
-  isSeachDisabled: boolean = true;
+  isSearchDisabled: boolean = true;
 
   dataSource = new MatTableDataSource<Subject>();
   @ViewChild('select') select: MatSelect;
@@ -59,28 +63,33 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   userLogged: User;
   subjectId: any;
 
+  courseYear: Date;
+
   private subscriptions = new Subscription();
+  @ViewChild('emptyCoursesDialog') emptyCoursesDialog: SimpleDialogComponent;
 
-  constructor(private sessionStorage: SessionStorageService,
+  constructor(
     private subjectStoreService: SubjectStoreService, private courseStoreService: CourseStoreService,
-    private userLoggedService: UserLoggedService, private route: ActivatedRoute, private router: Router,
+    private userLoggedService: UserLoggedService, private router: Router,
     public dialog: MatDialog, private snackbarService: SnackbarService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService
 
-  ) { }
-
-  ngOnInit() {
-    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(value => this.isLoading = value));
-    this.currentUrl = this.router.url;
+  ) {
 
   }
 
+  ngOnInit() {
+    this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(value => this.isLoadingGet = value));
+    this.currentUrl = this.router.url;
+    this.multiDatePickerService.date$.subscribe(date => this.courseYear = date);
+  }
+
   ngAfterViewInit() {
-    this.isSelectCourseDisabled = this.courses.length < 1;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
     this.setDataSource(this.select);
+
     this.cdRef.detectChanges();
   }
 
@@ -88,56 +97,107 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  setDataSourceManagerTeacher(matSelect: MatSelect) {
+  setDataSourceManager(matSelect: MatSelect) {
+    console.log('setDataSourceManager()');
     this.subscriptions.add(this.userLoggedService.userLogged$
       .pipe(
         switchMap(user => {
           this.user = user;
+          return this.courseStoreService.courses$
+        }),
+        switchMap(courses => {
+          this.courses = courses;
           return this.subjectStoreService.subjects$
         }),
         switchMap(subjects => {
-          this.subjects = subjects;
-          let teacherSubjects = subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
-          this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-          this.isSelectCourseDisabled = this.courses.length < 1;
-          return matSelect.valueChange;
-        }))
-      .subscribe((value: any) => {
-        this.courseName = value;
-        let subjectsByCourse = this.subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0)
-        this.dataSource.data = subjectsByCourse;
-        if (subjectsByCourse.length) {
-          this.isSeachDisabled = false;
-          this.isBtnAddDisabled = false;
-        }
-      }));
-  }
+          console.log('subjects', subjects)
+          if (subjects != null) {//first emission from BehaviorSubject is null  
+            this.subjects = subjects;
 
-  setDataSourceManagerOrTeacher(matSelect: MatSelect) {
-    this.subscriptions.add(this.subjectStoreService.subjects$
-      .pipe(
-        switchMap(subjects => {
-          this.subjects = subjects;
-          this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
-          this.isSelectCourseDisabled = this.courses.length < 1;
+            if (this.areaRole === this.roleTeacher && this.userLoggedService.isManager) {
+              let teacherSubjects = this.subjects.filter(s => s.teacher.id.indexOf(this.user.id) === 0);
+              this.courses = teacherSubjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+
+              if ((!this.courses.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
+
+            } else {
+              if ((!this.subjects.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
+            }
+
+            if (!this.courses.length) {
+              this.isSelectCourseDisabled = true;
+              this.isBtnAddDisabled = true;
+            } else {
+              this.isSelectCourseDisabled = false;
+            }
+
+            if (this.isLoadingGet) {
+              this.select.value = null;
+              this.dataSource.data = [];
+              this.isSearchDisabled = true;
+              this.isBtnAddDisabled = true;
+            }
+
+            this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(matSelect.value) === 0);
+            this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
+          }
+
           return matSelect.valueChange;
         }))
       .subscribe((value: string) => {
         this.courseName = value;
-        let subjectsByCourse = this.subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0);
-        this.dataSource.data = subjectsByCourse;
-        if (subjectsByCourse.length) {
-          this.isSeachDisabled = false;
-          this.isBtnAddDisabled = false;
-        }
+        this.course = this.courses.find(c => c.name.indexOf(this.courseName) === 0);
+        this.isBtnAddDisabled = false;
+
+        if (this.areaRole === this.roleTeacher && this.userLoggedService.isManager)
+          this.dataSource.data = this.subjects.filter(sj => sj.teacher.username.indexOf(this.user.username) === 0 && sj.course.name.indexOf(this.courseName) === 0);
+        else
+          this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0);
+        this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
+      }));
+  }
+
+  setDataSourceTeacher(matSelect: MatSelect) {
+    console.log('setDataSourceTeacher()');
+    this.subscriptions.add(this.subjectStoreService.subjects$
+      .pipe(
+        switchMap(subjects => {
+          if (subjects != null) {//first emission from BehaviorSubject is null
+            this.subjects = subjects;
+            this.courses = subjects.map(s => s.course).filter((c, i, cs) => cs.findIndex(v => v.id === c.id) === i);
+
+            if (!this.courses.length) {
+              this.isSelectCourseDisabled = true;
+              this.isBtnAddDisabled = true;
+            } else {
+              this.isSelectCourseDisabled = false;
+            }
+
+            if (this.isLoadingGet) {
+              this.select.value = null;
+              this.dataSource.data = [];
+              this.isSearchDisabled = true;
+              this.isBtnAddDisabled = true;
+            }
+
+            if ((!subjects.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
+          }
+
+          return matSelect.valueChange;
+        }))
+      .subscribe((value: string) => {
+        this.courseName = value;
+        this.course = this.courses.find(c => c.name.indexOf(this.courseName) === 0);
+
+        this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(this.courseName) === 0);
+        this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
       }));
   }
 
   setDataSource(matSelect: MatSelect) {
-    this.setDataSourceManagerOrTeacher(matSelect);
-
-    if (this.areaRole === this.roleTeacher && this.userLoggedService.isManager) this.setDataSourceManagerTeacher(matSelect)
-
+    if ((this.areaRole === this.roleManager) || (this.roleTeacher && this.userLoggedService.isManager())) this.setDataSourceManager(matSelect);
+    else if (this.areaRole === this.roleTeacher) this.setDataSourceTeacher(matSelect)
+    else console.error('No areaRole!!');
   }
 
   applyFilter(filterValue: string) {

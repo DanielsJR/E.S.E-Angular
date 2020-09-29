@@ -15,6 +15,7 @@ import { rowAnimation } from '../../../shared/animations/animations';
 import * as moment from 'moment';
 import { SimpleDialogComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog.component';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+import { MultiDatePickerService } from '../../../shared/multi-date-picker/multy-date-picker.service';
 
 
 
@@ -34,7 +35,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
   isLoading: boolean = false;
-  courseYear: Date = new Date(new Date().getFullYear(), 0);
+  courseYear: Date;
 
   private subscriptions = new Subscription();
   dialogRef: MatDialogRef<SimpleDialogComponent>;
@@ -43,12 +44,14 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
 
   constructor(private courseStoreService: CourseStoreService,
     private snackbarService: SnackbarService,
-    private cdRef: ChangeDetectorRef,) { }
+    private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService) { }
 
   ngOnInit() {
     this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => this.isLoading = isLoadding));
     this.dataSource.filterPredicate = (course: Course, filterValue: string) =>
       course.name.toString().toLowerCase().indexOf(filterValue) === 0;
+
+    this.multiDatePickerService.date$.subscribe(date => this.courseYear = date);
   }
 
   ngAfterViewInit() {
@@ -60,12 +63,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.subscriptions.add(this.courseStoreService.courses$
       .subscribe(courses => {
         emissions++;
-        if (courses.length > 0) {
-          this.courseYear = new Date(+courses[0].year, 0);
-        } else {
-          if (emissions == 1) this.courseStoreService.loadCoursesByYear(this.courseYear.getFullYear().toString());//default
-          if (emissions > 1 && !this.emptyCoursesDialog.isOpen()) this.emptyCoursesDialog.openSimpleDialog();
-        }
+        if ((!courses.length) && (emissions > 1) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
         this.dataSource.data = courses;
       }));
 
@@ -105,11 +103,6 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe(_ => this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED),
         err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_DELETE_ERROR, RESULT_ERROR)
       ));
-  }
-
-
-  onDateChange(date: Date) {
-    this.courseStoreService.loadCoursesByYear(date.getFullYear().toString());
   }
 
 }

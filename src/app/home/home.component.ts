@@ -17,6 +17,7 @@ import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideN
 import { Subscription, Observable, of } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
+import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-picker.service';
 
 
 
@@ -82,7 +83,8 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   animString: String;
   toolbarColorAccent: boolean = false;
 
-  get year() { return new Date().getFullYear(); }
+  currentYear: Date = new Date();
+  year: Date;
 
   headshakeState = false;
   //fillToolbar = false;
@@ -95,7 +97,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
     //private quizNotificationService: QuizNotificationService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService
 
   ) {
 
@@ -110,8 +112,10 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
     this.getState();
 
+    multiDatePickerService.date$.subscribe(date => this.year = date);
+
   }
-  //console.warn('subscribing!!!!');
+
   ngOnInit() {
     if (this.user) {
       if (this.user.username === '111') {
@@ -121,6 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
       }
 
     }
+
 
   }
 

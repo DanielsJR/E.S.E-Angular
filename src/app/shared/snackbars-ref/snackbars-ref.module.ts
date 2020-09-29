@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
         SnackbarsRefComponent,
     ],
     entryComponents: [
-        SnackbarsRefComponent,
+        //SnackbarsRefComponent,
     ],
 
     exports: [

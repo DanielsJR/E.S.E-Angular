@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-date-picker.service';
 
 
 @Component({
@@ -17,18 +18,22 @@ import { Subscription } from 'rxjs/internal/Subscription';
     `],
 })
 
-export class TeacherComponent implements OnInit, OnDestroy {
+export class TeacherComponent implements OnInit {
 
-    private subscriptions = new Subscription();
 
-    constructor(private userLoggedService: UserLoggedService, private subjectStoreService: SubjectStoreService) { }
+    year: Date;
+
+    constructor(private subjectStoreService: SubjectStoreService,
+        private multiDatePickerService: MultiDatePickerService,
+        private userLoggedService: UserLoggedService) { }
 
     ngOnInit(): void {
-        this.subjectStoreService.loadSubjectsByTeacherAndYear(this.userLoggedService.getTokenUsername(), '2018');
+        this.multiDatePickerService.date$.subscribe(date => {
+            this.year = date;
+            this.subjectStoreService.clearStore();
+            this.subjectStoreService.loadSubjectsByTeacherAndYear(this.userLoggedService.getTokenUsername(), this.year.getFullYear().toString());
+        })
     }
 
-    ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-    }
 
 }

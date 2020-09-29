@@ -13,6 +13,9 @@
         <mat-label>Seleccione un Curso</mat-label>
       </mat-form-field>
 
+      &nbsp;&nbsp;
+
+
       <span class="spacer-r"></span>
 
       <mat-chip-list>
@@ -23,13 +26,13 @@
       </mat-chip-list>
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" class="mat-toolbar divToobar"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+    <div *ngIf="!isLoadingGet" class="mat-toolbar divToobar"></div>
+    <mat-progress-bar *ngIf="isLoadingGet" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <mat-toolbar class="toolbar2">
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" [disabled]="isSeachDisabled">
+        <input matInput (keyup)="applyFilter($event.target.value)" [disabled]="isSearchDisabled">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar Asignatura
         </mat-placeholder>
@@ -100,8 +103,8 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" @rowAnimation></tr>
-      <tr mat-row *matRowDef="let subject; columns: displayedColumns;"
-        [routerLink]="['./detail/course', subject.id ]" @rowAnimation (mousedown)="subjectId= subject.id">
+      <tr mat-row *matRowDef="let subject; columns: displayedColumns;" [routerLink]="['./detail/course', subject.id ]"
+        @rowAnimation (mousedown)="subjectId= subject.id">
         <!-- (click)="routerInAnim.animate()"-->
 
       </tr>
@@ -112,5 +115,10 @@
     </mat-paginator>
 
   </mat-card>
+
+  <nx-simple-dialog #emptyCoursesDialog title="Asignaturas" [subtitle]="courseYear | date: 'y'"
+    message=" No hay Asignaturas registradas para el año {{ courseYear | date: 'y' }} " cancelButton="Cerrar"
+    type="card">
+  </nx-simple-dialog>
 
 </div>

@@ -38,7 +38,9 @@ import { YearPickerComponent } from './year-picker/year-picker.component';
     RegularDatePickerComponent,
   ],
 
-  entryComponents: [InfoDialogComponent],
+  entryComponents: [
+    //InfoDialogComponent
+  ],
 
   exports: [
     MultiDatePickerComponent,

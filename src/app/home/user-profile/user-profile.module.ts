@@ -21,7 +21,7 @@ import { UserProfileComponent } from './user-profile.component';
 
 
     entryComponents: [
-        SetPassDialogRefComponent,
+        //SetPassDialogRefComponent,
     ],
 
     exports: [

@@ -17,6 +17,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
+import { MultiDatePickerService } from './multy-date-picker.service';
 
 @Component({
   selector: 'nx-multi-date-picker',
@@ -65,7 +66,7 @@ export class MultiDatePickerComponent implements ControlValueAccessor, AfterView
 
   private _onDestroy: Subject<void> = new Subject<void>();
 
-  constructor(@Inject(DOCUMENT) private _document: any) { }
+  constructor(@Inject(DOCUMENT) private _document: any, private multiDatePickerService: MultiDatePickerService) { }
 
   ngAfterViewInit() {
     switch (this.mode) {
@@ -168,6 +169,7 @@ export class MultiDatePickerComponent implements ControlValueAccessor, AfterView
     control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe((value) => {
       const valor = new Date(value);
       this.dateChange.emit(valor);
+      this.multiDatePickerService.emitDate(valor);
       this.onChange(valor);
       this.onTouched();
     });

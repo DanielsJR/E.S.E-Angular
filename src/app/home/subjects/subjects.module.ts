@@ -60,9 +60,9 @@ import { NgxAnimationsModule } from 'ngx-animations';
   ],
 
   entryComponents: [
-    SubjectsCrudDialogRefComponent,
+   /* SubjectsCrudDialogRefComponent,
     SubjectsGradesCrudDialogRefComponent,
-    SubjectEvaluationsCrudDialogRefComponent
+    SubjectEvaluationsCrudDialogRefComponent */
   ],
 
   exports: [

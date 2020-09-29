@@ -34,6 +34,7 @@ export class SearchUserDialogComponent implements OnInit {
         config.data = data;
         config.panelClass = 'dialogService';
         config.width = '280px';
+        config.disableClose = true;
         //config.height = 'auto';
 
         let dialogRef = this.dialog.open(SearchUserDialogRefComponent, config);

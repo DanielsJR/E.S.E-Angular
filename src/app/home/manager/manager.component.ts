@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseStoreService } from '../../services/course-store.service';
-import { UserStoreService } from '../../services/user-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
-import { UserLoggedService } from '../../services/user-logged.service';
+import { UserStoreService } from '../../services/user-store.service';
+import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-date-picker.service';
+
 
 @Component({
     selector: 'nx-manager',
@@ -18,21 +19,28 @@ import { UserLoggedService } from '../../services/user-logged.service';
 
 export class ManagerComponent implements OnInit {
 
-    date: Date;
+    year: Date;
 
     constructor(
-        private subjectStoreService: SubjectStoreService,
         private userStoreService: UserStoreService,
+        private subjectStoreService: SubjectStoreService,
+        private courseStoreService:CourseStoreService,
+        private multiDatePickerService: MultiDatePickerService
 
     ) {
-        this.date = new Date();
+
     }
 
     ngOnInit(): void {
         this.userStoreService.loadAllTeachers();
         this.userStoreService.loadAllStudents();
 
-        this.subjectStoreService.loadSubjectsByYear('2018');
+        this.multiDatePickerService.date$.subscribe(date => {
+            this.year = date;
+            this.courseStoreService.loadCoursesByYear(this.year.getFullYear().toString());
+            this.subjectStoreService.clearStore();
+            this.subjectStoreService.loadSubjectsByYear(this.year.getFullYear().toString());
+        })
     }
 
 }

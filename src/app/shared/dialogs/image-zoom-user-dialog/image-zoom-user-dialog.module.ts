@@ -20,7 +20,7 @@ import { PipeModule } from '../../pipes/pipe.module';
     ],
 
     entryComponents: [
-        ImageZoomUserDialogRefComponent,
+        //ImageZoomUserDialogRefComponent,
     ],
 
     exports: [

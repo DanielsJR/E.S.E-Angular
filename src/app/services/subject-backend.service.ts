@@ -45,8 +45,8 @@ export class SubjectBackendService {
                     , err => console.error('Error updating subject', err.error.exception)));
     }
 
-    delete(subject: Subject | string): Observable<Subject> {
-        const subjectId = (typeof subject === 'string') ? subject : subject.id;
+    delete(subject: Subject): Observable<Subject> {
+        const subjectId = subject.id;
         const url = `${this.subjectURL}/${subjectId}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Subject>(url)

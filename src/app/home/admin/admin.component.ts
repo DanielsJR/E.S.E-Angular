@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CourseStoreService } from '../../services/course-store.service';
 import { UserStoreService } from '../../services/user-store.service';
-import { SubjectStoreService } from '../../services/subject-store.service';
-import { UserLoggedService } from '../../services/user-logged.service';
 
 
 @Component({
@@ -18,22 +15,12 @@ import { UserLoggedService } from '../../services/user-logged.service';
 })
 export class AdminComponent implements OnInit {
     constructor(
-        private courseStoreService: CourseStoreService,
         private userStoreService: UserStoreService,
-        private subjectStoreService: SubjectStoreService,
-        private userLoggedService: UserLoggedService,
     ) { }
 
     ngOnInit(): void {
         this.userStoreService.loadAllManagers();
         this.userStoreService.loadAllTeachers();
-
-        if (this.userLoggedService.isManager()) {
-            this.userStoreService.loadAllStudents();
-            this.courseStoreService.loadCoursesByYear('2018');
-            this.subjectStoreService.loadSubjectsByYear('2018');
-        }
-
     }
 
 }

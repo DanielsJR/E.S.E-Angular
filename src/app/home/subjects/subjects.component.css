@@ -17,11 +17,11 @@ mat-card {
     background: unset !important;
 }
 
-mat-form-field {
+mat-toolbar mat-form-field {
     font-size: 14px;
-    width: 50%;
     padding-top: 10px;
 }
+
 
 .divToobar {
     height: 5px;

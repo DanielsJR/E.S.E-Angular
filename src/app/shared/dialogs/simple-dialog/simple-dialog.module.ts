@@ -22,7 +22,7 @@ import { PipeModule } from '../../pipes/pipe.module';
     ],
 
     entryComponents: [
-        SimpleDialogRefComponent,
+        //SimpleDialogRefComponent,
     ],
 
     exports: [

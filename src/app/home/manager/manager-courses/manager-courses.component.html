@@ -13,10 +13,6 @@
 
       &nbsp;&nbsp;
 
-      <nx-multi-date-picker mode="YEAR" label="Buscar por Año" [max]="2020" floatLabel = "auto" [(ngModel)]="courseYear"
-       customFormFieldClass="customFormField" (dateChange)="onDateChange($event)">
-      </nx-multi-date-picker>
-
       <span class="spacer-r"></span>
 
       <mat-chip-list>
@@ -32,6 +28,7 @@
           &nbsp; {{courseYear | date: 'y'}}
         </mat-chip>
       </mat-chip-list>
+      
     </mat-toolbar>
 
     <div *ngIf="!isLoading" class="divToobar backgroundColorCard"></div>
@@ -71,7 +68,6 @@
             <mat-icon svgIcon="eye"></mat-icon>
           </button>
 
-
           <button mat-icon-button color="warn"
             (click)="dialogAction(deleteDialog.openSimpleDialog()); $event.stopPropagation()">
             <mat-icon svgIcon="delete"></mat-icon>
@@ -89,7 +85,6 @@
              [type]=" 'classic' ">
           </nx-simple-dialog>
 
-
         </td>
       </ng-container>
 
@@ -106,11 +101,11 @@
   </mat-card>
 
   <nx-simple-dialog #emptyCoursesDialog
-     [title]="'Cursos'"
+     title="Cursos"
      [subtitle]="courseYear | date: 'y'"
-     [message]="'No hay Cursos registrados'"
-     [cancelButton]="'Cerrar'"
-     [type]="'card'">
+     message=" No hay Cursos registrados para el año {{ courseYear | date: 'y' }} "
+     cancelButton="Cerrar"
+     type="card">
  </nx-simple-dialog>
 
 </div>
