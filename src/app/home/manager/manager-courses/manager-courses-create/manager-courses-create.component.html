@@ -41,22 +41,18 @@
 
         &nbsp;&nbsp;
 
-        <nx-multi-date-picker mode="YEAR" label="Año" [max]="currentDate" formControlName="year"
-         customFormFieldClass="customFormFieldCreate"  floatLabel = "never"> <!--(dateChange)="onDateChange($event)"-->
-        </nx-multi-date-picker>
-
         <span class="spacer-r"></span>
         <mat-chip-list>
           <mat-chip color="accent" selected="true">
             <mat-icon svgIcon="book"></mat-icon>
-            &nbsp; {{num.value}}-{{letter.value}}
+            &nbsp; {{num?.value}}-{{letter?.value}}
           </mat-chip>
         </mat-chip-list>
         &nbsp;&nbsp;
         <mat-chip-list>
           <mat-chip color="accent" selected="true">
             <mat-icon svgIcon="calendar"></mat-icon>
-            &nbsp; {{year.value | date: 'y'}}
+            &nbsp; {{year?.value | date: 'y'}}
           </mat-chip>
         </mat-chip-list>
 

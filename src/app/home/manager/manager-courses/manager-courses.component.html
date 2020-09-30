@@ -5,7 +5,7 @@
     <mat-toolbar color="primary">
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off">
+        <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off" [disabled]="isSearchDisabled">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar por Nombre
         </mat-placeholder>
@@ -31,8 +31,8 @@
       
     </mat-toolbar>
 
-    <div *ngIf="!isLoading" class="divToobar backgroundColorCard"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
+    <div *ngIf="!isLoadingGet" class="divToobar backgroundColorCard"></div>
+    <mat-progress-bar *ngIf="isLoadingGet" mode="indeterminate" color="accent"></mat-progress-bar>
 
     <table mat-table #table [dataSource]="dataSource" matSort>
 

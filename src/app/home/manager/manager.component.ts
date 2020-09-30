@@ -24,7 +24,7 @@ export class ManagerComponent implements OnInit {
     constructor(
         private userStoreService: UserStoreService,
         private subjectStoreService: SubjectStoreService,
-        private courseStoreService:CourseStoreService,
+        private courseStoreService: CourseStoreService,
         private multiDatePickerService: MultiDatePickerService
 
     ) {
@@ -37,8 +37,10 @@ export class ManagerComponent implements OnInit {
 
         this.multiDatePickerService.date$.subscribe(date => {
             this.year = date;
-            this.courseStoreService.loadCoursesByYear(this.year.getFullYear().toString());
+            
+            this.courseStoreService.clearStore();
             this.subjectStoreService.clearStore();
+            this.courseStoreService.loadCoursesByYear(this.year.getFullYear().toString());
             this.subjectStoreService.loadSubjectsByYear(this.year.getFullYear().toString());
         })
     }

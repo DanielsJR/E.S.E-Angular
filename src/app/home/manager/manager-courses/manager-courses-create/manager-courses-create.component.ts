@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CourseStoreService } from '../../../../services/course-store.service';
 import { SessionStorageService } from '../../../../services/session-storage.service';
 import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
@@ -20,6 +20,7 @@ import { CrudUserDialogComponent } from '../../../users/crud-user-dialog/crud-us
 import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
 import { rowAnimation } from '../../../../shared/animations/animations';
 import { SimpleDialogComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog.component';
+import { MultiDatePickerService } from '../../../../shared/multi-date-picker/multy-date-picker.service';
 
 @Component({
   templateUrl: './manager-courses-create.component.html',
@@ -57,26 +58,28 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
 
   private subscriptions = new Subscription();
 
-  currentDate: Date = new Date();
   @ViewChild('duplicatedDialog') duplicatedDialog: SimpleDialogComponent;
 
-
   constructor(private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
-    private sessionStorage: SessionStorageService, private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService, public dialog: MatDialog) {
+    private multiDatePickerService: MultiDatePickerService, private formBuilder: FormBuilder,
+    private snackbarService: SnackbarService, public dialog: MatDialog, private cdRef: ChangeDetectorRef,
+  ) {
 
   }
 
   ngOnInit() {
-    this.buildForm();
     this.course = new Course();
     this.dataSource = new MatTableDataSource();
+    this.buildForm();
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
+    this.subscriptions.add(this.multiDatePickerService.date$.subscribe(date => this.year.setValue(date)));
+
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -87,7 +90,7 @@ export class ManagerCoursesCreateComponent implements OnInit, AfterViewInit, OnD
     this.createForm = this.formBuilder.group({
       num: [null, Validators.required],
       letter: [null, Validators.required],
-      year: [this.currentDate, Validators.required],
+      year: [null, Validators.required],
       teacher: [null, Validators.required]
     });
 

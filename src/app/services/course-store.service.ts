@@ -10,6 +10,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { Observable } from 'rxjs/internal/Observable';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { Injectable } from '@angular/core';
+import { EMPTY } from 'rxjs';
 
 
 @Injectable({
@@ -40,26 +41,20 @@ export class CourseStoreService {
     }
 
     loadCoursesByYear(year: string) {
-        if (this.coursesSource.getValue().length && this.coursesSource.getValue()[0]?.year == year) {
-            console.log(`********GET-Courses-FROM-CACHE********`);
-            this.coursesSource.next(this.dataStore.courses);
-        } else {
-            console.log(`********GET-Courses-FROM-BACKEND********`);
-            this.isLoadingGet.next(true);
-            this.courseBackendService.getCourses(year)
-                .pipe(finalize(() => this.isLoadingGet.next(false)))
-                .subscribe(data => {
-                    this.dataStore.courses = data;
-                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                    if (data.length == 0) console.error('course list empty');
-                });
-        }
-
+        console.log(`********GET-Courses-FROM-BACKEND********`);
+        this.isLoadingGet.next(true);
+        this.courseBackendService.getCourses(year)
+            .pipe(finalize(() => this.isLoadingGet.next(false)))
+            .subscribe(data => {
+                this.dataStore.courses = data;
+                this.coursesSource.next(Object.assign({}, this.dataStore).courses);
+                if (data.length == 0) console.error('course list empty');
+            });
     }
 
-    loadOneCourse(name: string) {
+    loadOneCourse(name: string): Observable<Course> {
         return this.courses$
-            .pipe(map(courses => courses.find(course => course.name === name)));
+            .pipe(map(courses => courses?.find(course => course?.name === name)));
     }
 
     create(course: Course): Observable<Course> {
@@ -68,10 +63,8 @@ export class CourseStoreService {
             .pipe(
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
-                    if (!this.coursesSource.getValue().length || this.coursesSource.getValue()[0]?.year == course.year) {
-                        this.dataStore.courses.push(data);
-                        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
-                    }
+                    this.dataStore.courses.push(data);
+                    this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                 }));
     }
 
@@ -82,7 +75,7 @@ export class CourseStoreService {
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(data => {
                     let index = this.dataStore.courses.findIndex(c => c.id === data.id);
-                    if (index != -1 && this.coursesSource.getValue()[0].year == course.year) {
+                    if (index != -1) {
                         this.dataStore.courses[index] = data;
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                         this.subjectStoreService.updateCourseInSubjectStore(data);
@@ -97,11 +90,18 @@ export class CourseStoreService {
                 finalize(() => this.isLoadingService.isLoadingFalse()),
                 tap(_ => {
                     let index = this.dataStore.courses.findIndex((c: Course) => c.id === course.id);
-                    if (index != -1 && this.coursesSource.getValue()[0].year == course.year) {
+                    if (index != -1) {
                         this.dataStore.courses.splice(index, 1);
                         this.coursesSource.next(Object.assign({}, this.dataStore).courses);
                     }
                 }));
+    }
+
+
+    clearStore() {
+        console.log("****************Clearing CourseStore with null******************");
+        this.dataStore.courses = null;
+        this.coursesSource.next(Object.assign({}, this.dataStore).courses);
     }
 
 

@@ -8,18 +8,18 @@
          [matDatepicker]="datepicker"
          [max]="_max"
          [min]="_min"
-         readonly>
-
-  <mat-label>
-     <i class="mdi mdi-calendar-range app-input-icon">&nbsp;</i>{{label}}
-  </mat-label>
-
-</mat-form-field>
-
-<mat-datepicker #datepicker
+         readonly
+         style="cursor: pointer;">
+  
+  <i matPrefix class="mdi mdi-calendar-range app-input-icon" (click)="datepicker.open()" style="cursor: pointer;">&nbsp;</i>
+  <i matSuffix class="mdi mdi-menu-down app-input-icon" (click)="datepicker.open()" style="cursor: pointer;"></i>
+  
+  <mat-datepicker #datepicker
                 (closed)="_takeFocusAway(datepicker)"
                 (yearSelected)="_yearSelectedHandler($event,datepicker)"
                 [touchUi]="touchUi"
                 panelClass="nx-year-picker"
                 startView="multi-year">
-</mat-datepicker>
+  </mat-datepicker>
+
+</mat-form-field>

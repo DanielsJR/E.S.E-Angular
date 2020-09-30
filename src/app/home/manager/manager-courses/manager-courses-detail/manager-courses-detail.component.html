@@ -4,7 +4,7 @@
 
     <mat-toolbar color="primary">
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off" [disabled]="isSearchDisabled">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
@@ -158,5 +158,13 @@
     </mat-toolbar>
 
   </mat-card>
+
+  <nx-simple-dialog #emptyCoursesDialog
+     title="Curso"
+     subtitle="{{courseName}} {{courseYear | date: 'y'}}"
+     message=" No hay {{courseName}} registrado para el año {{ courseYear | date: 'y' }} "
+     cancelButton="Cerrar"
+     type="card">
+  </nx-simple-dialog>
 
 </div>

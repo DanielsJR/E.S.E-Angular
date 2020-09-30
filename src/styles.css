@@ -87,13 +87,10 @@ a.mat-menu-item>mat-icon {
 
 /*nx-multi-date-picker*/
 .customFormField {
-    font-size: 14px !important;
-    padding-top: 10px !important;
+    font-size: 16px !important;
+    padding-right: 16px;
 }
 
-.customFormFieldCreate {
-    font-size: 14px !important;
-}
 
 /*scrollbar 
 ::-webkit-scrollbar {

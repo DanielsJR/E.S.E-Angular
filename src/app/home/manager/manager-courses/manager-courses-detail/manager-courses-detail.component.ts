@@ -20,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../../../shared/animations/animations';
 import { SimpleDialogComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog.component';
+import { MultiDatePickerService } from '../../../../shared/multi-date-picker/multy-date-picker.service';
 
 
 @Component({
@@ -56,34 +57,57 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
   rowClasses: {};
   isLoading: boolean = false;
 
+  isSearchDisabled: boolean = true;
+
+  courseYear: Date;
+
   private subscriptions = new Subscription();
   @ViewChild('duplicatedDialog') duplicatedDialog: SimpleDialogComponent;
+  courseName: string;
+  @ViewChild('emptyCoursesDialog') emptyCoursesDialog: SimpleDialogComponent;
 
   constructor(
     private route: ActivatedRoute, private router: Router, private courseStoreService: CourseStoreService,
-    private sessionStorage: SessionStorageService,
+    private multiDatePickerService: MultiDatePickerService,
     private snackbarService: SnackbarService, public dialog: MatDialog
-  ) { }
+  ) {
+    this.subscriptions.add(this.multiDatePickerService.date$.subscribe(date => this.courseYear = date));
+  }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<Course>();
+
+    this.dataSource = new MatTableDataSource<any>();
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0
       || user.firstName.toLowerCase().indexOf(filterValue) === 0
       || user.lastName.toLowerCase().indexOf(filterValue) === 0
       || shortNameSecondName(user).toLowerCase().indexOf(filterValue) === 0;
 
-    // paramMap re-uses the component
+    this.setDataSource();
+
+  }
+
+  setDataSource() {
     this.subscriptions.add(this.route.paramMap
       .pipe(
-        switchMap(params => this.courseStoreService.loadOneCourse(params.get('name')))
+        switchMap(params => {
+          this.courseName = params.get('name');
+          return this.courseStoreService.courses$
+        })
       )
-      .subscribe(c => {
-        if (c) {
-          this.course = c;
-          this.chiefTeacher = c.chiefTeacher;
-          this.dataSource.data = c.students;
-          this.listStudents = this.dataSource.data;
+      .subscribe(courses => {
+        if (courses != null) {
+          this.chiefTeacher = null;
+          this.dataSource.data = [];
+
+          this.course = courses.find(c => c.name.indexOf(this.courseName) === 0);
+          if (this.course) {
+            this.chiefTeacher = this.course.chiefTeacher;
+            this.dataSource.data = this.course.students;
+            this.listStudents = this.dataSource.data;
+          }
+          this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
+          if ((!this.course) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
         }
       }));
 
@@ -181,7 +205,10 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
 
     this.subscriptions.add(this.courseStoreService.update(courseEdit)
       .pipe(finalize(() => this.btnDisabled = true))
-      .subscribe(_ => this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED),
+      .subscribe(_ => {
+        this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED);
+        this.gotoCourses();
+      },
         err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_UPDATE_ERROR, RESULT_ERROR)
       ));
 

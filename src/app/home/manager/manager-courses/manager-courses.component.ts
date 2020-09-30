@@ -34,8 +34,9 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSize = 5;
   pageSizeOptions = [5, 10, 20];
-  isLoading: boolean = false;
+  isLoadingGet: boolean = false;
   courseYear: Date;
+  isSearchDisabled: boolean = true;
 
   private subscriptions = new Subscription();
   dialogRef: MatDialogRef<SimpleDialogComponent>;
@@ -47,7 +48,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService) { }
 
   ngOnInit() {
-    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => this.isLoading = isLoadding));
+    this.subscriptions.add(this.courseStoreService.isLoadingGetCourses$.subscribe(isLoadding => this.isLoadingGet = isLoadding));
     this.dataSource.filterPredicate = (course: Course, filterValue: string) =>
       course.name.toString().toLowerCase().indexOf(filterValue) === 0;
 
@@ -58,14 +59,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
-
-    let emissions = 0;//first emission from BehaviorSubject []
-    this.subscriptions.add(this.courseStoreService.courses$
-      .subscribe(courses => {
-        emissions++;
-        if ((!courses.length) && (emissions > 1) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
-        this.dataSource.data = courses;
-      }));
+    this.setDataSource();
 
     this.cdRef.detectChanges();
 
@@ -73,6 +67,17 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  setDataSource() {
+    this.subscriptions.add(this.courseStoreService.courses$
+      .subscribe(courses => {
+        if (courses != null) {//first emission from BehaviorSubject is null
+          if ((!courses.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
+          this.dataSource.data = courses;
+          this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
+        }
+      }));
   }
 
   applyFilter(filterValue: string) {
@@ -97,9 +102,9 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   deleteCourse(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
-    this.isLoading = true;
+    this.isLoadingGet = true;
     this.subscriptions.add(this.courseStoreService.delete(dialogRef.componentInstance.obj)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.isLoadingGet = false))
       .subscribe(_ => this.snackbarService.openSnackBar(COURSE_DELETE_SUCCEED, RESULT_SUCCEED),
         err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_DELETE_ERROR, RESULT_ERROR)
       ));

@@ -75,13 +75,12 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService
 
   ) {
-
+    this.subscriptions.add(this.multiDatePickerService.date$.subscribe(date => this.courseYear = date));
   }
 
   ngOnInit() {
     this.subscriptions.add(this.subjectStoreService.isLoadingGetSubjects$.subscribe(value => this.isLoadingGet = value));
     this.currentUrl = this.router.url;
-    this.multiDatePickerService.date$.subscribe(date => this.courseYear = date);
   }
 
   ngAfterViewInit() {
@@ -98,7 +97,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setDataSourceManager(matSelect: MatSelect) {
-    console.log('setDataSourceManager()');
     this.subscriptions.add(this.userLoggedService.userLogged$
       .pipe(
         switchMap(user => {
@@ -110,8 +108,8 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
           return this.subjectStoreService.subjects$
         }),
         switchMap(subjects => {
-          console.log('subjects', subjects)
-          if (subjects != null) {//first emission from BehaviorSubject is null  
+          //console.log('+++++++subjects+++++++++ ', subjects)
+          if (subjects != null && this.courses != null) {//first emission from BehaviorSubject is null  
             this.subjects = subjects;
 
             if (this.areaRole === this.roleTeacher && this.userLoggedService.isManager) {
@@ -133,12 +131,11 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
             if (this.isLoadingGet) {
               this.select.value = null;
-              this.dataSource.data = [];
               this.isSearchDisabled = true;
               this.isBtnAddDisabled = true;
             }
 
-            this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(matSelect.value) === 0);
+            this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(matSelect?.value) === 0);
             this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
           }
 
@@ -158,7 +155,6 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setDataSourceTeacher(matSelect: MatSelect) {
-    console.log('setDataSourceTeacher()');
     this.subscriptions.add(this.subjectStoreService.subjects$
       .pipe(
         switchMap(subjects => {
@@ -175,12 +171,14 @@ export class SubjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
             if (this.isLoadingGet) {
               this.select.value = null;
-              this.dataSource.data = [];
               this.isSearchDisabled = true;
               this.isBtnAddDisabled = true;
             }
 
             if ((!subjects.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
+
+            this.dataSource.data = this.subjects.filter(sj => sj.course.name.indexOf(matSelect?.value) === 0);
+            this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
           }
 
           return matSelect.valueChange;

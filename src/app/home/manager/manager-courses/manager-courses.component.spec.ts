@@ -122,9 +122,9 @@ describe('ManagerCoursesComponent', () => {
 
     component.deleteCourse(simpleDialogRef);
     simpleDialogRef.componentInstance.action1();
-    expect(component.isLoading).toBeTruthy('isLoading');
+    expect(component.isLoadingGet).toBeTruthy('isLoading');
     tick();
-    expect(component.isLoading).toBeFalsy('isLoading');
+    expect(component.isLoadingGet).toBeFalsy('isLoading');
     expect(deleteSpy).toHaveBeenCalled();
     expect(openSnackBarSpy).toHaveBeenCalledWith('Curso: ' + simpleDialogRef.componentInstance.obj.name + ' eliminado', RESULT_SUCCEED);
 
@@ -181,11 +181,10 @@ describe('ManagerCoursesComponent', () => {
     let dialogDebugElements = fixture.debugElement.queryAll(By.css('mat-row'));
     expect(dialogDebugElements.length).toEqual(2);//two students
     let row = dialogDebugElements[0].nativeElement as HTMLElement;
-    expect(component.isDark).toBeFalsy('isDark');
+
     expect(row.classList.contains('fila')).toBeTruthy('contains fila class');
     expect(row.classList.contains('fila-dark')).toBeFalsy('contains fila-dark class');
 
-    component.isDark = true;
     fixture.detectChanges();
     expect(row.classList.contains('fila')).toBeFalsy('contains fila class');
     expect(row.classList.contains('fila-dark')).toBeTruthy('contains fila class');

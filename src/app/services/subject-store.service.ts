@@ -86,7 +86,7 @@ export class SubjectStoreService {
 
     loadOneSubject(id: string) {
         return this.subjects$
-            .pipe(map(subjects => subjects.find(subject => subject.id === id)));
+            .pipe(map(subjects => subjects?.find(subject => subject?.id === id)));
     }
 
     create(subject: Subject): Observable<Subject> {
