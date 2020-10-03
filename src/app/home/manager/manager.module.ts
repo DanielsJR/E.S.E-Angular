@@ -19,6 +19,7 @@ import { ManagerSubjectsComponent } from './manager-subjects/manager-subjects.co
 import { QuizStudentModule } from '../quiz-student/quizStudent.module';
 import { ManagerSubjectAttendanceComponent } from './manager-subjects/manager-subject-detail/manager-subject-attendance.component';
 import { TeacherModule } from '../teacher/teacher.module';
+import { HomeUserModule } from '../home-user/home-user.module';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { TeacherModule } from '../teacher/teacher.module';
     UsersModule,
     QuizStudentModule,
     TeacherModule,
+    HomeUserModule,
     
   ],
 
@@ -56,10 +58,6 @@ import { TeacherModule } from '../teacher/teacher.module';
   ],
 
   providers: [
-
-  ],
-
-  entryComponents: [
 
   ],
 

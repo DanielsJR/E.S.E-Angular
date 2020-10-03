@@ -131,6 +131,17 @@
         background: mat-color($background, app-bar) !important;
     }
 
+    .backgroundColorHover:hover{
+        cursor: pointer;
+        background: mat-color($background, hover) !important;
+    }
+
+    .backgroundColorHover:active{
+        cursor: pointer;
+        background: mat-color($background, selected-row) !important;
+    }
+
+
 
     //mat table custom
     .mat-row:hover {

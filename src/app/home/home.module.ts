@@ -13,33 +13,29 @@ import { CustomReuseStrategy } from './customReuseStrategy';
 import { UserProfileModule } from './user-profile/user-profile.module';
 
 
+
 @NgModule({
   imports: [
     SharedModule,
     HomeRoutingModule,
     UserProfileModule,
-    
+
   ],
 
   declarations: [
     HomeComponent,
-
     HomeMenuComponent,
     UsersMenuComponent,
     CoursesMenuComponent,
     SubjectsMenuComponent,
-    QuizMenuComponent, 
+    QuizMenuComponent,
     UserSettingsComponent,
-
-  ],
-  
-  entryComponents: [
 
   ],
 
   providers: [
-   // {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
-],
+    // {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
+  ],
 
 
 })

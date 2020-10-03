@@ -69,10 +69,15 @@ export const ROLE_ADMIN = 'ADMIN';
 export const ROLE_MANAGER = 'MANAGER';
 export const ROLE_TEACHER = 'TEACHER';
 export const ROLE_STUDENT = 'STUDENT';
+
 export const ROLE_ADMIN_SPANISH = 'Super-Admin';
 export const ROLE_MANAGER_SPANISH = 'Administrador';
 export const ROLE_TEACHER_SPANISH = 'Docente';
 export const ROLE_STUDENT_SPANISH = 'Estudiante';
+
+export const ROLE_MANAGERS_SPANISH = 'Administradores';
+export const ROLE_TEACHERS_SPANISH = 'Docentes';
+export const ROLE_STUDENTS_SPANISH = 'Estudiantes';
 
 
 //*******************SNACKBAR---DIALOG_REF*************************/
@@ -148,8 +153,8 @@ export const IMAGE_BASE64 = 'imageBase64';
 
 //*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';
-
-
+export const WELCOME_MALE = 'Bienvenido. ';
+export const WELCOME_FEMALE = 'Bienvenida. ';
 //*******************DATE-FORMAT*************************/
 export const DD_MM_YYYY ='DD/MM/YYYY';
 
@@ -170,3 +175,11 @@ export const SEARCH_USER = 'searchUser'
 export const SET_ROLES = 'setRoles'
 export const SIMPLE_DIALOG_CLASSIC = 'classic'
 export const SIMPLE_DIALOG_CARD = 'card'
+
+//*******************HOME-USER*************************/
+export const TITLE_COURSES = 'Cursos';
+export const TITLE_SUBJECTS = 'Asignaturas';
+export const TITLE_MY_SUBJECTS = 'Mis Asignaturas';
+export const TITLE_QUIZES = 'Mis Pruebas';
+export const TITLE_PROFILE = 'Perfil';
+export const TITLE_PREFERENCES = 'Preferencias';

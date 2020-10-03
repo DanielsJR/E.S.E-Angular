@@ -78,8 +78,6 @@ const routes: Routes = [
                                 data: { animation: 'grades-id' },
                             },
 
-
-
                         ]
                     },
 

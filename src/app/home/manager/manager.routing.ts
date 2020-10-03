@@ -113,8 +113,6 @@ const routes: Routes = [
                     },
 
                     //teacher
-
-
                     {
                         path: 'teacher',
                         canActivateChild: [TeacherGuard],
@@ -124,7 +122,6 @@ const routes: Routes = [
                                 component: TeacherSubjectsComponent,
                                 data: { animation: 'teacher-subjects' },
                             },
-
 
                             {
                                 path: 'subjects/detail',
@@ -172,7 +169,6 @@ const routes: Routes = [
 
                                 ]
                             },
-
 
                             {
                                 path: 'quizes',

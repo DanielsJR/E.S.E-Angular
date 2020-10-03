@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { ROLE_TEACHER } from '../../../app.config';
 
 @Component({
   selector: 'nx-teacher-home',
-  templateUrl: './teacher-home.component.html',
-  styleUrls: ['./teacher-home.component.css']
+  template: `<nx-home-user [areaRole] ="areaRole"></nx-home-user>`,
+  styles: [`:host  {
+    display: block;
+    width: 100%;
+  }
+  `]
 })
 export class TeacherHomeComponent implements OnInit {
-
-  nCards = [1, 2, 3, 4, 5];
+  areaRole = ROLE_TEACHER;
 
   constructor() { }
 

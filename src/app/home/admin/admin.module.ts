@@ -6,6 +6,7 @@ import { AdminGetManagersComponent } from './admin-get-users/admin-get-managers.
 import { AdminComponent } from './admin.component';
 import { UsersModule } from '../users/users.module';
 import { AdminGetTeachersComponent } from './admin-get-users/admin-get-teachers.component';
+import { HomeUserModule } from '../home-user/home-user.module';
 
 
 
@@ -14,6 +15,7 @@ import { AdminGetTeachersComponent } from './admin-get-users/admin-get-teachers.
     SharedModule,
     AdminRoutingModule,
     UsersModule,
+    HomeUserModule,
     
   ],
 

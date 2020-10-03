@@ -47,9 +47,6 @@ body {
     background: unset !important;
 }
 
-/*MATERIAL dialog*/
-
-
 
 /*MATERIAL snackBar*/
 .snackBarService {
@@ -58,12 +55,6 @@ body {
     max-width: 100% !important;
 }
 
-/*MATERIAL snackBar*/
-
-/*MATERIAL table.... mat-list in tables*/
-
-
-/*MATERIAL snackBar*/
 
 /*MAT icons*/
 button.mat-menu-item {
@@ -79,11 +70,7 @@ a.mat-menu-item>mat-icon {
     width: 24px;
 }
 
-/*MAT icons*/
 
-/*MAT CARD*/
-
-/*MAT divider*/
 
 /*nx-multi-date-picker*/
 .customFormField {

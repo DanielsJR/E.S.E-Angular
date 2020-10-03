@@ -1,0 +1,14 @@
+<div class="container">
+
+    <a *ngFor="let m of userMenus" [routerLink]="m?.route" class="backgroundColorCard backgroundDiv"
+        (click)="emitMenuAction(m.title)">
+        <mat-card class="backgroundColorHover">
+            <mat-card-title>{{m.title}}</mat-card-title>
+            <div class="cardDivider accentColorBG"></div>
+            <mat-card-content>{{m.description}}</mat-card-content>
+        </mat-card>
+    </a>
+
+    <router-outlet></router-outlet>
+
+</div>

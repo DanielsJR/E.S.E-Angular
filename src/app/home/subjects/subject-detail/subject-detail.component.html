@@ -1,7 +1,7 @@
 <div class="container">
 
     <mat-toolbar color="accent" class="toolbarSubjectMenu">
-        <button *ngFor="let m of toolbarMenus" mat-button [routerLink]="m.route" routerLinkActive="active">{{m.name}}
+        <button mat-button *ngFor="let m of toolbarMenus" [routerLink]="m.route" routerLinkActive="active">{{m.name}}
         </button>
         <span class="spacer-r"></span>
     </mat-toolbar>

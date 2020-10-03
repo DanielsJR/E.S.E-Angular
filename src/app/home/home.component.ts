@@ -5,7 +5,7 @@ import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdHeadshakeA
 import { SnackbarService } from '../shared/snackbars-ref/snackbar.service';
 import { Router, ActivatedRoute, ActivationEnd, } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
-import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED } from '../app.config';
+import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED, WELCOME_FEMALE, WELCOME_MALE, TITLE_PROFILE, TITLE_PREFERENCES } from '../app.config';
 import { IsLoadingService } from '../services/isLoadingService.service';
 import { Theme } from '../shared/theme-picker/theme';
 import { LoginService } from '../login/login-form/login.service';
@@ -18,6 +18,8 @@ import { Subscription, Observable, of } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
 import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-picker.service';
+import { HomeUserService } from './home-user/home-user.service';
+import { GENDERS } from '../models/genders';
 
 
 
@@ -42,6 +44,11 @@ import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-p
 })
 export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate {
 
+  roleAdmin = ROLE_ADMIN;
+  roleManager = ROLE_MANAGER;
+  roleTeacher = ROLE_TEACHER;
+  roleStudent = ROLE_STUDENT;
+
   user: User;
   privilege = this.userLoggedService.getPrivilege();
   roles = this.userLoggedService.getRoles();
@@ -52,42 +59,31 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   welcome: string;
 
   isScrolled = false;
-  triggerUsers = true;
   isLoading: boolean = false;
 
-  roleAdmin = ROLE_ADMIN;
-  roleManager = ROLE_MANAGER;
-  roleTeacher = ROLE_TEACHER;
-  roleStudent = ROLE_STUDENT;
-
-  btnRoute = false;
-
-  //profile
   profileAction = '';
   profileTitle = '';
   _isSidenavProfileOpen = new EventEmitter<boolean>();
   isSidenavProfileOpen: boolean = false;
   @ViewChild("sidenavProfile") sidenavProfile: MatSidenav;
 
-
-  currentUrl: string = '';
-
   sideNavMenuState: boolean;
   sideNavChatState: boolean;
   @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
   @ViewChild("sidenavChat") sidenavChat: MatSidenav;
-  @ViewChild("sidenavMenuProfile") sidenavMenuProfile: MatDrawer;
 
-  private subscriptions = new Subscription();
+  @ViewChild("sidenavMenuProfile") sidenavMenuProfile: MatDrawer;
+  @ViewChild("sidenavMenuSettings") sidenavMenuSettings: MatDrawer;
 
   animString: String;
-  toolbarColorAccent: boolean = false;
 
   currentYear: Date = new Date();
   year: Date;
 
   headshakeState = false;
-  //fillToolbar = false;
+  fillToolbar = false;
+
+  private subscriptions = new Subscription();
 
   constructor(
     private loginService: LoginService,
@@ -97,13 +93,11 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
     //private quizNotificationService: QuizNotificationService,
-    private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService
+    private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService,
+    private homeUserService: HomeUserService,
 
   ) {
-
-    this.subscriptions.add(this.isLoadingService.isLoading$.subscribe(result =>
-      this.isLoading = result
-    ));
+    this.subscriptions.add(this.isLoadingService.isLoading$.subscribe(result => this.isLoading = result));
 
     this.subscriptions.add(this.userLoggedService.userLogged$.subscribe(user => {
       this.user = user;
@@ -112,20 +106,14 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
     this.getState();
 
-    multiDatePickerService.date$.subscribe(date => this.year = date);
-
+    this.multiDatePickerService.date$.subscribe(date => this.year = date);
   }
 
   ngOnInit() {
     if (this.user) {
-      if (this.user.username === '111') {
-        this.welcome = WELCOME_ADMIN + this.shortName(this.user);
-      } else {
-        this.welcome = (this.user.gender === 'Mujer') ? 'Bienvenida ' + this.shortName(this.user) : 'Bienvenido ' + this.shortName(this.user);
-      }
-
+      if (this.userLoggedService.isAdmin()) this.welcome = WELCOME_ADMIN + this.shortName(this.user);
+      else this.welcome = (this.user.gender === GENDERS[1].viewValue) ? WELCOME_FEMALE + this.shortName(this.user) : WELCOME_MALE + this.shortName(this.user);
     }
-
 
   }
 
@@ -152,6 +140,14 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.subscriptions.add(this.sidenavProfile.openedChange.subscribe(isOpen => {
       // this.btnProfileBack._elementRef.nativeElement.focus();
       this._isSidenavProfileOpen.emit(this.isSidenavProfileOpen = isOpen);
+    }));
+
+    this.subscriptions.add(this.homeUserService.menuAction$.subscribe(action => {
+      if (action.length) {
+        if (action === TITLE_PROFILE && !this.sidenavMenuSettings.opened) this.toggleSideNavAsyc(this.sidenavMenuProfile);
+        else if (action === TITLE_PREFERENCES && !this.sidenavMenuProfile.opened) this.toggleSideNavAsyc(this.sidenavMenuSettings);
+      }
+
     }));
 
     this.cdRef.detectChanges();
@@ -181,13 +177,8 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.subscriptions.add(this.router.events.pipe(
       filter(event => event instanceof ActivationEnd && event.snapshot.children.length == 0))
       .subscribe((event: ActivationEnd) => {
-        if (event.snapshot.parent.url.toString() === 'subjects,detail') {
-          this.animString = event.snapshot.parent.data.animation;
-          setTimeout(() => this.toolbarColorAccent = true, 1500);
-        } else {
-          this.toolbarColorAccent = false;
-          this.animString = event.snapshot.data.animation;
-        }
+        if (event.snapshot.parent.url.toString() === 'subjects,detail') this.animString = event.snapshot.parent.data.animation;
+        else this.animString = event.snapshot.data.animation;
       }));
   }
 
@@ -203,24 +194,19 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   }
 
   wasSideNavOpenAsyc: boolean = false;
-  openSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
+  toggleSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
     if (!this.sideNavMenuState) {
       this.sideNavMenuState = true;
       setTimeout(() => sidenav.toggle(), 500);
       this.wasSideNavOpenAsyc = true;
-    } else {
-      sidenav.toggle();
-      this.wasSideNavOpenAsyc = false;
-    }
-  }
-
-  closeSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
-    if (this.sideNavMenuState && this.wasSideNavOpenAsyc) {
+    } else if (this.sideNavMenuState && this.wasSideNavOpenAsyc) {
       sidenav.toggle();
       setTimeout(() => this.sideNavMenuState = false, 500);
+      this.wasSideNavOpenAsyc = false;
     } else {
       sidenav.toggle();
     }
+
   }
 
 

@@ -10,6 +10,7 @@ import { SubjectsModule } from '../subjects/subjects.module';
 import { StudentSubjectCourseComponent } from './student-subjects/student-subject-course.component';
 import { StudentSubjectsGradesComponent } from './student-subjects/student-subjects-grades.component';
 import { StudentSubjectsQuizComponent } from './student-subjects/student-subjects-quiz/student-subjects-quiz.component';
+import { HomeUserModule } from '../home-user/home-user.module';
 
 
 
@@ -19,6 +20,7 @@ import { StudentSubjectsQuizComponent } from './student-subjects/student-subject
     StudentRoutingModule,
     QuizStudentModule,
     SubjectsModule,
+    HomeUserModule,
   ],
 
   declarations: [
