@@ -1,37 +1,37 @@
 <ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
-    *ngIf="!shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
+    *ngIf="sideNavMenuState && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
     <mat-list-item (click)="trigger = !trigger">
         <mat-icon matListIcon svgIcon="account-multiple" [class.accentColor]="rla.isActive"></mat-icon>
-        <h3 matLine [class.accentColor]="rla.isActive">Usuarios</h3>
-        <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
+        <h3 matLine [class.accentColor]="rla.isActive" [@animateText]= "sideNavMenuState">Usuarios</h3>
+        <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down" [@animateText]= "sideNavMenuState"></mat-icon>
     </mat-list-item>
 
-    <div [@tdCollapse]="trigger || shortMenu" [style.overflow]="'hidden'" id="collapsebleDiv">
+    <div [@tdCollapse]="trigger || !sideNavMenuState" [style.overflow]="'hidden'" id="collapsebleDiv">
 
         <mat-list-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/managers']" routerLinkActive
             #rlaManagers="routerLinkActive">
             <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaManagers.isActive"></mat-icon>
-            <h3 matLine [class.accentColor]="rlaManagers.isActive">Administradores</h3>
+            <h3 matLine [class.accentColor]="rlaManagers.isActive" [@animateText]= "sideNavMenuState">Administradores</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleAdmin)" [routerLink]="['./admin/teachers']" routerLinkActive
             #rlaATeachers="routerLinkActive">
             <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaATeachers.isActive"></mat-icon>
-            <h3 matLine [class.accentColor]="rlaATeachers.isActive">Docentes</h3>
+            <h3 matLine [class.accentColor]="rlaATeachers.isActive" [@animateText]= "sideNavMenuState">Docentes</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/teachers']" routerLinkActive
             #rlaMTeachers="routerLinkActive">
             <mat-icon matListIcon svgIcon="account-multiple-outline" [class.accentColor]="rlaMTeachers.isActive"></mat-icon>
-            <h3 matLine [class.accentColor]="rlaMTeachers.isActive">Docentes</h3>
+            <h3 matLine [class.accentColor]="rlaMTeachers.isActive" [@animateText]= "sideNavMenuState">Docentes</h3>
         </mat-list-item>
 
         <mat-list-item *ngIf="roles?.includes(roleManager)" [routerLink]="['./manager/students']" routerLinkActive
             #rlaStudents="routerLinkActive">
             <mat-icon matListIcon svgIcon="account-group-outline" [class.accentColor]="rlaStudents.isActive">
             </mat-icon>
-            <h3 matLine [class.accentColor]="rlaStudents.isActive">Estudiantes</h3>
+            <h3 matLine [class.accentColor]="rlaStudents.isActive" [@animateText]= "sideNavMenuState">Estudiantes</h3>
         </mat-list-item>
 
     </div>
@@ -40,12 +40,11 @@
 
 
 <ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
-    *ngIf="shortMenu && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
+    *ngIf="!sideNavMenuState && (roles?.includes(roleAdmin) || roles?.includes(roleManager))">
 
     <mat-list-item [matMenuTriggerFor]="menuUsers">
         <mat-icon matListIcon svgIcon="account-multiple" [class.accentColor]="rla.isActive"></mat-icon>
-        <h3 matLine [class.accentColor]="rla.isActive">Usuarios</h3>
-        <mat-icon [@tdRotate]="!trigger" svgIcon="menu-down"></mat-icon>
+
     </mat-list-item>
 
     <mat-menu x-position="after" #menuUsers="matMenu" [overlapTrigger]="false">

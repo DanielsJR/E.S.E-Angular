@@ -7,9 +7,13 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
-import { RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
+import { RESULT_ERROR, RESULT_SUCCEED, URI_HOME, URI_LOGIN, WELCOME_ADMIN, WELCOME_FEMALE, WELCOME_MALE } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { IsLoadingService } from '../../services/isLoadingService.service';
+import { switchMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { GENDERS } from '../../models/genders';
+import { User } from '../../models/user';
 
 
 @Component({
@@ -44,6 +48,10 @@ export class LoginComponent implements OnInit {
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
 
+  shortName(user: User): string {
+    return user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
+  }
+
   login(): void {
     this.isLoadingService.isLoadingTrue();
 
@@ -51,7 +59,7 @@ export class LoginComponent implements OnInit {
       .subscribe(token => {
         this.localStorageService.setToken(token.token);
         const endPoint = this.userLoggedService.getPrivilege().toLowerCase();
-        this.router.navigate([`${URI_HOME}/${endPoint}`]);
+        this.router.navigate([`${URI_HOME}/${endPoint}`])
 
       }, err => {
         //console.error('message: ' + err.error.errors + '   status: ' + err.status);

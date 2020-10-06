@@ -3,6 +3,7 @@ import { NavigationExtras } from '@angular/router';
 import { ROLE_MANAGER, ROLE_ADMIN } from '../../app.config';
 import { tdRotateAnimation, tdCollapseAnimation } from '@covalent/core/common';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { animateText } from '../../shared/animations/animations';
 
 @Component({
   selector: 'nx-users-menu',
@@ -14,6 +15,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
   animations: [
     tdRotateAnimation,
     tdCollapseAnimation,
+    animateText,
   ],
 
 })
@@ -22,7 +24,8 @@ export class UsersMenuComponent implements OnInit {
 
 
   @Input() roles: string[];
-  @Input() shortMenu: boolean;
+  @Input() sideNavMenuState: string;
+
   roleAdmin = ROLE_ADMIN;
   roleManager = ROLE_MANAGER;
   trigger = true;

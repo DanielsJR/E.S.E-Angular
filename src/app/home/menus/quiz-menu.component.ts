@@ -26,7 +26,8 @@ export class QuizMenuComponent implements OnInit {
 
 
   @Input() roles: string[];
-  @Input() shortMenu: boolean;
+  @Input() sideNavMenuState: string;
+  
   roleTeacher = ROLE_TEACHER;
   roleManager = ROLE_MANAGER;
   trigger = true;

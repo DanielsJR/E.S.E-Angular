@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, EventEmitter, OnDestroy, ChangeDetectorRe
 import { User } from '../models/user';
 import { ThemePickerComponent } from '../shared/theme-picker/theme-picker.component';
 import { tdRotateAnimation, tdCollapseAnimation, tdBounceAnimation, tdHeadshakeAnimation } from '@covalent/core/common';
-import { SnackbarService } from '../shared/snackbars-ref/snackbar.service';
 import { Router, ActivatedRoute, ActivationEnd, } from '@angular/router';
 import { UserLoggedService } from '../services/user-logged.service';
 import { ROLE_ADMIN, ROLE_MANAGER, ROLE_TEACHER, ROLE_STUDENT, URI_WELCOME, WELCOME_ADMIN, RESULT_SUCCEED, WELCOME_FEMALE, WELCOME_MALE, TITLE_PROFILE, TITLE_PREFERENCES } from '../app.config';
@@ -19,8 +18,6 @@ import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
 import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-picker.service';
 import { HomeUserService } from './home-user/home-user.service';
-import { GENDERS } from '../models/genders';
-
 
 
 @Component({
@@ -90,7 +87,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     private userLoggedService: UserLoggedService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
     //private quizNotificationService: QuizNotificationService,
     private cdRef: ChangeDetectorRef, private multiDatePickerService: MultiDatePickerService,
@@ -110,11 +106,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   }
 
   ngOnInit() {
-    if (this.user) {
-      if (this.userLoggedService.isAdmin()) this.welcome = WELCOME_ADMIN + this.shortName(this.user);
-      else this.welcome = (this.user.gender === GENDERS[1].viewValue) ? WELCOME_FEMALE + this.shortName(this.user) : WELCOME_MALE + this.shortName(this.user);
-    }
-
   }
 
   ngAfterViewInit() {
@@ -132,7 +123,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
           this.sidenavChat.open();
           this.sideNavMenuState = false;
           this.sideNavChatState = false;
-          this.snackbarService.openSnackBar(this.welcome, RESULT_SUCCEED);
         }, 1000);
 
       }));
@@ -156,10 +146,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
-  }
-
-  shortName(user: User): string {
-    return user.firstName.substr(0, user.firstName.indexOf(' ')) || user.firstName;
   }
 
   logout(): void {

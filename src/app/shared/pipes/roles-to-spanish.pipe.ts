@@ -10,24 +10,13 @@ export class RolesToSpanishPipe implements PipeTransform {
     transform(roles: string[]): string {
         let rolesSpanish: string[] = [];
         for (let role of roles) {
-            if (role === ROLE_ADMIN) {
-                role = ROLE_ADMIN_SPANISH;
-            }
-
-            else if (role === ROLE_MANAGER) {
-                role = ROLE_MANAGER_SPANISH;
-            }
-
-            else if (role === ROLE_TEACHER) {
-                role = ROLE_TEACHER_SPANISH;
-            }
-
-            else if (role === ROLE_STUDENT) {
-                role = ROLE_STUDENT_SPANISH;
-            };
+            if (role === ROLE_ADMIN) role = ROLE_ADMIN_SPANISH;
+            else if (role === ROLE_MANAGER) role = ROLE_MANAGER_SPANISH;
+            else if (role === ROLE_TEACHER) role = ROLE_TEACHER_SPANISH;
+            else if (role === ROLE_STUDENT) role = ROLE_STUDENT_SPANISH;
 
             rolesSpanish.push(role);
         }
-        return rolesSpanish.toString().replace(/,/g, ', ');
+        return rolesSpanish.toString().replace(/,/g, '-');
     }
 }

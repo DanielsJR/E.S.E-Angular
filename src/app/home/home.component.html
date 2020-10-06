@@ -62,7 +62,7 @@
 
         <!-- sidenavMenu -->
         <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
-            [@onSideNavChange]="sideNavMenuState">
+        [@onSideNavChange]="sideNavMenuState">
 
             <!-- sidenav header toobar -->
             <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar">
@@ -72,8 +72,8 @@
                             <img matListAvatar
                                 [src]=" 'data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl'"
                                 alt="{{privilege | lowercase}}" [matMenuTriggerFor]="settings">
-                            <h3 *ngIf="user" matLine> {{user | shortName}} </h3>
-                            <p matLine>
+                            <h3 *ngIf="user" matLine [@animateText]="sideNavMenuState"> {{user | shortName}} </h3>
+                            <p matLine [@animateText]="sideNavMenuState">
                                 <span *ngIf="user" [class.roles]="!fillToolbar">{{user.roles | rolesToSpanish}}</span>
                             </p>
                             <!--<nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>-->
@@ -117,11 +117,11 @@
 
             <!-- sidenav menus -->
             <mat-nav-list class="sidenavMainMenu">
-                <nx-home-menu [roles]='roles'></nx-home-menu>
-                <nx-users-menu [roles]='roles' [shortMenu]="!sideNavMenuState"></nx-users-menu>
-                <nx-courses-menu [roles]='roles'></nx-courses-menu>
-                <nx-subjects-menu [roles]='roles'></nx-subjects-menu>
-                <nx-quiz-menu [roles]='roles' [shortMenu]="!sideNavMenuState"></nx-quiz-menu>
+                <nx-home-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-home-menu>
+                <nx-users-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-users-menu>
+                <nx-courses-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-courses-menu>
+                <nx-subjects-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-subjects-menu>
+                <nx-quiz-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-quiz-menu>
             </mat-nav-list>
 
             <!-- sidenav menu footer toobar -->

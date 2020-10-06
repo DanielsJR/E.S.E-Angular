@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ROLE_TEACHER, ROLE_ADMIN, ROLE_MANAGER, ROLE_STUDENT } from '../../app.config';
+import { animateText } from '../../shared/animations/animations';
 
 @Component({
   selector: 'nx-subjects-menu',
@@ -7,28 +8,31 @@ import { ROLE_TEACHER, ROLE_ADMIN, ROLE_MANAGER, ROLE_STUDENT } from '../../app.
 
 <mat-list-item *ngIf= "roles?.includes(roleManager)" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive">Asignaturas</h3>
+    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Asignaturas</h3>
 </mat-list-item>  
 
 <mat-divider *ngIf= "roles?.includes(roleTeacher) && roles?.includes(roleManager)"></mat-divider>
 
 <mat-list-item *ngIf= "roles?.includes(roleTeacher) && roles?.includes(roleManager)" [routerLink]= "links[1].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school-outline" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive">Mis Asignaturas</h3>
+    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Mis Asignaturas</h3>
 </mat-list-item>  
 
 <mat-list-item *ngIf= "roles?.includes(roleTeacher) && !roles?.includes(roleManager)" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive">Mis Asignaturas</h3>
+    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Mis Asignaturas</h3>
 </mat-list-item>
 
 <mat-list-item *ngIf= "roles[0] === roleStudent" [routerLink]= "links[0].route" routerLinkActive #rla="routerLinkActive">
   <mat-icon matListIcon svgIcon ="school" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive">Mis Asignaturas</h3>
+    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Mis Asignaturas</h3>
 </mat-list-item>
 
   `,
   styles: [],
+  animations: [
+    animateText,
+  ]
 
 })
 
@@ -37,6 +41,9 @@ export class SubjectsMenuComponent implements OnInit {
 
   @Input()
   roles: string[];
+
+  @Input()
+  sideNavMenuState: string;
 
   roleAdmin = ROLE_ADMIN;
   roleManager = ROLE_MANAGER;

@@ -26,7 +26,6 @@ export class HomeResolverService implements Resolve<Theme> {
 
 
     resolve(): Observable<Theme> | Observable<never> {
-
         return this.userLoggedService.getUserFromBackEnd()
             .pipe(
                 switchMap(user => this.themeService.getTheme(user.username)),

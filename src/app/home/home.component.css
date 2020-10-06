@@ -126,7 +126,10 @@
 .sidenavToolbar,
 .sidenavToolbar h3 {
     font: unset !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.05px !important;
 }
+
 
 .sidenavToolbar mat-list {
     padding: 0;
