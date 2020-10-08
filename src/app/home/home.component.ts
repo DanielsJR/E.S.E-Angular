@@ -80,6 +80,8 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   headshakeState = false;
   fillToolbar = false;
 
+  backdrop = false;
+
   private subscriptions = new Subscription();
 
   constructor(
@@ -193,7 +195,11 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
       sidenav.toggle();
     }
 
+
   }
 
+  setBackdrop(): boolean {
+    return (this.sidenavMenuProfile?.opened || this.sidenavMenuSettings?.opened);
+  }
 
 }

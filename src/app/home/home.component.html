@@ -33,18 +33,18 @@
         <button color="accent" type="button" mat-raised-button (click)="style4 = !style4">accent footer</button>-->
 
         <div matTooltip="Notificaciones">
-            <button type="button" mat-icon-button>
-                <mat-icon svgIcon="bell" [@tdHeadshake]="headshakeState" (click)="headshakeState = !headshakeState">
+            <button type="button" mat-icon-button (click)="headshakeState = !headshakeState">
+                <mat-icon svgIcon="bell" [@tdHeadshake]="headshakeState">
                 </mat-icon>
             </button>
         </div>
 
-
         <nx-full-screen></nx-full-screen>
 
-        <button type="button" mat-icon-button>
-            <mat-icon svgIcon="spray" (click)="fillToolbar = !fillToolbar"></mat-icon>
+        <button type="button" mat-icon-button (click)="fillToolbar = !fillToolbar">
+            <mat-icon svgIcon="spray"></mat-icon>
         </button>
+
         <nx-theme-picker #themePicker></nx-theme-picker>
 
         <div matTooltip="Chat">
@@ -57,15 +57,15 @@
     </mat-toolbar>
 
 
-    <mat-sidenav-container class="sidenavContainer"
+    <mat-sidenav-container class="sidenavContainer" [hasBackdrop]="setBackdrop()"
         [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
         <!-- sidenavMenu -->
         <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
-        [@onSideNavChange]="sideNavMenuState">
+        [@onSideNavChange]="sideNavMenuState" disableClose>
 
             <!-- sidenav header toobar -->
-            <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar">
+            <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar" [style.padding]="0">
                 <div class="profileMini">
                     <mat-list>
                         <mat-list-item>
@@ -125,21 +125,20 @@
             </mat-nav-list>
 
             <!-- sidenav menu footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard">
-                <span class="spacer-r"></span>
-                <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState">
+            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard" [style.padding]="!sideNavMenuState ? '0' : '0 12px' ">
+                <span *ngIf="sideNavMenuState" class="spacer-r"></span>
+                <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState" [style.margin]=" '0 auto'  ">
                     <mat-icon *ngIf="sideNavMenuState" svgIcon="arrow-collapse-horizontal"></mat-icon>
                     <mat-icon *ngIf="!sideNavMenuState" svgIcon="arrow-expand-horizontal"></mat-icon>
                 </button>
             </mat-toolbar>
 
             <!-- sidenav user-menu-profile -->
-            <mat-drawer mode="slide" opened="false" #sidenavMenuProfile class="drawer"
+            <mat-drawer opened="false" #sidenavMenuProfile class="drawer" 
             [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack
-                        style="margin-left: 12px;">
+                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack>
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
@@ -179,7 +178,7 @@
                 </mat-nav-list>
 
                 <!-- sidenav user-profile -->
-                <mat-drawer mode="side" opened="false" #sidenavProfile class="drawer">
+                <mat-drawer opened="false" #sidenavProfile class="drawer">
 
                     <mat-toolbar color="accent" class="sidenavToolbar">
                         <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
@@ -202,12 +201,11 @@
             </mat-drawer>
 
             <!-- sidenav settings -->
-            <mat-drawer mode="side" opened="false" #sidenavMenuSettings class="drawer">
+            <mat-drawer opened="false" #sidenavMenuSettings class="drawer">
 
                 <!-- sidenav settings toobar -->
                 <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuSettings)" #btnSettingsBack
-                        style="margin-left: 12px;">
+                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuSettings)" #btnSettingsBack>
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
                     <span class="spacer-r"></span>
@@ -224,7 +222,7 @@
 
         <!-- sidenavChat -->
         <mat-sidenav #sidenavChat mode="side" opened="false" class="sidenavChat" [position]=" 'end' "
-            [@onSideNavChange]="sideNavChatState">
+            [@onSideNavChange]="sideNavChatState" disableClose>
 
             <!-- sidenavChat header toobar -->
             <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar">
@@ -235,16 +233,16 @@
             </mat-nav-list>
 
             <!-- sidenavChat footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard">
-                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState" style="margin-right: 12px;">
+            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard"  [style.padding]="!sideNavChatState ? '0' : '0 12px' ">
+                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState" [style.margin]=" '0 auto'  ">
                     <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
                     <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
                 </button>
 
-                <span class="spacer-r"></span>
+                <span *ngIf="sideNavChatState" class="spacer-r"></span>
 
-                <mat-form-field appearance="outline" [floatLabel]=" 'never' "
-                    [style.visibility]="!sideNavChatState? 'hidden': 'visible'">
+                <mat-form-field *ngIf="sideNavChatState" appearance="outline" [floatLabel]=" 'never' "
+                    > <!-- [style.visibility]="!sideNavChatState? 'hidden': 'visible'" -->
                     <input matInput autocomplete="off" placeholder="Escribe un mensaje">
                     <button matSuffix mat-icon-button color="primary">
                         <mat-icon svgIcon="send"></mat-icon>

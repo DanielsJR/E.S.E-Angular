@@ -1,4 +1,4 @@
-<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
     *ngIf="sideNavMenuState && roles?.includes(roleTeacher)">
 
     <mat-list-item (click)="trigger = !trigger">
@@ -32,10 +32,10 @@
 
     </div>
 
-</div>
+</ng-container>
 
 
-<div routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+<ng-container routerLinkActive [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
     *ngIf="!sideNavMenuState && roles?.includes(roleTeacher)">
 
     <mat-list-item [matMenuTriggerFor]="menuQuiz">
@@ -68,4 +68,4 @@
 
     </mat-menu>
 
-</div>
+</ng-container>

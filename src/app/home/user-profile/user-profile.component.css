@@ -2,7 +2,7 @@
     width: 100%;
     overflow-y: auto;
     position: absolute;
-    top: 64px;
+    top: 56px;
     bottom: 0;
 }
 
@@ -44,7 +44,6 @@ form mat-form-field {
 
 ::ng-deep .listAvatarContainer .mat-list-item .mat-list-item-content {
     justify-content: center;
-
     padding: 0;
 }
 

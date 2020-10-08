@@ -4,39 +4,11 @@ import { animateText } from '../../shared/animations/animations';
 
 @Component({
   selector: 'nx-home-menu',
-  template: `
-
-<mat-list-item *ngIf="roles?.includes(roleAdmin)" routerLink="./admin" routerLinkActive="active" #rla="routerLinkActive" [routerLinkActiveOptions]= "{exact: true}">
-  <mat-icon matListIcon svgIcon="home-variant" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Home</h3>
-</mat-list-item>  
-  
-<mat-list-item *ngIf="roles?.includes(roleManager)  && !roles?.includes(roleAdmin)" routerLink="./manager" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]= "{exact: true}">
-  <mat-icon matListIcon svgIcon="home-variant"  [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Home</h3>
-</mat-list-item>  
-
-<mat-list-item *ngIf="roles?.includes(roleTeacher)  && !roles?.includes(roleAdmin) && !roles?.includes(roleManager)" routerLink="./teacher" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]= "{exact: true}">
-  <mat-icon matListIcon svgIcon="home-variant" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Home</h3>
-</mat-list-item>
-
-<mat-list-item *ngIf="roles?.includes(roleStudent)" routerLink="./student" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]= "{exact: true}">
-  <mat-icon matListIcon svgIcon="home-variant" [class.accentColor]= "rla.isActive"></mat-icon>
-    <h3 matLine [class.accentColor]= "rla.isActive" [@animateText]= "sideNavMenuState">Home</h3>
-</mat-list-item>
-
-<mat-divider></mat-divider>
-
-  
-  `,
-  styles: [
-  ],
+  templateUrl: 'home-menu.component.html',
+  styles: [],
   animations: [
     animateText,
   ]
-
-
 })
 
 export class HomeMenuComponent implements OnInit {

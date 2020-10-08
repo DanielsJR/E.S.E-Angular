@@ -20,11 +20,12 @@
     width: 100% !important;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
     z-index: 1;
+    height: 56px;
 }
 
 .routerWrapper {
     position: absolute;
-    top: 64px;
+    top: 56px;
     bottom: 0;
     width: 100%;
     margin: 0;

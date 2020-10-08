@@ -9,7 +9,13 @@ import { animateText } from '../../shared/animations/animations';
   selector: 'nx-users-menu',
   templateUrl: './users-menu.component.html',
   styles: [
-    ' ::ng-deep #collapsebleDiv mat-list-item .mat-list-item-content { padding-left: 30px !important;} #collapsebleDiv mat-list-item h3 {  font-weight:normal !important; }'
+    `::ng-deep #collapsebleDiv mat-list-item .mat-list-item-content {
+        padding-left: 30px !important;
+      }
+
+     #collapsebleDiv mat-list-item h3 {
+        font-weight:normal !important;
+      }`
   ],
 
   animations: [
