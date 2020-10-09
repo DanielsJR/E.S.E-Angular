@@ -116,7 +116,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   dialogCardUserSubs(dialogRef: MatDialogRef<CardUserDialogRefComponent>): void {
     let user = dialogRef.componentInstance.user;
     dialogRef.afterClosed().subscribe(result => {
-      
+
       if (result === RESULT_CANCELED) console.log(RESULT_CANCELED);
 
       else if (result === RESULT_DETAIL) this.crudUserDialog.openDialogDetail(user);
@@ -146,6 +146,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   crudVisibility(user: User) {
     return (!this.checkEqualOrGreaterPrivileges(this.userLoggedService.getRoles(), user.roles) && !this.isAdminEditingTeacher()) ? 'visible' : 'hidden';
+  }
+
+  reloadUsers() {
+    if (this.uriUsersRole === URI_MANAGER) this.userStoreService.loadAllManagers();
+    else if (this.uriUsersRole === URI_TEACHER) this.userStoreService.loadAllTeachers();
+    else if (this.uriUsersRole === URI_STUDENT) this.userStoreService.loadAllStudents();
   }
 
 

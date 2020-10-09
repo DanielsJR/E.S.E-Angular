@@ -57,22 +57,15 @@ export class UserStoreService {
     }
 
     loadAllManagers() {
-        if (this.managersSource.getValue().length) {
-            console.log(`********GET-Managers-FROM-CACHE********`);
-            this.managersSource.next(this.dataStore.managers);
-
-        } else {
-            console.log(`********GET-Managers-FROM-BACKEND********`);
-            this.isLoadingGetManagers.next(true);
-            this.userBackendService.getUsers(this.managerUriRole).pipe(
-                finalize(() => this.isLoadingGetManagers.next(false)))
-                .subscribe(users => {
-                    this.dataStore.managers = users;
-                    this.managersSource.next(Object.assign({}, this.dataStore).managers);
-                    if (users.length == 0) console.error('manager list empty');
-                });
-        }
-
+        console.log(`********GET-Managers-FROM-BACKEND********`);
+        this.isLoadingGetManagers.next(true);
+        this.userBackendService.getUsers(this.managerUriRole).pipe(
+            finalize(() => this.isLoadingGetManagers.next(false)))
+            .subscribe(users => {
+                this.dataStore.managers = users;
+                this.managersSource.next(Object.assign({}, this.dataStore).managers);
+                if (users.length == 0) console.error('manager list empty');
+            });
     }
 
     loadOneManager(id: string) {
@@ -161,21 +154,15 @@ export class UserStoreService {
     }
 
     loadAllTeachers() {
-        if (this.teachersSource.getValue().length) {
-            console.log(`********GET-Teachers-FROM-CACHE********`);
-            this.teachersSource.next(this.dataStore.teachers);
-        } else {
-            console.log(`********GET-Teachers-FROM-BACKEND********`);
-            this.isLoadingGetTeachers.next(true);
-            this.userBackendService.getUsers(this.teacherUriRole)
-                .pipe(finalize(() => this.isLoadingGetTeachers.next(false)))
-                .subscribe(users => {
-                    this.dataStore.teachers = users;
-                    this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
-                    if (users.length == 0) console.error('teacher list empty');
-                });
-        }
-
+        console.log(`********GET-Teachers-FROM-BACKEND********`);
+        this.isLoadingGetTeachers.next(true);
+        this.userBackendService.getUsers(this.teacherUriRole)
+            .pipe(finalize(() => this.isLoadingGetTeachers.next(false)))
+            .subscribe(users => {
+                this.dataStore.teachers = users;
+                this.teachersSource.next(Object.assign({}, this.dataStore).teachers);
+                if (users.length == 0) console.error('teacher list empty');
+            });
     }
 
     loadOneTeacher(id: string) {
@@ -272,21 +259,15 @@ export class UserStoreService {
     }
 
     loadAllStudents() {
-        if (this.studentsSource.getValue().length) {
-            console.log(`********GET-Students-FROM-CACHE********`);
-            this.studentsSource.next(this.dataStore.students);
-        } else {
-            console.log(`********GET-Students-FROM-BACKEND********`);
-            this.isLoadingGetStudents.next(true);
-            this.userBackendService.getUsers(this.studentUriRole)
-                .pipe(finalize(() => this.isLoadingGetStudents.next(false)))
-                .subscribe(users => {
-                    this.dataStore.students = users;
-                    this.studentsSource.next(Object.assign({}, this.dataStore).students);
-                    if (users.length == 0) console.error('student list empty');
-                });
-        }
-
+        console.log(`********GET-Students-FROM-BACKEND********`);
+        this.isLoadingGetStudents.next(true);
+        this.userBackendService.getUsers(this.studentUriRole)
+            .pipe(finalize(() => this.isLoadingGetStudents.next(false)))
+            .subscribe(users => {
+                this.dataStore.students = users;
+                this.studentsSource.next(Object.assign({}, this.dataStore).students);
+                if (users.length == 0) console.error('student list empty');
+            });
     }
 
     loadOneStudent(id: string) {

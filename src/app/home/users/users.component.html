@@ -13,12 +13,15 @@
 
       <span class="spacer-r"></span>
 
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">
-          <mat-icon svgIcon="account-multiple"></mat-icon>
-          &nbsp; {{usersRole}}
-        </mat-chip>
-      </mat-chip-list>
+      <div matTooltip="Recargar {{usersRole}}">
+        <mat-chip-list>
+          <mat-chip color="accent" selected="true" (click)="reloadUsers()" style="cursor: pointer;">
+            <mat-icon svgIcon="account-multiple"></mat-icon>
+            &nbsp; {{usersRole}}
+            &nbsp; <mat-icon svgIcon="refresh-circle"></mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
 
     </mat-toolbar>
 
