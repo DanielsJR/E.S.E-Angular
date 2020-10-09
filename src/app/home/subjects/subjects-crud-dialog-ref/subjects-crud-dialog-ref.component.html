@@ -14,17 +14,20 @@
     <mat-list>
       <mat-list-item>
         <img *ngIf="!teacher" matListAvatar
-          [src]=" 'data:'+ avatar?.type+';base64,' + avatar?.data | safe: 'resourceUrl' "
-          alt="Profesor">
+          [src]=" 'data:'+ avatar?.type+';base64,' + avatar?.data | safe: 'resourceUrl' " alt="Profesor">
+
         <img *ngIf="teacher" matListAvatar
           [src]=" 'data:'+ teacher?.avatar?.type+';base64,' + teacher?.avatar?.data | safe: 'resourceUrl' "
           alt="Profesor" (click)="imageZoom.openDialogImage()">
+
         <nx-image-zoom-user #imageZoom [avatar]="teacher?.avatar"></nx-image-zoom-user>
-        <h3 matLine>{{subjectName?.viewValue}}</h3>
+
+        <h3 matLine>{{cName?.value?.viewValue}} </h3>
         <p matLine>
           <span class="role-style">{{subject?.course?.name}}</span>
           <span *ngIf="teacher" class="role-style"> / {{teacher | shortNameLastname}}</span>
         </p>
+
       </mat-list-item>
     </mat-list>
   </div>
@@ -178,7 +181,7 @@
     <span>&nbsp;&nbsp;</span>
     <h1 mat-dialog-title>Eliminar Asignatura</h1>
   </mat-toolbar>
-  
+
   <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 

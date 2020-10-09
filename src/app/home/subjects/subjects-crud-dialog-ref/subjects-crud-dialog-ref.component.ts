@@ -138,8 +138,8 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
 
   create() {
     let subject: Subject = Object.assign({}, this.subject);
-    subject.name = this.cName.value.viewValue; //this.subjectName.value;
-    subject.teacher = this.cTeacher.value; //this.teacher;
+    subject.name = this.cName.value.viewValue;
+    subject.teacher = this.cTeacher.value;
     this.isLoading = true;
     this.subjectStoreService.create(subject)
       .pipe(finalize(() => this.isLoading = false))
@@ -152,7 +152,7 @@ export class SubjectsCrudDialogRefComponent implements OnInit, OnDestroy {
     let subject: Subject = Object.assign({}, this.subject);
     subject.name = this.subjectName.value;
     subject.course = this.course;
-    subject.teacher = this.eTeacher.value; //this.teacher;
+    subject.teacher = this.eTeacher.value;
     this.isLoading = true;
     this.subjectStoreService.update(subject)
       .pipe(finalize(() => this.isLoading = false))
