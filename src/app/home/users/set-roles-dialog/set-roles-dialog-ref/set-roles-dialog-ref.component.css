@@ -1,14 +1,20 @@
 mat-dialog-content {
     overflow-x: hidden;
-    padding: 10px 30px;
+    padding: 20px 30px 5px;
     margin: 0;
 }
 
 .container {
     width: 100%;
-    padding: 20px 0;
+    padding: 10px 0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+}
+
+.toggleContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .divLoading {
@@ -18,6 +24,14 @@ mat-dialog-content {
 
 mat-form-field {
     width: 100%;
+}
+
+::ng-deep .setRoles mat-form-field .mat-form-field-wrapper {
+    padding: 0 !important;
+}
+
+.setRoles{
+    /* dummy class*/
 }
 
 mat-label {
@@ -43,8 +57,4 @@ mat-dialog-actions {
 .chip-selection {
     opacity: 0.75;
     font-size: 0.75em;
-}
-
-mat-chip {
-    cursor: pointer;
 }

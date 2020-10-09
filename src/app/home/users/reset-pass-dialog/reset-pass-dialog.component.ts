@@ -36,6 +36,7 @@ export class ResetPassDialogComponent implements OnInit {
         config.panelClass = 'dialogService';
         config.width = '500px';
         config.height = 'auto';
+        config.disableClose = true;
 
         this.dialog.open(ResetPassDialogRefComponent, config);
 

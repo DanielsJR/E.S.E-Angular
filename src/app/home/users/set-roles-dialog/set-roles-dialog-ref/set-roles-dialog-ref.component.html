@@ -10,43 +10,49 @@
   <div *ngIf="!isLoading" class="backgroundColorCard divLoading"></div>
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
-  <mat-dialog-content class="backgroundColorCard">
+  <mat-dialog-content class="backgroundColorCard setRoles">
 
-    <!-- [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value" -->
+    <mat-form-field appearance="outline" class="centerField" floatLabel="always"
+      [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
 
-    <mat-label>
-      <i class="mdi mdi-shield-account app-input-icon"></i>
-      Asignar a
-      <strong *ngIf="user">{{user | shortName}}&nbsp;
-      </strong>{{roles.length | i18nPlural: rolesMapping}}
-      <ng-container *ngIf="roles.length > 0">de:</ng-container>
-      &nbsp;
-    </mat-label>
-    <br>
+      <mat-label>
+        <i class="mdi mdi-shield-account app-input-icon"></i>
+        Asignar a
+        <strong *ngIf="user">{{user | shortName}}&nbsp;
+        </strong>{{roles.length | i18nPlural: rolesMapping}}
+        <ng-container *ngIf="roles.length > 0">de:</ng-container>
+        &nbsp;
+      </mat-label>
 
-    <div class="container" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
+      <div class="container">
 
-      <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
-        <mat-chip-list>
-          <mat-chip class="chip-selection" selected="true"
-            [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
-            Administrador
-          </mat-chip>
-        </mat-chip-list>
-      </mat-slide-toggle>
+        <div class="toggleContainer">
+          <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
+          </mat-slide-toggle>
+          &nbsp;
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true"
+              [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
+              Administrador
+            </mat-chip>
+          </mat-chip-list>
+        </div>
 
+        <div class="toggleContainer">
+          <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
+          </mat-slide-toggle>
+          &nbsp;
+          <mat-chip-list>
+            <mat-chip class="chip-selection" selected="true"
+              [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
+              Docente
+            </mat-chip>
+          </mat-chip-list>
+        </div>
 
-      <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
-        <mat-chip-list>
-          <mat-chip class="chip-selection" selected="true"
-            [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
-            Docente
-          </mat-chip>
-        </mat-chip-list>
-      </mat-slide-toggle>
+      </div>
 
-    </div>
-    <!--{{roles | json}}-->
+    </mat-form-field>
 
     <div class="errorRoles centerField warnColor"
       [style.visibility]="(!slideToggleManager.value && !slideToggleTeacher.value) ? 'visible' : 'hidden' ">
@@ -55,6 +61,7 @@
       <strong>requerido</strong>
     </div>
 
+    <!--{{roles | json}}-->
   </mat-dialog-content>
 
   <mat-divider></mat-divider>

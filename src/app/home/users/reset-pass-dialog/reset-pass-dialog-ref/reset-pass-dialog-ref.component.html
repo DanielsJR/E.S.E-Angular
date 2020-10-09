@@ -10,6 +10,7 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
 
 <mat-dialog-content class="backgroundColorCard">
+
   <mat-form-field appearance="outline">
     <input matInput [value]="this.resetedPass()" readonly>
     <mat-label>
@@ -17,6 +18,7 @@
       <strong>{{user | shortName}}&nbsp;</strong>a:
     </mat-label>
   </mat-form-field>
+  
 </mat-dialog-content>
 
 <mat-divider></mat-divider>

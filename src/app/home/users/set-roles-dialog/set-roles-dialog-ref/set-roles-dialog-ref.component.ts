@@ -9,7 +9,6 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { Avatar } from '../../../../models/avatar';
 import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 
 @Component({
@@ -64,11 +63,13 @@ export class SetRolesDialogRefComponent implements OnInit {
   get slideToggleTeacher() { return this.setRolesForm.get('slideToggleTeacher') };
 
   toggleManager() {
-    (this.slideToggleManager.value) ? this.roles.push(ROLE_MANAGER) : this.roles = this.roles.filter(e => e !== (ROLE_MANAGER));
+    (this.slideToggleManager.value) ? this.roles.push(ROLE_MANAGER)
+      : this.roles = this.roles.filter(e => e !== (ROLE_MANAGER));
   }
 
   toggleTeacher() {
-    (this.slideToggleTeacher.value) ? this.roles.push(ROLE_TEACHER) : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
+    (this.slideToggleTeacher.value) ? this.roles.push(ROLE_TEACHER)
+      : this.roles = this.roles.filter(e => e !== (ROLE_TEACHER));
   }
 
 
@@ -151,6 +152,5 @@ export class SetRolesDialogRefComponent implements OnInit {
   cancel(): void {
     this.dialogRef.close(RESULT_CANCELED);
   }
-
 
 }

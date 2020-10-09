@@ -1,18 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from './login.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs/internal/operators/finalize';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { SnackbarService } from '../../shared/snackbars-ref/snackbar.service';
 import { noWhitespaceValidator } from '../../shared/validators/no-white-space-validator';
-import { RESULT_ERROR, RESULT_SUCCEED, URI_HOME, URI_LOGIN, WELCOME_ADMIN, WELCOME_FEMALE, WELCOME_MALE } from '../../app.config';
+import { RESULT_ERROR, URI_HOME, URI_LOGIN } from '../../app.config';
 import { UserLoggedService } from '../../services/user-logged.service';
 import { IsLoadingService } from '../../services/isLoadingService.service';
-import { switchMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { GENDERS } from '../../models/genders';
 import { User } from '../../models/user';
 
 

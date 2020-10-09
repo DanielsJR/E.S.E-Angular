@@ -34,6 +34,7 @@ export class SetRolesDialogComponent implements OnInit {
         config.panelClass = 'dialogService';
         config.width = '500px';
         config.height = 'auto';
+        config.disableClose = true;
 
         return this.dialog.open(SetRolesDialogRefComponent, config);
 
