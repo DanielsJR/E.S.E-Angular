@@ -1,5 +1,4 @@
 <form [formGroup]="setRolesForm" (ngSubmit)="setUserRoles()">
-
   <mat-toolbar color="primary">
     <img style="height: 40px" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
     <span class="spacer-r"></span>
@@ -13,47 +12,44 @@
 
   <mat-dialog-content class="backgroundColorCard">
 
-    <mat-form-field appearance="outline" class="centerField" floatLabel="always"
-      [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
+    <!-- [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value" -->
 
-      <mat-label>
-        <i class="mdi mdi-shield-account app-input-icon"></i>
-        Asignar a
-        <strong *ngIf="user">{{user | shortName}}&nbsp;
-        </strong>{{roles.length | i18nPlural: rolesMapping}}
-        <ng-container *ngIf="roles.length > 0">de:</ng-container>
-        &nbsp;
-      </mat-label>
-
-      <div class="container">
-
-        <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
-          <mat-chip-list>
-            <mat-chip class="chip-selection" selected="true"
-              [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
-              Administrador
-            </mat-chip>
-          </mat-chip-list>
-        </mat-slide-toggle>
-
-        <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
-          <mat-chip-list>
-            <mat-chip class="chip-selection" selected="true"
-              [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
-              Docente
-            </mat-chip>
-          </mat-chip-list>
-        </mat-slide-toggle>
-
-      </div>
-
-    </mat-form-field>
-
+    <mat-label>
+      <i class="mdi mdi-shield-account app-input-icon"></i>
+      Asignar a
+      <strong *ngIf="user">{{user | shortName}}&nbsp;
+      </strong>{{roles.length | i18nPlural: rolesMapping}}
+      <ng-container *ngIf="roles.length > 0">de:</ng-container>
+      &nbsp;
+    </mat-label>
     <br>
 
+    <div class="container" [class.mat-form-field-invalid]="!slideToggleManager.value && !slideToggleTeacher.value">
+
+      <mat-slide-toggle formControlName="slideToggleManager" color="primary" (change)="toggleManager()">
+        <mat-chip-list>
+          <mat-chip class="chip-selection" selected="true"
+            [color]="(slideToggleManager.value) ?  'primary' :  'default' ">
+            Administrador
+          </mat-chip>
+        </mat-chip-list>
+      </mat-slide-toggle>
+
+
+      <mat-slide-toggle formControlName="slideToggleTeacher" color="accent" (change)="toggleTeacher()">
+        <mat-chip-list>
+          <mat-chip class="chip-selection" selected="true"
+            [color]="(slideToggleTeacher.value) ?  'accent' :  'default' ">
+            Docente
+          </mat-chip>
+        </mat-chip-list>
+      </mat-slide-toggle>
+
+    </div>
     <!--{{roles | json}}-->
 
-    <div *ngIf="!slideToggleManager.value && !slideToggleTeacher.value" class="errorRoles centerField">
+    <div class="errorRoles centerField warnColor"
+      [style.visibility]="(!slideToggleManager.value && !slideToggleTeacher.value) ? 'visible' : 'hidden' ">
       <i class="mdi mdi-alert-circle app-input-icon">&nbsp;</i>
       Al menos un Privilégio es &nbsp;
       <strong>requerido</strong>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { URI_MANAGER, URI_TEACHER, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED } from '../../../../app.config';
+import { URI_MANAGER, URI_TEACHER, ROLE_MANAGER, ROLE_TEACHER, RESULT_ERROR, RESULT_CANCELED, RESULT_SUCCEED, SET_ROLE_ERROR, SET_ROLE_SUCCEED } from '../../../../app.config';
 import { User } from '../../../../models/user';
 import { PRIVILEGES } from '../../../../models/privileges';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 import { Avatar } from '../../../../models/avatar';
 import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 
 @Component({
@@ -29,6 +30,8 @@ export class SetRolesDialogRefComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  isTeacherChecked = false;
+
 
   constructor(
     public dialogRef: MatDialogRef<SetRolesDialogRefComponent>,
@@ -37,7 +40,7 @@ export class SetRolesDialogRefComponent implements OnInit {
     private snackbarService: SnackbarService
   ) {
 
-    this.user = Object.assign({},data.user);
+    this.user = Object.assign({}, data.user);
     this.uriUsersRole = data.uriUsersRole;
 
     if (this.user.roles.includes(ROLE_MANAGER)) this.roles.push(ROLE_MANAGER);
@@ -88,11 +91,10 @@ export class SetRolesDialogRefComponent implements OnInit {
         .subscribe(user => {
           this.user = user;
           this.dialogRef.close(RESULT_SUCCEED);
-          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCEED);
+          this.snackbarService.openSnackBar(SET_ROLE_SUCCEED, RESULT_SUCCEED);
         }, err => {
-          console.error("Error editing roles manager: " + err.message);
           this.dialogRef.close(RESULT_ERROR);
-          this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
+          this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : SET_ROLE_ERROR, RESULT_ERROR);
         });
 
     } else if (this.uriUsersRole === URI_TEACHER) {
@@ -102,11 +104,10 @@ export class SetRolesDialogRefComponent implements OnInit {
         .subscribe(user => {
           this.user = user;
           this.dialogRef.close(RESULT_SUCCEED);
-          this.snackbarService.openSnackBar("Roles Actualizados", RESULT_SUCCEED);
+          this.snackbarService.openSnackBar(SET_ROLE_SUCCEED, RESULT_SUCCEED);
         }, err => {
-          console.error("Error editing roles teacher: " + err.message);
           this.dialogRef.close(RESULT_ERROR);
-          this.snackbarService.openSnackBar(err.error.message, RESULT_ERROR);
+          this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : SET_ROLE_ERROR, RESULT_ERROR);
         });
 
     } else {

@@ -151,6 +151,9 @@ export const SET_PASS_SUCCEED = 'Contraseña Actualizada';
 export const IMAGE_CHANGE_EVENT = 'imageChangeEvent';
 export const IMAGE_BASE64 = 'imageBase64';
 
+export const SET_ROLE_ERROR = 'Error al Actualizar Roles';
+export const SET_ROLE_SUCCEED = 'Roles Actualizados';
+
 //*******************WELCOME-MESSAGES*************************/
 export const WELCOME_ADMIN = 'Bienvenido Sr. ';
 export const WELCOME_MALE = 'Bienvenido. ';
