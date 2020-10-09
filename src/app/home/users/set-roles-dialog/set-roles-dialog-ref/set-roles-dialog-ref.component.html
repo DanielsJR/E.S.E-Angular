@@ -18,8 +18,8 @@
       <mat-label>
         <i class="mdi mdi-shield-account app-input-icon"></i>
         Asignar a
-        <strong *ngIf="user">{{user | shortName}}&nbsp;
-        </strong>{{roles.length | i18nPlural: rolesMapping}}
+        <strong *ngIf="user">{{user | shortName}}&nbsp;</strong>
+        {{roles.length | i18nPlural: rolesMapping}}
         <ng-container *ngIf="roles.length > 0">de:</ng-container>
         &nbsp;
       </mat-label>
