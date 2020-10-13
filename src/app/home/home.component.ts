@@ -18,6 +18,8 @@ import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
 import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-picker.service';
 import { HomeUserService } from './home-user/home-user.service';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { take } from 'rxjs/internal/operators/take';
 
 
 @Component({
@@ -60,17 +62,19 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
   profileAction = '';
   profileTitle = '';
-  _isSidenavProfileOpen = new EventEmitter<boolean>();
   isSidenavProfileOpen: boolean = false;
-  @ViewChild("sidenavProfile") sidenavProfile: MatSidenav;
+
+  private sidenavProfile: MatSidenav;
+  @ViewChild("sidenavProfile", { static: false }) set _sidenavProfile(sidenav: MatSidenav) {
+    if (!sidenav) return;
+    this.sidenavProfile = sidenav;
+    this.sidenavProfile.openedChange.subscribe(isOpen => this.isSidenavProfileOpen = isOpen);
+  };
 
   sideNavMenuState: boolean;
   sideNavChatState: boolean;
   @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
   @ViewChild("sidenavChat") sidenavChat: MatSidenav;
-
-  @ViewChild("sidenavMenuProfile") sidenavMenuProfile: MatDrawer;
-  @ViewChild("sidenavMenuSettings") sidenavMenuSettings: MatDrawer;
 
   animString: String;
 
@@ -82,7 +86,13 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
   backdrop = false;
 
+  @ViewChild("parentSidenav") parentSidenav: MatSidenav;
+
   private subscriptions = new Subscription();
+  parentSidenavMenu: string;
+
+  titleProfile = TITLE_PROFILE;
+  titlePreferences = TITLE_PREFERENCES;
 
   constructor(
     private loginService: LoginService,
@@ -129,15 +139,12 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
       }));
 
-    this.subscriptions.add(this.sidenavProfile.openedChange.subscribe(isOpen => {
-      // this.btnProfileBack._elementRef.nativeElement.focus();
-      this._isSidenavProfileOpen.emit(this.isSidenavProfileOpen = isOpen);
-    }));
 
     this.subscriptions.add(this.homeUserService.menuAction$.subscribe(action => {
       if (action.length) {
-        if (action === TITLE_PROFILE && !this.sidenavMenuSettings.opened) this.toggleSideNavAsyc(this.sidenavMenuProfile);
-        else if (action === TITLE_PREFERENCES && !this.sidenavMenuProfile.opened) this.toggleSideNavAsyc(this.sidenavMenuSettings);
+        this.parentSidenavMenu = action;
+        if (action === this.titleProfile || action === this.titlePreferences)
+          this.parentSidenav.open();
       }
 
     }));
@@ -181,25 +188,6 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     return of(this.closeAllSidenav()).pipe(delay(300));
   }
 
-  wasSideNavOpenAsyc: boolean = false;
-  toggleSideNavAsyc(sidenav: MatDrawer | MatSidenav) {
-    if (!this.sideNavMenuState) {
-      this.sideNavMenuState = true;
-      setTimeout(() => sidenav.toggle(), 500);
-      this.wasSideNavOpenAsyc = true;
-    } else if (this.sideNavMenuState && this.wasSideNavOpenAsyc) {
-      sidenav.toggle();
-      setTimeout(() => this.sideNavMenuState = false, 500);
-      this.wasSideNavOpenAsyc = false;
-    } else {
-      sidenav.toggle();
-    }
 
-
-  }
-
-  setBackdrop(): boolean {
-    return (this.sidenavMenuProfile?.opened || this.sidenavMenuSettings?.opened);
-  }
 
 }

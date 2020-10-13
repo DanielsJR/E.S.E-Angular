@@ -1,17 +1,105 @@
-<div [ngClass]="themePicker.themeName" class="mat-app-background myWrapper">
-    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+<mat-sidenav-container [ngClass]="themePicker.themeName" class="myWrapper">
 
-    <!-- mainToolbar  [class.primaryColorBG]="fillToolbar"-->
-    <mat-toolbar class="mainToolbar" color="primary">
+    <mat-sidenav mode="over" #parentSidenav style="width: 350px;" disableClose>
 
-        <img class="imgLogo" alt="E.S.E"
-            [src]=" 'assets/images/logos/ese-' + (this.sideNavMenuState ? 'logo' : 'logo2')   + '.png'  "
-            [@logoNavChange]="sideNavMenuState">
+        <div *ngIf="parentSidenavMenu === titleProfile"
+            [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
-        <!-- [@logoNavChange]="(sidenavMenu.opened && sideNavMenuState) ? true : false "
+            <mat-toolbar color="accent" class="sidenavToolbar">
+                <button mat-icon-button (click)="parentSidenav.close()" #btnMenuProfileBack>
+                    <mat-icon svgIcon="arrow-left"></mat-icon>
+                </button>
+                <span class="spacer-r"></span>
+                <mat-icon svgIcon="account-circle"></mat-icon>
+                <span>&nbsp;</span>
+                <h1>Perfil</h1>
+            </mat-toolbar>
+
+            <mat-list class="listAvatarContainer">
+                <mat-list-item>
+                    <img matListAvatar
+                        [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
+                        alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
+                </mat-list-item>
+
+                <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
+
+            </mat-list>
+
+            <mat-divider></mat-divider>
+
+            <mat-nav-list class="sideToolbarProfileMenu backgroundColorCard">
+                <mat-list-item (click)="sidenavProfile.toggle(); profileAction='usuario'">
+                    <h4 mat-line>Usuario</h4>
+                    <mat-icon matListIcon svgIcon="account-circle"></mat-icon>
+                </mat-list-item>
+
+                <mat-list-item (click)="sidenavProfile.toggle(); profileAction='personal'">
+                    <h4 mat-line>Informacion Personal</h4>
+                    <mat-icon matListIcon svgIcon="account"></mat-icon>
+                </mat-list-item>
+
+                <mat-list-item (click)="sidenavProfile.toggle(); profileAction='contacto'">
+                    <h4 mat-line>Contacto</h4>
+                    <mat-icon matListIcon svgIcon="phone"></mat-icon>
+                </mat-list-item>
+            </mat-nav-list>
+
+            <!-- sidenav user-profile -->
+            <mat-drawer opened="false" #sidenavProfile class="drawer">
+
+                <mat-toolbar color="accent" class="sidenavToolbar">
+                    <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
+                        <mat-icon svgIcon="arrow-left"></mat-icon>
+                    </button>
+
+                    <span class="spacer-r"></span>
+                    <h1>{{profileTitle}}</h1>
+                    <span>&nbsp;&nbsp;</span>
+                    <mat-icon svgIcon="account-edit"></mat-icon>
+                </mat-toolbar>
+
+                <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
+                    [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event">
+                </nx-user-profile>
+
+            </mat-drawer>
+
+        </div>
+
+        <div *ngIf="parentSidenavMenu === titlePreferences">
+            <!-- sidenav settings toobar -->
+            <mat-toolbar color="accent" class="sidenavToolbar">
+                <button mat-icon-button (click)="parentSidenav.close()">
+                    <mat-icon svgIcon="arrow-left"></mat-icon>
+                </button>
+                <span class="spacer-r"></span>
+                <mat-icon svgIcon="cogs"></mat-icon>
+                <span>&nbsp;</span>
+                <h1>Preferencias</h1>
+            </mat-toolbar>
+
+            <!-- sidenav user-settings //TODO -->
+            <nx-user-settings [user]="user"></nx-user-settings>
+        </div>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+        <div class="myWrapper">
+            <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+            <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+
+            <!-- mainToolbar  [class.primaryColorBG]="fillToolbar"-->
+            <mat-toolbar class="mainToolbar" color="primary">
+
+                <img class="imgLogo" alt="E.S.E" [@logoNavChange]="sideNavMenuState" (click)="sidenavMenu.toggle()"
+                    [src]=" 'assets/images/logos/ese-' + (this.sideNavMenuState ? 'logo' : 'logo2')   + '.png'  ">
+
+                <!-- [@logoNavChange]="(sidenavMenu.opened && sideNavMenuState) ? true : false "
           (click)="sidenavMenu.toggle()"-->
-        <!--<button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
+                <!--<button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
             <mat-icon svgIcon="backburger" [@tdRotate]="!sidenavMenu.opened"></mat-icon>
         </button>
 
@@ -21,256 +109,143 @@
             </button>
         </div>-->
 
-        <!-- <span class="spacer-r"></span>
+                <!-- <span class="spacer-r"></span>
          <nx-logo [jelloState]=isScrolled></nx-logo>-->
 
-        <span class="spacer-r"></span>
-        <nx-multi-date-picker mode="YEAR" label="Año" [max]="currentYear" floatLabel="never" [(ngModel)]="year"
-            customFormFieldClass="customFormField">
-        </nx-multi-date-picker>
+                <span class="spacer-r"></span>
+                <nx-multi-date-picker mode="YEAR" label="Año" [max]="currentYear" floatLabel="never" [(ngModel)]="year"
+                    customFormFieldClass="customFormField">
+                </nx-multi-date-picker>
 
-        <!--<button color="accent" type="button" mat-raised-button (click)="style3 = !style3">accent header</button>
+                <!--<button color="accent" type="button" mat-raised-button (click)="style3 = !style3">accent header</button>
         <button color="accent" type="button" mat-raised-button (click)="style4 = !style4">accent footer</button>-->
 
-        <div matTooltip="Notificaciones">
-            <button type="button" mat-icon-button (click)="headshakeState = !headshakeState">
-                <mat-icon svgIcon="bell" [@tdHeadshake]="headshakeState">
-                </mat-icon>
-            </button>
-        </div>
+                <div matTooltip="Notificaciones">
+                    <button type="button" mat-icon-button (click)="headshakeState = !headshakeState">
+                        <mat-icon svgIcon="bell" [@tdHeadshake]="headshakeState">
+                        </mat-icon>
+                    </button>
+                </div>
 
-        <nx-full-screen></nx-full-screen>
+                <nx-full-screen></nx-full-screen>
 
-        <button type="button" mat-icon-button (click)="fillToolbar = !fillToolbar">
-            <mat-icon svgIcon="spray"></mat-icon>
-        </button>
+                <button type="button" mat-icon-button (click)="fillToolbar = !fillToolbar">
+                    <mat-icon svgIcon="spray"></mat-icon>
+                </button>
 
-        <nx-theme-picker #themePicker></nx-theme-picker>
+                <nx-theme-picker #themePicker></nx-theme-picker>
 
-        <div matTooltip="Chat">
-            <button type="button" mat-icon-button (click)="sidenavChat.toggle()">
-                <mat-icon svgIcon="message"></mat-icon>
-                <!--<mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon> -->
-            </button>
-        </div>
+                <div matTooltip="Chat">
+                    <button type="button" mat-icon-button (click)="sidenavChat.toggle()">
+                        <mat-icon svgIcon="message"></mat-icon>
+                        <!--<mat-icon *ngIf="!sidenavChat.opened" svgIcon="message-outline"></mat-icon> -->
+                    </button>
+                </div>
 
-    </mat-toolbar>
+            </mat-toolbar>
 
+            <mat-sidenav-container class="sidenavContainer"
+                [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
-    <mat-sidenav-container class="sidenavContainer" [hasBackdrop]="setBackdrop()"
-        [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+                <!-- sidenavMenu -->
+                <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" position="start"
+                    [@onSideNavChange]="sideNavMenuState">
 
-        <!-- sidenavMenu -->
-        <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" [position]=" 'start' "
-        [@onSideNavChange]="sideNavMenuState" disableClose>
+                    <!-- sidenav header toobar -->
+                    <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar" [style.padding]="0">
+                        <div class="profileMini">
+                            <mat-list>
+                                <mat-list-item>
+                                    <img matListAvatar
+                                        [src]=" 'data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl'"
+                                        alt="{{privilege | lowercase}}" [matMenuTriggerFor]="settings">
+                                    <h3 *ngIf="user" matLine [@animateText]="sideNavMenuState"> {{user | shortName}}
+                                    </h3>
+                                    <p matLine [@animateText]="sideNavMenuState">
+                                        <span *ngIf="user"
+                                            [class.roles]="!fillToolbar">{{user.roles | rolesToSpanish}}</span>
+                                    </p>
+                                    <!--<nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>-->
+                                </mat-list-item>
+                            </mat-list>
 
-            <!-- sidenav header toobar -->
-            <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar" [style.padding]="0">
-                <div class="profileMini">
-                    <mat-list>
-                        <mat-list-item>
-                            <img matListAvatar
-                                [src]=" 'data:'+ user?.avatar?.type+';base64,' + user?.avatar?.data | safe: 'resourceUrl'"
-                                alt="{{privilege | lowercase}}" [matMenuTriggerFor]="settings">
-                            <h3 *ngIf="user" matLine [@animateText]="sideNavMenuState"> {{user | shortName}} </h3>
-                            <p matLine [@animateText]="sideNavMenuState">
-                                <span *ngIf="user" [class.roles]="!fillToolbar">{{user.roles | rolesToSpanish}}</span>
-                            </p>
-                            <!--<nx-image-zoom-user #imageZoom [avatar]="user?.avatar"></nx-image-zoom-user>-->
-                        </mat-list-item>
-                    </mat-list>
+                            <span class="spacer-r"></span>
 
-                    <span class="spacer-r"></span>
-
-                    <!-- <div matTooltip="opciones" *ngIf="sideNavMenuState">
+                            <!-- <div matTooltip="opciones" *ngIf="sideNavMenuState">
                         <button mat-icon-button [matMenuTriggerFor]="settings">
                             <mat-icon svgIcon="dots-vertical"></mat-icon>
                         </button>
                     </div>-->
 
-                </div>
-            </mat-toolbar>
-
-            <mat-menu x-position="after" #settings="matMenu" [overlapTrigger]="false">
-
-                <button mat-menu-item (click)="toggleSideNavAsyc(sidenavMenuProfile)">
-                    <mat-icon svgIcon="account-circle"></mat-icon>
-                    <span> Perfil </span>
-                </button>
-
-                <button mat-menu-item (click)="toggleSideNavAsyc(sidenavMenuSettings)">
-                    <mat-icon svgIcon="cogs"></mat-icon>
-                    <span> Preferencias </span>
-                </button>
-
-                <button mat-menu-item (click)="toggleSideNavAsyc(sidenavMenuSettings)">
-                    <mat-icon svgIcon="help-circle"></mat-icon>
-                    <span> Ayuda </span>
-                </button>
-
-                <button mat-menu-item (click)="logout()">
-                    <mat-icon svgIcon="logout"></mat-icon>
-                    <span> Salir </span>
-                </button>
-
-            </mat-menu>
-
-            <!-- sidenav menus -->
-            <mat-nav-list class="sidenavMainMenu">
-                <nx-home-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-home-menu>
-                <nx-users-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-users-menu>
-                <nx-courses-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-courses-menu>
-                <nx-subjects-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-subjects-menu>
-                <nx-quiz-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-quiz-menu>
-            </mat-nav-list>
-
-            <!-- sidenav menu footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard" [style.padding]="!sideNavMenuState ? '0' : '0 12px' ">
-                <span *ngIf="sideNavMenuState" class="spacer-r"></span>
-                <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState" [style.margin]=" '0 auto'  ">
-                    <mat-icon *ngIf="sideNavMenuState" svgIcon="arrow-collapse-horizontal"></mat-icon>
-                    <mat-icon *ngIf="!sideNavMenuState" svgIcon="arrow-expand-horizontal"></mat-icon>
-                </button>
-            </mat-toolbar>
-
-            <!-- sidenav user-menu-profile -->
-            <mat-drawer opened="false" #sidenavMenuProfile class="drawer" 
-            [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
-
-                <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuProfile)" #btnMenuProfileBack>
-                        <mat-icon svgIcon="arrow-left"></mat-icon>
-                    </button>
-                    <span class="spacer-r"></span>
-                    <mat-icon svgIcon="account-circle"></mat-icon>
-                    <span>&nbsp;</span>
-                    <h1>Perfil</h1>
-                </mat-toolbar>
-
-                <mat-list class="listAvatarContainer">
-                    <mat-list-item>
-                        <img matListAvatar
-                            [src]=" 'data:'+user?.avatar.type+';base64,' + user?.avatar.data | safe: 'resourceUrl'"
-                            alt="{{privilege}}" (click)="imageZoom.openDialogImage()">
-                    </mat-list-item>
-
-                    <nx-image-zoom-user #imageZoom [avatar]="user.avatar"></nx-image-zoom-user>
-
-                </mat-list>
-
-                <mat-divider></mat-divider>
-
-                <mat-nav-list class="sideToolbarProfileMenu backgroundColorCard">
-                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='usuario'">
-                        <h4 mat-line>Usuario</h4>
-                        <mat-icon matListIcon svgIcon="account-circle"></mat-icon>
-                    </mat-list-item>
-
-                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='personal'">
-                        <h4 mat-line>Informacion Personal</h4>
-                        <mat-icon matListIcon svgIcon="account"></mat-icon>
-                    </mat-list-item>
-
-                    <mat-list-item (click)="sidenavProfile.toggle(); profileAction='contacto'">
-                        <h4 mat-line>Contacto</h4>
-                        <mat-icon matListIcon svgIcon="phone"></mat-icon>
-                    </mat-list-item>
-                </mat-nav-list>
-
-                <!-- sidenav user-profile -->
-                <mat-drawer opened="false" #sidenavProfile class="drawer">
-
-                    <mat-toolbar color="accent" class="sidenavToolbar">
-                        <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
-                            <mat-icon svgIcon="arrow-left"></mat-icon>
-                        </button>
-
-                        <span class="spacer-r"></span>
-                        <h1>{{profileTitle}}</h1>
-                        <span>&nbsp;&nbsp;</span>
-                        <mat-icon svgIcon="account-edit"></mat-icon>
+                        </div>
                     </mat-toolbar>
 
-                    <nx-user-profile *ngIf="user" [user]="user" [profileAction]="profileAction"
-                        [isSidenavProfileOpen]="isSidenavProfileOpen" (title)="profileTitle=$event">
-                    </nx-user-profile>
+                    <mat-menu x-position="after" #settings="matMenu" [overlapTrigger]="false">
 
-                </mat-drawer>
+                        <button mat-menu-item (click)="parentSidenav.open();parentSidenavMenu= titleProfile">
+                            <mat-icon svgIcon="account-circle"></mat-icon>
+                            <span> Perfil </span>
+                        </button>
+
+                        <button mat-menu-item (click)="parentSidenav.open();parentSidenavMenu= titlePreferences">
+                            <mat-icon svgIcon="cogs"></mat-icon>
+                            <span> Preferencias </span>
+                        </button>
+
+                        <button mat-menu-item (click)="parentSidenav.open();parentSidenavMenu= titlePreferences">
+                            <mat-icon svgIcon="help-circle"></mat-icon>
+                            <span> Ayuda </span>
+                        </button>
+
+                        <button mat-menu-item (click)="logout()">
+                            <mat-icon svgIcon="logout"></mat-icon>
+                            <span> Salir </span>
+                        </button>
+
+                    </mat-menu>
+
+                    <!-- sidenav menus -->
+                    <mat-nav-list class="sidenavMainMenu">
+                        <nx-home-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-home-menu>
+                        <nx-users-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-users-menu>
+                        <nx-courses-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-courses-menu>
+                        <nx-subjects-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-subjects-menu>
+                        <nx-quiz-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-quiz-menu>
+                    </mat-nav-list>
+
+                    <!-- sidenav menu footer toobar -->
+                    <mat-toolbar class="sidenavToolbarFooter backgroundColorCard"
+                        [style.padding]="!sideNavMenuState ? '0' : '0 12px' ">
+                        <span *ngIf="sideNavMenuState" class="spacer-r"></span>
+                        <button mat-icon-button (click)="sideNavMenuState = !sideNavMenuState"
+                            [style.margin]=" '0 auto'  ">
+                            <mat-icon *ngIf="sideNavMenuState" svgIcon="arrow-collapse-horizontal"></mat-icon>
+                            <mat-icon *ngIf="!sideNavMenuState" svgIcon="arrow-expand-horizontal"></mat-icon>
+                        </button>
+                    </mat-toolbar>
 
 
-            </mat-drawer>
+                </mat-sidenav>
 
-            <!-- sidenav settings -->
-            <mat-drawer opened="false" #sidenavMenuSettings class="drawer">
+                <!-- main content -->
+                <mat-sidenav-content [@onMainContentChangeLeft]="sideNavMenuState"
+                    [@onMainContentChangeRight]="sideNavChatState">
 
-                <!-- sidenav settings toobar -->
-                <mat-toolbar color="accent" class="sidenavToolbar">
-                    <button mat-icon-button (click)="toggleSideNavAsyc(sidenavMenuSettings)" #btnSettingsBack>
-                        <mat-icon svgIcon="arrow-left"></mat-icon>
-                    </button>
-                    <span class="spacer-r"></span>
-                    <mat-icon svgIcon="cogs"></mat-icon>
-                    <span>&nbsp;</span>
-                    <h1>Preferencias</h1>
-                </mat-toolbar>
+                    <!-- header toolbar2 -->
+                    <mat-toolbar class="toolbar2" [class.primaryColorBG]="fillToolbar">
+                    </mat-toolbar>
+                    <!--[color]="(toolbarColorAccent) ? 'accent':''" -->
 
-                <!-- sidenav user-settings //TODO -->
-                <nx-user-settings [user]="user"></nx-user-settings>
-            </mat-drawer>
-
-        </mat-sidenav>
-
-        <!-- sidenavChat -->
-        <mat-sidenav #sidenavChat mode="side" opened="false" class="sidenavChat" [position]=" 'end' "
-            [@onSideNavChange]="sideNavChatState" disableClose>
-
-            <!-- sidenavChat header toobar -->
-            <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar">
-            </mat-toolbar>
-
-            <!-- sidenavChat content -->
-            <mat-nav-list class="sidenavMainMenu">
-            </mat-nav-list>
-
-            <!-- sidenavChat footer toobar -->
-            <mat-toolbar class="sidenavToolbarFooter backgroundColorCard"  [style.padding]="!sideNavChatState ? '0' : '0 12px' ">
-                <button mat-icon-button (click)="sideNavChatState = !sideNavChatState" [style.margin]=" '0 auto'  ">
-                    <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
-                    <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
-                </button>
-
-                <span *ngIf="sideNavChatState" class="spacer-r"></span>
-
-                <mat-form-field *ngIf="sideNavChatState" appearance="outline" [floatLabel]=" 'never' "
-                    > <!-- [style.visibility]="!sideNavChatState? 'hidden': 'visible'" -->
-                    <input matInput autocomplete="off" placeholder="Escribe un mensaje">
-                    <button matSuffix mat-icon-button color="primary">
-                        <mat-icon svgIcon="send"></mat-icon>
-                    </button>
-                </mat-form-field>
-
-            </mat-toolbar>
-
-        </mat-sidenav>
-
-        <!-- main content -->
-        <mat-sidenav-content [@onMainContentChangeLeft]="sideNavMenuState"
-            [@onMainContentChangeRight]="sideNavChatState">
-
-            <!-- header toolbar2 -->
-            <mat-toolbar class="toolbar2" [class.primaryColorBG]="fillToolbar">
-            </mat-toolbar><!--[color]="(toolbarColorAccent) ? 'accent':''" -->
-
-            <div class="mainContent">
-                <div class="animWrapper" [@routeAnimations]="animString">
-                    <div class="routerWrapper">
-                        <router-outlet id="homeOutlet"></router-outlet>
+                    <div class="mainContent">
+                        <div class="animWrapper" [@routeAnimations]="animString">
+                            <div class="routerWrapper">
+                                <router-outlet id="homeOutlet"></router-outlet>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- footer toolbar -->
-           <!-- <mat-toolbar class="toolbarFooter">
+                    <!-- footer toolbar -->
+                    <!-- <mat-toolbar class="toolbarFooter">
                 <img style="height:30px; padding:13px" alt="logo" src="assets/images/logos/ese-logo.png">
                 <span style="font-size:12px; padding-top: 10px;">Enseñanza Sistemática Estimulante</span>
 
@@ -283,8 +258,46 @@
                     2017-{{currentYear | date: 'y'}}.</span>
             </mat-toolbar> -->
 
-        </mat-sidenav-content>
+                </mat-sidenav-content>
 
-    </mat-sidenav-container>
+                <!-- sidenavChat -->
+                <mat-sidenav #sidenavChat mode="side" opened="false" class="sidenavChat" position="end"
+                    [@onSideNavChange]="sideNavChatState" disableClose>
 
-</div>
+                    <!-- sidenavChat header toobar -->
+                    <mat-toolbar class="sidenavToolbar" [class.primaryColorBG]="fillToolbar">
+                    </mat-toolbar>
+
+                    <!-- sidenavChat content -->
+                    <mat-nav-list class="sidenavMainMenu">
+                    </mat-nav-list>
+
+                    <!-- sidenavChat footer toobar -->
+                    <mat-toolbar class="sidenavToolbarFooter backgroundColorCard"
+                        [style.padding]="!sideNavChatState ? '0' : '0 12px' ">
+                        <button mat-icon-button (click)="sideNavChatState = !sideNavChatState"
+                            [style.margin]=" '0 auto'  ">
+                            <mat-icon *ngIf="sideNavChatState" svgIcon="arrow-collapse-horizontal"></mat-icon>
+                            <mat-icon *ngIf="!sideNavChatState" svgIcon="arrow-expand-horizontal"></mat-icon>
+                        </button>
+
+                        <span *ngIf="sideNavChatState" class="spacer-r"></span>
+
+                        <mat-form-field *ngIf="sideNavChatState" appearance="outline" [floatLabel]=" 'never' ">
+                            <!-- [style.visibility]="!sideNavChatState? 'hidden': 'visible'" -->
+                            <input matInput autocomplete="off" placeholder="Escribe un mensaje">
+                            <button matSuffix mat-icon-button color="primary">
+                                <mat-icon svgIcon="send"></mat-icon>
+                            </button>
+                        </mat-form-field>
+
+                    </mat-toolbar>
+
+                </mat-sidenav>
+
+            </mat-sidenav-container>
+        </div>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -51,6 +51,7 @@
 
 .imgLogo {
     height: 40px;
+    cursor: pointer;
 }
 
 .toolbar2 {
@@ -181,7 +182,7 @@
 
 .sideToolbarProfileMenu {
     overflow-y: auto;
-    width: inherit;
+    width: 100%;
     position: absolute;
     top: 184px;
     bottom: 0;

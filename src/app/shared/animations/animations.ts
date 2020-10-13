@@ -419,7 +419,6 @@ export const animateText = trigger('animateText', [
       'opacity': '1'
     })
   ),
-  //transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)')),
 ]);
 
 
