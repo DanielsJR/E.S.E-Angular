@@ -57,7 +57,8 @@ export class LocalStorageService {
     }
 
     isTokenExpired(): boolean {
-        if (this.isTokenStored()) return (this.getExpireDate() < (Date.now().valueOf() / 1000));
+        if (this.isTokenStored())
+            return (this.getExpireDate() < (Date.now().valueOf() / 1000));
         return true;
     }
 

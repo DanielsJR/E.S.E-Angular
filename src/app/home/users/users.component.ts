@@ -38,6 +38,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSizeOptions = [5, 10, 20];
   rowClasses: {};
   isLoading: boolean = false;
+  userloggedRoles;
 
   // mat dialog
   user: User;
@@ -45,14 +46,18 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('crudUserDialog') crudUserDialog: CrudUserDialogComponent;
 
   private subscriptions = new Subscription();
+  isAdmin: boolean;
 
-  constructor(private userStoreService: UserStoreService, private sessionStorage: SessionStorageService,
-    public sanitizer: DomSanitizer, private userLoggedService: UserLoggedService,
+  constructor(private userStoreService: UserStoreService, private userLoggedService: UserLoggedService,
+    public sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-  ) { }
+  ) {
+    this.userloggedRoles = this.userLoggedService.getRoles();
+    this.isAdmin = this.userLoggedService.isAdmin();
+  }
 
   ngOnInit() {
-    //console.log("AreaRole: " + this.areaRole + "  userLoggedRoles: " + this.userLoggedService.getRoles());
+    //console.log("AreaRole: " + this.areaRole + "  userLoggedRoles: " + this.userloggedRoles);
 
     this.dataSource.filterPredicate = (user: User, filterValue: string) =>
       (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).indexOf(filterValue) === 0 ||
@@ -136,16 +141,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isAdminEditingTeacher() {
-    if (this.isAdmin() && this.uriUsersRole === URI_TEACHER) return true;
+    if (this.isAdmin && this.uriUsersRole === URI_TEACHER) return true;
     return false;
   }
 
-  isAdmin() {
-    return this.userLoggedService.isAdmin();
-  }
-
   crudVisibility(user: User) {
-    return (!this.checkEqualOrGreaterPrivileges(this.userLoggedService.getRoles(), user.roles) && !this.isAdminEditingTeacher()) ? 'visible' : 'hidden';
+    return (!this.checkEqualOrGreaterPrivileges(this.userloggedRoles, user.roles) && !this.isAdminEditingTeacher()) ? 'visible' : 'hidden';
   }
 
   reloadUsers() {

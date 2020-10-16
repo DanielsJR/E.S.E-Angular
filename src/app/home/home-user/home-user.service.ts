@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable({
     providedIn: 'root',
 })
 export class HomeUserService {
 
-    private menuActionSource = <BehaviorSubject<string>>new BehaviorSubject('');
+    latestAction: string;
+    private menuActionSource = new Subject<string>();
 
     constructor() { }
 
@@ -15,6 +17,7 @@ export class HomeUserService {
     }
 
     emitAction(action: string) {
+        this.latestAction = action;
         this.menuActionSource.next(action);
     }
 }

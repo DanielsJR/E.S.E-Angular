@@ -77,7 +77,7 @@
             [onlyRead]="isAdminEditingTeacher()">
           </nx-crud-user-dialog>
 
-          <button *ngIf="isAdmin()" mat-icon-button color="warn"
+          <button *ngIf="isAdmin" mat-icon-button color="warn"
             (click)="setRoles.openDialogSetRoles(); $event.stopPropagation()">
             <mat-icon svgIcon="shield-account"></mat-icon>
           </button>

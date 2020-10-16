@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
   welcome: string;
 
-  isScrolled = false;
+  isScrolled: boolean = false;
   isLoading: boolean = false;
 
   profileAction = '';
@@ -71,8 +71,8 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.sidenavProfile.openedChange.subscribe(isOpen => this.isSidenavProfileOpen = isOpen);
   };
 
-  sideNavMenuState: boolean;
-  sideNavChatState: boolean;
+  sideNavMenuState: boolean = false;
+  sideNavChatState: boolean = false;
   @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
   @ViewChild("sidenavChat") sidenavChat: MatSidenav;
 
@@ -131,10 +131,10 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         setTimeout(() => {
-          this.sidenavMenu.open();
-          this.sidenavChat.open();
           this.sideNavMenuState = false;
           this.sideNavChatState = false;
+          this.sidenavMenu.open();
+          this.sidenavChat.open();
         }, 1000);
 
       }));

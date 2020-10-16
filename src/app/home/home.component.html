@@ -6,7 +6,7 @@
             [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
             <mat-toolbar color="accent" class="sidenavToolbar">
-                <button mat-icon-button (click)="parentSidenav.close()" #btnMenuProfileBack>
+                <button mat-icon-button (click)="parentSidenav.close();parentSidenavMenu= '' " #btnMenuProfileBack>
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
@@ -70,7 +70,7 @@
         <div *ngIf="parentSidenavMenu === titlePreferences">
             <!-- sidenav settings toobar -->
             <mat-toolbar color="accent" class="sidenavToolbar">
-                <button mat-icon-button (click)="parentSidenav.close()">
+                <button mat-icon-button (click)="parentSidenav.close();parentSidenavMenu= '' ">
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
                 <span class="spacer-r"></span>
@@ -196,6 +196,22 @@
                             <mat-icon svgIcon="help-circle"></mat-icon>
                             <span> Ayuda </span>
                         </button>
+
+                        <button mat-menu-item [routerLink]="['../welcome']">
+                            <mat-icon svgIcon="login"></mat-icon>
+                            <span> Welcome </span>
+                        </button>
+
+                        <button mat-menu-item [routerLink]="['../login']">
+                            <mat-icon svgIcon="login"></mat-icon>
+                            <span> Login </span>
+                        </button>
+
+                        <button mat-menu-item [routerLink]="['../loginnnn']">
+                            <mat-icon svgIcon="login"></mat-icon>
+                            <span> Not Found </span>
+                        </button>
+
 
                         <button mat-menu-item (click)="logout()">
                             <mat-icon svgIcon="logout"></mat-icon>
