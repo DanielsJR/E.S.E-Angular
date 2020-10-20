@@ -128,6 +128,7 @@ export const GRADE_UPDATE_SUCCEED = 'Calificación Actualizada';
 export const GRADE_DELETE_ERROR = 'Error al Eliminar Calificación';
 export const GRADE_DELETE_SUCCEED = 'Calificación Eliminada';
 
+export const QUIZ_GET_ERROR = 'Error al Obtener Prueba(s)';
 export const QUIZ_CREATE_ERROR = 'Error al Crear Prueba';
 export const QUIZ_CREATE_SUCCEED = 'Prueba Creada';
 export const QUIZ_UPDATE_ERROR = 'Error al Actualizar Prueba';

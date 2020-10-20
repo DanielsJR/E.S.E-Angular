@@ -6,7 +6,7 @@ import { SessionStorageService } from '../../../services/session-storage.service
 import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
-import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR } from '../../../app.config';
+import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR, QUIZ_GET_ERROR, SIMPLE_DIALOG_CLASSIC } from '../../../app.config';
 import { IsLoadingService } from '../../../services/isLoadingService.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,6 +17,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../../shared/animations/animations';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'nx-teacher-quizes',
@@ -36,21 +37,22 @@ export class TeacherQuizesComponent implements OnInit {
   isLoading: boolean = false;
   private subscriptions = new Subscription();
 
+  simpleDialogDeleteType = SIMPLE_DIALOG_CLASSIC;
+  userLogged: User;
+
   constructor(private quizBackendService: QuizBackendService,
-    private sessionStorage: SessionStorageService,
     public dialog: MatDialog, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,
     private cdRef: ChangeDetectorRef,) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
     this.setDataSource();
+
     this.cdRef.detectChanges();
   }
 
@@ -62,13 +64,16 @@ export class TeacherQuizesComponent implements OnInit {
     this.subscriptions.add(this.userLoggedService.userLogged$
       .pipe(
         switchMap(user => {
+          this.userLogged = user;
           this.isLoading = true;
-          return this.quizBackendService.getQuizByUserId(user.id);
+          return this.quizBackendService.getTeacherQuizes(user?.username);
         }),
         take(1),
         finalize(() => this.isLoading = false)
       )
-      .subscribe(qs => this.dataSource.data = qs));
+      .subscribe(qs => { this.dataSource.data = qs }
+        , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : QUIZ_GET_ERROR, RESULT_ERROR)
+      ));
   }
 
   applyFilter(filterValue: string) {
@@ -79,16 +84,13 @@ export class TeacherQuizesComponent implements OnInit {
 
   deleteQuizDialog(dialogRef: MatDialogRef<SimpleDialogRefComponent>) {
     dialogRef.afterClosed().subscribe(result => {
-      if (result === RESULT_CANCELED) {
-        console.log(RESULT_CANCELED);
-      } else if (result === RESULT_ACTION1) {
+      if (result === RESULT_CANCELED) console.log(RESULT_CANCELED);
+      else if (result === RESULT_ACTION1) {
         console.log(RESULT_ACTION1);
         this.deleteQuiz(dialogRef.componentInstance.obj);
-      } else if (result === RESULT_ACTION2) {
-        console.log(RESULT_ACTION2);
-      } else if (result === RESULT_ACTION3) {
-        console.log(RESULT_ACTION3);
-      }
+      } else if (result === RESULT_ACTION2) console.log(RESULT_ACTION2);
+      else if (result === RESULT_ACTION3) console.log(RESULT_ACTION3);
+
     });
   }
 
@@ -99,21 +101,14 @@ export class TeacherQuizesComponent implements OnInit {
 
   deleteQuiz(quiz: Quiz) {
     this.isLoadingService.isLoadingTrue();
-    this.subscriptions.add(this.quizBackendService.delete(quiz)
+    this.subscriptions.add(this.quizBackendService.delete(quiz, this.userLogged.username)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(quiz => {
         this.deleteQuizFromDataSource(quiz.id);
         this.snackbarService.openSnackBar(QUIZ_DELETE_SUCCEED, RESULT_SUCCEED);
       }
-        , error => {
-          if (error instanceof HttpErrorResponse) {
-            this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-
-          } else {
-            this.snackbarService.openSnackBar(QUIZ_DELETE_ERROR, RESULT_ERROR);
-
-          }
-        }));
+        , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : QUIZ_DELETE_ERROR, RESULT_ERROR)
+      ));
   }
 
 }

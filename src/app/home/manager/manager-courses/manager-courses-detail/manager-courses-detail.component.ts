@@ -209,7 +209,7 @@ export class ManagerCoursesDetailComponent implements OnInit, AfterViewInit, OnD
         this.snackbarService.openSnackBar(COURSE_UPDATE_SUCCEED, RESULT_SUCCEED);
         this.gotoCourses();
       },
-        err => this.snackbarService.openSnackBar((err.error.errors) ? err.error.errors : COURSE_UPDATE_ERROR, RESULT_ERROR)
+        err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : COURSE_UPDATE_ERROR, RESULT_ERROR)
       ));
 
   }

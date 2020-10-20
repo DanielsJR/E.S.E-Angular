@@ -1,472 +1,49 @@
-<div class="container" *ngIf="quiz">
+<div class="containerQuiz" *ngIf="quiz">
 
-  <mat-card class="mat-elevation-z8">
 
-    <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight mat-align-tabs="center"
-     (selectedTabChange)="correspondItemsAccordion.openAll(); trueFalseItemsAccordion.openAll();
-       multipleSelectionItemsAccordion.openAll(); incompleteTextItemsAccordion.openAll()" animationDuration="0">
+  <mat-tab-group color="primary" backgroundColor="primary" dynamicHeight mat-align-tabs="center" animationDuration="0">
+    <!--(selectedTabChange)="correspondItemsAccordion.openAll();"-->
 
-      <mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+        <span>&nbsp;&nbsp;Correspondencia</span>
+      </ng-template>
 
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-          <span>&nbsp;&nbsp;Correspondencia</span>
-        </ng-template>
+      <nx-quiz-correspond-item [quiz]="quiz"></nx-quiz-correspond-item>
+    </mat-tab>
 
-        <form [formGroup]="editCorrespondItemsForm"  class="backgroundColorCard">
-          <mat-accordion #correspondItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+        <span>&nbsp;&nbsp;Verdadero o Falso</span>
+      </ng-template>
 
-            <mat-toolbar color="accent">
+      <nx-quiz-true-false-item [quiz]="quiz"></nx-quiz-true-false-item>
+    </mat-tab>
 
-              <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-              <h1>&nbsp;&nbsp;Correspondencia</h1>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+        <span>&nbsp;&nbsp;Selección Multiple</span>
+      </ng-template>
 
-              <span class="spacer-c"></span>
-              <mat-icon svgIcon="calculator"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Ponderación {{ponderationCorrespondItems}}% </h1>
-              <span>&nbsp;&nbsp;</span>
+      <nx-quiz-multiple-selection-item [quiz]="quiz"></nx-quiz-multiple-selection-item>
+    </mat-tab>
 
-              <mat-slider [disabled]="disabled" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
-                [tickInterval]="tickInterval" formControlName="ponderation" [displayWith]="formatLabel"
-                [color]=" 'warn' ">
-              </mat-slider>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+        <span>&nbsp;&nbsp;Texto Incompleto</span>
+      </ng-template>
 
-              <span class="spacer-r"></span>
-              <button type="button" mat-mini-fab color="primary" (click)="addCorrespondItem()">
-                <mat-icon svgIcon="plus"></mat-icon>
-              </button>
+      <nx-quiz-incomplete-text-item [quiz]="quiz"></nx-quiz-incomplete-text-item>
+    </mat-tab>
 
-              <button type="button" mat-mini-fab color="primary"
-                (click)=" panelOpenCorrespondItems ? correspondItemsAccordion.closeAll() : correspondItemsAccordion.openAll()">
-                <!-- <i class="mdi mdi-menu-{{panelOpenCorrespondItems ? 'up' : 'down'}} size-mdi-icon"></i> -->
-              </button>
-            </mat-toolbar>
+  </mat-tab-group>
 
-            <div formArrayName="correspondItems">
-              <mat-expansion-panel #mep *ngFor="let ci of correspondItems['controls']; let i=index;"
-                [expanded]="ci.get('open').value" (opened)="panelOpenCorrespondItems = true"
-                (closed)="panelOpenCorrespondItems = false">
 
-                <mat-expansion-panel-header>
-
-                  <mat-panel-title>
-                    <button mat-mini-fab color="primary" class="miniFabMini">
-                      {{ i + 1 }}
-                    </button>
-                  </mat-panel-title>
-
-                  <mat-panel-description>
-                    <span *ngIf="!mep.expanded"> {{ci.get('item').value}} </span>
-                  </mat-panel-description>
-
-                </mat-expansion-panel-header>
-
-                <div [formGroupName]="i">
-
-                  <mat-form-field appearance="outline" class="fullWith">
-                    <mat-label>
-                      Item
-                    </mat-label>
-                    <textarea matInput formControlName="item" required></textarea>
-                    <mat-error *ngIf="ci.get('item').hasError('required')">
-                      <strong>requerido</strong>.
-                    </mat-error>
-                  </mat-form-field>
-
-                  <br>
-
-                  <mat-form-field appearance="fill" class="fullWith">
-                    <mat-label>
-                      <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Correspondencia
-                    </mat-label>
-                    <input matInput formControlName="correspond" required>
-                  </mat-form-field>
-
-                  <mat-action-row>
-
-                    <button type="button" mat-mini-fab color="accent"
-                      [disabled]="correspondItems.invalid || correspondItems.pristine" (click)="saveCorrespondItems()">
-                      <mat-icon svgIcon="content-save"></mat-icon>
-                    </button>
-
-                    <button type="button" mat-mini-fab color="warn"
-                      (click)="deleteCorrespondItemDialog(deleteDialog.openSimpleDialog(),i)">
-                      <mat-icon svgIcon="delete"></mat-icon>
-                    </button>
-
-                  </mat-action-row>
-
-                  <nx-simple-dialog #deleteDialog [obj]="ci" [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' "
-                    [subtitle]=" 'Items Correspondientes' " [dialogTitle]=" 'Eliminar Item' "
-                    [cancelButton]=" 'Descartar' " [type]=" 'classic' " [icon]=" 'delete' ">
-                  </nx-simple-dialog>
-
-                </div>
-
-              </mat-expansion-panel>
-              
-            </div>
-
-          </mat-accordion>
-        </form>
-
-      </mat-tab>
-
-      <mat-tab>
-
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-          <span>&nbsp;&nbsp;Verdadero o Falso</span>
-        </ng-template>
-
-        <form [formGroup]="editTrueFalseItemsForm" class="backgroundColorCard">
-          <mat-accordion #trueFalseItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
-            <mat-toolbar color="accent">
-
-              <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Verdadero o Falso</h1>
-
-              <span class="spacer-c"></span>
-
-              <mat-icon svgIcon="calculator"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Ponderación {{ponderationTrueFalseItems}}% </h1>
-
-              <span>&nbsp;&nbsp;</span>
-              <mat-slider [disabled]="disabled" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
-                [tickInterval]="tickInterval" formControlName="ponderation" [displayWith]="formatLabel"
-                [color]=" 'warn' ">
-              </mat-slider>
-
-              <span class="spacer-r"></span>
-
-              <button type="button" mat-mini-fab color="primary" (click)="addTrueFalseItem()">
-                <mat-icon svgIcon="plus"></mat-icon>
-              </button>
-
-              <button type="button" mat-mini-fab color="primary"
-                (click)=" panelOpenTrueFalseItems ? trueFalseItemsAccordion.closeAll() : trueFalseItemsAccordion.openAll()">
-                <i class="mdi mdi-menu-{{panelOpenTrueFalseItems ? 'up' : 'down'}} size-mdi-icon"></i>
-              </button>
-
-            </mat-toolbar>
-
-            <div formArrayName="trueFalseItems">
-              <mat-expansion-panel #mep *ngFor="let tf of trueFalseItems['controls'] ; let i=index;"
-                [expanded]="tf.get('open').value" (opened)="panelOpenTrueFalseItems = true"
-                (closed)="panelOpenTrueFalseItems = false">
-
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <button mat-mini-fab color="primary" class="miniFabMini">
-                      {{ i + 1 }}
-                    </button>
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    <span *ngIf="!mep.expanded"> {{tf.get('sentence').value}} </span>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <div [formGroupName]="i">
-                  <mat-form-field appearance="outline" class="fullWith">
-                    <mat-label>
-                      Sentencia
-                    </mat-label>
-                    <textarea matInput formControlName="sentence" required></textarea>
-                  </mat-form-field>
-
-                  <br>
-                  <mat-form-field appearance="fill" class="fullWith">
-                    <mat-select formControlName="answer" required>
-                      <mat-option *ngFor="let trueFalse of trueFalses" [value]="trueFalse.value">
-                        {{ trueFalse.viewValue }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-label>
-                      <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
-                    </mat-label>
-                  </mat-form-field>
-
-                  <mat-action-row>
-                    <button type="button" mat-mini-fab color="accent"
-                      [disabled]="trueFalseItems.invalid || trueFalseItems.pristine" (click)="saveTrueFalseItems()">
-                      <mat-icon svgIcon="content-save"></mat-icon>
-                    </button>
-
-                    <button type="button" mat-mini-fab color="warn"
-                      (click)="deleteTrueFalseItemDialog(deleteTrueFalse.openSimpleDialog(),i)">
-                      <mat-icon svgIcon="delete"></mat-icon>
-                    </button>
-                  </mat-action-row>
-                  <nx-simple-dialog #deleteTrueFalse [obj]="tf" [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' "
-                    [subtitle]=" 'Verdadero o Falso' " [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' "
-                    [type]=" 'classic' " [icon]=" 'delete' ">
-                  </nx-simple-dialog>
-
-                </div>
-              </mat-expansion-panel>
-            </div>
-          </mat-accordion>
-        </form>
-
-      </mat-tab>
-
-      <mat-tab>
-
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-          <span>&nbsp;&nbsp;Seleción Múltiple</span>
-        </ng-template>
-
-        <form [formGroup]="editMultipleSelectionItemsForm" class="backgroundColorCard">
-          <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true"
-            [displayMode]="accordionDisplayMode">
-            <mat-toolbar color="accent">
-
-              <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Seleción Múltiple</h1>
-
-              <span class="spacer-c"></span>
-              <mat-icon svgIcon="calculator"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Ponderación {{ponderationMultipleSelectionItems}}% </h1>
-
-              <span>&nbsp;&nbsp;</span>
-              <mat-slider [disabled]="disabled" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
-                [tickInterval]="tickInterval" formControlName="ponderation" [displayWith]="formatLabel"
-                [color]=" 'warn' ">
-              </mat-slider>
-
-              <span class="spacer-r"></span>
-              <button type="button" mat-mini-fab color="primary" (click)="addMultipleSelectionItem()">
-                <mat-icon svgIcon="plus"></mat-icon>
-              </button>
-
-              <button type="button" mat-mini-fab color="primary"
-                (click)=" panelOpenMultipleSelectionItems ? multipleSelectionItemsAccordion.closeAll() : multipleSelectionItemsAccordion.openAll()">
-                <i class="mdi mdi-menu-{{panelOpenMultipleSelectionItems ? 'up' : 'down'}} size-mdi-icon"></i>
-              </button>
-
-            </mat-toolbar>
-
-            <div formArrayName="multipleSelectionItems">
-              <mat-expansion-panel #mep *ngFor="let ms of multipleSelectionItems['controls']; let i=index;"
-                [expanded]="ms.get('open').value" (opened)="panelOpenMultipleSelectionItems = true"
-                (closed)="panelOpenMultipleSelectionItems = false">
-
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <button mat-mini-fab color="primary" class="miniFabMini">
-                      {{ i + 1 }}
-                    </button>
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    <span *ngIf="!mep.expanded"> {{ms.get('sentence').value}} </span>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <div [formGroupName]="i">
-                  <mat-form-field appearance="outline" class="fullWith">
-                    <mat-label>
-                      Sentencia
-                    </mat-label>
-                    <textarea matInput formControlName="sentence" required></textarea>
-
-                  </mat-form-field>
-                  <br>
-                  <mat-form-field appearance="standard" class="fullWith">
-                    <mat-label>
-                      Alternativa A
-                    </mat-label>
-                    <input matInput formControlName="alternativeA" required>
-                    <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon"></i>
-                  </mat-form-field>
-                  <br>
-                  <mat-form-field appearance="standard" class="fullWith">
-                    <mat-label>
-                      Alternativa B
-                    </mat-label>
-                    <input matInput formControlName="alternativeB" required>
-                    <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon"></i>
-                  </mat-form-field>
-                  <br>
-                  <mat-form-field appearance="standard" class="fullWith">
-                    <mat-label>
-                      Alternativa C
-                    </mat-label>
-                    <input matInput formControlName="alternativeC" required>
-                    <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon"></i>
-                  </mat-form-field>
-                  <br>
-                  <mat-form-field appearance="standard" class="fullWith">
-                    <mat-label>
-                      Alternativa D
-                    </mat-label>
-                    <input matInput formControlName="alternativeD" required>
-                    <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon"></i>
-                  </mat-form-field>
-
-                  <br>
-                  <mat-form-field appearance="fill" class="fullWith">
-
-                    <mat-select formControlName="answer" required>
-                      <mat-option [value]="ms.get('alternativeA').value">
-                        A
-                      </mat-option>
-                      <mat-option [value]="ms.get('alternativeB').value">
-                        B
-                      </mat-option>
-                      <mat-option [value]="ms.get('alternativeC').value">
-                        C
-                      </mat-option>
-                      <mat-option [value]="ms.get('alternativeD').value">
-                        D
-                      </mat-option>
-                    </mat-select>
-
-                    <mat-label>
-                      <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
-                    </mat-label>
-
-                  </mat-form-field>
-
-                  <mat-action-row>
-                    <button type="button" mat-mini-fab color="accent"
-                      [disabled]="multipleSelectionItems.invalid || multipleSelectionItems.pristine"
-                      (click)="saveMultipleSelectionItems()">
-                      <mat-icon svgIcon="content-save"></mat-icon>
-                    </button>
-
-                    <button type="button" mat-mini-fab color="warn"
-                      (click)="deleteMultipleSelectionItemDialog(deleteMultipleSelectionItem.openSimpleDialog(),i)">
-                      <mat-icon svgIcon="delete"></mat-icon>
-                    </button>
-                  </mat-action-row>
-                  <nx-simple-dialog #deleteMultipleSelectionItem [obj]="ms"
-                    [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Seleción Múltiple' "
-                    [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
-                    [icon]=" 'delete' ">
-                  </nx-simple-dialog>
-
-                </div>
-              </mat-expansion-panel>
-            </div>
-          </mat-accordion>
-        </form>
-
-      </mat-tab>
-
-      <mat-tab>
-
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-          <span>&nbsp;&nbsp;Respuesta Corta</span>
-        </ng-template>
-
-        <form [formGroup]="editIncompleteTextItemsForm" class="backgroundColorCard">
-          <mat-accordion #incompleteTextItemsAccordion="matAccordion" [multi]="true"
-            [displayMode]="accordionDisplayMode">
-
-            <mat-toolbar color="accent">
-
-              <mat-icon svgIcon="format-list-bulleted"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Respuesta Corta</h1>
-
-              <span class="spacer-c"></span>
-              <mat-icon svgIcon="calculator"></mat-icon>
-              <span>&nbsp;&nbsp;</span>
-              <h1 mat-dialog-title>Ponderación {{ponderationIncompleteTextItems}}% </h1>
-
-              <span>&nbsp;&nbsp;</span>
-              <mat-slider [disabled]="disabled" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel"
-                [tickInterval]="tickInterval" formControlName="ponderation" [displayWith]="formatLabel"
-                [color]=" 'warn' ">
-              </mat-slider>
-
-              <span class="spacer-r"></span>
-              <button type="button" mat-mini-fab color="primary" (click)="addIncompleteTextItem()">
-                <mat-icon svgIcon="plus"></mat-icon>
-              </button>
-
-              <button type="button" mat-mini-fab color="primary"
-                (click)=" panelOpenIncompleteTextItems ? incompleteTextItemsAccordion.closeAll() : incompleteTextItemsAccordion.openAll()">
-                <i class="mdi mdi-menu-{{panelOpenIncompleteTextItems ? 'up' : 'down'}} size-mdi-icon"></i>
-              </button>
-
-            </mat-toolbar>
-
-            <div formArrayName="incompleteTextItems">
-              <mat-expansion-panel #mep *ngFor="let it of incompleteTextItems['controls'] ; let i=index;"
-                [expanded]="it.get('open').value" (opened)="panelOpenIncompleteTextItems = true"
-                (closed)="panelOpenIncompleteTextItems = false">
-
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <button mat-mini-fab color="primary" class="miniFabMini">
-                      {{ i + 1 }}
-                    </button>
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    <span *ngIf="!mep.expanded"> {{it.get('sentence').value}} </span>
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <div [formGroupName]="i">
-                  <mat-form-field appearance="outline" class="fullWith">
-                    <mat-label>
-                      Sentencia
-                    </mat-label>
-                    <textarea matInput formControlName="sentence" required></textarea>
-
-                  </mat-form-field>
-
-                  <br>
-                  <mat-form-field appearance="fill" class="fullWith">
-                    <mat-label>
-                      <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
-                    </mat-label>
-                    <input matInput formControlName="answer" required>
-                  </mat-form-field>
-
-                  <mat-action-row>
-                    <button type="button" mat-mini-fab color="accent"
-                      [disabled]="incompleteTextItems.invalid || incompleteTextItems.pristine"
-                      (click)="saveIncompleteTextItems()">
-                      <mat-icon svgIcon="content-save"></mat-icon>
-                    </button>
-                    <button type="button" mat-mini-fab color="warn"
-                      (click)="deleteIncompleteTextItemDialog(deleteIncompleteTextItem.openSimpleDialog(),i)">
-                      <mat-icon svgIcon="delete"></mat-icon>
-                    </button>
-                  </mat-action-row>
-                  <nx-simple-dialog #deleteIncompleteTextItem [obj]="it"
-                    [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Texto Incompleto' "
-                    [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
-                    [icon]=" 'delete' ">
-                  </nx-simple-dialog>
-
-                </div>
-              </mat-expansion-panel>
-            </div>
-
-          </mat-accordion>
-        </form>
-
-      </mat-tab>
-
-    </mat-tab-group>
-
-  </mat-card>
-
-
-
-
-
-  <mat-card class="mat-elevation-z8">
+  <mat-card>
 
     <form [formGroup]="editDataQuizForm">
 
@@ -547,6 +124,7 @@
             <button mat-icon-button matSuffix *ngIf="title.pristine">
               <mat-icon type="button" svgIcon="pencil"></mat-icon>
             </button>
+
             <button mat-icon-button matSuffix color="accent" *ngIf="!title.pristine"
               [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
               <mat-icon svgIcon="content-save"></mat-icon>
@@ -561,6 +139,7 @@
             <button mat-icon-button matSuffix *ngIf="description.pristine">
               <mat-icon type="button" svgIcon="pencil"></mat-icon>
             </button>
+
             <button mat-icon-button matSuffix color="accent" *ngIf="!description.pristine"
               [disabled]="editDataQuizForm.invalid" (click)="saveDataQuiz()">
               <mat-icon svgIcon="content-save"></mat-icon>

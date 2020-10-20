@@ -90,19 +90,14 @@ export class TeacherQuizesCreateComponent implements OnInit, OnDestroy {
     editedQuiz.incompleteTextItems = this.incompleteTextItems.value;
 
     this.isLoadingService.isLoadingTrue();
-    this.subscriptions.add(this.quizBackendService.create(editedQuiz)
+    this.subscriptions.add(this.quizBackendService.create(editedQuiz,this.quiz.author.username)
       .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
       .subscribe(q => {
         this.quiz = q;
         this.router.navigate(['../detail', q.id], { relativeTo: this.route });
         this.snackbarService.openSnackBar(QUIZ_CREATE_SUCCEED, RESULT_SUCCEED);
-      }, error => {
-        if (error instanceof HttpErrorResponse) {
-          this.snackbarService.openSnackBar(error.error.message, RESULT_ERROR);
-        } else {
-          this.snackbarService.openSnackBar(QUIZ_CREATE_ERROR, RESULT_ERROR);
-        }
-      }));
+      }, err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : QUIZ_CREATE_ERROR, RESULT_ERROR)
+      ));
   }
 
   gotoQuizes() {

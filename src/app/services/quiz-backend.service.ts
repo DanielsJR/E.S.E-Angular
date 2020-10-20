@@ -1,4 +1,4 @@
-import { API_BACKEND_SERVER, URI_QUIZ } from "../app.config";
+import { API_BACKEND_SERVER, URI_QUIZ, URI_TEACHER, URI_USER } from "../app.config";
 import { Quiz } from "../models/quiz";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -22,55 +22,74 @@ export class QuizBackendService {
         console.log(`resource called: ${url}`)
         return this.httpCli.get<Quiz[]>(url)
             .pipe(retry(3),
-                tap(quizes => console.log(`N° Quizes: ${quizes.length}`))
+                tap(quizes => console.log(`N° Quizes: ${quizes.length}`)
+                    , err => console.error('Error getting Quizes', err?.error?.exception))
             );
     }
 
-    create(quiz: Quiz): Observable<Quiz> {
-        const url = `${this.quizURL}`;
+    getTeacherQuizes(username: string): Observable<Quiz[]> {
+        const url = `${this.quizURL}${URI_TEACHER}/${username}`;
+        console.log(`resource called: ${url}`);
+        return this.httpCli.get<Quiz[]>(url)
+            .pipe(retry(3),
+                tap(quizes => console.log(`N° Quizes: ${quizes.length}`)
+                    , err => console.error('Error getting Quiz', err?.error?.exception))
+            );
+    }
+
+    create(quiz: Quiz, username: string): Observable<Quiz> {
+        const url = `${this.quizURL}${URI_TEACHER}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.post<Quiz>(url, quiz)
             .pipe(
-                tap(resp => console.log(`created Quiz title= ${resp.title}`))
+                tap(resp => console.log(`created Quiz title= ${resp.title}`)
+                    , err => console.error('Error creating Quiz', err?.error?.exception))
             );
     }
 
-    update(quiz: Quiz): Observable<Quiz> {
+    update(quiz: Quiz, username: string): Observable<Quiz> {
         const id = quiz.id;
-        const url = `${this.quizURL}/${id}`;
+        const url = `${this.quizURL}/${id}${URI_TEACHER}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.put<Quiz>(url, quiz)
             .pipe(
-                tap(resp => console.log(`edited quiz title= ${resp.title}`))
+                tap(resp => console.log(`edited quiz title= ${resp.title}`)
+                    , err => console.error('Error updating Quiz', err?.error?.exception))
             );
     }
 
-    delete(quiz: Quiz | string): Observable<Quiz> {
-        const id = (typeof quiz === 'string') ? quiz : quiz.id;
-        const url = `${this.quizURL}/${id}`;
+    delete(quiz: Quiz, username: string): Observable<Quiz> {
+        const id = quiz.id;
+        const url = `${this.quizURL}/${id}${URI_TEACHER}/${username}`;
         console.log(`resource called:  ${url}`);
         return this.httpCli.delete<Quiz>(url)
             .pipe(
-                tap(_ => console.log(`deleted quiz id=${id}`))
+                tap(_ => console.log(`deleted quiz id=${id}`)
+                    , err => console.error('Error deleting Quiz', err?.error?.exception))
             );
+
     }
 
-    getQuizById(id: string): Observable<Quiz> {
-        const url = `${this.quizURL}/${id}`;
+    getTeacherQuizById(id: string, username: string): Observable<Quiz> {
+        const url = `${this.quizURL}/${id}${URI_TEACHER}/${username}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Quiz>(url)
             .pipe(retry(3),
-                tap(_ => console.log(`fetched quiz id=${id}`))
+                tap(_ => console.log(`fetched quiz id=${id}`)
+                    , err => console.error('Error getting Quiz', err?.error?.exception))
             );
     }
 
     getQuizByUserId(id: string): Observable<Quiz[]> {
-        const url = `${this.quizURL}/user/${id}`;
+        const url = `${this.quizURL}${URI_USER}${id}`;
         console.log(`resource called: ${url}`);
         return this.httpCli.get<Quiz[]>(url)
             .pipe(retry(3),
-                tap(quizes => console.log(`N° Quizes: ${quizes.length}`))
+                tap(quizes => console.log(`N° Quizes: ${quizes.length}`)
+                    , err => console.error('Error getting Quiz', err?.error?.exception))
             );
     }
+
+
 
 }

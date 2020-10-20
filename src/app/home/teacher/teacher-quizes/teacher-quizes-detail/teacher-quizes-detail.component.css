@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.container {
+.containerQuiz {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -11,6 +11,7 @@
     width: 100%;
     height: 100%;
 }
+
 
 mat-card {
     width: 100%;
@@ -20,20 +21,6 @@ mat-card {
     padding: 0;
     overflow: hidden;
     background: unset !important;
-}
-
-table {
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-}
-
-mat-card:last-of-type {
-    margin-top: 0;
-}
-
-mat-form-field {
-    font-size: 16px;
 }
 
 .toolbarDiv {
@@ -54,6 +41,10 @@ mat-form-field {
     font-size: 16px;
 }
 
+.quizContainer {
+    margin: 15px !important;
+}
+
 .listContainer {
     display: flex;
     flex-direction: column;
@@ -64,16 +55,6 @@ mat-form-field {
     padding: 0;
     height: 100%;
     min-height: 88px;
-}
-
-
-
-.listContainer .mat-list-item:first-of-type {
-    --margin-top: 10px;
-}
-
-.listContainer .mat-list-item:last-of-type {
-    --padding-bottom: 21.5px;
 }
 
 .listContainer .mat-list-item .mat-list-item {
@@ -133,11 +114,6 @@ mat-form-field {
     color: darkgray;
 }
 
-.quizContainer {
-    margin: 15px !important;
-}
-
-
 .fullWith {
     width: 100%;
 }
@@ -154,64 +130,16 @@ mat-form-field {
     font-size: 24px;
 }
 
-.mat-action-row {
-    justify-content: space-between !important;
-    padding: 16px 24px !important;
+mat-form-field {
+    font-size: 16px;
 }
 
-mat-accordion mat-toolbar button {
-    margin: 0 5px;
-}
 
-mat-action-row button {
-    margin: 0 5px;
-}
+mat-tab-group {
+    width: 100%;
+    min-width: 500px;
+    height: fit-content;
 
-.miniFabMini {
-    width: 24px;
-    height: 24px;
-    box-shadow: none !important;
-    line-height: 12px;
-}
-
-::ng-deep .miniFabMini .mat-button-wrapper {
-    font-weight: bold;
-    line-height: 12px;
     padding: 0;
-    padding-right: 1px;
-    padding-top: 1px;
-}
-
-
-.miniFabMini2 {
-    width: 24px;
-    height: 24px;
-    line-height: 12px;
-}
-
-::ng-deep .miniFabMini2 .mat-button-wrapper {
-    font-weight: bold;
-    line-height: 12px;
-    padding: 0;
-    padding-right: 1px;
-    padding-top: 1px;
-}
-
-mat-expansion-panel-header {
-    height: 64px;
-
-}
-
-.mat-accordion .mat-expansion-panel:first-of-type{
-    margin-top: 0 !important;
-    border-top-right-radius: 0 !important;
-    border-top-left-radius: 0 !important;
-}
-
-.mat-accordion .mat-expansion-panel:last-of-type{
-    margin-bottom: 0 !important;
-}
-
-mat-expansion-panel mat-form-field {
-    font-family: monospace;
+    overflow: hidden;
 }

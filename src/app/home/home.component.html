@@ -5,7 +5,7 @@
         <div *ngIf="parentSidenavMenu === titleProfile"
             [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
 
-            <mat-toolbar color="accent" class="sidenavToolbar">
+            <mat-toolbar color="accent" class="parentSidenavToolbar">
                 <button mat-icon-button (click)="parentSidenav.close();parentSidenavMenu= '' " #btnMenuProfileBack>
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
@@ -48,7 +48,7 @@
             <!-- sidenav user-profile -->
             <mat-drawer opened="false" #sidenavProfile class="drawer">
 
-                <mat-toolbar color="accent" class="sidenavToolbar">
+                <mat-toolbar color="accent" class="parentSidenavToolbar">
                     <button mat-icon-button (click)="sidenavProfile.toggle()" #btnProfileBack>
                         <mat-icon svgIcon="arrow-left"></mat-icon>
                     </button>
@@ -69,7 +69,7 @@
 
         <div *ngIf="parentSidenavMenu === titlePreferences">
             <!-- sidenav settings toobar -->
-            <mat-toolbar color="accent" class="sidenavToolbar">
+            <mat-toolbar color="accent" class="parentSidenavToolbar">
                 <button mat-icon-button (click)="parentSidenav.close();parentSidenavMenu= '' ">
                     <mat-icon svgIcon="arrow-left"></mat-icon>
                 </button>
@@ -88,8 +88,8 @@
     <mat-sidenav-content>
 
         <div class="myWrapper">
-            <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-            <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+            <div *ngIf="!isLoading" style="height: 5px;" class="progress-bar"></div>
+            <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="progress-bar"></mat-progress-bar>
 
             <!-- mainToolbar  [class.primaryColorBG]="fillToolbar"-->
             <mat-toolbar class="mainToolbar" color="primary">
@@ -144,8 +144,8 @@
 
             </mat-toolbar>
 
-            <mat-sidenav-container class="sidenavContainer"
-                [style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' ">
+            <!--[style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "-->
+            <mat-sidenav-container class="sidenavContainer" [style.background-color]="themePicker.isDark ? '' : 'rgb(230, 230, 230)' "> 
 
                 <!-- sidenavMenu -->
                 <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" position="start"

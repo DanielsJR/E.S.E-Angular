@@ -1,0 +1,131 @@
+<form [formGroup]="editMultipleSelectionItemsForm">
+    <mat-accordion #multipleSelectionItemsAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
+
+        <mat-toolbar color="accent" class="toolbarItems">
+
+            <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>Seleción Múltiple</h1>
+
+            <span class="spacer-c"></span>
+            <mat-icon svgIcon="calculator"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>Ponderación % </h1>
+
+            <span class="spacer-r"></span>
+            <button type="button" mat-mini-fab color="primary" (click)="addMultipleSelectionItem()">
+                <mat-icon svgIcon="plus"></mat-icon>
+            </button>
+
+            <button type="button" mat-mini-fab color="primary"
+                (click)=" panelOpenMultipleSelectionItems ? multipleSelectionItemsAccordion.closeAll() : multipleSelectionItemsAccordion.openAll()">
+                <i class="mdi mdi-menu-{{panelOpenMultipleSelectionItems ? 'up' : 'down'}} size-mdi-icon"></i>
+            </button>
+
+        </mat-toolbar>
+
+        <div formArrayName="multipleSelectionItems" class="items">
+            <mat-expansion-panel #mep *ngFor="let ms of multipleSelectionItems['controls']; let i=index;"
+                [expanded]="ms.get('open').value" (opened)="panelOpenMultipleSelectionItems = true"
+                (closed)="panelOpenMultipleSelectionItems = false">
+
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <button mat-mini-fab color="primary" class="miniFabMini">
+                            {{ i + 1 }}
+                        </button>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        <span *ngIf="!mep.expanded"> {{ms.get('sentence').value}} </span>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="i">
+                    <mat-form-field appearance="outline" class="fullWith">
+                        <mat-label>
+                            Sentencia
+                        </mat-label>
+                        <textarea matInput formControlName="sentence" required></textarea>
+
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="standard" class="fullWith">
+                        <mat-label>
+                            Alternativa A
+                        </mat-label>
+                        <input matInput formControlName="alternativeA" required>
+                        <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon"></i>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="standard" class="fullWith">
+                        <mat-label>
+                            Alternativa B
+                        </mat-label>
+                        <input matInput formControlName="alternativeB" required>
+                        <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon"></i>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="standard" class="fullWith">
+                        <mat-label>
+                            Alternativa C
+                        </mat-label>
+                        <input matInput formControlName="alternativeC" required>
+                        <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon"></i>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="standard" class="fullWith">
+                        <mat-label>
+                            Alternativa D
+                        </mat-label>
+                        <input matInput formControlName="alternativeD" required>
+                        <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon"></i>
+                    </mat-form-field>
+
+                    <br>
+                    <mat-form-field appearance="fill" class="fullWith">
+
+                        <mat-select formControlName="answer" required>
+                            <mat-option [value]="ms.get('alternativeA').value">
+                                A
+                            </mat-option>
+                            <mat-option [value]="ms.get('alternativeB').value">
+                                B
+                            </mat-option>
+                            <mat-option [value]="ms.get('alternativeC').value">
+                                C
+                            </mat-option>
+                            <mat-option [value]="ms.get('alternativeD').value">
+                                D
+                            </mat-option>
+                        </mat-select>
+
+                        <mat-label>
+                            <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                        </mat-label>
+
+                    </mat-form-field>
+
+                    <mat-action-row>
+                        <button type="button" mat-mini-fab color="accent"
+                            [disabled]="multipleSelectionItems.invalid || multipleSelectionItems.pristine"
+                            (click)="saveMultipleSelectionItems()">
+                            <mat-icon svgIcon="content-save"></mat-icon>
+                        </button>
+
+                        <button type="button" mat-mini-fab color="warn"
+                            (click)="deleteMultipleSelectionItemDialog(deleteMultipleSelectionItem.openSimpleDialog(),i)">
+                            <mat-icon svgIcon="delete"></mat-icon>
+                        </button>
+                    </mat-action-row>
+                    <nx-simple-dialog #deleteMultipleSelectionItem [obj]="ms"
+                        [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' " [subtitle]=" 'Seleción Múltiple' "
+                        [dialogTitle]=" 'Eliminar Item' " [cancelButton]=" 'Descartar' " [type]=" 'classic' "
+                        [icon]=" 'delete' ">
+                    </nx-simple-dialog>
+
+                </div>
+            </mat-expansion-panel>
+        </div>
+
+    </mat-accordion>
+</form>

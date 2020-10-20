@@ -1,6 +1,6 @@
 <div class="container">
 
-  <mat-card class="mat-elevation-z8">
+  <mat-card>
 
     <mat-toolbar color="primary">
 
@@ -63,8 +63,15 @@
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
 
-          <nx-simple-dialog #deleteQuiz [obj]="quiz" [icon]=" 'delete' " [dialogTitle]=" 'Eliminar Prueba' "
-            [message]=" 'Eliminar esta Prueba?' " [title]="quiz.title" [subtitle]="quiz.subjectName" [type]="'classic'">
+          <nx-simple-dialog #deleteQuiz
+             [obj]="quiz"
+             icon="delete"
+             dialogTitle="Eliminar Prueba"
+             message="¿Eliminar esta Prueba?"
+             [title]="quiz.title"
+             [subtitle]="quiz.subjectName"
+             actionButton1="Aceptar"
+             [type]="simpleDialogDeleteType">
           </nx-simple-dialog>
 
         </td>
