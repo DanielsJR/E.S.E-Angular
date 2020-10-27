@@ -72,7 +72,7 @@ export class ManagerCoursesComponent implements OnInit, AfterViewInit, OnDestroy
   setDataSource() {
     this.subscriptions.add(this.courseStoreService.courses$
       .subscribe(courses => {
-        if (courses != null) {//first emission from BehaviorSubject is null
+        if (courses != null) {
           if ((!courses.length) && (!this.emptyCoursesDialog.isOpen())) this.emptyCoursesDialog.openSimpleDialog();
           this.dataSource.data = courses;
           this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;

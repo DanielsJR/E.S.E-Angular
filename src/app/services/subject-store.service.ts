@@ -90,10 +90,10 @@ export class SubjectStoreService {
     }
 
     create(subject: Subject): Observable<Subject> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.subjectBackendService.create(subject)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     this.dataStore.subjects.push(data);
                     this.subjectsSource.next(Object.assign({}, this.dataStore).subjects);
@@ -101,10 +101,10 @@ export class SubjectStoreService {
     }
 
     update(subject: Subject): Observable<Subject> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.subjectBackendService.update(subject)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     let index = this.dataStore.subjects.findIndex(s => s.id === data.id);
                     if (index != -1) {
@@ -116,10 +116,10 @@ export class SubjectStoreService {
     }
 
     delete(subject: Subject): Observable<Subject> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.subjectBackendService.delete(subject)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(_ => {
                     let index = this.dataStore.subjects.findIndex((s: Subject) => s.id === subject.id);
                     if (index != -1) {

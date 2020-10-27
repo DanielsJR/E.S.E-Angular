@@ -70,7 +70,7 @@ export class UserStoreService {
 
     loadOneManager(id: string) {
         return this.managers$
-            .pipe(map(managers => managers.find(manager => manager.id === id)));
+            .pipe(map(managers => managers?.find(manager => manager.id === id)));
     }
 
     createManager(user: User): Observable<User> {
@@ -167,7 +167,7 @@ export class UserStoreService {
 
     loadOneTeacher(id: string) {
         return this.teachers$
-            .pipe(map(teachers => teachers.find(teacher => teacher.id === id)));
+            .pipe(map(teachers => teachers?.find(teacher => teacher.id === id)));
     }
 
     createTeacher(user: User): Observable<User> {
@@ -272,7 +272,7 @@ export class UserStoreService {
 
     loadOneStudent(id: string) {
         return this.students$
-            .pipe(map(students => students.find(student => student.id === id)));
+            .pipe(map(students => students?.find(student => student.id === id)));
     }
 
     createStudent(user: User): Observable<User> {

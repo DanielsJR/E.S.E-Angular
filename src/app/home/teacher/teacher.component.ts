@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { QuizStoreService } from '../../services/quiz-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
 import { UserLoggedService } from '../../services/user-logged.service';
-import { Subscription } from 'rxjs/internal/Subscription';
 import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-date-picker.service';
 
 
@@ -12,27 +12,32 @@ import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-dat
     :host {
         display: block;
         width: 100%;
-        margin-bottom: 64px;
+        --margin-bottom: 64px;
       }
   
     `],
 })
 
 export class TeacherComponent implements OnInit {
-
-
     year: Date;
+    usernameLogged: string;
 
-    constructor(private subjectStoreService: SubjectStoreService,
+    constructor(
+        private quizStoreService: QuizStoreService,
+        private subjectStoreService: SubjectStoreService,
         private multiDatePickerService: MultiDatePickerService,
-        private userLoggedService: UserLoggedService) { }
+        private userLoggedService: UserLoggedService
+    ) {
+        this.usernameLogged = userLoggedService.getTokenUsername();
+    }
 
     ngOnInit(): void {
         this.multiDatePickerService.date$.subscribe(date => {
             this.year = date;
             this.subjectStoreService.clearStore();
-            this.subjectStoreService.loadSubjectsByTeacherAndYear(this.userLoggedService.getTokenUsername(), this.year.getFullYear().toString());
+            this.subjectStoreService.loadSubjectsByTeacherAndYear(this.usernameLogged, this.year.getFullYear().toString());
         })
+        this.quizStoreService.getTeacherQuizes(this.usernameLogged);
     }
 
 

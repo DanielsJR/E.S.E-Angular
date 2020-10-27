@@ -11,14 +11,10 @@ export class IsLoadingService {
     isLoading$ = this.isLoading.asObservable();
     
     constructor() {
-        this.isLoadingFalse();
+        this.isLoadingEmit(false);
     }
 
-    isLoadingTrue() {
-        this.isLoading.next(true);
-    }
-
-    isLoadingFalse() {
-        this.isLoading.next(false);
+    isLoadingEmit(value:boolean){
+        this.isLoading.next(value);
     }
 }

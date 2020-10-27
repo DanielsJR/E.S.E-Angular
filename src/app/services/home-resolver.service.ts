@@ -38,7 +38,7 @@ export class HomeResolverService implements Resolve<Theme> {
                         return EMPTY;
                     }
                 }),
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
             )
     }
 

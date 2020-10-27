@@ -222,7 +222,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
 
     let obs: Observable<Attendance> = (this.isCreating) ? this.attendanceStoreService.create(attendance) : this.attendanceStoreService.update(attendance);
     this.subscriptions.add(obs
-      .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
+      .pipe(finalize(() => this.isLoadingService.isLoadingEmit(false)))
       .subscribe(_ => {
         this.snackbarService.openSnackBar(messageSucced, RESULT_SUCCEED);
         this.btnAction = BTN_ACTION_UPDATE;
@@ -238,7 +238,7 @@ export class SubjectAttendanceComponent implements OnInit, OnDestroy, AfterViewI
 
   deleteAttendance() {
     this.attendanceStoreService.delete(this.attendance)
-      .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
+      .pipe(finalize(() => this.isLoadingService.isLoadingEmit(false)))
       .subscribe(_ => {
         this.snackbarService.openSnackBar(ATTENDANCE_DELETE_SUCCEED, RESULT_SUCCEED);
         this.btnAction = BTN_ACTION_CREATE;

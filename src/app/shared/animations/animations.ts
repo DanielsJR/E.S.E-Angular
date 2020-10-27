@@ -421,37 +421,46 @@ export const animateText = trigger('animateText', [
   ),
 ]);
 
-
 export const fadeAnimation = trigger('fadeAnimation', [
+  transition('* <=> *', [
 
-  transition('* => *', [
+    query(':enter, :leave', [style(sharedStyles)], { optional: true }),
 
-    query(':enter',
-      [
-        style({ opacity: 0 })
-      ],
-      { optional: true }
-    ),
+    group([
+      query(':leave',
+        [
+          style({ opacity: 1 }),
+          animate('0.5s', style({ opacity: 0 }))
+        ], { optional: true }
+      ),
+
+      query(':enter',
+        [
+          style({ opacity: 0 }),
+          animate('0.5s', style({ opacity: 1 }))
+        ], { optional: true }
+      )])
+
+  ]),
+
+]);
+
+export const fadeAnimation2 = trigger('fadeAnimation2', [
+  transition('* <=> *', [
+
+    query(':enter', [style({ opacity: 0 })], { optional: true }),
 
     query(':leave',
       [
         style({ opacity: 1 }),
         animate('0.5s', style({ opacity: 0 }))
-      ],
-      { optional: true }
+      ], { optional: true }
     ),
 
-    query(':enter',
-      [
-        style({ opacity: 0 }),
-        animate('0.5s', style({ opacity: 1 }))
-      ],
-      { optional: true }
-    )
-
-  ])
+  ]),
 
 ]);
+
 
 //fixes mat-table animations
 export const rowAnimation = trigger('rowAnimation', [transition('* => void', [animate('0ms', style({ display: 'none' }))])]);

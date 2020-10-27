@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseStoreService } from '../../services/course-store.service';
+import { QuizStoreService } from '../../services/quiz-store.service';
 import { SubjectStoreService } from '../../services/subject-store.service';
+import { UserLoggedService } from '../../services/user-logged.service';
 import { UserStoreService } from '../../services/user-store.service';
 import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-date-picker.service';
 
@@ -20,14 +22,20 @@ import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-dat
 export class ManagerComponent implements OnInit {
 
     year: Date;
+    usernameLogged: any;
+    isTeacher: boolean;
 
     constructor(
         private userStoreService: UserStoreService,
         private subjectStoreService: SubjectStoreService,
         private courseStoreService: CourseStoreService,
-        private multiDatePickerService: MultiDatePickerService
+        private multiDatePickerService: MultiDatePickerService,
+        private userLoggedService: UserLoggedService,
+        private quizStoreService: QuizStoreService,
 
     ) {
+        this.usernameLogged = userLoggedService.getTokenUsername();
+        this.isTeacher = userLoggedService.isTeacher();
 
     }
 
@@ -37,12 +45,15 @@ export class ManagerComponent implements OnInit {
 
         this.multiDatePickerService.date$.subscribe(date => {
             this.year = date;
-            
+
             this.courseStoreService.clearStore();
             this.subjectStoreService.clearStore();
             this.courseStoreService.loadCoursesByYear(this.year.getFullYear().toString());
             this.subjectStoreService.loadSubjectsByYear(this.year.getFullYear().toString());
         })
+
+
+        if (this.isTeacher) this.quizStoreService.getTeacherQuizes(this.usernameLogged);
     }
 
 }

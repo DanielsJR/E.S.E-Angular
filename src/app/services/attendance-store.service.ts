@@ -55,14 +55,14 @@ export class AttendanceStoreService {
 
     loadOneAttendanceByDate(date: string): Observable<Attendance> {
         return this.attendances$
-            .pipe(map(as => as.find(a => a.date === date)));
+            .pipe(map(as => as?.find(a => a.date === date)));
     }
 
     create(attendance: Attendance): Observable<Attendance> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.attendanceBackendService.create(attendance)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     this.dataStore.attendances.push(data);
                     this.attendancesSource.next(Object.assign({}, this.dataStore).attendances);
@@ -70,10 +70,10 @@ export class AttendanceStoreService {
     }
 
     update(attendance: Attendance): Observable<Attendance> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.attendanceBackendService.update(attendance)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     let index = this.dataStore.attendances.findIndex(a => a.id === data.id);
                     if (index != -1) {
@@ -84,10 +84,10 @@ export class AttendanceStoreService {
     }
 
     delete(attendance: Attendance | string): Observable<Attendance> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.attendanceBackendService.delete(attendance)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(_ => {
                     let index = this.dataStore.attendances.findIndex((c: Attendance) => c.id === ((typeof attendance === 'string') ? attendance : attendance.id));
                     if (index != -1) {

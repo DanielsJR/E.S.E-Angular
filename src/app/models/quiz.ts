@@ -9,7 +9,7 @@ export class Quiz {
         public author?: User,
         public subjectName?: string,
         public quizLevel?: string,
-        
+
         public correspondItems?: CorrespondItem[],
         public incompleteTextItems?: IncompleteTextItem[],
         public trueFalseItems?: TrueFalseItem[],
@@ -41,10 +41,10 @@ export class TrueFalseItem {
 export class MultipleSeletionItem {
     constructor(
         public sentence: string,
-        public alternativeA:string,
-        public alternativeB:string,
-        public alternativeC:string,
-        public alternativeD:string,
+        public alternativeA: string,
+        public alternativeB: string,
+        public alternativeC: string,
+        public alternativeD: string,
         public answer: string,
         public correct?: boolean,
     ) { }
@@ -57,6 +57,7 @@ export class IncompleteTextItem {
         public correct?: boolean,
     ) { }
 }
+
 
 export const QUIZ_LEVELS = [
     { value: 'PRIMERO_BASICO', viewValue: 'Primero Básico' },

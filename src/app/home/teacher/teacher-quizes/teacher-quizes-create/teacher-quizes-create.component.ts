@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { QuizBackendService } from '../../../../services/quiz-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
@@ -8,9 +7,9 @@ import { Quiz, QUIZ_LEVELS, TRUE_FALSES } from '../../../../models/quiz';
 import { RESULT_ERROR, RESULT_SUCCEED, QUIZ_CREATE_SUCCEED, QUIZ_CREATE_ERROR } from '../../../../app.config';
 import { UserLoggedService } from '../../../../services/user-logged.service';
 import { finalize } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
 import { SUBJECT_NAMES } from '../../../../models/subject-names';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { QuizStoreService } from '../../../../services/quiz-store.service';
 
 @Component({
   selector: 'nx-teacher-quizes-create',
@@ -36,7 +35,8 @@ export class TeacherQuizesCreateComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
 
-  constructor(private quizBackendService: QuizBackendService, private router: Router,
+  constructor(private quizStoreService: QuizStoreService,
+    private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,) {
@@ -89,9 +89,9 @@ export class TeacherQuizesCreateComponent implements OnInit, OnDestroy {
     editedQuiz.multipleSelectionItems = this.multipleSelectionItems.value;
     editedQuiz.incompleteTextItems = this.incompleteTextItems.value;
 
-    this.isLoadingService.isLoadingTrue();
-    this.subscriptions.add(this.quizBackendService.create(editedQuiz,this.quiz.author.username)
-      .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
+    this.isLoadingService.isLoadingEmit(true);
+    this.subscriptions.add(this.quizStoreService.create(editedQuiz, this.quiz.author.username)
+      .pipe(finalize(() => this.isLoadingService.isLoadingEmit(false)))
       .subscribe(q => {
         this.quiz = q;
         this.router.navigate(['../detail', q.id], { relativeTo: this.route });

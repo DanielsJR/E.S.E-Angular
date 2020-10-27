@@ -19,10 +19,8 @@ import { TeacherSubjectAttendanceComponent } from './teacher-subjects/teacher-su
 import { TeacherSubjectGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-grades.component';
 import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-book.component';
 import { HomeUserModule } from '../home-user/home-user.module';
-import { QuizTrueFalseItemComponent } from './teacher-quizes/quiz-items/quiz-true-false-item/quiz-true-false-item.component';
-import { QuizCorrespondItemComponent } from './teacher-quizes/quiz-items/quiz-correspond-item/quiz-correspond-item.component';
-import { QuizMultipleSelectionItemComponent } from './teacher-quizes/quiz-items/quiz-multiple-selection-item/quiz-multiple-selection-item.component';
-import { QuizIncompleteTextItemComponent } from './teacher-quizes/quiz-items/quiz-incomplete-text-item/quiz-incomplete-text-item.component';
+import { QuizItemComponent } from './teacher-quizes/quiz-item/quiz-item.component';
+
 
 
 @NgModule({
@@ -33,13 +31,13 @@ import { QuizIncompleteTextItemComponent } from './teacher-quizes/quiz-items/qui
     SubjectsModule,
     QuizStudentModule,
     HomeUserModule,
-    
+
   ],
 
   declarations: [
     TeacherComponent,
     TeacherHomeComponent,
-    
+
     TeacherSubjectsComponent,
     TeacherSubjectsDetailComponent,
     TeacherSubjectGradesComponent,
@@ -53,20 +51,12 @@ import { QuizIncompleteTextItemComponent } from './teacher-quizes/quiz-items/qui
     TeacherQuizesCreateComponent,
     TeacherQuizesSendQuizComponent,
     TeacherSubjectBookComponent,
-    QuizCorrespondItemComponent,
-    QuizTrueFalseItemComponent,
-    QuizMultipleSelectionItemComponent,
-    QuizIncompleteTextItemComponent,
-    
+
+    QuizItemComponent,
+
   ],
 
-  exports:[
-    TeacherQuizesComponent,
-    TeacherQuizesDetailComponent,
-    TeacherQuizesCreateComponent,
-    TeacherQuizesSendQuizComponent,
-    TeacherSubjectBookComponent,
-
+  exports: [
   ],
 
   providers: [

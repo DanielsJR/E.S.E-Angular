@@ -31,5 +31,6 @@ export class SnackbarService {
     return this.snackBar.openFromComponent(SnackbarsRefComponent, config);
   }
 
+
 }
 

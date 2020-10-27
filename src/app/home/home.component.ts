@@ -11,15 +11,13 @@ import { LoginService } from '../login/login-form/login.service';
 
 import { MatSidenav, MatDrawer } from '@angular/material/sidenav';
 import { delay } from 'rxjs/internal/operators/delay';
-import { QuizNotificationService } from '../services/quiz-notification.service';
 import { onMainContentChangeLeft, onMainContentChangeRight, animateText, onSideNavChange, routeAnimations, rowAnimation, waitAnimation, logoNavChange, } from '../shared/animations/animations';
 import { Subscription, Observable, of } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
 import { CanComponentDeactivate } from '../guards/can-deactivate-guard.service';
 import { MultiDatePickerService } from '../shared/multi-date-picker/multy-date-picker.service';
 import { HomeUserService } from './home-user/home-user.service';
-import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { take } from 'rxjs/internal/operators/take';
+
 
 
 @Component({

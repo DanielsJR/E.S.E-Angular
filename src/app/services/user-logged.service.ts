@@ -36,7 +36,7 @@ export class UserLoggedService {
     }
 
     getUserFromBackEnd(): Observable<User> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.userBackendService.getUserByUsernameSecured(this.getTokenUsername())
             .pipe(
                 tap(user => this.userLoggedNext(user)

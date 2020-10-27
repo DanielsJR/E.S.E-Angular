@@ -91,14 +91,14 @@ export class GradeStoreService {
 
     loadOneGrade(id: string) {
         return this.grades$
-            .pipe(map(grades => grades.find(g => g.id === id)));
+            .pipe(map(grades => grades?.find(g => g.id === id)));
     }
 
     create(grade: Grade, teacherUsername: string): Observable<Grade> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.gradeBackendService.create(grade, teacherUsername)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     this.dataStore.grades.push(data);
                     this.gradesSource.next(Object.assign({}, this.dataStore).grades);
@@ -106,10 +106,10 @@ export class GradeStoreService {
     }
 
     update(grade: Grade, teacherUsername: string): Observable<Grade> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.gradeBackendService.update(grade, teacherUsername)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     let index = this.dataStore.grades.findIndex(g => g.id === data.id);
                     if (index != -1) {

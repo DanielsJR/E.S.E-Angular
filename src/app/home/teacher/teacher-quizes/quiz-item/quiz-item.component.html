@@ -1,0 +1,207 @@
+<form [formGroup]="itemsForm">
+
+    <mat-toolbar color="accent" class="toolbarItems">
+
+        <mat-icon svgIcon="format-list-bulleted"></mat-icon>
+        <h1>&nbsp;&nbsp;{{itemTitle}}</h1>
+
+        <span class="spacer-c"></span>
+        <mat-icon svgIcon="calculator"></mat-icon>
+        <span>&nbsp;&nbsp;</span>
+        <h1 mat-dialog-title>{{controlItemsArray.length}} Items </h1>
+        <span>&nbsp;&nbsp;</span>
+
+
+        <mat-icon svgIcon="calculator"></mat-icon>
+        <span>&nbsp;&nbsp;</span>
+        <h1 mat-dialog-title>Total Puntos 25</h1>
+        <span>&nbsp;&nbsp;</span>
+
+        <span class="spacer-r"></span>
+        <button type="button" mat-mini-fab color="primary" (click)="addItem()" [disabled]="btnAddDisabled">
+            <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+
+        <button type="button" mat-mini-fab color="primary" [disabled]="!controlItemsArray.length"
+            (click)=" panelOpenItems ? mAccordion.closeAll() : mAccordion.openAll()">
+            <i class="mdi mdi-menu-{{panelOpenItems ? 'up' : 'down'}} size-mdi-icon"></i>
+        </button>
+    </mat-toolbar>
+
+    <mat-accordion #mAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
+
+        <mat-expansion-panel #mep *ngFor="let it of items['controls']; let i=index;" [expanded]="it.get('open').value"
+            (opened)="panelOpenItems = true" (closed)="panelOpenItems = false">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <button mat-mini-fab color="primary" class="miniFabMini">
+                        {{ i + 1 }}
+                    </button>
+                </mat-panel-title>
+
+                <mat-panel-description>
+                    <span *ngIf="!mep.expanded"> {{ it?.get('sentence')?.value }} {{ it?.get('item')?.value }}</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
+                <div formArrayName="items">
+                    <div [formGroupName]="i">
+
+                        <ng-container *ngIf="itemType === correspondItemType">
+
+                            <mat-form-field appearance="outline" class="fullWith">
+                                <mat-label>
+                                    Item
+                                </mat-label>
+                                <textarea matInput formControlName="item" required></textarea>
+                                <mat-error *ngIf="it.get('item').hasError('required')">
+                                    <strong>requerido</strong>.
+                                </mat-error>
+                            </mat-form-field>
+
+                            <br>
+
+                            <mat-form-field appearance="fill" class="fullWith">
+                                <mat-label>
+                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Correspondencia
+                                </mat-label>
+                                <input matInput formControlName="correspond" required>
+                            </mat-form-field>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="itemType === trueFalseItemType">
+                            <mat-form-field appearance="outline" class="fullWith">
+                                <mat-label>
+                                    Sentencia
+                                </mat-label>
+                                <textarea matInput formControlName="sentence" required></textarea>
+                            </mat-form-field>
+
+                            <br>
+
+                            <mat-form-field appearance="fill" class="fullWith">
+                                <mat-select formControlName="answer" required>
+                                    <mat-option *ngFor="let trueFalse of trueFalses" [value]="trueFalse.value">
+                                        {{ trueFalse.viewValue }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-label>
+                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                </mat-label>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="itemType === multipleSelectionItemType">
+                            <mat-form-field appearance="outline" class="fullWith">
+                                <mat-label>
+                                    Sentencia
+                                </mat-label>
+                                <textarea matInput formControlName="sentence" required></textarea>
+
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field appearance="standard" class="fullWith">
+                                <mat-label>
+                                    Alternativa A
+                                </mat-label>
+                                <input matInput formControlName="alternativeA" required>
+                                <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon"></i>
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field appearance="standard" class="fullWith">
+                                <mat-label>
+                                    Alternativa B
+                                </mat-label>
+                                <input matInput formControlName="alternativeB" required>
+                                <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon"></i>
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field appearance="standard" class="fullWith">
+                                <mat-label>
+                                    Alternativa C
+                                </mat-label>
+                                <input matInput formControlName="alternativeC" required>
+                                <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon"></i>
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field appearance="standard" class="fullWith">
+                                <mat-label>
+                                    Alternativa D
+                                </mat-label>
+                                <input matInput formControlName="alternativeD" required>
+                                <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon"></i>
+                            </mat-form-field>
+
+                            <br>
+                            <mat-form-field appearance="fill" class="fullWith">
+
+                                <mat-select formControlName="answer" required>
+                                    <mat-option [value]="it.get('alternativeA').value">
+                                        A
+                                    </mat-option>
+                                    <mat-option [value]="it.get('alternativeB').value">
+                                        B
+                                    </mat-option>
+                                    <mat-option [value]="it.get('alternativeC').value">
+                                        C
+                                    </mat-option>
+                                    <mat-option [value]="it.get('alternativeD').value">
+                                        D
+                                    </mat-option>
+                                </mat-select>
+
+                                <mat-label>
+                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                </mat-label>
+
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="itemType === incompleteTextItemType">
+                            <mat-form-field appearance="outline" class="fullWith">
+                                <mat-label>
+                                    Sentencia
+                                </mat-label>
+                                <textarea matInput formControlName="sentence" required></textarea>
+
+                            </mat-form-field>
+
+                            <br>
+                            <mat-form-field appearance="fill" class="fullWith">
+                                <mat-label>
+                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                </mat-label>
+                                <input matInput formControlName="answer" required>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <mat-action-row>
+                            <button type="button" mat-mini-fab color="accent" [disabled]="!itemsDisableBtnSave(i)"
+                                (click)="prepareEditedQuiz()">
+                                <mat-icon svgIcon="content-save"></mat-icon>
+                            </button>
+
+                            <button type="button" mat-mini-fab color="warn"
+                                (click)="deleteItemDialog(deleteDialog.openSimpleDialog(),i)">
+                                <mat-icon svgIcon="delete"></mat-icon>
+                            </button>
+                        </mat-action-row>
+
+                        <nx-simple-dialog #deleteDialog [obj]="it" [title]=" '¿Desea eliminar el Item ' + (i+1) + '?' "
+                            [subtitle]=" 'Items' " dialogTitle="Eliminar Item" actionButton1="Aceptar"
+                            [type]=" 'classic' " icon="delete">
+                        </nx-simple-dialog>
+                    </div>
+                </div>
+            </ng-template>
+
+        </mat-expansion-panel>
+
+
+
+    </mat-accordion>
+
+</form>

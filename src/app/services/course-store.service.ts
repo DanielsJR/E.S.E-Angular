@@ -58,10 +58,10 @@ export class CourseStoreService {
     }
 
     create(course: Course): Observable<Course> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.courseBackendService.create(course)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     this.dataStore.courses.push(data);
                     this.coursesSource.next(Object.assign({}, this.dataStore).courses);
@@ -69,10 +69,10 @@ export class CourseStoreService {
     }
 
     update(course: Course): Observable<Course> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.courseBackendService.update(course)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     let index = this.dataStore.courses.findIndex(c => c.id === data.id);
                     if (index != -1) {
@@ -84,10 +84,10 @@ export class CourseStoreService {
     }
 
     delete(course: Course): Observable<Course> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.courseBackendService.delete(course)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(_ => {
                     let index = this.dataStore.courses.findIndex((c: Course) => c.id === course.id);
                     if (index != -1) {

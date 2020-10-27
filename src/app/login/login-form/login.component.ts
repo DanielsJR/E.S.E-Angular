@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.isLoadingService.isLoadingTrue();
+    this.isLoadingService.isLoadingEmit(true);
 
     this.loginService.login(this.username.value, this.password.value)
       .subscribe(token => {
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
 
       }, err => {
         //console.error('message: ' + err.error.errors + '   status: ' + err.status);
-        this.isLoadingService.isLoadingFalse();
+        this.isLoadingService.isLoadingEmit(false);
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
             this.loginForm.reset();

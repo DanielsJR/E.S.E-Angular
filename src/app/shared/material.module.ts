@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {CdkTableModule} from '@angular/cdk/table';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,6 +38,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 @NgModule({
   exports: [
     CdkTableModule,
+    DragDropModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,

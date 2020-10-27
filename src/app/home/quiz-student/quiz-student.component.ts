@@ -224,9 +224,9 @@ export class QuizStudentComponent implements OnInit, OnDestroy {
     this.quizStudentToSend.multipleSelectionItems = this.multipleSelectionItems.value;
     this.quizStudentToSend.incompleteTextItems = this.incompleteTextItems.value;
 
-    this.isLoadingService.isLoadingTrue();
+    this.isLoadingService.isLoadingEmit(true);
     this.subscriptions.add(this.quizStudentBackendService.create(this.quizStudentToSend)
-      .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
+      .pipe(finalize(() => this.isLoadingService.isLoadingEmit(false)))
       .subscribe(qs => {
         this.snackbarService.openSnackBar('Prueba Enviada', RESULT_SUCCEED);
         this.sendGradeToTeacher(qs);

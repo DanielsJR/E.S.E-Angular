@@ -71,14 +71,14 @@ export class EvaluationStoreService {
 
     loadOneEvaluation(id: string) {
         return this.evaluations$
-            .pipe(map(evaluations => evaluations.find(v => v.id === id)));
+            .pipe(map(evaluations => evaluations?.find(v => v.id === id)));
     }
 
     create(evaluation: Evaluation): Observable<Evaluation> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.evaluationBackendService.create(evaluation)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     this.dataStore.evaluations.push(data);
                     this.evaluationsSource.next(Object.assign({}, this.dataStore).evaluations);
@@ -86,10 +86,10 @@ export class EvaluationStoreService {
     }
 
     update(evaluation: Evaluation): Observable<Evaluation> {
-        this.isLoadingService.isLoadingTrue();
+        this.isLoadingService.isLoadingEmit(true);
         return this.evaluationBackendService.update(evaluation)
             .pipe(
-                finalize(() => this.isLoadingService.isLoadingFalse()),
+                finalize(() => this.isLoadingService.isLoadingEmit(false)),
                 tap(data => {
                     let index = this.dataStore.evaluations.findIndex(v => v.id === data.id);
                     if (index != -1) {

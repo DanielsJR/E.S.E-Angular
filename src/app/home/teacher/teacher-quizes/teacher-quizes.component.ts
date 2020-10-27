@@ -1,23 +1,18 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { QuizBackendService } from '../../../services/quiz-backend.service';
 import { Quiz } from '../../../models/quiz';
 import { UserLoggedService } from '../../../services/user-logged.service';
-import { SessionStorageService } from '../../../services/session-storage.service';
 import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
-import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR, QUIZ_GET_ERROR, SIMPLE_DIALOG_CLASSIC } from '../../../app.config';
+import { RESULT_CANCELED, RESULT_ACTION1, RESULT_ACTION2, RESULT_ACTION3, RESULT_ERROR, RESULT_SUCCEED, QUIZ_DELETE_SUCCEED, QUIZ_DELETE_ERROR, QUIZ_GET_ERROR, SIMPLE_DIALOG_CLASSIC, RESULT_WARN } from '../../../app.config';
 import { IsLoadingService } from '../../../services/isLoadingService.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
-import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { take } from 'rxjs/internal/operators/take';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { rowAnimation } from '../../../shared/animations/animations';
-import { User } from '../../../models/user';
+import { QuizStoreService } from '../../../services/quiz-store.service';
 
 @Component({
   selector: 'nx-teacher-quizes',
@@ -38,14 +33,21 @@ export class TeacherQuizesComponent implements OnInit {
   private subscriptions = new Subscription();
 
   simpleDialogDeleteType = SIMPLE_DIALOG_CLASSIC;
-  userLogged: User;
+  usernameLogged: string;
+  isSearchDisabled: boolean = true;
 
-  constructor(private quizBackendService: QuizBackendService,
+
+  constructor(private quizStoreService: QuizStoreService,
     public dialog: MatDialog, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService, private userLoggedService: UserLoggedService,
-    private cdRef: ChangeDetectorRef,) { }
+    private cdRef: ChangeDetectorRef,
+  ) {
+    this.usernameLogged = userLoggedService.getTokenUsername();
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.subscriptions.add(this.quizStoreService.isLoadingGetQuizes$.subscribe(isLoadding => this.isLoading = isLoadding));
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -61,17 +63,15 @@ export class TeacherQuizesComponent implements OnInit {
   }
 
   setDataSource() {
-    this.subscriptions.add(this.userLoggedService.userLogged$
-      .pipe(
-        switchMap(user => {
-          this.userLogged = user;
-          this.isLoading = true;
-          return this.quizBackendService.getTeacherQuizes(user?.username);
-        }),
-        take(1),
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe(qs => { this.dataSource.data = qs }
+    this.subscriptions.add(this.quizStoreService.quizes$
+      .subscribe(qs => {
+        if (qs != null) {
+          if (!qs.length) this.snackbarService.openSnackBar('No hay Pruebas para mostrar', RESULT_WARN);
+          this.dataSource.data = qs;
+          this.isSearchDisabled = (!this.dataSource.data.length) ? true : false;
+        }
+
+      }
         , err => this.snackbarService.openSnackBar((err?.error?.errors) ? err.error.errors : QUIZ_GET_ERROR, RESULT_ERROR)
       ));
   }
@@ -100,9 +100,9 @@ export class TeacherQuizesComponent implements OnInit {
   }
 
   deleteQuiz(quiz: Quiz) {
-    this.isLoadingService.isLoadingTrue();
-    this.subscriptions.add(this.quizBackendService.delete(quiz, this.userLogged.username)
-      .pipe(finalize(() => this.isLoadingService.isLoadingFalse()))
+    this.isLoadingService.isLoadingEmit(true);
+    this.subscriptions.add(this.quizStoreService.delete(quiz, this.usernameLogged)
+      .pipe(finalize(() => this.isLoadingService.isLoadingEmit(false)))
       .subscribe(quiz => {
         this.deleteQuizFromDataSource(quiz.id);
         this.snackbarService.openSnackBar(QUIZ_DELETE_SUCCEED, RESULT_SUCCEED);

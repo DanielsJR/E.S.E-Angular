@@ -187,3 +187,14 @@ export const TITLE_MY_SUBJECTS = 'Mis Asignaturas';
 export const TITLE_QUIZES = 'Mis Pruebas';
 export const TITLE_PROFILE = 'Perfil';
 export const TITLE_PREFERENCES = 'Preferencias';
+
+//*******************QUIZ-ITEMS*************************/
+export const CORRESPOND_ITEM_TYPE = 'correspondItem';
+export const TRUE_FALSE_ITEM_TYPE = 'trueFalseItem';
+export const MULTIPLE_SELECTION_ITEM_TYPE = 'multipleSelectionItem';
+export const INCOMPLETE_TEXT_ITEM_TYPE = 'incompleteTextItem';
+
+export const CORRESPOND_ITEM_TITLE = 'Correspondencia';
+export const TRUE_FALSE_ITEM_TITLE = 'Verdaredo o Falso';
+export const MULTIPLE_SELECTION_ITEM_TITLE = 'Selección Multiple';
+export const INCOMPLETE_TEXT_ITEM_TITLE = 'Respuesta Corta';

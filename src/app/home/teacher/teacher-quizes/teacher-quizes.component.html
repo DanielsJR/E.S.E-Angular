@@ -5,7 +5,7 @@
     <mat-toolbar color="primary">
 
       <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)">
+        <input matInput (keyup)="applyFilter($event.target.value)" [disabled]="isSearchDisabled">
         <mat-placeholder>
           <i class="mdi mdi-magnify"></i>Buscar
         </mat-placeholder>
