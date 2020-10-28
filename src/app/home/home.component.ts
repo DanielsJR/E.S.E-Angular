@@ -69,8 +69,8 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.sidenavProfile.openedChange.subscribe(isOpen => this.isSidenavProfileOpen = isOpen);
   };
 
-  sideNavMenuState: boolean = false;
-  sideNavChatState: boolean = false;
+  sideNavMenuState: boolean;
+  sideNavChatState: boolean;
   @ViewChild("sidenavMenu") sidenavMenu: MatSidenav;
   @ViewChild("sidenavChat") sidenavChat: MatSidenav;
 
@@ -177,6 +177,7 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
   closeAllSidenav(): boolean {
     this.sideNavMenuState = false;
+    this.sideNavChatState = false;
     this.sidenavMenu.close();
     this.sidenavChat.close();
     return (!this.sidenavMenu.opened && !this.sidenavChat.opened);

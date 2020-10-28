@@ -19,7 +19,7 @@ import { TeacherSubjectAttendanceComponent } from './teacher-subjects/teacher-su
 import { TeacherSubjectGradesComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-grades.component';
 import { TeacherSubjectBookComponent } from './teacher-subjects/teacher-subject-detail/teacher-subject-book.component';
 import { HomeUserModule } from '../home-user/home-user.module';
-import { QuizItemComponent } from './teacher-quizes/quiz-item/quiz-item.component';
+import { QuizModule } from '../quiz/quiz.module';
 
 
 
@@ -30,6 +30,7 @@ import { QuizItemComponent } from './teacher-quizes/quiz-item/quiz-item.componen
     UsersModule,
     SubjectsModule,
     QuizStudentModule,
+    QuizModule,
     HomeUserModule,
 
   ],
@@ -52,7 +53,6 @@ import { QuizItemComponent } from './teacher-quizes/quiz-item/quiz-item.componen
     TeacherQuizesSendQuizComponent,
     TeacherSubjectBookComponent,
 
-    QuizItemComponent,
 
   ],
 

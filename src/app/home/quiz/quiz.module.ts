@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../../shared/shared.module";
 import { QuizComponent } from "./quiz.component";
-import { QuizDetailComponent } from "./quiz-detail/quiz-detail.component";
+import { QuizItemComponent } from './quiz-item/quiz-item.component';
 
 @NgModule({
   imports: [
@@ -11,7 +11,7 @@ import { QuizDetailComponent } from "./quiz-detail/quiz-detail.component";
 
   declarations: [
     QuizComponent,
-    QuizDetailComponent,
+    QuizItemComponent,
 
   ],
 
@@ -19,13 +19,9 @@ import { QuizDetailComponent } from "./quiz-detail/quiz-detail.component";
 
   ],
 
-  entryComponents: [
-
-  ],
-
   exports: [
-    QuizDetailComponent,
-
+    QuizComponent,
+    QuizItemComponent,
 
   ]
 

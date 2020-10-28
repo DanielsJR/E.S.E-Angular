@@ -4,6 +4,10 @@
     (closeEvaluationCourseDetail)="setEvaluationCourse($event)">
   </nx-subject-evaluations-course>
 
+  <nx-quiz *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail"
+    (closeQuizDetail)="setEvaluationQuizDetail($event)">
+  </nx-quiz>
+
   <mat-card>
 
     <mat-toolbar color="primary">
@@ -104,8 +108,5 @@
 
   </mat-card>
 
-  <nx-quiz-detail *ngIf="evaluationQuizDetail" [evaluation]="evaluationQuizDetail"
-    (closeQuizDetail)="setEvaluationQuizDetail($event)">
-  </nx-quiz-detail>
 
 </div>

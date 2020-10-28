@@ -9,7 +9,7 @@ import { UserStoreService } from '../../services/user-store.service';
     :host {
         display: block;
         width: 100%;
-        margin-bottom: 64px;
+        --margin-bottom: 64px;
       }
     `],
 })

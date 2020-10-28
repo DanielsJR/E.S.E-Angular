@@ -14,7 +14,7 @@ import { MultiDatePickerService } from '../../shared/multi-date-picker/multy-dat
     :host {
         display: block;
         width: 100%;
-        margin-bottom: 64px;
+        --margin-bottom: 64px;
       }
     `],
 })

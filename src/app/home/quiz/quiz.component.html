@@ -1,3 +1,69 @@
-<p>
-  quiz works!
-</p>
+<div class="container">
+
+  <button mat-mini-fab color="accent" class="closeButton miniFabMini2" (click)="closeButton()" matTooltip="Cerrar">
+    <mat-icon svgIcon="close" color="primary"></mat-icon>
+  </button>
+
+  <mat-toolbar color="primary" class="toolbarTitle">
+    <h1>{{evaluation?.quiz?.title}}</h1>
+    <span class="spacer-r"></span>
+
+    <img class="imgEseToolbar" alt="logo" title="logo" src="assets/images/logos/ese-logo.png">
+
+  </mat-toolbar>
+
+  <mat-card class="quizData">
+
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="quizDetailForm" class="backgroundColorAppBar">
+
+      <mat-list class="listContainer">
+
+        <div class="data">
+
+          <mat-list-item>
+            <img matListAvatar
+              [src]=" 'data:'+ evaluation?.quiz?.author?.avatar?.type+';base64,' + evaluation?.quiz?.author?.avatar?.data  | safe: 'resourceUrl' "
+              alt="student" (click)="imageZoom.openDialogImage()">
+            <nx-image-zoom-user #imageZoom [avatar]="evaluation?.quiz?.author?.avatar"></nx-image-zoom-user>
+
+            <h3 matLine> {{evaluation?.quiz?.author | shortNameLastname}} </h3>
+
+            <p matLine>
+              <i class="mdi mdi-account-circle app-input-icon">&nbsp;</i>
+              <span class="role-style">Autor</span>
+            </p>
+
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-form-field appearance="outline">
+              <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Curso</mat-label>
+              <input matInput formControlName="courseName" readonly>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label><i class="mdi mdi-school app-input-icon">&nbsp;</i>Asignatura</mat-label>
+              <input matInput formControlName="subjectName" readonly>
+            </mat-form-field>
+          </mat-list-item>
+
+        </div>
+
+      </mat-list>
+
+    </form>
+
+    <mat-divider></mat-divider>
+
+  </mat-card>
+
+  <mat-card class="quizItems">
+    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="correspondItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="trueFalseItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="multipleSelectionItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="incompleteTextItem" [isReadonly]="true"></nx-quiz-item>
+  </mat-card>
+
+</div>

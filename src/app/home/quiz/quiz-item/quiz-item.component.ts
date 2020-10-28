@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
-import { RESULT_CANCELED, RESULT_ACTION1, QUIZ_UPDATE_SUCCEED, RESULT_SUCCEED, QUIZ_UPDATE_ERROR, RESULT_ERROR, CORRESPOND_ITEM_TYPE, INCOMPLETE_TEXT_ITEM_TYPE, MULTIPLE_SELECTION_ITEM_TYPE, TRUE_FALSE_ITEM_TYPE, CORRESPOND_ITEM_TITLE, INCOMPLETE_TEXT_ITEM_TITLE, MULTIPLE_SELECTION_ITEM_TITLE, TRUE_FALSE_ITEM_TITLE } from '../../../../app.config';
-import { Quiz, TRUE_FALSES } from '../../../../models/quiz';
-import { IsLoadingService } from '../../../../services/isLoadingService.service';
-import { QuizStoreService } from '../../../../services/quiz-store.service';
-import { SimpleDialogRefComponent } from '../../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
-import { SnackbarService } from '../../../../shared/snackbars-ref/snackbar.service';
+import { CORRESPOND_ITEM_TYPE, TRUE_FALSE_ITEM_TYPE, MULTIPLE_SELECTION_ITEM_TYPE, INCOMPLETE_TEXT_ITEM_TYPE, CORRESPOND_ITEM_TITLE, INCOMPLETE_TEXT_ITEM_TITLE, MULTIPLE_SELECTION_ITEM_TITLE, TRUE_FALSE_ITEM_TITLE, QUIZ_UPDATE_ERROR, QUIZ_UPDATE_SUCCEED, RESULT_ACTION1, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCEED } from '../../../app.config';
+import { Quiz, TRUE_FALSES } from '../../../models/quiz';
+import { IsLoadingService } from '../../../services/isLoadingService.service';
+import { QuizStoreService } from '../../../services/quiz-store.service';
+import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
+import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service';
 
 @Component({
   selector: 'nx-quiz-item',
@@ -18,6 +18,7 @@ export class QuizItemComponent implements OnInit {
 
   @Input() itemType: string;
   @Input() quiz: Quiz;
+  @Input() isReadonly: boolean;
 
   itemsForm: FormGroup;
   panelOpenItems: boolean = false;

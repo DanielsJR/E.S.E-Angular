@@ -95,7 +95,7 @@ form {
     margin-left: 50px;
 }
 
-::ng-deep .listContainer .data mat-form-field:first-of-type .mat-form-field-wrapper {
+::ng-deep .containerQuiz .listContainer .data mat-form-field:first-of-type .mat-form-field-wrapper {
     padding: 0;
 }
 
@@ -155,6 +155,15 @@ mat-tab-group {
 
 .quizItems {
     width: 100%;
+    margin: 0 20px 20px 20px;
+}
+
+.quizItems nx-quiz-item {
+    margin-bottom: 20px;
+}
+
+.quizItems nx-quiz-item:last-of-type {
+    margin-bottom: 0;
 }
 
 ::ng-deep .containerQuiz .quizItems form mat-toolbar {
@@ -170,4 +179,3 @@ mat-card {
     flex-flow: wrap;
     padding: 0;
 }
-

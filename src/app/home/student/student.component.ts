@@ -17,7 +17,7 @@ import { User } from '../../models/user';
     :host {
         display: block;
         width: 100%;
-        margin-bottom: 64px;
+        --margin-bottom: 64px;
       }
     
     `],

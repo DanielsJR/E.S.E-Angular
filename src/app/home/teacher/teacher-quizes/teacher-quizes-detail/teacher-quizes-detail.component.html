@@ -109,10 +109,10 @@
   </form>
 
   <div class="quizItems">
-    <nx-quiz-item [quiz]="quiz" itemType="correspondItem"></nx-quiz-item>
-    <nx-quiz-item [quiz]="quiz" itemType="trueFalseItem"></nx-quiz-item>
-    <nx-quiz-item [quiz]="quiz" itemType="multipleSelectionItem"></nx-quiz-item>
-    <nx-quiz-item [quiz]="quiz" itemType="incompleteTextItem"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="correspondItem" [isReadonly]="false"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="trueFalseItem" [isReadonly]="false"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="multipleSelectionItem" [isReadonly]="false"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="incompleteTextItem" [isReadonly]="false"></nx-quiz-item>
   </div>
 
 </div>

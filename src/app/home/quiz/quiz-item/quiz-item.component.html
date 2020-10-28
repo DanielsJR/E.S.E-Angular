@@ -18,7 +18,8 @@
         <span>&nbsp;&nbsp;</span>
 
         <span class="spacer-r"></span>
-        <button type="button" mat-mini-fab color="primary" (click)="addItem()" [disabled]="btnAddDisabled">
+        <button *ngIf="!isReadonly" type="button" mat-mini-fab color="primary" (click)="addItem()"
+            [disabled]="btnAddDisabled">
             <mat-icon svgIcon="plus"></mat-icon>
         </button>
 
@@ -55,7 +56,8 @@
                                 <mat-label>
                                     Item
                                 </mat-label>
-                                <textarea matInput formControlName="item" required></textarea>
+                                <textarea matInput formControlName="item" [required]="!isReadonly"
+                                    [readonly]="isReadonly"></textarea>
                                 <mat-error *ngIf="it.get('item').hasError('required')">
                                     <strong>requerido</strong>.
                                 </mat-error>
@@ -67,7 +69,8 @@
                                 <mat-label>
                                     <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Correspondencia
                                 </mat-label>
-                                <input matInput formControlName="correspond" required>
+                                <input matInput formControlName="correspond" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                             </mat-form-field>
 
                         </ng-container>
@@ -77,13 +80,14 @@
                                 <mat-label>
                                     Sentencia
                                 </mat-label>
-                                <textarea matInput formControlName="sentence" required></textarea>
+                                <textarea matInput formControlName="sentence" [required]="!isReadonly"
+                                    [readonly]="isReadonly"></textarea>
                             </mat-form-field>
 
                             <br>
 
                             <mat-form-field appearance="fill" class="fullWith">
-                                <mat-select formControlName="answer" required>
+                                <mat-select formControlName="answer" [required]="!isReadonly" [disabled]="isReadonly">
                                     <mat-option *ngFor="let trueFalse of trueFalses" [value]="trueFalse.value">
                                         {{ trueFalse.viewValue }}
                                     </mat-option>
@@ -99,7 +103,8 @@
                                 <mat-label>
                                     Sentencia
                                 </mat-label>
-                                <textarea matInput formControlName="sentence" required></textarea>
+                                <textarea matInput formControlName="sentence" [required]="!isReadonly"
+                                    [readonly]="isReadonly"></textarea>
 
                             </mat-form-field>
                             <br>
@@ -107,7 +112,8 @@
                                 <mat-label>
                                     Alternativa A
                                 </mat-label>
-                                <input matInput formControlName="alternativeA" required>
+                                <input matInput formControlName="alternativeA" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                                 <i matSuffix class="mdi mdi-alpha-a-circle size-mdi-icon"></i>
                             </mat-form-field>
                             <br>
@@ -115,7 +121,8 @@
                                 <mat-label>
                                     Alternativa B
                                 </mat-label>
-                                <input matInput formControlName="alternativeB" required>
+                                <input matInput formControlName="alternativeB" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                                 <i matSuffix class="mdi mdi-alpha-b-circle size-mdi-icon"></i>
                             </mat-form-field>
                             <br>
@@ -123,7 +130,8 @@
                                 <mat-label>
                                     Alternativa C
                                 </mat-label>
-                                <input matInput formControlName="alternativeC" required>
+                                <input matInput formControlName="alternativeC" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                                 <i matSuffix class="mdi mdi-alpha-c-circle size-mdi-icon"></i>
                             </mat-form-field>
                             <br>
@@ -131,14 +139,15 @@
                                 <mat-label>
                                     Alternativa D
                                 </mat-label>
-                                <input matInput formControlName="alternativeD" required>
+                                <input matInput formControlName="alternativeD" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                                 <i matSuffix class="mdi mdi-alpha-d-circle size-mdi-icon"></i>
                             </mat-form-field>
 
                             <br>
                             <mat-form-field appearance="fill" class="fullWith">
 
-                                <mat-select formControlName="answer" required>
+                                <mat-select formControlName="answer" [required]="!isReadonly" [disabled]="isReadonly">
                                     <mat-option [value]="it.get('alternativeA').value">
                                         A
                                     </mat-option>
@@ -165,7 +174,8 @@
                                 <mat-label>
                                     Sentencia
                                 </mat-label>
-                                <textarea matInput formControlName="sentence" required></textarea>
+                                <textarea matInput formControlName="sentence" [required]="!isReadonly"
+                                    [readonly]="isReadonly"></textarea>
 
                             </mat-form-field>
 
@@ -174,11 +184,12 @@
                                 <mat-label>
                                     <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
                                 </mat-label>
-                                <input matInput formControlName="answer" required>
+                                <input matInput formControlName="answer" [required]="!isReadonly"
+                                    [readonly]="isReadonly">
                             </mat-form-field>
                         </ng-container>
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isReadonly">
                             <button type="button" mat-mini-fab color="accent" [disabled]="!itemsDisableBtnSave(i)"
                                 (click)="prepareEditedQuiz()">
                                 <mat-icon svgIcon="content-save"></mat-icon>
