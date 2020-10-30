@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    margin: 20px;
+}
+
 .container {
     display: flex;
     flex-flow: row wrap;
@@ -11,7 +16,6 @@ mat-card {
     width: 100%;
     min-width: 500px;
     height: fit-content;
-    margin: 20px;
     padding: 0;
     overflow: hidden;
     background: unset !important;
@@ -95,5 +99,5 @@ td.mat-cell mat-list mat-list-item ::ng-deep .mat-list-item-content {
 }
 
 nx-quiz-student-detail {
-    width: 100%;
+    margin-top: 20px;
 }

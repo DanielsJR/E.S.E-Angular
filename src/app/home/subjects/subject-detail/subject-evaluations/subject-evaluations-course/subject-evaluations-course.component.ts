@@ -26,13 +26,18 @@ import { CrudUserDialogComponent } from '../../../../users/crud-user-dialog/crud
 })
 export class SubjectEvaluationsCourseComponent implements OnInit {
 
-  private _evaluation: Evaluation;
+
   colorGrade: any;
   quizStudentGrade: Grade;
 
+  private _evaluation: Evaluation;
+
   @Input() set evaluation(evaluation: Evaluation) {
     this._evaluation = evaluation;
-    if (this.grades) this.setGrades();
+    if (this.grades) {
+      this.setDataSource();
+      this.setQuizStudent(null);
+    }
   }
 
   get evaluation() {
@@ -65,9 +70,8 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   isDark;
   rowClasses: {};
-  isLoading: boolean = false;
 
-  crudUserOnlyRead= true;
+  crudUserOnlyRead = true;
 
   @ViewChild('crudStudentDialog') crudStudentDialog: CrudUserDialogComponent;
 
@@ -106,12 +110,10 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
       .subscribe(grades => {
         if (grades) {
           this.grades = grades;
-          if (this.grades.length) this.setGrades();
+          if (this.grades.length) this.setDataSource();
         }
 
       }));
-
-    this.subscriptions.add(this.gradeStoreService.isLoadingGetGrades$.subscribe(isLoadding => setTimeout(() => this.isLoading = isLoadding)));
 
     this.subscriptions.add(this.sessionStorage.isThemeDark$.subscribe(isDark => this.isDark = isDark));
 
@@ -140,8 +142,7 @@ export class SubjectEvaluationsCourseComponent implements OnInit {
     path.split('.').reduce((o, p) => o && o[p], obj)
   )
 
-  setGrades() {
-    console.log('*********setGrades')
+  setDataSource() {
     let filteredGrades = this.grades.filter(g => g.evaluation.id.indexOf(this.evaluation.id) === 0);
     this.dataSource.data = filteredGrades;
   }

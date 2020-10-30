@@ -54,6 +54,10 @@ mat-expansion-panel mat-form-field {
     font-family: monospace;
 }
 
+.mat-expansion-panel-header-title, .mat-expansion-panel-header-description{
+    align-items: center;
+}
+
 .fullWith {
     width: 100%;
 }

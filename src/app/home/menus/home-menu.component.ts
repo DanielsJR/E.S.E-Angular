@@ -22,10 +22,10 @@ export class HomeMenuComponent implements OnInit {
   roleTeacher = ROLE_TEACHER;
   roleStudent = ROLE_STUDENT;
 
-
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

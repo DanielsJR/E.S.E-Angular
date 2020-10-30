@@ -4,20 +4,39 @@
 
         <mat-icon svgIcon="format-list-bulleted"></mat-icon>
         <h1>&nbsp;&nbsp;{{itemTitle}}</h1>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
-        <span class="spacer-c"></span>
-        <mat-icon svgIcon="calculator"></mat-icon>
-        <span>&nbsp;&nbsp;</span>
-        <h1 mat-dialog-title>{{controlItemsArray.length}} Items </h1>
-        <span>&nbsp;&nbsp;</span>
+        <ng-container *ngIf="isQuizStudent">
 
+            <mat-icon svgIcon="checkbox-marked-circle" color="primary"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>{{answers[0]}}</h1>
 
-        <mat-icon svgIcon="calculator"></mat-icon>
-        <span>&nbsp;&nbsp;</span>
-        <h1 mat-dialog-title>Total Puntos 25</h1>
-        <span>&nbsp;&nbsp;</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+            <mat-icon svgIcon="close-circle" color="warn"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>{{answers[1]}}</h1>
+
+        </ng-container>
+
+        <ng-container>
+
+            <span class="spacer-c"></span>
+            <mat-icon svgIcon="calculator"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>{{controlItemsArray.length}} Items </h1>
+            <span>&nbsp;&nbsp;</span>
+
+            <mat-icon svgIcon="calculator"></mat-icon>
+            <span>&nbsp;&nbsp;</span>
+            <h1 mat-dialog-title>Total Puntos 25</h1>
+            <span>&nbsp;&nbsp;</span>
+
+        </ng-container>
 
         <span class="spacer-r"></span>
+
         <button *ngIf="!isReadonly" type="button" mat-mini-fab color="primary" (click)="addItem()"
             [disabled]="btnAddDisabled">
             <mat-icon svgIcon="plus"></mat-icon>
@@ -27,6 +46,7 @@
             (click)=" panelOpenItems ? mAccordion.closeAll() : mAccordion.openAll()">
             <i class="mdi mdi-menu-{{panelOpenItems ? 'up' : 'down'}} size-mdi-icon"></i>
         </button>
+
     </mat-toolbar>
 
     <mat-accordion #mAccordion="matAccordion" [multi]="true" [displayMode]="accordionDisplayMode">
@@ -36,13 +56,18 @@
 
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <button mat-mini-fab color="primary" class="miniFabMini">
+                    <button mat-mini-fab class="miniFabMini"
+                        [color]="(isQuizStudent) ? checkAnswerColor(it.get('correct').value) : 'primary' ">
                         {{ i + 1 }}
                     </button>
                 </mat-panel-title>
 
                 <mat-panel-description>
-                    <span *ngIf="!mep.expanded"> {{ it?.get('sentence')?.value }} {{ it?.get('item')?.value }}</span>
+                    <span *ngIf="!mep.expanded"> {{ it?.get('sentence')?.value }} {{ it?.get('item')?.value }} &nbsp;</span>
+
+                    <mat-icon *ngIf="isQuizStudent" [svgIcon]="checkAnswerIcon(it.get('correct').value)"
+                        [color]="checkAnswerColor(it.get('correct').value)"></mat-icon>
+
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
@@ -67,10 +92,14 @@
 
                             <mat-form-field appearance="fill" class="fullWith">
                                 <mat-label>
-                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Correspondencia
+                                    <i *ngIf="!isQuizStudent" class="mdi mdi-checkbox-marked-circle app-input-icon"></i>
+                                    <i *ngIf="isQuizStudent" class="mdi app-input-icon"
+                                        [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                                    Correspondencia
                                 </mat-label>
+
                                 <input matInput formControlName="correspond" [required]="!isReadonly"
-                                    [readonly]="isReadonly">
+                                    [readonly]="isReadonly"> <!--[ngClass]="(isQuizStudent) ? (it.get('correct').value ? 'primaryColor' : 'warnColor'): '' "-->
                             </mat-form-field>
 
                         </ng-container>
@@ -92,9 +121,14 @@
                                         {{ trueFalse.viewValue }}
                                     </mat-option>
                                 </mat-select>
+
                                 <mat-label>
-                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                    <i *ngIf="!isQuizStudent" class="mdi mdi-checkbox-marked-circle app-input-icon"></i>
+                                    <i *ngIf="isQuizStudent" class="mdi app-input-icon"
+                                        [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                                    Respuesta
                                 </mat-label>
+
                             </mat-form-field>
                         </ng-container>
 
@@ -163,7 +197,10 @@
                                 </mat-select>
 
                                 <mat-label>
-                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                    <i *ngIf="!isQuizStudent" class="mdi mdi-checkbox-marked-circle app-input-icon"></i>
+                                    <i *ngIf="isQuizStudent" class="mdi app-input-icon"
+                                        [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                                    Respuesta
                                 </mat-label>
 
                             </mat-form-field>
@@ -182,8 +219,12 @@
                             <br>
                             <mat-form-field appearance="fill" class="fullWith">
                                 <mat-label>
-                                    <i class="mdi mdi-checkbox-marked-circle app-input-icon">&nbsp;</i>Respuesta
+                                    <i *ngIf="!isQuizStudent" class="mdi mdi-checkbox-marked-circle app-input-icon"></i>
+                                    <i *ngIf="isQuizStudent" class="mdi app-input-icon"
+                                        [ngClass]="it.get('correct').value ? 'primaryColor mdi-checkbox-marked-circle' : 'warnColor mdi-close-circle' "></i>
+                                    Respuesta
                                 </mat-label>
+
                                 <input matInput formControlName="answer" [required]="!isReadonly"
                                     [readonly]="isReadonly">
                             </mat-form-field>

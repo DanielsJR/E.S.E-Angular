@@ -89,14 +89,14 @@
 
         <div class="myWrapper">
             <div *ngIf="!isLoading" style="height: 5px;" class="progress-bar"></div>
-            <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="progress-bar"></mat-progress-bar>
+            <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="progress-bar">
+            </mat-progress-bar>
 
             <!-- mainToolbar  [class.primaryColorBG]="fillToolbar"-->
             <mat-toolbar class="mainToolbar" color="primary">
 
                 <img class="imgLogo" alt="E.S.E" [@logoNavChange]="sideNavMenuState" (click)="sidenavMenu.toggle()"
                     [src]=" 'assets/images/logos/ese-' + (this.sideNavMenuState ? 'logo' : 'logo2')   + '.png'  ">
-
                 <!-- [@logoNavChange]="(sidenavMenu.opened && sideNavMenuState) ? true : false "
           (click)="sidenavMenu.toggle()"-->
                 <!--<button type="button" mat-icon-button (click)="sidenavMenu.toggle()">
@@ -145,7 +145,8 @@
             </mat-toolbar>
 
             <!--[style.background-color]="themePicker.isDark ? 'rgb(26, 26, 26)' : 'rgb(226, 226, 226)' "-->
-            <mat-sidenav-container class="sidenavContainer" [style.background-color]="themePicker.isDark ? '' : 'rgb(230, 230, 230)' "> 
+            <mat-sidenav-container class="sidenavContainer"
+                [style.background-color]="themePicker.isDark ? '' : 'rgb(230, 230, 230)' ">
 
                 <!-- sidenavMenu -->
                 <mat-sidenav #sidenavMenu mode="side" opened="false" class="sidenav" position="start"
@@ -222,11 +223,11 @@
 
                     <!-- sidenav menus -->
                     <mat-nav-list class="sidenavMainMenu">
-                        <nx-home-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-home-menu>
-                        <nx-users-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-users-menu>
-                        <nx-courses-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-courses-menu>
-                        <nx-subjects-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-subjects-menu>
-                        <nx-quiz-menu [roles]='roles' [sideNavMenuState]="sideNavMenuState"></nx-quiz-menu>
+                        <nx-home-menu [roles]="roles" [sideNavMenuState]="sideNavMenuState"></nx-home-menu>
+                        <nx-users-menu [roles]="roles" [sideNavMenuState]="sideNavMenuState"></nx-users-menu>
+                        <nx-courses-menu [roles]="roles" [sideNavMenuState]="sideNavMenuState"></nx-courses-menu>
+                        <nx-subjects-menu [roles]="roles" [sideNavMenuState]="sideNavMenuState"></nx-subjects-menu>
+                        <nx-quiz-menu [roles]="roles" [sideNavMenuState]="sideNavMenuState"></nx-quiz-menu>
                     </mat-nav-list>
 
                     <!-- sidenav menu footer toobar -->
@@ -251,7 +252,6 @@
                     <mat-toolbar class="toolbar2" [class.primaryColorBG]="fillToolbar">
                     </mat-toolbar>
                     <!--[color]="(toolbarColorAccent) ? 'accent':''" -->
-
                     <div class="mainContent">
                         <div class="animWrapper" [@routeAnimations]="animString">
                             <div class="routerWrapper">

@@ -327,9 +327,9 @@ export const subjectRouteAnimations = trigger('subjectRouteAnimations', [
   transition('course-id => book-id', useAnimation(rotateCarouselToLeft)),
   transition('course-id => quiz-id', useAnimation(rotateCarouselToLeft)),
   transition('course-id => student-grades-id', useAnimation(rotateCarouselToLeft)),
-  transition('course-id => grades-id', useAnimation(scaleDownFromRight)),
-
+  //transition('course-id => grades-id', useAnimation(scaleDownFromRight)),
   transition('grades-id => *', useAnimation(scaleDownFromLeft)),
+  transition('* => grades-id', useAnimation(scaleDownFromRight)),
 
   transition('evaluations-id => course-id', useAnimation(rotateCarouselToRight)),
   transition('evaluations-id => attendance-id', useAnimation(rotateCarouselToLeft)),
@@ -419,6 +419,7 @@ export const animateText = trigger('animateText', [
       'opacity': '1'
     })
   ),
+  //transition('* <=> *', animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)'))
 ]);
 
 export const fadeAnimation = trigger('fadeAnimation', [

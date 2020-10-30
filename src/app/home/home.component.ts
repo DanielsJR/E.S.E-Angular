@@ -129,10 +129,10 @@ export class HomeComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         setTimeout(() => {
-          this.sideNavMenuState = false;
-          this.sideNavChatState = false;
           this.sidenavMenu.open();
           this.sidenavChat.open();
+          this.sideNavMenuState = false;
+          this.sideNavChatState = false;
         }, 1000);
 
       }));

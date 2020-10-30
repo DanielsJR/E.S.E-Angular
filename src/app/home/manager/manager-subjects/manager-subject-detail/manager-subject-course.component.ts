@@ -7,7 +7,6 @@ import { ROLE_MANAGER } from '../../../../app.config';
   styles: [`:host  {
     display: block;
     width: 100%;
-    margin-bottom: 64px;
   }
   `]
 })

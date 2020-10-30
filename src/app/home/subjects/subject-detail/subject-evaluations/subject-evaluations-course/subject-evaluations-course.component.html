@@ -1,27 +1,23 @@
 <div class="container">
 
-  <button mat-mini-fab color="accent" class="closeButton miniFabMini" (click)="closeButton()" matTooltip="Cerrar">
+  <button mat-mini-fab color="accent" class="closeButton" (click)="closeButton()" matTooltip="Cerrar">
     <mat-icon svgIcon="close" color="primary"></mat-icon>
   </button>
 
+  <mat-toolbar class="toolbarTitle" color="primary">
+    <h2>{{evaluation.title}}</h2>
+
+    <span class="spacer-r"></span>
+    <mat-chip-list>
+      <mat-chip color="accent" selected="true">
+        <mat-icon svgIcon="school"></mat-icon>
+        &nbsp; {{subject?.name}} {{subject?.course?.name}}
+      </mat-chip>
+    </mat-chip-list>
+
+  </mat-toolbar>
+
   <mat-card>
-
-    <mat-toolbar class="toolbar" color="primary">
-      <h2>{{evaluation.title}}</h2>
-
-      <span class="spacer-r"></span>
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">
-          <mat-icon svgIcon="school"></mat-icon>
-          &nbsp; {{subject?.name}} {{subject?.course?.name}}
-        </mat-chip>
-      </mat-chip-list>
-
-    </mat-toolbar>
-
-    <div *ngIf="!isLoading" class="divToobar backgroundColorCard"></div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent"></mat-progress-bar>
-
     <mat-toolbar class="toolbar" color="none">
       <mat-form-field style="width: 50%;">
         <input matInput (keyup)="applyFilter($event.target.value)">
@@ -52,7 +48,7 @@
               </p>
             </mat-list-item>
           </mat-list>
-          
+
           <nx-card-user-dialog #cardStudentDialog [user]="grade.student" [areaRole]="areaRole"
             [onlyRead]="crudUserOnlyRead">
           </nx-card-user-dialog>
@@ -109,6 +105,7 @@
   </mat-card>
 
   <nx-quiz-student-detail *ngIf="quizStudentGrade" [grade]="quizStudentGrade"
-    (closeQuizStudentDetail)="setQuizStudent($event)"></nx-quiz-student-detail>
+    (closeQuizStudentDetail)="setQuizStudent($event)">
+  </nx-quiz-student-detail>
 
 </div>

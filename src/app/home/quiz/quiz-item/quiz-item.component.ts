@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { CORRESPOND_ITEM_TYPE, TRUE_FALSE_ITEM_TYPE, MULTIPLE_SELECTION_ITEM_TYPE, INCOMPLETE_TEXT_ITEM_TYPE, CORRESPOND_ITEM_TITLE, INCOMPLETE_TEXT_ITEM_TITLE, MULTIPLE_SELECTION_ITEM_TITLE, TRUE_FALSE_ITEM_TITLE, QUIZ_UPDATE_ERROR, QUIZ_UPDATE_SUCCEED, RESULT_ACTION1, RESULT_CANCELED, RESULT_ERROR, RESULT_SUCCEED } from '../../../app.config';
 import { Quiz, TRUE_FALSES } from '../../../models/quiz';
+import { QuizStudent } from '../../../models/quiz-student';
 import { IsLoadingService } from '../../../services/isLoadingService.service';
 import { QuizStoreService } from '../../../services/quiz-store.service';
 import { SimpleDialogRefComponent } from '../../../shared/dialogs/simple-dialog/simple-dialog-ref/simple-dialog-ref.component';
@@ -16,8 +17,17 @@ import { SnackbarService } from '../../../shared/snackbars-ref/snackbar.service'
 })
 export class QuizItemComponent implements OnInit {
 
+  private _quiz: Quiz | QuizStudent;
+  @Input() set quiz(quiz: Quiz | QuizStudent) {
+    if (quiz) this._quiz = quiz;
+    if (this._quiz && this.itemsForm) this.buildForm();//reset form
+  }
+
+  get quiz() {
+    return this._quiz;
+  }
+
   @Input() itemType: string;
-  @Input() quiz: Quiz;
   @Input() isReadonly: boolean;
 
   itemsForm: FormGroup;
@@ -34,19 +44,27 @@ export class QuizItemComponent implements OnInit {
   itemTitle: string;
   btnAddDisabled: boolean;
 
+  answers: number[];
+  incorrectAnswers: number;
+  correctAnswers: number;
+
+  isQuizStudent: boolean;
 
   constructor(private quizStoreService: QuizStoreService,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
   ) { }
 
+
   ngOnInit(): void {
+    this.isQuizStudent = !this.isQuiz(this.quiz)
     this.getItemTitle();
     this.buildForm();
   }
 
-  ngAfterViewInit() {
-
+  isQuiz(toBeDetermined: any): toBeDetermined is Quiz {
+    if ((toBeDetermined as Quiz).author) return true
+    return false
   }
 
   buildForm() {
@@ -55,13 +73,16 @@ export class QuizItemComponent implements OnInit {
     });
 
     this.controlItemsArray = <FormArray>this.itemsForm.controls.items;
-
+    this.initializeCorrectIncorrectAnswers();
     this.setItems(this.quiz);
-
   }
 
   get items() { return this.itemsForm.get('items'); }
 
+  initializeCorrectIncorrectAnswers() {
+    this.incorrectAnswers = 0;
+    this.correctAnswers = 0;
+  }
 
   setItems(quiz: Quiz) {
     switch (this.itemType) {
@@ -86,49 +107,68 @@ export class QuizItemComponent implements OnInit {
   }
 
   setCorrespondItems(quiz: Quiz) {
-    quiz.correspondItems.forEach(ci => {
+    quiz.correspondItems.forEach(item => {
+      (item.correct) ? this.correctAnswers++ : this.incorrectAnswers++;
+
       this.controlItemsArray.push(this.formBuilder.group({
-        item: [ci.item, [Validators.required]],
-        correspond: [ci.correspond, [Validators.required]],
+        item: [item.item, [Validators.required]],
+        correspond: [item.correspond, [Validators.required]],
         open: [this.panelOpenItems],
-      }))
-    })
+        correct: [item.correct],
+      }));
+    });
+
+    this.answers = [this.correctAnswers, this.incorrectAnswers];
   }
 
   setTrueFalseItems(quiz: Quiz) {
-    quiz.trueFalseItems.forEach(tf => {
+    quiz.trueFalseItems.forEach(item => {
+      (item.correct) ? this.correctAnswers++ : this.incorrectAnswers++;
+
       this.controlItemsArray.push(this.formBuilder.group({
-        sentence: [tf.sentence, [Validators.required]],
-        answer: [tf.answer, [Validators.required]],
+        sentence: [item.sentence, [Validators.required]],
+        answer: [item.answer, [Validators.required]],
         open: [this.panelOpenItems],
-      }))
-    })
+        correct: [item.correct],
+      }));
+    });
+
+    this.answers = [this.correctAnswers, this.incorrectAnswers];
   }
 
   setMultipleSelectionItems(quiz: Quiz) {
-    quiz.multipleSelectionItems.forEach(ms => {
-      this.controlItemsArray.push(this.formBuilder.group({
-        sentence: [ms.sentence, [Validators.required]],
-        alternativeA: [ms.alternativeA, [Validators.required]],
-        alternativeB: [ms.alternativeB, [Validators.required]],
-        alternativeC: [ms.alternativeC, [Validators.required]],
-        alternativeD: [ms.alternativeD, [Validators.required]],
-        answer: [ms.answer, [Validators.required]],
-        open: [this.panelOpenItems],
-      }));
+    quiz.multipleSelectionItems.forEach(item => {
+      (item.correct) ? this.correctAnswers++ : this.incorrectAnswers++;
 
-    })
+      this.controlItemsArray.push(this.formBuilder.group({
+        sentence: [item.sentence, [Validators.required]],
+        alternativeA: [item.alternativeA, [Validators.required]],
+        alternativeB: [item.alternativeB, [Validators.required]],
+        alternativeC: [item.alternativeC, [Validators.required]],
+        alternativeD: [item.alternativeD, [Validators.required]],
+        answer: [item.answer, [Validators.required]],
+        open: [this.panelOpenItems],
+        correct: [item.correct],
+      }));
+    });
+
+    this.answers = [this.correctAnswers, this.incorrectAnswers];
 
   }
 
   setIncompleteTextItems(quiz: Quiz) {
-    quiz.incompleteTextItems.forEach(it => {
+    quiz.incompleteTextItems.forEach(item => {
+      (item.correct) ? this.correctAnswers++ : this.incorrectAnswers++;
+
       this.controlItemsArray.push(this.formBuilder.group({
-        sentence: [it.sentence, [Validators.required]],
-        answer: [it.answer, [Validators.required]],
+        sentence: [item.sentence, [Validators.required]],
+        answer: [item.answer, [Validators.required]],
         open: [this.panelOpenItems],
-      }))
-    })
+        correct: [item.correct],
+      }));
+    });
+
+    this.answers = [this.correctAnswers, this.incorrectAnswers];
   }
 
   addItem() {
@@ -295,7 +335,7 @@ export class QuizItemComponent implements OnInit {
 
   private saveItems(editedQuiz: Quiz) {
     this.isLoadingService.isLoadingEmit(true);
-    this.quizStoreService.update(editedQuiz, this.quiz.author.username)
+    this.quizStoreService.update(editedQuiz, editedQuiz.author.username)
       .pipe(finalize(() => {
         this.isLoadingService.isLoadingEmit(false);
       }))
@@ -332,6 +372,14 @@ export class QuizItemComponent implements OnInit {
         this.itemTitle = INCOMPLETE_TEXT_ITEM_TITLE;
         break;
     }
+  }
+
+  checkAnswerIcon(value: boolean): string {
+    return value ? "check" : "close";
+  }
+
+  checkAnswerColor(value: boolean): string {
+    return value ? "primary" : "warn";
   }
 
 }

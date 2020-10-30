@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container" cdkDrag>
 
-  <button mat-mini-fab color="accent" class="closeButton miniFabMini2" (click)="closeButton()" matTooltip="Cerrar">
+  <button mat-mini-fab color="accent" class="closeButton" (click)="closeButton()" matTooltip="Cerrar">
     <mat-icon svgIcon="close" color="primary"></mat-icon>
   </button>
 
@@ -37,7 +37,7 @@
 
           </mat-list-item>
 
-          <mat-list-item>
+          <mat-list-item class="cursoAsignatura">
             <mat-form-field appearance="outline">
               <mat-label><i class="mdi mdi-book-outline app-input-icon">&nbsp;</i>Curso</mat-label>
               <input matInput formControlName="courseName" readonly>
@@ -60,10 +60,10 @@
   </mat-card>
 
   <mat-card class="quizItems">
-    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="correspondItem" [isReadonly]="true"></nx-quiz-item>
-    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="trueFalseItem" [isReadonly]="true"></nx-quiz-item>
-    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="multipleSelectionItem" [isReadonly]="true"></nx-quiz-item>
-    <nx-quiz-item [quiz]="evaluation?.quiz" itemType="incompleteTextItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="correspondItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="trueFalseItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="multipleSelectionItem" [isReadonly]="true"></nx-quiz-item>
+    <nx-quiz-item [quiz]="quiz" itemType="incompleteTextItem" [isReadonly]="true"></nx-quiz-item>
   </mat-card>
 
 </div>

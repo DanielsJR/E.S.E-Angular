@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    margin: 20px;
+}
+
 .container {
     display: flex;
     flex-flow: row wrap;
@@ -11,7 +16,6 @@ mat-card {
     width: 100%;
     min-width: 500px;
     height: fit-content;
-    margin: 20px;
     padding: 0;
     overflow: hidden;
     background: unset !important;
@@ -64,9 +68,9 @@ td.mat-cell:last-of-type {
 }
 
 nx-subject-evaluations-course {
-    width: 100%;
+    margin-top: 20px;
 }
 
-nx-quiz-detail {
-    width: 100%;
+nx-quiz {
+    margin-top: 20px;
 }

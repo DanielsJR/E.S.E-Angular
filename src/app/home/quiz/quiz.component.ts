@@ -21,8 +21,13 @@ export class QuizComponent implements OnInit {
   private _evaluation: Evaluation;
 
   @Input() set evaluation(evaluation: Evaluation) {
-    if (evaluation.quiz) this._evaluation = evaluation;
-    if (this._evaluation && this.quizDetailForm) this.buildForm();
+    if (evaluation?.quiz) {
+      this._evaluation = evaluation;
+      this.quiz = evaluation.quiz;
+    }
+    if (this._evaluation && this.quizDetailForm) {//reset
+      this.buildForm();
+    }
   }
 
   get evaluation() {
@@ -45,11 +50,13 @@ export class QuizComponent implements OnInit {
   isLoading: boolean = false;
   quizId: string;
   quizDetailForm: FormGroup;
+  quiz: Quiz;
 
   constructor(private quizStoreService: QuizStoreService,
     private formBuilder: FormBuilder, private snackbarService: SnackbarService,
     private isLoadingService: IsLoadingService,
     private userLoggedService: UserLoggedService,
+    private cdRef: ChangeDetectorRef,
   ) {
     this.usernameLogged = userLoggedService.getTokenUsername();
 
@@ -70,6 +77,8 @@ export class QuizComponent implements OnInit {
       courseName: [this.evaluation.subject.course.name],
     });
 
+    //this.cdRef.detectChanges();
+
   }
 
   get title() { return this.quizDetailForm.get('title'); }
@@ -80,5 +89,7 @@ export class QuizComponent implements OnInit {
   closeButton() {
     this.closeQuizDetail.emit(null);
   }
+
+  // getQuiz() {    return this.evaluation.quiz;  }
 
 }
