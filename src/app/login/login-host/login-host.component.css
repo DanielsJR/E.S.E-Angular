@@ -10,13 +10,20 @@
     overflow: hidden;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr minmax(200px, 300px) 1fr;
-    grid-template-rows: 1fr minmax(300px, 400px) 1fr;
-    height: 100%;
+.p-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
 }
 
+.grid-container {
+    display: grid;
+    place-content: center;
+    --grid-template-columns: 1fr minmax(200px, 300px) 1fr;
+    --grid-template-rows: 1fr minmax(300px, 400px) 1fr;
+    height: 100%;
+}
 
 .theme-picker {
     position: fixed;
@@ -25,11 +32,16 @@
     z-index: 3;
 }
 
-.p-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 5;
+mat-card,
+.form {
+    --grid-area: 2/2/2/3;
+    z-index: 2;
+}
+
+mat-card {
+    padding: 0;
+    overflow: hidden;
+    width: 300px;
 }
 
 .VYMape {
@@ -61,17 +73,4 @@
     .VYMape svg {
         display: block
     }
-}
-
-
-
-mat-card,
-.form {
-    grid-area: 2/2/2/3;
-    z-index: 2;
-}
-
-mat-card {
-    padding: 0;
-    overflow: hidden;
 }

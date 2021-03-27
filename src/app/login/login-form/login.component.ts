@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LoginService } from './login.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   unauthMessage = 'Usuario o Contraseña Incorrecta';
+
+  @Input() vertical: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private loginService: LoginService,
     private userLoggedService: UserLoggedService,

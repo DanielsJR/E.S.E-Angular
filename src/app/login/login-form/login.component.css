@@ -1,13 +1,9 @@
-
-
 form .login-content {
-    position: absolute;
-    padding: 0 45px;
-    top: 100px;
-    bottom: 0;
-    line-height: 4.5em;
-    overflow: hidden;
+    padding: 30px 45px 0;
+    height: 300px;
+    --width: 200px;
 }
+
 
 .unauthMessage {
     position: relative;
@@ -50,4 +46,24 @@ span {
 }
 
 
+.login-content-horizontal {
+    display: flex;
+    padding: 30px 45px 0;
+    align-items: center;
+}
 
+.login-content-horizontal mat-form-field {
+    padding: 0 15px;
+
+}
+
+.login-content-horizontal button {
+    width: 100%;
+}
+
+.toolbarH {
+    height: auto;
+    font: unset !important;
+    color: inherit !important;
+    background-color: inherit !important;
+}
