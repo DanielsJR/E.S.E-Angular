@@ -1,24 +1,24 @@
 <div [ngClass]="theme.themeName" class="mat-app-background myWrapper">
 
-  <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
-  <div class="grid-container">
+    <div class="grid-container">
 
-    <span class="theme-picker">
+        <span class="theme-picker">
       <nx-theme-picker #theme [hidden]= "true"></nx-theme-picker>
-      <!--<button color="warn" mat-raised-button [routerLink]="['/welcome']">WELCOME</button>test-->
+      <!--<button color="warn" mat-raised-button [routerLink]="['/welcome']">WELCOME</button>
+      <button color="warn" mat-raised-button [routerLink]="['/SFGFDG']">NOT FOUND</button>-->
     </span>
 
-    <mat-card>
-      <nx-login [vertical]="true"></nx-login>
-    </mat-card>
+        <mat-card>
+            <nx-login [vertical]="true"></nx-login>
+        </mat-card>
 
-  </div>
+    </div>
 
-  <div class="VYMape" aria-hidden="true">
-    <svg jsname="BUfzDd" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice"
-      aria-hidden="true">
+    <div class="VYMape" aria-hidden="true">
+        <svg jsname="BUfzDd" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice" aria-hidden="true">
 
       <path fill="#efefee"
         d="M592.66 0c-15 64.092-30.7 125.285-46.598 183.777C634.056 325.56 748.348 550.932 819.642 809.5h419.672C1184.518 593.727 1083.124 290.064 902.637 0H592.66z" />
@@ -35,6 +35,6 @@
         d="M1278.31,38.196C1245.81,209.874 1197.22,365.556 1144.82,499.838L1144.82,503.638C1185.82,615.924 1216.41,720.211 1239.11,809.6L1439.7,810L1439.7,256.768C1379.4,158.78 1321.41,86.288 1278.31,38.195L1278.31,38.196z" />
     </svg>
 
-  </div>
+    </div>
 
 </div>

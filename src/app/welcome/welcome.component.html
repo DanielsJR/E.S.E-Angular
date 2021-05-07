@@ -1,83 +1,60 @@
 <div [ngClass]="theme.themeName" class="mat-app-background myWrapper">
 
-  <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
+    <div *ngIf="!isLoading" style="height: 5px;" class="p-bar"></div>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="accent" class="p-bar"></mat-progress-bar>
 
-  <header id="header" class="primaryColorBG header-background">
-    <nx-theme-picker #theme [hidden]="true"></nx-theme-picker>
-    <!--<button color="warn" mat-raised-button [routerLink]="['/login']">LOGIN</button> test-->
+    <header id="header" class="primaryColorBG header-background">
+        <nx-theme-picker #theme [hidden]="true"></nx-theme-picker>
+        <!--<button color="warn" mat-raised-button [routerLink]="['/login']">LOGIN</button>
+        <button color="warn" mat-raised-button [routerLink]="['/SFGFDG']">NOT FOUND</button>-->
 
-    <div class="accentColorBG line1"></div>
-    <div class="header-section">
+        <div class="accentColorBG line1"></div>
+        <div class="header-section">
 
-      <div class="header-headline">
-        <h1 class="mat-h1">
-          ESE
-          <!-- <nx-logo [type]="'mat-fab'"></nx-logo>-->
-        </h1>
-        <h2> Enseñanza Sistemática Estimulante</h2>
-      </div>
+            <div class="header-headline">
+                <h1 class="mat-h1">
+                    ESE
+                    <!-- <nx-logo [type]="'mat-fab'"></nx-logo>-->
+                </h1>
+                <h2> Enseñanza Sistemática Estimulante</h2>
+            </div>
 
-    </div>
-    <div class="accentColorBG line2"></div>
+        </div>
+        <div class="accentColorBG line2"></div>
 
-    <div class="loginContainer">
-      <nx-login [vertical]="false"></nx-login>
-    </div>
+        <div class="loginContainer">
+            <nx-login [vertical]="false"></nx-login>
+        </div>
 
-  </header>
+    </header>
 
+    <main class="homepage-promo">
 
+        <div class="homepage-row introduction">
 
+            <div class="homepage-row-column">
+                <h2>High quality</h2>
+                <p> Internationalized and accessible components for everyone. Well tested to ensure performance and reliability. </p>
+                <p>Straightforward APIs with consistent cross platform behaviour.</p>
+            </div>
 
-  <!--<div id="center">
-  </div>-->
+            <div class="homepage-row-column">
+                <h2>Versatile</h2>
+                <p> Provide tools that help developers build their own custom components with common interaction patterns. </p>
+                <p> Customizable within the bounds of the Material Design specification. </p>
+            </div>
 
-  <!--<div id="line2" mat-raised-button color="accent"></div>-->
+            <div class="homepage-row-column">
+                <h2>Frictionless</h2>
+                <p> Built by the Angular team to integrate seamlessly with Angular. </p>
+                <p> Start from scratch or drop into your existing applications. </p>
+            </div>
+        </div>
 
-  <!--
--->
-
-  <!--<mat-card id="content">
-    <nx-login></nx-login>
-
-     <div class="logo">
-        <h2>Bienvenido a</h2>
-        <nx-logo></nx-logo>
-        <img width="180" src="assets/images/logos/ese-logo-big2.png">
-      </div>
-  </mat-card>-->
-
-
-  <main class="homepage-promo">
-
-    <div class="homepage-row introduction">
-
-      <div class="homepage-row-column">
-        <h2>High quality</h2>
-        <p> Internationalized and accessible components for everyone. Well tested to ensure
-          performance and reliability. </p>
-        <p>Straightforward APIs with consistent cross platform behaviour.</p>
-      </div>
-
-      <div class="homepage-row-column">
-        <h2>Versatile</h2>
-        <p> Provide tools that help developers build their own custom components with common
-          interaction patterns. </p>
-        <p> Customizable within the bounds of the Material Design specification. </p>
-      </div>
-
-      <div class="homepage-row-column">
-        <h2>Frictionless</h2>
-        <p> Built by the Angular team to integrate seamlessly with Angular. </p>
-        <p> Start from scratch or drop into your existing applications. </p>
-      </div>
-    </div>
-
-    <mat-divider role="separator" class="mat-divider mat-divider-horizontal" aria-orientation="horizontal">
+        <!-- <mat-divider role="separator" class="mat-divider mat-divider-horizontal" aria-orientation="horizontal">
     </mat-divider>
 
-    <!-- <div class="docs-homepage-featured-components docs-homepage-carousel-row">
+     <div class="docs-homepage-featured-components docs-homepage-carousel-row">
       <h2 _ngcontent-jmu-c136="">Featured components</h2>
 
     </div>
@@ -92,12 +69,12 @@
           data-mat-icon-type="font">chevron_right</mat-icon></a>
     </div> -->
 
-  </main>
+    </main>
 
-  <footer class="primaryColorBG mat-elevation-z">
-    <img id="l-s" alt="logo" src="assets/images/logos/ese-logo.png">
-    <h6>Powered by NX Company &copy; &nbsp; 2017-{{year}}.</h6>
-  </footer>
+    <footer class="primaryColorBG mat-elevation-z myFooter">
+        <img alt="logo" src="assets/images/logos/ese-logo.png">
+        <h6>Powered by NX Company &copy; &nbsp; 2017-{{year}}.</h6>
+    </footer>
 
 
 </div>
